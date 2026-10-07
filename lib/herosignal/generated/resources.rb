@@ -122,10 +122,12 @@ module HeroSignal
       # Bildirim geçmişi CSV işi (teslimatlar; tamamlanınca download_url)
       #
       # GET /v1/notifications/{messageId}/history
-      def history(message_id, request_options: nil)
+      def history(message_id, app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/notifications/{messageId}/history",
           path_params: { "messageId" => message_id },
+          app_id: app_id,
+          query_app_id: true,
           response: "Export",
           request_options: request_options
         )
@@ -134,10 +136,12 @@ module HeroSignal
       # Mesaj olay CSV işi (gönderildi/teslim/açıldı/tıklandı/bounce…; tamamlanınca download_url)
       #
       # POST /v1/notifications/{messageId}/export_events
-      def export_events(message_id, request_options: nil)
+      def export_events(message_id, app_id: nil, request_options: nil)
         @client.call(
           :post, "/v1/notifications/{messageId}/export_events",
           path_params: { "messageId" => message_id },
+          app_id: app_id,
+          query_app_id: true,
           response: "Export",
           request_options: request_options
         )
@@ -560,7 +564,9 @@ module HeroSignal
       # Tahmini sayım
       #
       # POST /v1/apps/{appId}/segments/{segmentId}/estimate
-      def estimate(segment_id, force:, app_id: nil, request_options: nil)
+      #
+      # @param force true: önbelleği atla, tam sayım Değerler: "true", "false".
+      def estimate(segment_id, force: nil, app_id: nil, request_options: nil)
         @client.call(
           :post, "/v1/apps/{appId}/segments/{segmentId}/estimate",
           path_params: { "segmentId" => segment_id },
