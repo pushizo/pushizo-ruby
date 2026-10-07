@@ -193,6 +193,44 @@ module HeroSignal
       field "serviceWorkerPath", :service_worker_path, :string
       field "serviceWorkerScope", :service_worker_scope, :string
       field "prompt", :prompt, "AppSettingsWebPushPrompt"
+      field "welcomeNotification", :welcome_notification, "AppSettingsWebPushWelcomeNotification"
+      field "clickBehavior", :click_behavior, "AppSettingsWebPushClickBehavior"
+      field "customLink", :custom_link, "AppSettingsWebPushCustomLink"
+      field "promptBackoffDays", :prompt_backoff_days, [:array, :integer]
+    end
+
+    # AppSettingsWebPushClickBehavior şeması.
+    class AppSettingsWebPushClickBehavior < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "exact", "origin".
+      field "match", :match, :string
+      # Zorunlu. Değerler: "navigate", "focus".
+      field "action", :action, :string
+    end
+
+    # AppSettingsWebPushCustomLink şeması.
+    class AppSettingsWebPushCustomLink < HeroSignal::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu. Değerler: "button", "link".
+      field "style", :style, :string
+      # Zorunlu. Değerler: "small", "medium", "large".
+      field "size", :size, :string
+      field "color", :color, "AppSettingsWebPushCustomLinkColor"
+      field "texts", :texts, [:map, "AppSettingsWebPushCustomLinkTextsValue"]
+      field "unsubscribeEnabled", :unsubscribe_enabled, :boolean
+    end
+
+    # AppSettingsWebPushCustomLinkColor şeması.
+    class AppSettingsWebPushCustomLinkColor < HeroSignal::BaseModel
+      field "button", :button, :string
+      field "text", :text, :string
+    end
+
+    # AppSettingsWebPushCustomLinkTextsValue şeması.
+    class AppSettingsWebPushCustomLinkTextsValue < HeroSignal::BaseModel
+      field "subscribe", :subscribe, :string
+      field "unsubscribe", :unsubscribe, :string
+      field "explanation", :explanation, :string
     end
 
     # AppSettingsWebPushPrompt şeması.
@@ -223,6 +261,20 @@ module HeroSignal
       field "message", :message, :string
       field "accept", :accept, :string
       field "cancel", :cancel, :string
+    end
+
+    # AppSettingsWebPushWelcomeNotification şeması.
+    class AppSettingsWebPushWelcomeNotification < HeroSignal::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      field "url", :url, :string
+      field "texts", :texts, [:map, "AppSettingsWebPushWelcomeNotificationTextsValue"]
+    end
+
+    # AppSettingsWebPushWelcomeNotificationTextsValue şeması.
+    class AppSettingsWebPushWelcomeNotificationTextsValue < HeroSignal::BaseModel
+      field "title", :title, :string
+      field "message", :message, :string
     end
 
     # AuditEntry şeması.
@@ -2708,6 +2760,44 @@ module HeroSignal
       field "serviceWorkerPath", :service_worker_path, :string
       field "serviceWorkerScope", :service_worker_scope, :string
       field "prompt", :prompt, "UpdateAppDtoSettingsWebPushPrompt"
+      field "welcomeNotification", :welcome_notification, "UpdateAppDtoSettingsWebPushWelcomeNotification"
+      field "clickBehavior", :click_behavior, "UpdateAppDtoSettingsWebPushClickBehavior"
+      field "customLink", :custom_link, "UpdateAppDtoSettingsWebPushCustomLink"
+      field "promptBackoffDays", :prompt_backoff_days, [:array, :integer]
+    end
+
+    # UpdateAppDtoSettingsWebPushClickBehavior şeması.
+    class UpdateAppDtoSettingsWebPushClickBehavior < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "exact", "origin".
+      field "match", :match, :string
+      # Zorunlu. Değerler: "navigate", "focus".
+      field "action", :action, :string
+    end
+
+    # UpdateAppDtoSettingsWebPushCustomLink şeması.
+    class UpdateAppDtoSettingsWebPushCustomLink < HeroSignal::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu. Değerler: "button", "link".
+      field "style", :style, :string
+      # Zorunlu. Değerler: "small", "medium", "large".
+      field "size", :size, :string
+      field "color", :color, "UpdateAppDtoSettingsWebPushCustomLinkColor"
+      field "texts", :texts, [:map, "UpdateAppDtoSettingsWebPushCustomLinkTextsValue"]
+      field "unsubscribeEnabled", :unsubscribe_enabled, :boolean
+    end
+
+    # UpdateAppDtoSettingsWebPushCustomLinkColor şeması.
+    class UpdateAppDtoSettingsWebPushCustomLinkColor < HeroSignal::BaseModel
+      field "button", :button, :string
+      field "text", :text, :string
+    end
+
+    # UpdateAppDtoSettingsWebPushCustomLinkTextsValue şeması.
+    class UpdateAppDtoSettingsWebPushCustomLinkTextsValue < HeroSignal::BaseModel
+      field "subscribe", :subscribe, :string
+      field "unsubscribe", :unsubscribe, :string
+      field "explanation", :explanation, :string
     end
 
     # UpdateAppDtoSettingsWebPushPrompt şeması.
@@ -2738,6 +2828,20 @@ module HeroSignal
       field "message", :message, :string
       field "accept", :accept, :string
       field "cancel", :cancel, :string
+    end
+
+    # UpdateAppDtoSettingsWebPushWelcomeNotification şeması.
+    class UpdateAppDtoSettingsWebPushWelcomeNotification < HeroSignal::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      field "url", :url, :string
+      field "texts", :texts, [:map, "UpdateAppDtoSettingsWebPushWelcomeNotificationTextsValue"]
+    end
+
+    # UpdateAppDtoSettingsWebPushWelcomeNotificationTextsValue şeması.
+    class UpdateAppDtoSettingsWebPushWelcomeNotificationTextsValue < HeroSignal::BaseModel
+      field "title", :title, :string
+      field "message", :message, :string
     end
 
     # UpdateInAppDto şeması.
