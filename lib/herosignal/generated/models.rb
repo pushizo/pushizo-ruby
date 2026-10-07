@@ -861,6 +861,7 @@ module HeroSignal
       field "display", :display_value, "CreateInAppDtoDisplay"
       field "audience", :audience, "CreateInAppDtoAudience"
       field "frequency", :frequency, "CreateInAppDtoFrequency"
+      field "journey_only", :journey_only, :boolean
       field "priority", :priority, :integer
       field "start_at", :start_at, :string
       field "end_at", :end_at, :string
@@ -1112,7 +1113,7 @@ module HeroSignal
       # Zorunlu.
       field "url", :url, :string
       field "description", :description, :string
-      # Zorunlu. Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed".
+      # Zorunlu. Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited".
       field "events", :events, [:array, :string]
       field "event_filters", :event_filters, "CreateWebhookDtoEventFilters"
       field "batch", :batch, :boolean
@@ -1589,6 +1590,8 @@ module HeroSignal
       # Zorunlu.
       field "frequency", :frequency, "InAppMessageFrequency"
       # Zorunlu.
+      field "journey_only", :journey_only, :boolean
+      # Zorunlu.
       field "start_at", :start_at, :string
       # Zorunlu.
       field "end_at", :end_at, :string
@@ -1701,6 +1704,390 @@ module HeroSignal
       field "updated", :updated, :integer
       # Zorunlu.
       field "unread_count", :unread_count, :integer
+    end
+
+    # Journey şeması.
+    class Journey < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu. Değerler: "draft", "active", "paused", "archived".
+      field "status", :status, :string
+      # Zorunlu.
+      field "current_version", :current_version, :integer
+      # Zorunlu.
+      field "draft_version", :draft_version, :integer
+      # Zorunlu.
+      field "trigger_kind", :trigger_kind, :string
+      # Zorunlu.
+      field "published_at", :published_at, :string
+      # Zorunlu.
+      field "created_by", :created_by, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+      # Zorunlu.
+      field "summary", :summary, "JourneySummary"
+    end
+
+    # JourneyDetail şeması.
+    class JourneyDetail < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu. Değerler: "draft", "active", "paused", "archived".
+      field "status", :status, :string
+      # Zorunlu.
+      field "current_version", :current_version, :integer
+      # Zorunlu.
+      field "draft_version", :draft_version, :integer
+      # Zorunlu.
+      field "trigger_kind", :trigger_kind, :string
+      # Zorunlu.
+      field "published_at", :published_at, :string
+      # Zorunlu.
+      field "created_by", :created_by, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+      # Zorunlu.
+      field "summary", :summary, "JourneyDetailSummary"
+      # Zorunlu.
+      field "editing", :editing, "JourneyDetailEditing"
+      # Zorunlu.
+      field "issues", :issues, [:array, "JourneyDetailIssuesItem"]
+    end
+
+    # JourneyDetailEditing şeması.
+    class JourneyDetailEditing < HeroSignal::BaseModel
+      # Zorunlu.
+      field "version", :version, :integer
+      # Zorunlu.
+      field "graph", :graph, [:map, :any]
+      # Zorunlu.
+      field "settings", :settings, [:map, :any]
+      # Zorunlu.
+      field "published_at", :published_at, :string
+      # Zorunlu.
+      field "published_by", :published_by, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # JourneyDetailIssuesItem şeması.
+    class JourneyDetailIssuesItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "code", :code, :string
+      field "node_id", :node_id, :string
+      field "edge_id", :edge_id, :string
+      # Zorunlu.
+      field "message", :message, :string
+    end
+
+    # JourneyDetailSummary şeması.
+    class JourneyDetailSummary < HeroSignal::BaseModel
+      # Zorunlu.
+      field "runs_total", :runs_total, :integer
+      # Zorunlu.
+      field "active", :active, :integer
+      # Zorunlu.
+      field "completed", :completed, :integer
+      # Zorunlu.
+      field "exited", :exited, :integer
+      # Zorunlu.
+      field "failed", :failed, :integer
+      # Zorunlu.
+      field "goal_reached", :goal_reached, :integer
+    end
+
+    # JourneyPage şeması.
+    class JourneyPage < HeroSignal::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "Journey"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
+    end
+
+    # JourneyPublishResult şeması.
+    class JourneyPublishResult < HeroSignal::BaseModel
+      # Zorunlu.
+      field "journey", :journey, "Journey"
+      # Zorunlu.
+      field "version", :version, :integer
+      # Zorunlu.
+      field "issues", :issues, [:array, "JourneyPublishResultIssuesItem"]
+    end
+
+    # JourneyPublishResultIssuesItem şeması.
+    class JourneyPublishResultIssuesItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "code", :code, :string
+      field "node_id", :node_id, :string
+      field "edge_id", :edge_id, :string
+      # Zorunlu.
+      field "message", :message, :string
+    end
+
+    # JourneyRun şeması.
+    class JourneyRun < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "journey_id", :journey_id, :string
+      # Zorunlu.
+      field "version", :version, :integer
+      # Zorunlu.
+      field "user_id", :user_id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu. Değerler: "active", "waiting", "completed", "exited", "failed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "current_node_id", :current_node_id, :string
+      # Zorunlu.
+      field "next_action_at", :next_action_at, :string
+      # Zorunlu.
+      field "entered_at", :entered_at, :string
+      # Zorunlu.
+      field "completed_at", :completed_at, :string
+      # Zorunlu.
+      field "exit_reason", :exit_reason, :string
+      # Zorunlu.
+      field "goal_id", :goal_id, :string
+      # Zorunlu.
+      field "goal_reached_at", :goal_reached_at, :string
+      # Zorunlu.
+      field "context", :context, [:map, :any]
+    end
+
+    # JourneyRunDetail şeması.
+    class JourneyRunDetail < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "journey_id", :journey_id, :string
+      # Zorunlu.
+      field "version", :version, :integer
+      # Zorunlu.
+      field "user_id", :user_id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu. Değerler: "active", "waiting", "completed", "exited", "failed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "current_node_id", :current_node_id, :string
+      # Zorunlu.
+      field "next_action_at", :next_action_at, :string
+      # Zorunlu.
+      field "entered_at", :entered_at, :string
+      # Zorunlu.
+      field "completed_at", :completed_at, :string
+      # Zorunlu.
+      field "exit_reason", :exit_reason, :string
+      # Zorunlu.
+      field "goal_id", :goal_id, :string
+      # Zorunlu.
+      field "goal_reached_at", :goal_reached_at, :string
+      # Zorunlu.
+      field "context", :context, [:map, :any]
+      # Zorunlu.
+      field "journey_name", :journey_name, :string
+      # Zorunlu.
+      field "steps", :steps, [:array, "JourneyRunDetailStepsItem"]
+    end
+
+    # JourneyRunDetailStepsItem şeması.
+    class JourneyRunDetailStepsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "node_id", :node_id, :string
+      # Zorunlu.
+      field "node_type", :node_type, :string
+      # Zorunlu. Değerler: "completed", "waiting", "failed", "skipped".
+      field "status", :status, :string
+      # Zorunlu.
+      field "branch", :branch, :string
+      # Zorunlu.
+      field "result", :result, [:map, :any]
+      # Zorunlu.
+      field "started_at", :started_at, :string
+      # Zorunlu.
+      field "finished_at", :finished_at, :string
+    end
+
+    # JourneyRunPage şeması.
+    class JourneyRunPage < HeroSignal::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "JourneyRun"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
+    end
+
+    # JourneysCreateBody şeması.
+    class JourneysCreateBody < HeroSignal::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      # React Flow uyumlu journey grafı: { nodes: [{ id, type, position, data }], edges: [{ id, source, target, sourceHandle }] } (docs/journeys.md)
+      field "graph", :graph, "JourneysCreateBodyGraph"
+      # Yeniden giriş, yalnızca yeni girenler, çıkış kuralları, çıkış tag'leri, hedefler, takvim (docs/journeys.md)
+      field "settings", :settings, [:map, :any]
+    end
+
+    # React Flow uyumlu journey grafı: { nodes: [{ id, type, position, data }], edges: [{ id, source, target, sourceHandle }] } (docs/journeys.md)
+    class JourneysCreateBodyGraph < HeroSignal::BaseModel
+      # Zorunlu.
+      field "nodes", :nodes, [:array, [:map, :any]]
+      # Zorunlu.
+      field "edges", :edges, [:array, [:map, :any]]
+    end
+
+    # JourneysSaveDraftBody şeması.
+    class JourneysSaveDraftBody < HeroSignal::BaseModel
+      # Zorunlu. React Flow uyumlu journey grafı: { nodes: [{ id, type, position, data }], edges: [{ id, source, target, sourceHandle }] } (docs/journeys.md)
+      field "graph", :graph, "JourneysSaveDraftBodyGraph"
+      # Yeniden giriş, yalnızca yeni girenler, çıkış kuralları, çıkış tag'leri, hedefler, takvim (docs/journeys.md)
+      field "settings", :settings, [:map, :any]
+    end
+
+    # React Flow uyumlu journey grafı: { nodes: [{ id, type, position, data }], edges: [{ id, source, target, sourceHandle }] } (docs/journeys.md)
+    class JourneysSaveDraftBodyGraph < HeroSignal::BaseModel
+      # Zorunlu.
+      field "nodes", :nodes, [:array, [:map, :any]]
+      # Zorunlu.
+      field "edges", :edges, [:array, [:map, :any]]
+    end
+
+    # JourneyStats şeması.
+    class JourneyStats < HeroSignal::BaseModel
+      # Zorunlu.
+      field "version", :version, :integer
+      # Zorunlu.
+      field "summary", :summary, "JourneyStatsSummary"
+      # Zorunlu.
+      field "nodes", :nodes, [:array, "JourneyStatsNodesItem"]
+      # Zorunlu.
+      field "goals", :goals, [:array, "JourneyStatsGoalsItem"]
+      # Zorunlu.
+      field "exit_reasons", :exit_reasons, [:map, :integer]
+    end
+
+    # JourneyStatsGoalsItem şeması.
+    class JourneyStatsGoalsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "goal_id", :goal_id, :string
+      # Zorunlu.
+      field "reached", :reached, :integer
+    end
+
+    # JourneyStatsNodesItem şeması.
+    class JourneyStatsNodesItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "node_id", :node_id, :string
+      # Zorunlu.
+      field "node_type", :node_type, :string
+      # Zorunlu.
+      field "entered", :entered, :integer
+      # Zorunlu.
+      field "completed", :completed, :integer
+      # Zorunlu.
+      field "waiting_now", :waiting_now, :integer
+      # Zorunlu.
+      field "skipped", :skipped, :integer
+      # Zorunlu.
+      field "failed", :failed, :integer
+      # Zorunlu.
+      field "branches", :branches, [:map, :integer]
+      field "messages", :messages, [:map, :integer]
+    end
+
+    # JourneyStatsSummary şeması.
+    class JourneyStatsSummary < HeroSignal::BaseModel
+      # Zorunlu.
+      field "runs_total", :runs_total, :integer
+      # Zorunlu.
+      field "active", :active, :integer
+      # Zorunlu.
+      field "completed", :completed, :integer
+      # Zorunlu.
+      field "exited", :exited, :integer
+      # Zorunlu.
+      field "failed", :failed, :integer
+      # Zorunlu.
+      field "goal_reached", :goal_reached, :integer
+      # Zorunlu.
+      field "waiting", :waiting, :integer
+      # Zorunlu.
+      field "goal_conversion_rate", :goal_conversion_rate, :number
+    end
+
+    # JourneySummary şeması.
+    class JourneySummary < HeroSignal::BaseModel
+      # Zorunlu.
+      field "runs_total", :runs_total, :integer
+      # Zorunlu.
+      field "active", :active, :integer
+      # Zorunlu.
+      field "completed", :completed, :integer
+      # Zorunlu.
+      field "exited", :exited, :integer
+      # Zorunlu.
+      field "failed", :failed, :integer
+      # Zorunlu.
+      field "goal_reached", :goal_reached, :integer
+    end
+
+    # JourneyTriggerResult şeması.
+    class JourneyTriggerResult < HeroSignal::BaseModel
+      # Zorunlu.
+      field "entered", :entered, :boolean
+      # Zorunlu.
+      field "run", :run, "JourneyRun"
+      # Zorunlu. Değerler: "inactive", "outside_schedule", "re_entry", "already_active", "unknown_user".
+      field "reason", :reason, :string
+    end
+
+    # JourneyVersionList şeması.
+    class JourneyVersionList < HeroSignal::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "JourneyVersionListDataItem"]
+    end
+
+    # JourneyVersionListDataItem şeması.
+    class JourneyVersionListDataItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "version", :version, :integer
+      # Zorunlu.
+      field "graph", :graph, [:map, :any]
+      # Zorunlu.
+      field "settings", :settings, [:map, :any]
+      # Zorunlu.
+      field "published_at", :published_at, :string
+      # Zorunlu.
+      field "published_by", :published_by, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
     end
 
     # Member şeması.
@@ -2672,6 +3059,22 @@ module HeroSignal
       field "created_at", :created_at, :string
     end
 
+    # TriggerRunDto şeması.
+    class TriggerRunDto < HeroSignal::BaseModel
+      field "external_id", :external_id, :string
+      field "user_id", :user_id, :string
+      field "alias", :alias_, "TriggerRunDtoAlias"
+      field "context", :context, [:map, :any]
+    end
+
+    # TriggerRunDtoAlias şeması.
+    class TriggerRunDtoAlias < HeroSignal::BaseModel
+      # Zorunlu.
+      field "label", :label, :string
+      # Zorunlu.
+      field "value", :value, :string
+    end
+
     # UpdateApiKeyDto şeması.
     class UpdateApiKeyDto < HeroSignal::BaseModel
       field "name", :name, :string
@@ -2851,6 +3254,7 @@ module HeroSignal
       field "display", :display_value, "UpdateInAppDtoDisplay"
       field "audience", :audience, "UpdateInAppDtoAudience"
       field "frequency", :frequency, "UpdateInAppDtoFrequency"
+      field "journey_only", :journey_only, :boolean
       field "priority", :priority, :integer
       field "start_at", :start_at, :string
       field "end_at", :end_at, :string
@@ -2879,6 +3283,26 @@ module HeroSignal
       field "max_impressions", :max_impressions, :integer
       field "min_interval_seconds", :min_interval_seconds, :integer
       field "stop_after_interaction", :stop_after_interaction, :boolean
+    end
+
+    # UpdateJourneyDto şeması.
+    class UpdateJourneyDto < HeroSignal::BaseModel
+      field "name", :name, :string
+      field "description", :description, :string
+    end
+
+    # UpdateNodeDto şeması.
+    class UpdateNodeDto < HeroSignal::BaseModel
+      field "data", :data, [:map, :any]
+      field "position", :position, "UpdateNodeDtoPosition"
+    end
+
+    # UpdateNodeDtoPosition şeması.
+    class UpdateNodeDtoPosition < HeroSignal::BaseModel
+      # Zorunlu.
+      field "x", :x, :number
+      # Zorunlu.
+      field "y", :y, :number
     end
 
     # UpdateTemplateDto şeması.
@@ -2967,7 +3391,7 @@ module HeroSignal
     class UpdateWebhookDto < HeroSignal::BaseModel
       field "url", :url, :string
       field "description", :description, :string
-      # Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed".
+      # Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited".
       field "events", :events, [:array, :string]
       field "event_filters", :event_filters, "UpdateWebhookDtoEventFilters"
       field "batch", :batch, :boolean
@@ -3096,6 +3520,46 @@ module HeroSignal
     class UserIdentity < HeroSignal::BaseModel
       # Zorunlu.
       field "identity", :identity, [:map, :string]
+    end
+
+    # UserJourneyRuns şeması.
+    class UserJourneyRuns < HeroSignal::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "UserJourneyRunsDataItem"]
+    end
+
+    # UserJourneyRunsDataItem şeması.
+    class UserJourneyRunsDataItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "journey_id", :journey_id, :string
+      # Zorunlu.
+      field "version", :version, :integer
+      # Zorunlu.
+      field "user_id", :user_id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu. Değerler: "active", "waiting", "completed", "exited", "failed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "current_node_id", :current_node_id, :string
+      # Zorunlu.
+      field "next_action_at", :next_action_at, :string
+      # Zorunlu.
+      field "entered_at", :entered_at, :string
+      # Zorunlu.
+      field "completed_at", :completed_at, :string
+      # Zorunlu.
+      field "exit_reason", :exit_reason, :string
+      # Zorunlu.
+      field "goal_id", :goal_id, :string
+      # Zorunlu.
+      field "goal_reached_at", :goal_reached_at, :string
+      # Zorunlu.
+      field "context", :context, [:map, :any]
+      # Zorunlu.
+      field "journey_name", :journey_name, :string
     end
 
     # UserList şeması.

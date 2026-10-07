@@ -1736,6 +1736,282 @@ module HeroSignal
         end
       end
     end
+
+    # journeys kaynağı.
+    class Journeys < HeroSignal::BaseResource
+      # Journey listesi
+      #
+      # GET /v1/apps/{appId}/journeys
+      #
+      # @param status Değerler: "draft", "active", "paused", "archived".
+      def list(limit: nil, cursor: nil, status: nil, q: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/journeys",
+          path_params: {},
+          query: { "limit" => limit, "cursor" => cursor, "status" => status, "q" => q },
+          app_id: app_id,
+          response: "JourneyPage",
+          request_options: request_options
+        )
+      end
+
+      # list sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def list_all(limit: nil, cursor: nil, status: nil, q: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          list(limit: limit, status: status, q: q, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+
+      # Journey oluştur (taslak)
+      #
+      # POST /v1/apps/{appId}/journeys
+      def create(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/journeys",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "JourneyDetail",
+          request_options: request_options
+        )
+      end
+
+      # Journey detayı
+      #
+      # GET /v1/apps/{appId}/journeys/{journeyId}
+      def get(journey_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/journeys/{journeyId}",
+          path_params: { "journeyId" => journey_id },
+          app_id: app_id,
+          response: "JourneyDetail",
+          request_options: request_options
+        )
+      end
+
+      # Ad / açıklama
+      #
+      # PATCH /v1/apps/{appId}/journeys/{journeyId}
+      def update(journey_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/journeys/{journeyId}",
+          path_params: { "journeyId" => journey_id },
+          body: body,
+          app_id: app_id,
+          response: "JourneyDetail",
+          request_options: request_options
+        )
+      end
+
+      # Hiç yayınlanmamış journey'i sil
+      #
+      # DELETE /v1/apps/{appId}/journeys/{journeyId}
+      def delete(journey_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/journeys/{journeyId}",
+          path_params: { "journeyId" => journey_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+
+      # Taslağı kaydet
+      #
+      # PUT /v1/apps/{appId}/journeys/{journeyId}/draft
+      def save_draft(journey_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :put, "/v1/apps/{appId}/journeys/{journeyId}/draft",
+          path_params: { "journeyId" => journey_id },
+          body: body,
+          app_id: app_id,
+          response: "JourneyDetail",
+          request_options: request_options
+        )
+      end
+
+      # Taslaktaki düğümü güncelle
+      #
+      # PATCH /v1/apps/{appId}/journeys/{journeyId}/nodes/{nodeId}
+      def update_node(journey_id, node_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/journeys/{journeyId}/nodes/{nodeId}",
+          path_params: { "journeyId" => journey_id, "nodeId" => node_id },
+          body: body,
+          app_id: app_id,
+          response: "JourneyDetail",
+          request_options: request_options
+        )
+      end
+
+      # Sürümler
+      #
+      # GET /v1/apps/{appId}/journeys/{journeyId}/versions
+      def versions(journey_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/journeys/{journeyId}/versions",
+          path_params: { "journeyId" => journey_id },
+          app_id: app_id,
+          response: "JourneyVersionList",
+          request_options: request_options
+        )
+      end
+
+      # Yayınla
+      #
+      # POST /v1/apps/{appId}/journeys/{journeyId}/publish
+      def publish(journey_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/journeys/{journeyId}/publish",
+          path_params: { "journeyId" => journey_id },
+          app_id: app_id,
+          response: "JourneyPublishResult",
+          request_options: request_options
+        )
+      end
+
+      # Duraklat
+      #
+      # POST /v1/apps/{appId}/journeys/{journeyId}/pause
+      def pause(journey_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/journeys/{journeyId}/pause",
+          path_params: { "journeyId" => journey_id },
+          app_id: app_id,
+          response: "JourneyDetail",
+          request_options: request_options
+        )
+      end
+
+      # Devam ettir
+      #
+      # POST /v1/apps/{appId}/journeys/{journeyId}/resume
+      def resume(journey_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/journeys/{journeyId}/resume",
+          path_params: { "journeyId" => journey_id },
+          app_id: app_id,
+          response: "JourneyDetail",
+          request_options: request_options
+        )
+      end
+
+      # Arşivle
+      #
+      # POST /v1/apps/{appId}/journeys/{journeyId}/archive
+      def archive(journey_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/journeys/{journeyId}/archive",
+          path_params: { "journeyId" => journey_id },
+          app_id: app_id,
+          response: "JourneyDetail",
+          request_options: request_options
+        )
+      end
+
+      # Kopyala
+      #
+      # POST /v1/apps/{appId}/journeys/{journeyId}/duplicate
+      def duplicate(journey_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/journeys/{journeyId}/duplicate",
+          path_params: { "journeyId" => journey_id },
+          app_id: app_id,
+          response: "JourneyDetail",
+          request_options: request_options
+        )
+      end
+
+      # Düğüm bazlı istatistik
+      #
+      # GET /v1/apps/{appId}/journeys/{journeyId}/stats
+      def stats(journey_id, version: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/journeys/{journeyId}/stats",
+          path_params: { "journeyId" => journey_id },
+          query: { "version" => version },
+          app_id: app_id,
+          response: "JourneyStats",
+          request_options: request_options
+        )
+      end
+
+      # Run listesi
+      #
+      # GET /v1/apps/{appId}/journeys/{journeyId}/runs
+      #
+      # @param status Değerler: "active", "waiting", "completed", "exited", "failed".
+      def runs(journey_id, limit: nil, cursor: nil, status: nil, user_id: nil, version: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/journeys/{journeyId}/runs",
+          path_params: { "journeyId" => journey_id },
+          query: { "limit" => limit, "cursor" => cursor, "status" => status, "user_id" => user_id, "version" => version },
+          app_id: app_id,
+          response: "JourneyRunPage",
+          request_options: request_options
+        )
+      end
+
+      # runs sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def runs_all(journey_id, limit: nil, cursor: nil, status: nil, user_id: nil, version: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          runs(journey_id, limit: limit, status: status, user_id: user_id, version: version, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+
+      # Kullanıcıyı journey'e sok (external_id, user_id veya alias; context Liquid custom_data)
+      #
+      # POST /v1/apps/{appId}/journeys/{journeyId}/runs
+      def trigger(journey_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/journeys/{journeyId}/runs",
+          path_params: { "journeyId" => journey_id },
+          body: body,
+          app_id: app_id,
+          response: "JourneyTriggerResult",
+          request_options: request_options
+        )
+      end
+
+      # Run detayı ve adımlar
+      #
+      # GET /v1/apps/{appId}/journeys/{journeyId}/runs/{runId}
+      def run(journey_id, run_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/journeys/{journeyId}/runs/{runId}",
+          path_params: { "journeyId" => journey_id, "runId" => run_id },
+          app_id: app_id,
+          response: "JourneyRunDetail",
+          request_options: request_options
+        )
+      end
+
+      # Run'ı sonlandır
+      #
+      # DELETE /v1/apps/{appId}/journeys/{journeyId}/runs/{runId}
+      def exit_run(journey_id, run_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/journeys/{journeyId}/runs/{runId}",
+          path_params: { "journeyId" => journey_id, "runId" => run_id },
+          app_id: app_id,
+          response: "JourneyRunDetail",
+          request_options: request_options
+        )
+      end
+
+      # Kullanıcının journey run'ları
+      #
+      # GET /v1/apps/{appId}/users/by/{label}/{value}/journeys
+      def list_for_user(label, value, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/users/by/{label}/{value}/journeys",
+          path_params: { "label" => label, "value" => value },
+          app_id: app_id,
+          response: "UserJourneyRuns",
+          request_options: request_options
+        )
+      end
+    end
   end
 
   # İstemciye kaynak erişimcilerini ekleyen üretilmiş modül.
@@ -1743,7 +2019,7 @@ module HeroSignal
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "0.1.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization journeys].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -1838,6 +2114,10 @@ module HeroSignal
     # Organizasyon, üyeler ve denetim kayıtları.
     def organization
       @organization ||= HeroSignal::Resources::Organization.new(self)
+    end
+
+    def journeys
+      @journeys ||= HeroSignal::Resources::Journeys.new(self)
     end
   end
 end
