@@ -33,11 +33,11 @@ module HeroSignal
       # @param kind Değerler: "campaign", "api", "journey", "test".
       # @param status Değerler: "queued", "processing", "completed", "cancelled", "failed".
       # @param sort Değerler: "created_at", "-created_at".
-      def list(limit: nil, cursor: nil, source: nil, kind: nil, status: nil, sort: nil, app_id: nil, request_options: nil)
+      def list(limit: nil, cursor: nil, source: nil, kind: nil, status: nil, sort: nil, label: nil, app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/notifications",
           path_params: {},
-          query: { "limit" => limit, "cursor" => cursor, "source" => source, "kind" => kind, "status" => status, "sort" => sort },
+          query: { "limit" => limit, "cursor" => cursor, "source" => source, "kind" => kind, "status" => status, "sort" => sort, "label" => label },
           app_id: app_id,
           query_app_id: true,
           response: "MessageList",
@@ -46,9 +46,9 @@ module HeroSignal
       end
 
       # list sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
-      def list_all(limit: nil, cursor: nil, source: nil, kind: nil, status: nil, sort: nil, app_id: nil, request_options: nil)
+      def list_all(limit: nil, cursor: nil, source: nil, kind: nil, status: nil, sort: nil, label: nil, app_id: nil, request_options: nil)
         @client.paginate(cursor) do |cursor_value|
-          list(limit: limit, source: source, kind: kind, status: status, sort: sort, app_id: app_id, request_options: request_options, cursor: cursor_value)
+          list(limit: limit, source: source, kind: kind, status: status, sort: sort, label: label, app_id: app_id, request_options: request_options, cursor: cursor_value)
         end
       end
 
@@ -657,6 +657,19 @@ module HeroSignal
         )
       end
 
+      # Şablon analitiği
+      #
+      # GET /v1/apps/{appId}/templates/{templateId}/stats
+      def stats(template_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/templates/{templateId}/stats",
+          path_params: { "templateId" => template_id },
+          app_id: app_id,
+          response: "TemplateStats",
+          request_options: request_options
+        )
+      end
+
       # Şablonu aynı organizasyondaki başka bir app'e kopyala
       #
       # POST /v1/apps/{appId}/templates/{templateId}/copy_to_app
@@ -708,11 +721,11 @@ module HeroSignal
       # @param status Değerler: "draft", "scheduled", "running", "paused", "completed", "cancelled", "failed".
       # @param type Değerler: "one_time", "scheduled", "recurring", "automated", "transactional".
       # @param channel Değerler: "ios_push", "android_push", "web_push", "email", "sms".
-      def list(limit: nil, cursor: nil, q: nil, status: nil, type: nil, channel: nil, app_id: nil, request_options: nil)
+      def list(limit: nil, cursor: nil, q: nil, status: nil, type: nil, channel: nil, label: nil, app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/apps/{appId}/campaigns",
           path_params: {},
-          query: { "limit" => limit, "cursor" => cursor, "q" => q, "status" => status, "type" => type, "channel" => channel },
+          query: { "limit" => limit, "cursor" => cursor, "q" => q, "status" => status, "type" => type, "channel" => channel, "label" => label },
           app_id: app_id,
           response: "CampaignPage",
           request_options: request_options
@@ -720,9 +733,9 @@ module HeroSignal
       end
 
       # list sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
-      def list_all(limit: nil, cursor: nil, q: nil, status: nil, type: nil, channel: nil, app_id: nil, request_options: nil)
+      def list_all(limit: nil, cursor: nil, q: nil, status: nil, type: nil, channel: nil, label: nil, app_id: nil, request_options: nil)
         @client.paginate(cursor) do |cursor_value|
-          list(limit: limit, q: q, status: status, type: type, channel: channel, app_id: app_id, request_options: request_options, cursor: cursor_value)
+          list(limit: limit, q: q, status: status, type: type, channel: channel, label: label, app_id: app_id, request_options: request_options, cursor: cursor_value)
         end
       end
 
@@ -881,6 +894,33 @@ module HeroSignal
           path_params: { "campaignId" => campaign_id },
           app_id: app_id,
           response: "CampaignStats",
+          request_options: request_options
+        )
+      end
+
+      # A/B varyant karşılaştırması
+      #
+      # GET /v1/apps/{appId}/campaigns/{campaignId}/variants/stats
+      def variant_stats(campaign_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/campaigns/{campaignId}/variants/stats",
+          path_params: { "campaignId" => campaign_id },
+          app_id: app_id,
+          response: "CampaignVariantStats",
+          request_options: request_options
+        )
+      end
+
+      # A/B kazananını seç
+      #
+      # POST /v1/apps/{appId}/campaigns/{campaignId}/winner
+      def select_winner(campaign_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/campaigns/{campaignId}/winner",
+          path_params: { "campaignId" => campaign_id },
+          body: body,
+          app_id: app_id,
+          response: "Campaign",
           request_options: request_options
         )
       end
@@ -1547,6 +1587,22 @@ module HeroSignal
         )
       end
 
+      # Retention kohortu
+      #
+      # GET /v1/apps/{appId}/analytics/retention
+      #
+      # @param format Değerler: "json", "csv".
+      def retention(weeks: nil, format: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/analytics/retention",
+          path_params: {},
+          query: { "weeks" => weeks, "format" => format },
+          app_id: app_id,
+          response: "RetentionReport",
+          request_options: request_options
+        )
+      end
+
       # Etkileşim ısı haritası
       #
       # GET /v1/apps/{appId}/analytics/engagement
@@ -1734,6 +1790,63 @@ module HeroSignal
         @client.paginate(cursor) do |cursor_value|
           audit_logs(limit: limit, action: action, actor_id: actor_id, app_id_param: app_id_param, from: from, to: to, request_options: request_options, cursor: cursor_value)
         end
+      end
+    end
+
+    # categories kaynağı.
+    class Categories < HeroSignal::BaseResource
+      # Mesaj kategorileri
+      #
+      # GET /v1/apps/{appId}/categories
+      def list(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/categories",
+          path_params: {},
+          app_id: app_id,
+          response: "MessageCategoryList",
+          request_options: request_options
+        )
+      end
+
+      # Kategori oluştur
+      #
+      # POST /v1/apps/{appId}/categories
+      def create(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/categories",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "MessageCategory",
+          request_options: request_options
+        )
+      end
+
+      # Kategori güncelle
+      #
+      # PATCH /v1/apps/{appId}/categories/{categoryId}
+      def update(category_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/categories/{categoryId}",
+          path_params: { "categoryId" => category_id },
+          body: body,
+          app_id: app_id,
+          response: "MessageCategory",
+          request_options: request_options
+        )
+      end
+
+      # Kategori sil
+      #
+      # DELETE /v1/apps/{appId}/categories/{categoryId}
+      def delete(category_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/categories/{categoryId}",
+          path_params: { "categoryId" => category_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
       end
     end
 
@@ -2012,6 +2125,36 @@ module HeroSignal
         )
       end
     end
+
+    # preferences kaynağı.
+    class Preferences < HeroSignal::BaseResource
+      # Kullanıcının tercihleri (alias ile)
+      #
+      # GET /v1/apps/{appId}/users/by/{label}/{value}/preferences
+      def get(label, value, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/users/by/{label}/{value}/preferences",
+          path_params: { "label" => label, "value" => value },
+          app_id: app_id,
+          response: "UserPreferences",
+          request_options: request_options
+        )
+      end
+
+      # Kullanıcı tercihlerini yaz (alias ile)
+      #
+      # PUT /v1/apps/{appId}/users/by/{label}/{value}/preferences
+      def set(label, value, body, app_id: nil, request_options: nil)
+        @client.call(
+          :put, "/v1/apps/{appId}/users/by/{label}/{value}/preferences",
+          path_params: { "label" => label, "value" => value },
+          body: body,
+          app_id: app_id,
+          response: "UserPreferences",
+          request_options: request_options
+        )
+      end
+    end
   end
 
   # İstemciye kaynak erişimcilerini ekleyen üretilmiş modül.
@@ -2019,7 +2162,7 @@ module HeroSignal
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "0.1.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization journeys].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization categories journeys preferences].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -2116,8 +2259,16 @@ module HeroSignal
       @organization ||= HeroSignal::Resources::Organization.new(self)
     end
 
+    def categories
+      @categories ||= HeroSignal::Resources::Categories.new(self)
+    end
+
     def journeys
       @journeys ||= HeroSignal::Resources::Journeys.new(self)
+    end
+
+    def preferences
+      @preferences ||= HeroSignal::Resources::Preferences.new(self)
     end
   end
 end

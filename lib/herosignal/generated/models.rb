@@ -137,6 +137,11 @@ module HeroSignal
     class AppSettings < HeroSignal::BaseModel
       field "quietHours", :quiet_hours, "AppSettingsQuietHours"
       field "frequencyCap", :frequency_cap, "AppSettingsFrequencyCap"
+      field "frequencyCaps", :frequency_caps, [:array, "AppSettingsFrequencyCapsItem"]
+      field "inApp", :in_app, "AppSettingsInApp"
+      field "androidChannels", :android_channels, [:array, "AppSettingsAndroidChannelsItem"]
+      field "sms", :sms, "AppSettingsSms"
+      field "preferenceCenter", :preference_center, "AppSettingsPreferenceCenter"
       field "defaultTtlSeconds", :default_ttl_seconds, :integer
       field "identityVerificationRequired", :identity_verification_required, :boolean
       field "allowedOrigins", :allowed_origins, [:array, :string]
@@ -144,6 +149,20 @@ module HeroSignal
       field "webPush", :web_push, "AppSettingsWebPush"
       field "onboarding", :onboarding, "AppSettingsOnboarding"
       field "sdkSetup", :sdk_setup, "AppSettingsSdkSetup"
+    end
+
+    # AppSettingsAndroidChannelsItem şeması.
+    class AppSettingsAndroidChannelsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      # Zorunlu. Değerler: "low", "default", "high", "urgent".
+      field "importance", :importance, :string
+      field "sound", :sound, :string
+      field "vibration", :vibration, :boolean
+      field "group", :group, :string
     end
 
     # AppSettingsFrequencyCap şeması.
@@ -154,12 +173,53 @@ module HeroSignal
       field "windowHours", :window_hours, :integer
     end
 
+    # AppSettingsFrequencyCapsItem şeması.
+    class AppSettingsFrequencyCapsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "max", :max, :integer
+      # Zorunlu.
+      field "window", :window, "AppSettingsFrequencyCapsItemWindow"
+      # Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      field "channels", :channels, [:array, :string]
+    end
+
+    # AppSettingsFrequencyCapsItemWindow şeması.
+    class AppSettingsFrequencyCapsItemWindow < HeroSignal::BaseModel
+      # Zorunlu.
+      field "value", :value, :integer
+      # Zorunlu. Değerler: "minutes", "hours", "days", "weeks".
+      field "unit", :unit, :string
+    end
+
+    # AppSettingsInApp şeması.
+    class AppSettingsInApp < HeroSignal::BaseModel
+      field "minIntervalSeconds", :min_interval_seconds, :integer
+    end
+
     # AppSettingsOnboarding şeması.
     class AppSettingsOnboarding < HeroSignal::BaseModel
       # Zorunlu.
       field "step", :step, :integer
       field "simulation", :simulation, :boolean
       field "completed_at", :completed_at, :string
+    end
+
+    # AppSettingsPreferenceCenter şeması.
+    class AppSettingsPreferenceCenter < HeroSignal::BaseModel
+      field "enabled", :enabled, :boolean
+      field "brandName", :brand_name, :string
+      field "logoUrl", :logo_url, :string
+      field "accentColor", :accent_color, :string
+      field "customUnsubscribeUrl", :custom_unsubscribe_url, :string
+      field "texts", :texts, [:map, "AppSettingsPreferenceCenterTextsValue"]
+    end
+
+    # AppSettingsPreferenceCenterTextsValue şeması.
+    class AppSettingsPreferenceCenterTextsValue < HeroSignal::BaseModel
+      field "title", :title, :string
+      field "description", :description, :string
+      field "unsubscribeAll", :unsubscribe_all, :string
+      field "saved", :saved, :string
     end
 
     # AppSettingsQuietHours şeması.
@@ -186,6 +246,13 @@ module HeroSignal
       field "detectedSubscriptionId", :detected_subscription_id, :string
       field "testMessageId", :test_message_id, :string
       field "completedAt", :completed_at, :string
+    end
+
+    # AppSettingsSms şeması.
+    class AppSettingsSms < HeroSignal::BaseModel
+      field "helpReply", :help_reply, :string
+      field "stopReply", :stop_reply, :string
+      field "autoReply", :auto_reply, :boolean
     end
 
     # AppSettingsWebPush şeması.
@@ -239,6 +306,8 @@ module HeroSignal
       field "enabled", :enabled, :boolean
       # Zorunlu. Değerler: "slidedown", "native".
       field "type", :type, :string
+      # Değerler: "push", "email", "sms", "email_sms".
+      field "collect", :collect, :string
       field "delaySeconds", :delay_seconds, :integer
       field "pageViews", :page_views, :integer
       field "scrollPercent", :scroll_percent, :integer
@@ -323,6 +392,14 @@ module HeroSignal
       field "app_id", :app_id, :string
       # Zorunlu.
       field "name", :name, :string
+      # Zorunlu.
+      field "labels", :labels, [:array, :string]
+      # Zorunlu.
+      field "category", :category, :string
+      # Zorunlu.
+      field "ab_test", :ab_test, "CampaignAbTest"
+      # Zorunlu.
+      field "variants", :variants, [:array, "CampaignVariantsItem"]
       # Zorunlu. Değerler: "one_time", "scheduled", "recurring", "automated", "transactional".
       field "type", :type, :string
       # Zorunlu. Değerler: "draft", "scheduled", "running", "paused", "completed", "cancelled", "failed".
@@ -365,6 +442,38 @@ module HeroSignal
       field "updated_at", :updated_at, :string
       # Zorunlu.
       field "estimated_recipients", :estimated_recipients, :integer
+    end
+
+    # CampaignAbTest şeması.
+    class CampaignAbTest < HeroSignal::BaseModel
+      field "enabled", :enabled, :boolean
+      field "test_percentage", :test_percentage, :integer
+      field "winner", :winner, "CampaignAbTestWinner"
+      # Değerler: "testing", "winner_sent".
+      field "phase", :phase, :string
+      field "winner_variant_id", :winner_variant_id, :string
+      field "decided_at", :decided_at, :string
+      field "decided_by", :decided_by, :string
+      field "significance", :significance, "CampaignAbTestSignificance"
+    end
+
+    # CampaignAbTestSignificance şeması.
+    class CampaignAbTestSignificance < HeroSignal::BaseModel
+      # Zorunlu.
+      field "p_value", :p_value, :number
+      # Zorunlu.
+      field "significant", :significant, :boolean
+      # Zorunlu.
+      field "metric", :metric, :string
+    end
+
+    # CampaignAbTestWinner şeması.
+    class CampaignAbTestWinner < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "manual", "auto".
+      field "mode", :mode, :string
+      # Zorunlu. Değerler: "open_rate", "click_rate", "conversion_rate".
+      field "metric", :metric, :string
+      field "evaluate_after_minutes", :evaluate_after_minutes, :integer
     end
 
     # CampaignApproval şeması.
@@ -420,11 +529,33 @@ module HeroSignal
       field "audience", :audience, "CampaignsCreateBodyAudience"
       # messages.content ile aynı şema (headings, contents, url, buttons…)
       field "content", :content, [:map, :any]
+      field "labels", :labels, [:array, :string]
+      # Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır
+      field "category", :category, :string
+      field "ab_test", :ab_test, "CampaignsCreateBodyAbTest"
+      # A/B varyantları (ağırlıklar toplamı 100; en fazla bir is_control)
+      field "variants", :variants, [:array, "CampaignsCreateBodyVariantsItem"]
       field "template_id", :template_id, :string
       field "template_version", :template_version, :integer
       field "delivery", :delivery, "CampaignsCreateBodyDelivery"
       field "recurrence", :recurrence, "CampaignsCreateBodyRecurrence"
       field "send_at", :send_at, :string
+    end
+
+    # CampaignsCreateBodyAbTest şeması.
+    class CampaignsCreateBodyAbTest < HeroSignal::BaseModel
+      field "enabled", :enabled, :boolean
+      field "test_percentage", :test_percentage, :integer
+      field "winner", :winner, "CampaignsCreateBodyAbTestWinner"
+    end
+
+    # CampaignsCreateBodyAbTestWinner şeması.
+    class CampaignsCreateBodyAbTestWinner < HeroSignal::BaseModel
+      # Değerler: "manual", "auto".
+      field "mode", :mode, :string
+      # Değerler: "open_rate", "click_rate", "conversion_rate".
+      field "metric", :metric, :string
+      field "evaluate_after_minutes", :evaluate_after_minutes, :integer
     end
 
     # CampaignsCreateBodyAudience şeması.
@@ -466,6 +597,17 @@ module HeroSignal
       field "cron", :cron, :string
       field "until", :until_, :string
       field "timezone", :timezone, :string
+    end
+
+    # CampaignsCreateBodyVariantsItem şeması.
+    class CampaignsCreateBodyVariantsItem < HeroSignal::BaseModel
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "weight_percent", :weight_percent, :integer
+      field "content", :content, [:map, :any]
+      field "is_control", :is_control, :boolean
     end
 
     # CampaignStats şeması.
@@ -561,11 +703,33 @@ module HeroSignal
       field "audience", :audience, "CampaignsUpdateBodyAudience"
       # messages.content ile aynı şema (headings, contents, url, buttons…)
       field "content", :content, [:map, :any]
+      field "labels", :labels, [:array, :string]
+      # Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır
+      field "category", :category, :string
+      field "ab_test", :ab_test, "CampaignsUpdateBodyAbTest"
+      # A/B varyantları (ağırlıklar toplamı 100; en fazla bir is_control)
+      field "variants", :variants, [:array, "CampaignsUpdateBodyVariantsItem"]
       field "template_id", :template_id, :string
       field "template_version", :template_version, :integer
       field "delivery", :delivery, "CampaignsUpdateBodyDelivery"
       field "recurrence", :recurrence, "CampaignsUpdateBodyRecurrence"
       field "send_at", :send_at, :string
+    end
+
+    # CampaignsUpdateBodyAbTest şeması.
+    class CampaignsUpdateBodyAbTest < HeroSignal::BaseModel
+      field "enabled", :enabled, :boolean
+      field "test_percentage", :test_percentage, :integer
+      field "winner", :winner, "CampaignsUpdateBodyAbTestWinner"
+    end
+
+    # CampaignsUpdateBodyAbTestWinner şeması.
+    class CampaignsUpdateBodyAbTestWinner < HeroSignal::BaseModel
+      # Değerler: "manual", "auto".
+      field "mode", :mode, :string
+      # Değerler: "open_rate", "click_rate", "conversion_rate".
+      field "metric", :metric, :string
+      field "evaluate_after_minutes", :evaluate_after_minutes, :integer
     end
 
     # CampaignsUpdateBodyAudience şeması.
@@ -607,6 +771,119 @@ module HeroSignal
       field "cron", :cron, :string
       field "until", :until_, :string
       field "timezone", :timezone, :string
+    end
+
+    # CampaignsUpdateBodyVariantsItem şeması.
+    class CampaignsUpdateBodyVariantsItem < HeroSignal::BaseModel
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "weight_percent", :weight_percent, :integer
+      field "content", :content, [:map, :any]
+      field "is_control", :is_control, :boolean
+    end
+
+    # CampaignVariantsItem şeması.
+    class CampaignVariantsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "weight_percent", :weight_percent, :integer
+      # Zorunlu.
+      field "content", :content, [:map, :any]
+      # Zorunlu.
+      field "is_control", :is_control, :boolean
+      # Zorunlu.
+      field "position", :position, :integer
+    end
+
+    # CampaignVariantStats şeması.
+    class CampaignVariantStats < HeroSignal::BaseModel
+      # Zorunlu.
+      field "ab_test", :ab_test, "CampaignVariantStatsAbTest"
+      # Zorunlu.
+      field "variants", :variants, [:array, "CampaignVariantStatsVariantsItem"]
+      # Zorunlu.
+      field "leader", :leader, :string
+      # Zorunlu.
+      field "significance", :significance, "CampaignVariantStatsSignificance"
+    end
+
+    # CampaignVariantStatsAbTest şeması.
+    class CampaignVariantStatsAbTest < HeroSignal::BaseModel
+      field "enabled", :enabled, :boolean
+      field "test_percentage", :test_percentage, :integer
+      field "winner", :winner, "CampaignVariantStatsAbTestWinner"
+      # Değerler: "testing", "winner_sent".
+      field "phase", :phase, :string
+      field "winner_variant_id", :winner_variant_id, :string
+      field "decided_at", :decided_at, :string
+      field "decided_by", :decided_by, :string
+      field "significance", :significance, "CampaignVariantStatsAbTestSignificance"
+    end
+
+    # CampaignVariantStatsAbTestSignificance şeması.
+    class CampaignVariantStatsAbTestSignificance < HeroSignal::BaseModel
+      # Zorunlu.
+      field "p_value", :p_value, :number
+      # Zorunlu.
+      field "significant", :significant, :boolean
+      # Zorunlu.
+      field "metric", :metric, :string
+    end
+
+    # CampaignVariantStatsAbTestWinner şeması.
+    class CampaignVariantStatsAbTestWinner < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "manual", "auto".
+      field "mode", :mode, :string
+      # Zorunlu. Değerler: "open_rate", "click_rate", "conversion_rate".
+      field "metric", :metric, :string
+      field "evaluate_after_minutes", :evaluate_after_minutes, :integer
+    end
+
+    # CampaignVariantStatsSignificance şeması.
+    class CampaignVariantStatsSignificance < HeroSignal::BaseModel
+      # Zorunlu.
+      field "p_value", :p_value, :number
+      # Zorunlu.
+      field "significant", :significant, :boolean
+      # Zorunlu.
+      field "metric", :metric, :string
+    end
+
+    # CampaignVariantStatsVariantsItem şeması.
+    class CampaignVariantStatsVariantsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "variant_id", :variant_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "weight_percent", :weight_percent, :integer
+      # Zorunlu.
+      field "is_control", :is_control, :boolean
+      # Zorunlu.
+      field "targeted", :targeted, :integer
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "delivered", :delivered, :integer
+      # Zorunlu.
+      field "opened", :opened, :integer
+      # Zorunlu.
+      field "clicked", :clicked, :integer
+      # Zorunlu.
+      field "converted", :converted, :integer
+      # Zorunlu.
+      field "holdout", :holdout, :integer
+      # Zorunlu.
+      field "open_rate", :open_rate, :number
+      # Zorunlu.
+      field "click_rate", :click_rate, :number
+      # Zorunlu.
+      field "conversion_rate", :conversion_rate, :number
     end
 
     # ChannelConfig şeması.
@@ -799,6 +1076,19 @@ module HeroSignal
       field "sms", :sms, :boolean
     end
 
+    # CreateCategoryDto şeması.
+    class CreateCategoryDto < HeroSignal::BaseModel
+      # Zorunlu.
+      field "key", :key, :string
+      # Zorunlu.
+      field "name", :name, [:map, :string]
+      field "description", :description, [:map, :string]
+      # Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      field "channels", :channels, [:array, :string]
+      field "default_opted_in", :default_opted_in, :boolean
+      field "position", :position, :integer
+    end
+
     # CreatedApiKey şeması.
     class CreatedApiKey < HeroSignal::BaseModel
       # Zorunlu.
@@ -857,6 +1147,8 @@ module HeroSignal
       field "name", :name, :string
       # Zorunlu.
       field "triggers", :triggers, [:array, :any]
+      field "trigger_groups", :trigger_groups, [:array, [:array, :any]]
+      field "variants", :variants, [:array, "CreateInAppDtoVariantsItem"]
       # Zorunlu.
       field "display", :display_value, "CreateInAppDtoDisplay"
       field "audience", :audience, "CreateInAppDtoAudience"
@@ -890,6 +1182,30 @@ module HeroSignal
       field "max_impressions", :max_impressions, :integer
       field "min_interval_seconds", :min_interval_seconds, :integer
       field "stop_after_interaction", :stop_after_interaction, :boolean
+    end
+
+    # CreateInAppDtoVariantsItem şeması.
+    class CreateInAppDtoVariantsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "weight_percent", :weight_percent, :integer
+      # Zorunlu.
+      field "display", :display_value, "CreateInAppDtoVariantsItemDisplay"
+    end
+
+    # CreateInAppDtoVariantsItemDisplay şeması.
+    class CreateInAppDtoVariantsItemDisplay < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "modal", "banner_top", "banner_bottom", "fullscreen".
+      field "layout", :layout, :string
+      field "background_color", :background_color, :string
+      field "text_color", :text_color, :string
+      field "dismissible", :dismissible, :boolean
+      field "auto_dismiss_seconds", :auto_dismiss_seconds, :integer
+      # Zorunlu.
+      field "blocks", :blocks, [:array, :any]
     end
 
     # CreateNotificationDto şeması.
@@ -962,6 +1278,8 @@ module HeroSignal
       field "throttle_rate_per_minute", :throttle_rate_per_minute, :integer
       field "include_unsubscribed", :include_unsubscribed, :boolean
       field "name", :name, :string
+      field "labels", :labels, [:array, :string]
+      field "category", :category, :string
     end
 
     # CreateNotificationDtoButtonsItem şeması.
@@ -1584,6 +1902,10 @@ module HeroSignal
       # Zorunlu.
       field "triggers", :triggers, [:array, :any]
       # Zorunlu.
+      field "trigger_groups", :trigger_groups, [:array, [:array, :any]]
+      # Zorunlu.
+      field "variants", :variants, [:array, "InAppMessageVariantsItem"]
+      # Zorunlu.
       field "display", :display_value, "InAppMessageDisplay"
       # Zorunlu.
       field "audience", :audience, "InAppMessageAudience"
@@ -1597,6 +1919,8 @@ module HeroSignal
       field "end_at", :end_at, :string
       # Zorunlu.
       field "stats", :stats, "InAppMessageStats"
+      # Zorunlu.
+      field "variant_stats", :variant_stats, [:array, "InAppMessageVariantStatsItem"]
       # Zorunlu.
       field "created_at", :created_at, :string
       # Zorunlu.
@@ -1648,6 +1972,42 @@ module HeroSignal
       field "dismissals", :dismissals, :integer
       # Zorunlu.
       field "unique_users", :unique_users, :integer
+      # Zorunlu.
+      field "ctr", :ctr, :number
+    end
+
+    # InAppMessageVariantsItem şeması.
+    class InAppMessageVariantsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "weight_percent", :weight_percent, :integer
+      # Zorunlu.
+      field "display", :display_value, "InAppMessageVariantsItemDisplay"
+    end
+
+    # InAppMessageVariantsItemDisplay şeması.
+    class InAppMessageVariantsItemDisplay < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "modal", "banner_top", "banner_bottom", "fullscreen".
+      field "layout", :layout, :string
+      field "background_color", :background_color, :string
+      field "text_color", :text_color, :string
+      field "dismissible", :dismissible, :boolean
+      field "auto_dismiss_seconds", :auto_dismiss_seconds, :integer
+      # Zorunlu.
+      field "blocks", :blocks, [:array, :any]
+    end
+
+    # InAppMessageVariantStatsItem şeması.
+    class InAppMessageVariantStatsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "variant_id", :variant_id, :string
+      # Zorunlu.
+      field "impressions", :impressions, :integer
+      # Zorunlu.
+      field "clicks", :clicks, :integer
       # Zorunlu.
       field "ctr", :ctr, :number
     end
@@ -2018,6 +2378,23 @@ module HeroSignal
       # Zorunlu.
       field "branches", :branches, [:map, :integer]
       field "messages", :messages, [:map, :integer]
+      field "variants", :variants, [:array, "JourneyStatsNodesItemVariantsItem"]
+    end
+
+    # JourneyStatsNodesItemVariantsItem şeması.
+    class JourneyStatsNodesItemVariantsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "variant_id", :variant_id, :string
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "opened", :opened, :integer
+      # Zorunlu.
+      field "clicked", :clicked, :integer
+      # Zorunlu.
+      field "converted", :converted, :integer
+      # Zorunlu.
+      field "winner", :winner, :boolean
     end
 
     # JourneyStatsSummary şeması.
@@ -2139,6 +2516,16 @@ module HeroSignal
       # Zorunlu.
       field "options", :options, [:map, :any]
       # Zorunlu.
+      field "labels", :labels, [:array, :string]
+      # Zorunlu.
+      field "category", :category, :string
+      # Zorunlu.
+      field "template_id", :template_id, :string
+      # Zorunlu.
+      field "campaign_id", :campaign_id, :string
+      # Zorunlu.
+      field "variants", :variants, [:array, "MessageVariantsItem"]
+      # Zorunlu.
       field "counts", :counts, "MessageCounts"
       # Zorunlu.
       field "requested_by", :requested_by, "MessageRequestedBy"
@@ -2154,6 +2541,38 @@ module HeroSignal
       field "created_at", :created_at, :string
       # Zorunlu.
       field "updated_at", :updated_at, :string
+    end
+
+    # MessageCategory şeması.
+    class MessageCategory < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "key", :key, :string
+      # Zorunlu.
+      field "name", :name, [:map, :string]
+      # Zorunlu.
+      field "description", :description, [:map, :string]
+      # Zorunlu.
+      field "channels", :channels, [:array, :string]
+      # Zorunlu.
+      field "default_opted_in", :default_opted_in, :boolean
+      # Zorunlu.
+      field "position", :position, :integer
+      # Zorunlu.
+      field "opted_out_users", :opted_out_users, :integer
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # MessageCategoryList şeması.
+    class MessageCategoryList < HeroSignal::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "MessageCategory"]
     end
 
     # MessageCounts şeması.
@@ -2269,6 +2688,18 @@ module HeroSignal
       field "open_rate", :open_rate, :number
       # Zorunlu.
       field "click_rate", :click_rate, :number
+    end
+
+    # MessageVariantsItem şeması.
+    class MessageVariantsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "weight_percent", :weight_percent, :integer
+      # Zorunlu.
+      field "is_control", :is_control, :boolean
     end
 
     # Ok şeması.
@@ -2684,6 +3115,26 @@ module HeroSignal
       field "properties", :properties, [:map, :any]
     end
 
+    # RetentionReport şeması.
+    class RetentionReport < HeroSignal::BaseModel
+      # Zorunlu.
+      field "weeks", :weeks, :integer
+      # Zorunlu.
+      field "cohorts", :cohorts, [:array, "RetentionReportCohortsItem"]
+      # Zorunlu.
+      field "average", :average, [:array, :number]
+    end
+
+    # RetentionReportCohortsItem şeması.
+    class RetentionReportCohortsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "week", :week, :string
+      # Zorunlu.
+      field "users", :users, :integer
+      # Zorunlu.
+      field "retention", :retention, [:array, :number]
+    end
+
     # ScheduleCampaignDto şeması.
     class ScheduleCampaignDto < HeroSignal::BaseModel
       field "send_at", :send_at, :string
@@ -2843,10 +3294,32 @@ module HeroSignal
       field "none", :none, [:array, [:map, :any]]
     end
 
+    # SelectWinnerDto şeması.
+    class SelectWinnerDto < HeroSignal::BaseModel
+      # Zorunlu.
+      field "variant_id", :variant_id, :string
+    end
+
     # SetOwnerDto şeması.
     class SetOwnerDto < HeroSignal::BaseModel
       # Zorunlu.
       field "external_id", :external_id, :string
+    end
+
+    # SetPreferencesDto şeması.
+    class SetPreferencesDto < HeroSignal::BaseModel
+      # Zorunlu.
+      field "preferences", :preferences, [:array, "SetPreferencesDtoPreferencesItem"]
+    end
+
+    # SetPreferencesDtoPreferencesItem şeması.
+    class SetPreferencesDtoPreferencesItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "category", :category, :string
+      # Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      field "channel", :channel, :string
+      # Zorunlu.
+      field "opted_in", :opted_in, :boolean
     end
 
     # Subscription şeması.
@@ -3039,6 +3512,36 @@ module HeroSignal
       field "has_more", :has_more, :boolean
     end
 
+    # TemplateStats şeması.
+    class TemplateStats < HeroSignal::BaseModel
+      # Zorunlu.
+      field "template_id", :template_id, :string
+      # Zorunlu.
+      field "messages", :messages, :integer
+      # Zorunlu.
+      field "campaigns", :campaigns, :integer
+      # Zorunlu.
+      field "targeted", :targeted, :integer
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "delivered", :delivered, :integer
+      # Zorunlu.
+      field "opened", :opened, :integer
+      # Zorunlu.
+      field "clicked", :clicked, :integer
+      # Zorunlu.
+      field "converted", :converted, :integer
+      # Zorunlu.
+      field "open_rate", :open_rate, :number
+      # Zorunlu.
+      field "click_rate", :click_rate, :number
+      # Zorunlu.
+      field "conversion_rate", :conversion_rate, :number
+      # Zorunlu.
+      field "last_used_at", :last_used_at, :string
+    end
+
     # TemplateVersionList şeması.
     class TemplateVersionList < HeroSignal::BaseModel
       # Zorunlu.
@@ -3107,6 +3610,11 @@ module HeroSignal
     class UpdateAppDtoSettings < HeroSignal::BaseModel
       field "quietHours", :quiet_hours, "UpdateAppDtoSettingsQuietHours"
       field "frequencyCap", :frequency_cap, "UpdateAppDtoSettingsFrequencyCap"
+      field "frequencyCaps", :frequency_caps, [:array, "UpdateAppDtoSettingsFrequencyCapsItem"]
+      field "inApp", :in_app, "UpdateAppDtoSettingsInApp"
+      field "androidChannels", :android_channels, [:array, "UpdateAppDtoSettingsAndroidChannelsItem"]
+      field "sms", :sms, "UpdateAppDtoSettingsSms"
+      field "preferenceCenter", :preference_center, "UpdateAppDtoSettingsPreferenceCenter"
       field "defaultTtlSeconds", :default_ttl_seconds, :integer
       field "identityVerificationRequired", :identity_verification_required, :boolean
       field "allowedOrigins", :allowed_origins, [:array, :string]
@@ -3114,6 +3622,20 @@ module HeroSignal
       field "webPush", :web_push, "UpdateAppDtoSettingsWebPush"
       field "onboarding", :onboarding, "UpdateAppDtoSettingsOnboarding"
       field "sdkSetup", :sdk_setup, "UpdateAppDtoSettingsSdkSetup"
+    end
+
+    # UpdateAppDtoSettingsAndroidChannelsItem şeması.
+    class UpdateAppDtoSettingsAndroidChannelsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      # Zorunlu. Değerler: "low", "default", "high", "urgent".
+      field "importance", :importance, :string
+      field "sound", :sound, :string
+      field "vibration", :vibration, :boolean
+      field "group", :group, :string
     end
 
     # UpdateAppDtoSettingsFrequencyCap şeması.
@@ -3124,12 +3646,53 @@ module HeroSignal
       field "windowHours", :window_hours, :integer
     end
 
+    # UpdateAppDtoSettingsFrequencyCapsItem şeması.
+    class UpdateAppDtoSettingsFrequencyCapsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "max", :max, :integer
+      # Zorunlu.
+      field "window", :window, "UpdateAppDtoSettingsFrequencyCapsItemWindow"
+      # Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      field "channels", :channels, [:array, :string]
+    end
+
+    # UpdateAppDtoSettingsFrequencyCapsItemWindow şeması.
+    class UpdateAppDtoSettingsFrequencyCapsItemWindow < HeroSignal::BaseModel
+      # Zorunlu.
+      field "value", :value, :integer
+      # Zorunlu. Değerler: "minutes", "hours", "days", "weeks".
+      field "unit", :unit, :string
+    end
+
+    # UpdateAppDtoSettingsInApp şeması.
+    class UpdateAppDtoSettingsInApp < HeroSignal::BaseModel
+      field "minIntervalSeconds", :min_interval_seconds, :integer
+    end
+
     # UpdateAppDtoSettingsOnboarding şeması.
     class UpdateAppDtoSettingsOnboarding < HeroSignal::BaseModel
       # Zorunlu.
       field "step", :step, :integer
       field "simulation", :simulation, :boolean
       field "completed_at", :completed_at, :string
+    end
+
+    # UpdateAppDtoSettingsPreferenceCenter şeması.
+    class UpdateAppDtoSettingsPreferenceCenter < HeroSignal::BaseModel
+      field "enabled", :enabled, :boolean
+      field "brandName", :brand_name, :string
+      field "logoUrl", :logo_url, :string
+      field "accentColor", :accent_color, :string
+      field "customUnsubscribeUrl", :custom_unsubscribe_url, :string
+      field "texts", :texts, [:map, "UpdateAppDtoSettingsPreferenceCenterTextsValue"]
+    end
+
+    # UpdateAppDtoSettingsPreferenceCenterTextsValue şeması.
+    class UpdateAppDtoSettingsPreferenceCenterTextsValue < HeroSignal::BaseModel
+      field "title", :title, :string
+      field "description", :description, :string
+      field "unsubscribeAll", :unsubscribe_all, :string
+      field "saved", :saved, :string
     end
 
     # UpdateAppDtoSettingsQuietHours şeması.
@@ -3156,6 +3719,13 @@ module HeroSignal
       field "detectedSubscriptionId", :detected_subscription_id, :string
       field "testMessageId", :test_message_id, :string
       field "completedAt", :completed_at, :string
+    end
+
+    # UpdateAppDtoSettingsSms şeması.
+    class UpdateAppDtoSettingsSms < HeroSignal::BaseModel
+      field "helpReply", :help_reply, :string
+      field "stopReply", :stop_reply, :string
+      field "autoReply", :auto_reply, :boolean
     end
 
     # UpdateAppDtoSettingsWebPush şeması.
@@ -3209,6 +3779,8 @@ module HeroSignal
       field "enabled", :enabled, :boolean
       # Zorunlu. Değerler: "slidedown", "native".
       field "type", :type, :string
+      # Değerler: "push", "email", "sms", "email_sms".
+      field "collect", :collect, :string
       field "delaySeconds", :delay_seconds, :integer
       field "pageViews", :page_views, :integer
       field "scrollPercent", :scroll_percent, :integer
@@ -3247,10 +3819,22 @@ module HeroSignal
       field "message", :message, :string
     end
 
+    # UpdateCategoryDto şeması.
+    class UpdateCategoryDto < HeroSignal::BaseModel
+      field "name", :name, [:map, :string]
+      field "description", :description, [:map, :string]
+      # Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      field "channels", :channels, [:array, :string]
+      field "default_opted_in", :default_opted_in, :boolean
+      field "position", :position, :integer
+    end
+
     # UpdateInAppDto şeması.
     class UpdateInAppDto < HeroSignal::BaseModel
       field "name", :name, :string
       field "triggers", :triggers, [:array, :any]
+      field "trigger_groups", :trigger_groups, [:array, [:array, :any]]
+      field "variants", :variants, [:array, "UpdateInAppDtoVariantsItem"]
       field "display", :display_value, "UpdateInAppDtoDisplay"
       field "audience", :audience, "UpdateInAppDtoAudience"
       field "frequency", :frequency, "UpdateInAppDtoFrequency"
@@ -3283,6 +3867,30 @@ module HeroSignal
       field "max_impressions", :max_impressions, :integer
       field "min_interval_seconds", :min_interval_seconds, :integer
       field "stop_after_interaction", :stop_after_interaction, :boolean
+    end
+
+    # UpdateInAppDtoVariantsItem şeması.
+    class UpdateInAppDtoVariantsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "weight_percent", :weight_percent, :integer
+      # Zorunlu.
+      field "display", :display_value, "UpdateInAppDtoVariantsItemDisplay"
+    end
+
+    # UpdateInAppDtoVariantsItemDisplay şeması.
+    class UpdateInAppDtoVariantsItemDisplay < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "modal", "banner_top", "banner_bottom", "fullscreen".
+      field "layout", :layout, :string
+      field "background_color", :background_color, :string
+      field "text_color", :text_color, :string
+      field "dismissible", :dismissible, :boolean
+      field "auto_dismiss_seconds", :auto_dismiss_seconds, :integer
+      # Zorunlu.
+      field "blocks", :blocks, [:array, :any]
     end
 
     # UpdateJourneyDto şeması.
@@ -3570,6 +4178,32 @@ module HeroSignal
       field "next_cursor", :next_cursor, :string
       # Zorunlu.
       field "has_more", :has_more, :boolean
+    end
+
+    # UserPreferences şeması.
+    class UserPreferences < HeroSignal::BaseModel
+      # Zorunlu.
+      field "user_id", :user_id, :string
+      # Zorunlu.
+      field "data", :data, [:array, "UserPreferencesDataItem"]
+      # Zorunlu.
+      field "categories", :categories, [:array, "MessageCategory"]
+    end
+
+    # UserPreferencesDataItem şeması.
+    class UserPreferencesDataItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "category", :category, :string
+      # Zorunlu.
+      field "channel", :channel, :string
+      # Zorunlu.
+      field "opted_in", :opted_in, :boolean
+      # Zorunlu.
+      field "explicit", :explicit, :boolean
+      # Zorunlu.
+      field "source", :source, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
     end
 
     # UsersSearchBody şeması.
