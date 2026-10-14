@@ -55,7 +55,7 @@ SDK'da metodu olmayan uçlar veya JSON dışı yanıtlar için
 | `app_id:` | `nil` | Çağrıda `app_id:` verilmezse kullanılan app |
 | `base_url:` | `https://api.herosignal.dev` | API adresi |
 | `timeout:` | `30` | Deneme başına zaman aşımı (sn) |
-| `max_retries:` | `3` | 429/5xx ve ağ hatalarında yeniden deneme |
+| `max_retries:` | `3` | En fazla yeniden deneme (politika: aşağıda) |
 | `auto_idempotency_key:` | `true` | `Idempotency-Key` destekleyen çağrılarda otomatik UUID |
 | `transport:` | `NetHttpTransport` | Özel taşıma (`#call(method, url, headers, body, timeout)`) |
 
@@ -63,7 +63,7 @@ Her çağrı `request_options: { timeout: 5, max_retries: 0, headers: { … } }`
 
 ### Hatalar
 
-429, 5xx ve ağ hatalarında üstel geri çekilmeyle (0,3 / 1 / 3 sn) yeniden denenir; `Retry-After` başlığına uyulur.
+429 her metotta; 5xx ve ağ hataları GET/HEAD/OPTIONS/PUT/DELETE'te, POST/PATCH'te yalnızca `Idempotency-Key` varsa (otomatik anahtar dahil) veya istek sunucuya hiç gönderilemediyse (bağlantı reddi, DNS hatası, bağlantı zaman aşımı) üstel geri çekilmeyle (0,3 / 1 / 3 sn) yeniden denenir; `Retry-After` başlığına uyulur.
 Kalıcı hatalar `HeroSignal::Error` alt sınıflarıdır ve `status`, `code` (`HS_…`), `request_id`, `details` taşır:
 
 ```ruby
