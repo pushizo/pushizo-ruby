@@ -2051,11 +2051,13 @@ module HeroSignal
       # Düğüm bazlı istatistik
       #
       # GET /v1/apps/{appId}/journeys/{journeyId}/stats
-      def stats(journey_id, version: nil, app_id: nil, request_options: nil)
+      #
+      # @param all_versions Değerler: "true", "false".
+      def stats(journey_id, version: nil, all_versions: nil, app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/apps/{appId}/journeys/{journeyId}/stats",
           path_params: { "journeyId" => journey_id },
-          query: { "version" => version },
+          query: { "version" => version, "all_versions" => all_versions },
           app_id: app_id,
           response: "JourneyStats",
           request_options: request_options
