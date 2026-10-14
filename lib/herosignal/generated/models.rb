@@ -1208,6 +1208,7 @@ module HeroSignal
       field "triggers", :triggers, [:array, :any]
       field "trigger_groups", :trigger_groups, [:array, [:array, :any]]
       field "variants", :variants, [:array, "CreateInAppDtoVariantsItem"]
+      field "ab_test", :ab_test, "CreateInAppDtoAbTest"
       # Zorunlu.
       field "display", :display_value, "CreateInAppDtoDisplay"
       field "audience", :audience, "CreateInAppDtoAudience"
@@ -1216,6 +1217,19 @@ module HeroSignal
       field "priority", :priority, :integer
       field "start_at", :start_at, :string
       field "end_at", :end_at, :string
+    end
+
+    # CreateInAppDtoAbTest şeması.
+    class CreateInAppDtoAbTest < HeroSignal::BaseModel
+      field "winner", :winner, "CreateInAppDtoAbTestWinner"
+    end
+
+    # CreateInAppDtoAbTestWinner şeması.
+    class CreateInAppDtoAbTestWinner < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "manual", "auto".
+      field "mode", :mode, :string
+      field "min_impressions", :min_impressions, :integer
+      field "confidence", :confidence, :number
     end
 
     # CreateInAppDtoAudience şeması.
@@ -1989,9 +2003,32 @@ module HeroSignal
       # Zorunlu.
       field "variant_stats", :variant_stats, [:array, "InAppMessageVariantStatsItem"]
       # Zorunlu.
+      field "ab_test", :ab_test, "InAppMessageAbTest"
+      # Zorunlu.
+      field "variant_significance", :variant_significance, "InAppMessageVariantSignificance"
+      # Zorunlu.
       field "created_at", :created_at, :string
       # Zorunlu.
       field "updated_at", :updated_at, :string
+    end
+
+    # InAppMessageAbTest şeması.
+    class InAppMessageAbTest < HeroSignal::BaseModel
+      field "winner", :winner, "InAppMessageAbTestWinner"
+      # Zorunlu.
+      field "winner_variant_id", :winner_variant_id, :string
+      # Zorunlu.
+      field "decided_at", :decided_at, :string
+      # Zorunlu.
+      field "decided_by", :decided_by, :string
+    end
+
+    # InAppMessageAbTestWinner şeması.
+    class InAppMessageAbTestWinner < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "manual", "auto".
+      field "mode", :mode, :string
+      field "min_impressions", :min_impressions, :integer
+      field "confidence", :confidence, :number
     end
 
     # InAppMessageAudience şeması.
@@ -2067,6 +2104,16 @@ module HeroSignal
       field "blocks", :blocks, [:array, :any]
     end
 
+    # InAppMessageVariantSignificance şeması.
+    class InAppMessageVariantSignificance < HeroSignal::BaseModel
+      # Zorunlu.
+      field "leader", :leader, :string
+      # Zorunlu.
+      field "p_value", :p_value, :number
+      # Zorunlu.
+      field "significant", :significant, :boolean
+    end
+
     # InAppMessageVariantStatsItem şeması.
     class InAppMessageVariantStatsItem < HeroSignal::BaseModel
       # Zorunlu.
@@ -2083,6 +2130,12 @@ module HeroSignal
     class InAppStatusDto < HeroSignal::BaseModel
       # Zorunlu. Değerler: "draft", "active", "paused", "archived".
       field "status", :status, :string
+    end
+
+    # InAppWinnerDto şeması.
+    class InAppWinnerDto < HeroSignal::BaseModel
+      # Zorunlu.
+      field "variant_id", :variant_id, :string
     end
 
     # InboxItem şeması.
@@ -3904,6 +3957,7 @@ module HeroSignal
       field "triggers", :triggers, [:array, :any]
       field "trigger_groups", :trigger_groups, [:array, [:array, :any]]
       field "variants", :variants, [:array, "UpdateInAppDtoVariantsItem"]
+      field "ab_test", :ab_test, "UpdateInAppDtoAbTest"
       field "display", :display_value, "UpdateInAppDtoDisplay"
       field "audience", :audience, "UpdateInAppDtoAudience"
       field "frequency", :frequency, "UpdateInAppDtoFrequency"
@@ -3911,6 +3965,19 @@ module HeroSignal
       field "priority", :priority, :integer
       field "start_at", :start_at, :string
       field "end_at", :end_at, :string
+    end
+
+    # UpdateInAppDtoAbTest şeması.
+    class UpdateInAppDtoAbTest < HeroSignal::BaseModel
+      field "winner", :winner, "UpdateInAppDtoAbTestWinner"
+    end
+
+    # UpdateInAppDtoAbTestWinner şeması.
+    class UpdateInAppDtoAbTestWinner < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "manual", "auto".
+      field "mode", :mode, :string
+      field "min_impressions", :min_impressions, :integer
+      field "confidence", :confidence, :number
     end
 
     # UpdateInAppDtoAudience şeması.
