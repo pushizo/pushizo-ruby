@@ -419,14 +419,22 @@ module HeroSignal
       # Olay tanımları
       #
       # GET /v1/apps/{appId}/events/definitions
-      def list_definitions(app_id: nil, request_options: nil)
+      def list_definitions(limit: nil, cursor: nil, app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/apps/{appId}/events/definitions",
           path_params: {},
+          query: { "limit" => limit, "cursor" => cursor },
           app_id: app_id,
           response: "EventDefinitionList",
           request_options: request_options
         )
+      end
+
+      # list_definitions sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def list_definitions_all(limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          list_definitions(limit: limit, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
       end
 
       # Olay detayı
@@ -1071,6 +1079,22 @@ module HeroSignal
       # A/B kazananını elle seç
       #
       # POST /v1/apps/{appId}/in-app-messages/{messageId}/winner
+      def select_winner(message_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/in-app-messages/{messageId}/winner",
+          path_params: { "messageId" => message_id },
+          body: body,
+          app_id: app_id,
+          response: "InAppMessage",
+          request_options: request_options
+        )
+      end
+
+      # A/B kazananını elle seç
+      #
+      # POST /v1/apps/{appId}/in-app-messages/{messageId}/winner
+      #
+      # @deprecated #select_winner kullanın; bu ad geriye dönük uyumluluk için korunur.
       def winner(message_id, body, app_id: nil, request_options: nil)
         @client.call(
           :post, "/v1/apps/{appId}/in-app-messages/{messageId}/winner",

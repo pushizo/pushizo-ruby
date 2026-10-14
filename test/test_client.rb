@@ -116,6 +116,80 @@ class TestClient < Minitest::Test
     end
   end
 
+  UNAVAILABLE = [503, '{"error":{"code":"HS_SERVICE_UNAVAILABLE","message":"x"}}'].freeze
+
+  def test_post_without_idempotency_key_not_retried_on_5xx
+    t = FakeTransport.new(UNAVAILABLE, [200, '{"accepted":1}'])
+    assert_raises(HeroSignal::ServerError) { client(t).events.send_events({ events: [] }) }
+    assert_equal 1, t.requests.size
+    assert_empty @slept
+
+    # Otomatik anahtar kapalıyken notifications.create de anahtarsız POST'tur.
+    t = FakeTransport.new(UNAVAILABLE, [202, '{"id":"m"}'])
+    assert_raises(HeroSignal::ServerError) { client(t, auto_idempotency_key: false).notifications.create({ contents: { en: "x" } }) }
+    assert_equal 1, t.requests.size
+
+    # Gönderildikten sonra kopan bağlantı: sunucu isteği işlemiş olabilir, tekrarlanmaz.
+    t = FakeTransport.new(:network, [200, "{}"])
+    assert_raises(HeroSignal::NetworkError) { client(t).events.send_events({ events: [] }) }
+    assert_equal 1, t.requests.size
+  end
+
+  def test_post_with_idempotency_key_retried_on_5xx
+    t = FakeTransport.new(UNAVAILABLE, [200, '{"accepted":1}'])
+    client(t).events.send_events({ events: [] }, request_options: { idempotency_key: "evt-1" })
+    assert_equal 2, t.requests.size
+    assert_equal ["evt-1"], t.requests.map { |r| r.headers["Idempotency-Key"] }.uniq
+
+    # Başlıkla verilen anahtar da sayılır; PATCH aynı kurala uyar.
+    t = FakeTransport.new(UNAVAILABLE, [200, "{}"])
+    client(t).request(:patch, "/v1/apps/{appId}", body: { name: "x" }, request_options: { headers: { "Idempotency-Key" => "upd-1" } })
+    assert_equal %i[patch patch], t.requests.map(&:method)
+  end
+
+  def test_idempotent_methods_retried_on_5xx
+    t = FakeTransport.new(UNAVAILABLE, [200, '{"id":"msg_1"}'], UNAVAILABLE, [200, '{"ok":true}'])
+    hs = client(t)
+    hs.notifications.get("msg_1")
+    hs.webhooks.delete("whk_1")
+    assert_equal %i[get get delete delete], t.requests.map(&:method)
+  end
+
+  def test_rate_limited_post_retried_without_key
+    t = FakeTransport.new([429, '{"error":{"code":"HS_RATE_LIMITED","message":"x"}}', { "retry-after" => "1" }], [200, '{"accepted":1}'])
+    client(t).events.send_events({ events: [] })
+    assert_equal 2, t.requests.size
+    assert_equal [1.0], @slept
+    assert_nil t.requests[0].headers["Idempotency-Key"]
+  end
+
+  def test_post_retried_when_request_never_sent
+    t = FakeTransport.new(:refused, [200, '{"accepted":1}'])
+    client(t).events.send_events({ events: [] })
+    assert_equal 2, t.requests.size
+  end
+
+  def test_post_retried_on_real_connection_refused
+    server = TCPServer.new("127.0.0.1", 0)
+    port = server.addr[1]
+    server.close
+    slept = []
+    hs = HeroSignal::Client.new(api_key: "k", app_id: "app_1", base_url: "http://127.0.0.1:#{port}", max_retries: 1,
+                                sleeper: ->(s) { slept << s })
+    assert_raises(HeroSignal::NetworkError) { hs.events.send_events({ events: [] }) }
+    assert_equal [0.3], slept
+  end
+
+  def test_in_app_select_winner_and_deprecated_alias
+    t = FakeTransport.new([200, '{"id":"iam_1"}'], [200, '{"id":"iam_1"}'])
+    hs = client(t)
+    hs.in_app_messages.select_winner("iam_1", { variant_id: "b" })
+    hs.in_app_messages.winner("iam_1", { variant_id: "b" })
+    assert_equal ["https://api.test/v1/apps/app_1/in-app-messages/iam_1/winner"], t.requests.map(&:url).uniq
+    assert_equal %i[post post], t.requests.map(&:method)
+    assert_equal({ "variant_id" => "b" }, t.json(1))
+  end
+
   def test_pagination_iterates_all_pages
     t = FakeTransport.new(
       [200, '{"data":[{"id":"s1"},{"id":"s2"}],"next_cursor":"c2","has_more":true}'],

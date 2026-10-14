@@ -4,7 +4,8 @@ $LOAD_PATH.unshift(File.expand_path("../lib", __dir__))
 require "herosignal"
 require "minitest/autorun"
 
-# Sıralı yanıtlar döndüren ve istekleri kaydeden sahte taşıma; :network ağ hatası üretir.
+# Sıralı yanıtlar döndüren ve istekleri kaydeden sahte taşıma; :network gönderim sonrası ağ hatası,
+# :refused bağlantı reddi (istek sunucuya hiç gitmedi) üretir.
 class FakeTransport
   Request = Struct.new(:method, :url, :headers, :body, :timeout)
 
@@ -19,6 +20,7 @@ class FakeTransport
     @requests << Request.new(method, url, headers.dup, body, timeout)
     response = @responses.shift
     raise Errno::ECONNRESET, "bağlantı koptu" if response.nil? || response == :network
+    raise Errno::ECONNREFUSED, "bağlantı reddedildi" if response == :refused
 
     status, body_text, headers_out = response
     [status, { "content-type" => "application/json" }.merge(headers_out || {}), body_text]

@@ -1756,6 +1756,10 @@ module HeroSignal
     class EventDefinitionList < HeroSignal::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "EventDefinition"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
     end
 
     # EventsAccepted şeması.

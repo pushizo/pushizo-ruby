@@ -21,6 +21,15 @@ module HeroSignal
       Net::OpenTimeout, Net::ReadTimeout, Net::HTTPBadResponse
     ].freeze
 
+    # Sunucuda tekrarlanması ek yan etki doğurmayan HTTP metotları; 5xx ve ağ hatalarında serbestçe yeniden denenir.
+    IDEMPOTENT_METHODS = %w[GET HEAD OPTIONS PUT DELETE].freeze
+
+    # Bağlantı kurulmadan oluşan hatalar (DNS çözümlenemedi, bağlantı reddi, ağ/sunucu erişilemez, bağlantı zaman
+    # aşımı): istek sunucuya hiç gönderilmemiştir.
+    NOT_SENT_ERRORS = [
+      SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH, Errno::ENETUNREACH, Net::OpenTimeout
+    ].freeze
+
     attr_reader :app_id, :base_url
 
     # api_key:: hs_live_… API anahtarı (Bearer).
@@ -151,9 +160,11 @@ module HeroSignal
     def send_with_retries(method, url, headers, payload, opts)
       timeout = opts[:timeout] || @timeout
       max_retries = opts.key?(:max_retries) ? opts[:max_retries] : @max_retries
+      has_key = headers.any? { |k, v| k.to_s.casecmp?("idempotency-key") && !v.to_s.empty? }
       attempt = 0
       loop do
         error = nil
+        not_sent = false
         begin
           status, response_headers, response_body = @transport.call(method, url, headers, payload, timeout)
           return parse_body(response_headers, response_body) if status.between?(200, 299)
@@ -161,13 +172,24 @@ module HeroSignal
           error = error_from(status, response_headers, response_body)
         rescue *NETWORK_ERRORS => e
           error = NetworkError.new(0, ErrorCode::NETWORK, e.message.to_s.empty? ? e.class.name : e.message)
+          not_sent = NOT_SENT_ERRORS.any? { |klass| e.is_a?(klass) }
         end
-        raise error if !error.retryable? || attempt >= max_retries
+        raise error if attempt >= max_retries || !retry?(method, error, has_key, not_sent)
 
         delay = error.retry_after && error.retry_after.positive? ? error.retry_after : BACKOFF[[attempt, BACKOFF.size - 1].min]
         @sleeper.call(delay)
         attempt += 1
       end
+    end
+
+    # Yeniden deneme politikası: 429 her metotta (istek işlenmeden reddedilmiştir); 5xx ve ağ hataları idempotent
+    # metotlarda, POST/PATCH'te yalnızca Idempotency-Key varsa ya da istek sunucuya hiç gönderilmediyse. Aksi hâlde
+    # sunucu isteği işlemiş olabilir ve tekrar çift kayıt üretebilir.
+    def retry?(method, error, has_idempotency_key, not_sent)
+      return true if error.status == 429
+      return false unless error.retryable?
+
+      IDEMPOTENT_METHODS.include?(method.to_s.upcase) || has_idempotency_key || not_sent
     end
 
     def parse_body(headers, body)
