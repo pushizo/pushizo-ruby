@@ -1067,6 +1067,20 @@ module HeroSignal
           request_options: request_options
         )
       end
+
+      # A/B kazananını elle seç
+      #
+      # POST /v1/apps/{appId}/in-app-messages/{messageId}/winner
+      def winner(message_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/in-app-messages/{messageId}/winner",
+          path_params: { "messageId" => message_id },
+          body: body,
+          app_id: app_id,
+          response: "InAppMessage",
+          request_options: request_options
+        )
+      end
     end
 
     # Kullanıcı bildirim kutusu (inbox): listeleme, okundu işaretleme ve arşivleme.
