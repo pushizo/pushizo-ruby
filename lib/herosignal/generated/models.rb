@@ -2084,6 +2084,16 @@ module HeroSignal
       field "ctr", :ctr, :number
     end
 
+    # InAppMessageVariantSignificance şeması.
+    class InAppMessageVariantSignificance < HeroSignal::BaseModel
+      # Zorunlu.
+      field "leader", :leader, :string
+      # Zorunlu.
+      field "p_value", :p_value, :number
+      # Zorunlu.
+      field "significant", :significant, :boolean
+    end
+
     # InAppMessageVariantsItem şeması.
     class InAppMessageVariantsItem < HeroSignal::BaseModel
       # Zorunlu.
@@ -2106,16 +2116,6 @@ module HeroSignal
       field "auto_dismiss_seconds", :auto_dismiss_seconds, :integer
       # Zorunlu.
       field "blocks", :blocks, [:array, :any]
-    end
-
-    # InAppMessageVariantSignificance şeması.
-    class InAppMessageVariantSignificance < HeroSignal::BaseModel
-      # Zorunlu.
-      field "leader", :leader, :string
-      # Zorunlu.
-      field "p_value", :p_value, :number
-      # Zorunlu.
-      field "significant", :significant, :boolean
     end
 
     # InAppMessageVariantStatsItem şeması.
