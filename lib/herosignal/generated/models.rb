@@ -1050,6 +1050,8 @@ module HeroSignal
       # Zorunlu.
       field "influenced", :influenced, :integer
       # Zorunlu.
+      field "unattributed", :unattributed, :integer
+      # Zorunlu.
       field "revenue", :revenue, :number
       # Zorunlu.
       field "sent", :sent, :integer
@@ -1065,6 +1067,8 @@ module HeroSignal
       field "direct", :direct, :integer
       # Zorunlu.
       field "influenced", :influenced, :integer
+      # Zorunlu.
+      field "unattributed", :unattributed, :integer
       # Zorunlu.
       field "revenue", :revenue, :number
     end
@@ -1087,6 +1091,8 @@ module HeroSignal
       field "direct", :direct, :integer
       # Zorunlu.
       field "influenced", :influenced, :integer
+      # Zorunlu.
+      field "unattributed", :unattributed, :integer
       # Zorunlu.
       field "revenue", :revenue, :number
     end
@@ -1655,6 +1661,10 @@ module HeroSignal
       # Zorunlu.
       field "is_conversion", :is_conversion, :boolean
       # Zorunlu.
+      field "outcome_unique", :outcome_unique, :boolean
+      # Zorunlu.
+      field "outcome_unattributed", :outcome_unattributed, :boolean
+      # Zorunlu.
       field "first_seen_at", :first_seen_at, :string
       # Zorunlu.
       field "last_seen_at", :last_seen_at, :string
@@ -1680,6 +1690,10 @@ module HeroSignal
       field "properties_schema", :properties_schema, [:map, :string]
       # Zorunlu.
       field "is_conversion", :is_conversion, :boolean
+      # Zorunlu.
+      field "outcome_unique", :outcome_unique, :boolean
+      # Zorunlu.
+      field "outcome_unattributed", :outcome_unattributed, :boolean
       # Zorunlu.
       field "first_seen_at", :first_seen_at, :string
       # Zorunlu.
@@ -2895,6 +2909,8 @@ module HeroSignal
     class PatchEventDefinitionDto < HeroSignal::BaseModel
       field "display_name", :display_name, :string
       field "is_conversion", :is_conversion, :boolean
+      field "outcome_unique", :outcome_unique, :boolean
+      field "outcome_unattributed", :outcome_unattributed, :boolean
     end
 
     # PatchSubscriptionDto şeması.
