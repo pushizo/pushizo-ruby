@@ -4178,6 +4178,8 @@ module HeroSignal
       # Zorunlu.
       field "session_count", :session_count, :integer
       # Zorunlu.
+      field "usage_seconds", :usage_seconds, :integer
+      # Zorunlu.
       field "merged_into", :merged_into, :string
       # Zorunlu.
       field "created_at", :created_at, :string
@@ -4207,6 +4209,8 @@ module HeroSignal
       field "last_active_at", :last_active_at, :string
       # Zorunlu.
       field "session_count", :session_count, :integer
+      # Zorunlu.
+      field "usage_seconds", :usage_seconds, :integer
       # Zorunlu.
       field "merged_into", :merged_into, :string
       # Zorunlu.
