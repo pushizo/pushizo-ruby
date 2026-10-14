@@ -892,7 +892,7 @@ module HeroSignal
       field "channel", :channel, :string
       # Zorunlu. Değerler: "apns", "fcm", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "mock".
       field "provider", :provider, :string
-      # Zorunlu. Değerler: "unconfigured", "active", "invalid".
+      # Zorunlu. Değerler: "unconfigured", "active", "invalid", "suspended".
       field "status", :status, :string
       # Zorunlu.
       field "config", :config, "ChannelConfigConfig"
@@ -906,6 +906,10 @@ module HeroSignal
       field "last_error", :last_error, :string
       # Zorunlu.
       field "updated_at", :updated_at, :string
+      # Zorunlu.
+      field "suspended_reason", :suspended_reason, :string
+      # Zorunlu.
+      field "dns_check", :dns_check, "ChannelConfigDnsCheck"
     end
 
     # ChannelConfigConfig şeması.
@@ -929,6 +933,7 @@ module HeroSignal
       field "from_address", :from_address, :string
       field "from_name", :from_name, :string
       field "reply_to", :reply_to, :string
+      field "dkim_selector", :dkim_selector, :string
       field "postal_address", :postal_address, :string
       field "host", :host, :string
       field "port", :port, :integer
@@ -944,6 +949,54 @@ module HeroSignal
       field "msgheader", :msgheader, :string
       # Değerler: "0", "11", "12".
       field "iys_filter", :iys_filter, :string
+    end
+
+    # ChannelConfigDnsCheck şeması.
+    class ChannelConfigDnsCheck < HeroSignal::BaseModel
+      # Zorunlu.
+      field "domain", :domain, :string
+      # Zorunlu.
+      field "checked_at", :checked_at, :string
+      # Zorunlu.
+      field "spf", :spf, "ChannelConfigDnsCheckSpf"
+      # Zorunlu.
+      field "dkim", :dkim, "ChannelConfigDnsCheckDkim"
+      # Zorunlu.
+      field "dmarc", :dmarc, "ChannelConfigDnsCheckDmarc"
+      # Zorunlu.
+      field "issues", :issues, [:array, :string]
+    end
+
+    # ChannelConfigDnsCheckDkim şeması.
+    class ChannelConfigDnsCheckDkim < HeroSignal::BaseModel
+      # Zorunlu.
+      field "ok", :ok, :boolean
+      # Zorunlu.
+      field "selector", :selector, :string
+      # Zorunlu.
+      field "record", :record, :string
+      # Zorunlu.
+      field "expected", :expected, :string
+    end
+
+    # ChannelConfigDnsCheckDmarc şeması.
+    class ChannelConfigDnsCheckDmarc < HeroSignal::BaseModel
+      # Zorunlu.
+      field "ok", :ok, :boolean
+      # Zorunlu.
+      field "record", :record, :string
+      # Zorunlu.
+      field "expected", :expected, :string
+    end
+
+    # ChannelConfigDnsCheckSpf şeması.
+    class ChannelConfigDnsCheckSpf < HeroSignal::BaseModel
+      # Zorunlu.
+      field "ok", :ok, :boolean
+      # Zorunlu.
+      field "record", :record, :string
+      # Zorunlu.
+      field "expected", :expected, :string
     end
 
     # ChannelList şeması.
@@ -2477,7 +2530,7 @@ module HeroSignal
       field "email", :email, :string
       # Zorunlu.
       field "name", :name, :string
-      # Zorunlu. Değerler: "owner", "admin", "developer", "marketer", "analyst", "billing", "viewer".
+      # Zorunlu. Değerler: "owner", "admin", "developer", "marketer", "analyst", "billing", "viewer", "composer".
       field "role", :role, :string
       # Zorunlu.
       field "app_scopes", :app_scopes, [:array, :string]
@@ -2762,7 +2815,7 @@ module HeroSignal
       field "channel", :channel, :string
       # Zorunlu. Değerler: "apns", "fcm", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "mock".
       field "provider", :provider, :string
-      # Zorunlu. Değerler: "unconfigured", "active", "invalid".
+      # Zorunlu. Değerler: "unconfigured", "active", "invalid", "suspended".
       field "status", :status, :string
       # Zorunlu.
       field "last_error", :last_error, :string
@@ -4020,6 +4073,74 @@ module HeroSignal
       field "properties", :properties, [:map, :any]
       field "tags", :tags, [:map, :string]
       field "subscriptions", :subscriptions, [:array, "AddSubscriptionDto"]
+    end
+
+    # UsageReport şeması.
+    class UsageReport < HeroSignal::BaseModel
+      # Zorunlu.
+      field "org_id", :org_id, :string
+      # Zorunlu.
+      field "plan_code", :plan_code, :string
+      # Zorunlu.
+      field "period", :period, "UsageReportPeriod"
+      # Zorunlu.
+      field "metrics", :metrics, [:array, "UsageReportMetricsItem"]
+      # Zorunlu.
+      field "apps", :apps, [:array, "UsageReportAppsItem"]
+      # Zorunlu.
+      field "daily", :daily, [:array, "UsageReportDailyItem"]
+      # Zorunlu.
+      field "trialing", :trialing, :boolean
+      # Zorunlu.
+      field "trial_ends_at", :trial_ends_at, :string
+    end
+
+    # UsageReportAppsItem şeması.
+    class UsageReportAppsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "messages_sent", :messages_sent, :number
+      # Zorunlu.
+      field "active_subscriptions", :active_subscriptions, :number
+      # Zorunlu.
+      field "mau", :mau, :number
+    end
+
+    # UsageReportDailyItem şeması.
+    class UsageReportDailyItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "date", :date, :string
+      # Zorunlu.
+      field "messages_sent", :messages_sent, :number
+      # Zorunlu.
+      field "api_requests", :api_requests, :number
+      # Zorunlu.
+      field "events_ingested", :events_ingested, :number
+    end
+
+    # UsageReportMetricsItem şeması.
+    class UsageReportMetricsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "metric", :metric, :string
+      # Zorunlu.
+      field "used", :used, :number
+      # Zorunlu.
+      field "limit", :limit, :number
+      # Zorunlu.
+      field "percent", :percent, :number
+      # Zorunlu.
+      field "hard", :hard, :boolean
+    end
+
+    # UsageReportPeriod şeması.
+    class UsageReportPeriod < HeroSignal::BaseModel
+      # Zorunlu.
+      field "start", :start, :string
+      # Zorunlu.
+      field "end", :end_, :string
     end
 
     # User şeması.

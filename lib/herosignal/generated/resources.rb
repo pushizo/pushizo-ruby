@@ -1791,6 +1791,19 @@ module HeroSignal
           audit_logs(limit: limit, action: action, actor_id: actor_id, app_id_param: app_id_param, from: from, to: to, request_options: request_options, cursor: cursor_value)
         end
       end
+
+      # Organizasyon kullanımı ve plan kotaları (org geneli anahtar)
+      #
+      # GET /v1/organization/usage
+      def usage(days: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/organization/usage",
+          path_params: {},
+          query: { "days" => days },
+          response: "UsageReport",
+          request_options: request_options
+        )
+      end
     end
 
     # categories kaynağı.
