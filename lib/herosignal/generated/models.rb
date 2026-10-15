@@ -110,6 +110,8 @@ module HeroSignal
       field "timezone", :timezone, :string
       # Zorunlu.
       field "settings", :settings, "AppSettings"
+      # Zorunlu. Değerler: "hmac", "jwt", "both".
+      field "identity_verification_mode", :identity_verification_mode, :string
       # Zorunlu. Değerler: "active", "suspended", "deleted".
       field "status", :status, :string
       # Zorunlu.
@@ -1200,6 +1202,14 @@ module HeroSignal
       field "segment_id", :segment_id, :string
     end
 
+    # CreateIdentityKeyDto şeması.
+    class CreateIdentityKeyDto < HeroSignal::BaseModel
+      field "kid", :kid, :string
+      field "label", :label, :string
+      field "public_jwk", :public_jwk, [:map, :any]
+      field "public_key_pem", :public_key_pem, :string
+    end
+
     # CreateInAppDto şeması.
     class CreateInAppDto < HeroSignal::BaseModel
       # Zorunlu.
@@ -1504,7 +1514,7 @@ module HeroSignal
       # Zorunlu.
       field "url", :url, :string
       field "description", :description, :string
-      # Zorunlu. Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited".
+      # Zorunlu. Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited", "audit.created".
       field "events", :events, [:array, :string]
       field "event_filters", :event_filters, "CreateWebhookDtoEventFilters"
       field "batch", :batch, :boolean
@@ -1679,6 +1689,8 @@ module HeroSignal
       # Zorunlu.
       field "outcome_unattributed", :outcome_unattributed, :boolean
       # Zorunlu.
+      field "retention_days", :retention_days, :integer
+      # Zorunlu.
       field "first_seen_at", :first_seen_at, :string
       # Zorunlu.
       field "last_seen_at", :last_seen_at, :string
@@ -1708,6 +1720,8 @@ module HeroSignal
       field "outcome_unique", :outcome_unique, :boolean
       # Zorunlu.
       field "outcome_unattributed", :outcome_unattributed, :boolean
+      # Zorunlu.
+      field "retention_days", :retention_days, :integer
       # Zorunlu.
       field "first_seen_at", :first_seen_at, :string
       # Zorunlu.
@@ -1924,6 +1938,30 @@ module HeroSignal
       field "conversion_rate", :conversion_rate, :number
       # Zorunlu.
       field "drop_off", :drop_off, :integer
+    end
+
+    # IdentityKey şeması.
+    class IdentityKey < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "kid", :kid, :string
+      # Zorunlu. Değerler: "ES256".
+      field "alg", :alg, :string
+      # Zorunlu.
+      field "public_jwk", :public_jwk, [:map, :string]
+      # Zorunlu.
+      field "label", :label, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "revoked_at", :revoked_at, :string
+    end
+
+    # IdentityKeyList şeması.
+    class IdentityKeyList < HeroSignal::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "IdentityKey"]
     end
 
     # Import şeması.
@@ -2856,6 +2894,13 @@ module HeroSignal
       field "ipAllowlist", :ip_allowlist, [:array, :string]
       field "retentionDays", :retention_days, :integer
       field "sessionMaxHours", :session_max_hours, :integer
+      field "auditStream", :audit_stream, "OrgSettingsAuditStream"
+    end
+
+    # OrgSettingsAuditStream şeması.
+    class OrgSettingsAuditStream < HeroSignal::BaseModel
+      field "s3", :s3, :boolean
+      field "webhookAppId", :webhook_app_id, :string
     end
 
     # OverviewStats şeması.
@@ -2968,6 +3013,7 @@ module HeroSignal
       field "is_conversion", :is_conversion, :boolean
       field "outcome_unique", :outcome_unique, :boolean
       field "outcome_unattributed", :outcome_unattributed, :boolean
+      field "retention_days", :retention_days, :integer
     end
 
     # PatchSubscriptionDto şeması.
@@ -3721,6 +3767,8 @@ module HeroSignal
       field "default_language", :default_language, :string
       field "timezone", :timezone, :string
       field "settings", :settings, "UpdateAppDtoSettings"
+      # Değerler: "hmac", "jwt", "both".
+      field "identity_verification_mode", :identity_verification_mode, :string
     end
 
     # UpdateAppDtoPlatformFlags şeması.
@@ -4139,7 +4187,7 @@ module HeroSignal
     class UpdateWebhookDto < HeroSignal::BaseModel
       field "url", :url, :string
       field "description", :description, :string
-      # Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited".
+      # Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited", "audit.created".
       field "events", :events, [:array, :string]
       field "event_filters", :event_filters, "UpdateWebhookDtoEventFilters"
       field "batch", :batch, :boolean
