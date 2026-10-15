@@ -371,7 +371,7 @@ module HeroSignal
         )
       end
 
-      # Token ile abonelik güncelle (token_type: ios_push, android_push, web_push, email, sms veya eski sağlayıcı adları iOSPush, AndroidPush, ChromePush, FirefoxPush, SafariPush, Email, SMS)
+      # Token ile abonelik güncelle (token_type: ios_push, android_push, hms_push, web_push, email, sms veya eski sağlayıcı adları iOSPush, AndroidPush, HuaweiPush, ChromePush, FirefoxPush, SafariPush, Email, SMS)
       #
       # PATCH /v1/apps/{appId}/subscriptions_by_token/{tokenType}/{token}
       def update_by_token(token_type, token, body, app_id: nil, request_options: nil)
@@ -592,7 +592,7 @@ module HeroSignal
       #
       # GET /v1/apps/{appId}/templates
       #
-      # @param channel Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # @param channel Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       def list(limit: nil, cursor: nil, q: nil, channel: nil, app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/apps/{appId}/templates",
@@ -728,7 +728,7 @@ module HeroSignal
       #
       # @param status Değerler: "draft", "scheduled", "running", "paused", "completed", "cancelled", "failed".
       # @param type Değerler: "one_time", "scheduled", "recurring", "automated", "transactional".
-      # @param channel Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # @param channel Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       def list(limit: nil, cursor: nil, q: nil, status: nil, type: nil, channel: nil, label: nil, app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/apps/{appId}/campaigns",
