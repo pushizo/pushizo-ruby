@@ -592,7 +592,7 @@ module HeroSignal
       #
       # GET /v1/apps/{appId}/templates
       #
-      # @param channel Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # @param channel Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       def list(limit: nil, cursor: nil, q: nil, channel: nil, app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/apps/{appId}/templates",
@@ -728,7 +728,7 @@ module HeroSignal
       #
       # @param status Değerler: "draft", "scheduled", "running", "paused", "completed", "cancelled", "failed".
       # @param type Değerler: "one_time", "scheduled", "recurring", "automated", "transactional".
-      # @param channel Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # @param channel Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       def list(limit: nil, cursor: nil, q: nil, status: nil, type: nil, channel: nil, label: nil, app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/apps/{appId}/campaigns",
@@ -1178,7 +1178,7 @@ module HeroSignal
       #
       # GET /v1/apps/{appId}/suppressions
       #
-      # @param channel Değerler: "email", "sms".
+      # @param channel Değerler: "email", "sms", "whatsapp", "rcs".
       # @param reason Değerler: "bounce", "complaint", "manual", "unsubscribe_link", "stop".
       def list(limit: nil, cursor: nil, channel: nil, reason: nil, value: nil, app_id: nil, request_options: nil)
         @client.call(
@@ -1356,6 +1356,20 @@ module HeroSignal
           body: body,
           app_id: app_id,
           response: "WebhookWithSecret",
+          request_options: request_options
+        )
+      end
+
+      # Event Streams önizlemesi: örnek olay + şablon + filtre → gövde/hata (gönderim yapmaz)
+      #
+      # POST /v1/apps/{appId}/webhooks/preview
+      def preview(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/webhooks/preview",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "WebhookPreviewResult",
           request_options: request_options
         )
       end
@@ -1901,6 +1915,413 @@ module HeroSignal
       end
     end
 
+    # contentTables kaynağı.
+    class ContentTables < HeroSignal::BaseResource
+      # İçerik tabloları
+      #
+      # GET /v1/apps/{appId}/content-tables
+      def list_tables(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/content-tables",
+          path_params: {},
+          app_id: app_id,
+          response: "ContentTableList",
+          request_options: request_options
+        )
+      end
+
+      # CSV ile içerik tablosu oluştur
+      #
+      # POST /v1/apps/{appId}/content-tables
+      #
+      # Şablonda `{% lookup '<ad>' key: user.tags.<etiket> as satir %}{{ satir.<sütun> }}`.
+      #
+      # @param file UTF-8 CSV; ilk satır başlık. En fazla 100.000 satır, 20 MB.
+      # @param name Liquid tablo adı (küçük harf, rakam, alt çizgi).
+      # @param key_column Satır seçiminde kullanılan anahtar sütunu (değerleri benzersiz).
+      def create_table_upload(file:, name:, key_column:, description: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/content-tables",
+          path_params: {},
+          form: { "file" => file, "name" => name, "key_column" => key_column, "description" => description },
+          app_id: app_id,
+          response: "ContentTable",
+          request_options: request_options
+        )
+      end
+
+      # İçerik tablosu ayrıntısı
+      #
+      # GET /v1/apps/{appId}/content-tables/{tableId}
+      def get_table(table_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/content-tables/{tableId}",
+          path_params: { "tableId" => table_id },
+          app_id: app_id,
+          response: "ContentTable",
+          request_options: request_options
+        )
+      end
+
+      # İçerik tablosu açıklamasını güncelle
+      #
+      # PATCH /v1/apps/{appId}/content-tables/{tableId}
+      def update_table(table_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/content-tables/{tableId}",
+          path_params: { "tableId" => table_id },
+          body: body,
+          app_id: app_id,
+          response: "ContentTable",
+          request_options: request_options
+        )
+      end
+
+      # İçerik tablosunu sil
+      #
+      # DELETE /v1/apps/{appId}/content-tables/{tableId}
+      def delete_table(table_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/content-tables/{tableId}",
+          path_params: { "tableId" => table_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+
+      # İçerik tablosunu yeniden yükle (sürüm artar)
+      #
+      # PUT /v1/apps/{appId}/content-tables/{tableId}/rows
+      #
+      # @param file Yeni CSV (tablonun tüm satırları değiştirilir, sürüm artar).
+      # @param key_column İsteğe bağlı yeni anahtar sütunu.
+      def replace_table_upload(table_id, file:, key_column: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :put, "/v1/apps/{appId}/content-tables/{tableId}/rows",
+          path_params: { "tableId" => table_id },
+          form: { "file" => file, "key_column" => key_column },
+          app_id: app_id,
+          response: "ContentTable",
+          request_options: request_options
+        )
+      end
+
+      # İçerik tablosu satırları
+      #
+      # GET /v1/apps/{appId}/content-tables/{tableId}/rows
+      def table_rows(table_id, limit: nil, offset: nil, q: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/content-tables/{tableId}/rows",
+          path_params: { "tableId" => table_id },
+          query: { "limit" => limit, "offset" => offset, "q" => q },
+          app_id: app_id,
+          response: "ContentTableRows",
+          request_options: request_options
+        )
+      end
+    end
+
+    # conversations kaynağı.
+    class Conversations < HeroSignal::BaseResource
+      # Konuşmalar (SMS, WhatsApp, RCS; son mesaja göre; kanal/durum/okunmamış/kişi filtresi)
+      #
+      # GET /v1/apps/{appId}/conversations
+      #
+      # @param channel Değerler: "sms", "whatsapp", "rcs".
+      # @param status Değerler: "open", "closed".
+      # @param unread Değerler: "true", "false".
+      def list(limit: nil, cursor: nil, channel: nil, status: nil, unread: nil, q: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/conversations",
+          path_params: {},
+          query: { "limit" => limit, "cursor" => cursor, "channel" => channel, "status" => status, "unread" => unread, "q" => q },
+          app_id: app_id,
+          response: "ConversationPage",
+          request_options: request_options
+        )
+      end
+
+      # list sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def list_all(limit: nil, cursor: nil, channel: nil, status: nil, unread: nil, q: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          list(limit: limit, channel: channel, status: status, unread: unread, q: q, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+
+      # Konuşma (WhatsApp oturum penceresi ve açık rıza durumu dahil)
+      #
+      # GET /v1/apps/{appId}/conversations/{conversationId}
+      def get(conversation_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/conversations/{conversationId}",
+          path_params: { "conversationId" => conversation_id },
+          app_id: app_id,
+          response: "Conversation",
+          request_options: request_options
+        )
+      end
+
+      # Konuşma mesajları (yeniden eskiye; giden mesaj durumu teslimattan)
+      #
+      # GET /v1/apps/{appId}/conversations/{conversationId}/messages
+      def messages(conversation_id, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/conversations/{conversationId}/messages",
+          path_params: { "conversationId" => conversation_id },
+          query: { "limit" => limit, "cursor" => cursor },
+          app_id: app_id,
+          response: "ConversationMessagePage",
+          request_options: request_options
+        )
+      end
+
+      # messages sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def messages_all(conversation_id, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          messages(conversation_id, limit: limit, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+
+      # Yanıt gönder. WhatsApp: açık rıza zorunlu; son gelen mesajdan 24 saat içinde metin/medya, pencere dışında yalnızca onaylı şablon (aksi 422 WHATSAPP_WINDOW_CLOSED).
+      #
+      # POST /v1/apps/{appId}/conversations/{conversationId}/messages
+      def reply(conversation_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/conversations/{conversationId}/messages",
+          path_params: { "conversationId" => conversation_id },
+          body: body,
+          app_id: app_id,
+          response: "ConversationReplyResult",
+          request_options: request_options
+        )
+      end
+
+      # Gelen mesajları okundu işaretle
+      #
+      # POST /v1/apps/{appId}/conversations/{conversationId}/read
+      def read(conversation_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/conversations/{conversationId}/read",
+          path_params: { "conversationId" => conversation_id },
+          app_id: app_id,
+          response: "Conversation",
+          request_options: request_options
+        )
+      end
+    end
+
+    # dataFeeds kaynağı.
+    class DataFeeds < HeroSignal::BaseResource
+      # Data feed listesi
+      #
+      # GET /v1/apps/{appId}/data-feeds
+      def list_feeds(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/data-feeds",
+          path_params: {},
+          app_id: app_id,
+          response: "DataFeedList",
+          request_options: request_options
+        )
+      end
+
+      # Data feed oluştur
+      #
+      # POST /v1/apps/{appId}/data-feeds
+      #
+      # URL şablonu Liquid ile kişiselleştirilir (ör. `https://api.ornek.com/u/{{ user.external_id }}`); şablonda `{{ feed.<ad>.alan }}`.
+      def create_feed(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/data-feeds",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "DataFeed",
+          request_options: request_options
+        )
+      end
+
+      # Data feed ayrıntısı
+      #
+      # GET /v1/apps/{appId}/data-feeds/{feedId}
+      def get_feed(feed_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/data-feeds/{feedId}",
+          path_params: { "feedId" => feed_id },
+          app_id: app_id,
+          response: "DataFeed",
+          request_options: request_options
+        )
+      end
+
+      # Data feed güncelle
+      #
+      # PATCH /v1/apps/{appId}/data-feeds/{feedId}
+      def update_feed(feed_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/data-feeds/{feedId}",
+          path_params: { "feedId" => feed_id },
+          body: body,
+          app_id: app_id,
+          response: "DataFeed",
+          request_options: request_options
+        )
+      end
+
+      # Data feed sil
+      #
+      # DELETE /v1/apps/{appId}/data-feeds/{feedId}
+      def delete_feed(feed_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/data-feeds/{feedId}",
+          path_params: { "feedId" => feed_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+
+      # Data feed'i örnek kullanıcıyla dene
+      #
+      # POST /v1/apps/{appId}/data-feeds/{feedId}/test
+      def test_feed(feed_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/data-feeds/{feedId}/test",
+          path_params: { "feedId" => feed_id },
+          body: body,
+          app_id: app_id,
+          response: "DataFeedTestResult",
+          request_options: request_options
+        )
+      end
+    end
+
+    # emailDeliverability kaynağı.
+    class EmailDeliverability < HeroSignal::BaseResource
+      # E-posta teslim ayarları (BCC/arşiv, gönderim öncesi adres doğrulama, üçüncü taraf doğrulayıcı)
+      #
+      # GET /v1/apps/{appId}/email-deliverability
+      def settings(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/email-deliverability",
+          path_params: {},
+          app_id: app_id,
+          response: "EmailDeliverabilitySettings",
+          request_options: request_options
+        )
+      end
+
+      # E-posta teslim ayarlarını güncelle (doğrulayıcı anahtarı zarf şifreli saklanır, geri okunmaz)
+      #
+      # PUT /v1/apps/{appId}/email-deliverability
+      def update(body, app_id: nil, request_options: nil)
+        @client.call(
+          :put, "/v1/apps/{appId}/email-deliverability",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "EmailDeliverabilitySettings",
+          request_options: request_options
+        )
+      end
+
+      # Adres doğrulama testi (sözdizimi, MX, tek kullanımlık alan adı, rol hesabı, üçüncü taraf)
+      #
+      # POST /v1/apps/{appId}/email-deliverability/verify-address
+      def verify(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/email-deliverability/verify-address",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "EmailAddressCheck",
+          request_options: request_options
+        )
+      end
+
+      # Isındırma planları (bugünkü limit/kullanım ve ileri günlere ayrılmış gönderimler)
+      #
+      # GET /v1/apps/{appId}/email-deliverability/warmup-plans
+      def plans(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/email-deliverability/warmup-plans",
+          path_params: {},
+          app_id: app_id,
+          response: "EmailWarmupPlanList",
+          request_options: request_options
+        )
+      end
+
+      # Isındırma planı oluştur (günlük limit eğrisi veya başlangıç/çarpan/hedef; sağlayıcı payları)
+      #
+      # POST /v1/apps/{appId}/email-deliverability/warmup-plans
+      def create(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/email-deliverability/warmup-plans",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "EmailWarmupPlan",
+          request_options: request_options
+        )
+      end
+
+      # Isındırma planı
+      #
+      # GET /v1/apps/{appId}/email-deliverability/warmup-plans/{planId}
+      def get(plan_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/email-deliverability/warmup-plans/{planId}",
+          path_params: { "planId" => plan_id },
+          app_id: app_id,
+          response: "EmailWarmupPlan",
+          request_options: request_options
+        )
+      end
+
+      # Isındırma planını güncelle (duraklat/sürdür, eğri, paylar)
+      #
+      # PATCH /v1/apps/{appId}/email-deliverability/warmup-plans/{planId}
+      def update_plan(plan_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/email-deliverability/warmup-plans/{planId}",
+          path_params: { "planId" => plan_id },
+          body: body,
+          app_id: app_id,
+          response: "EmailWarmupPlan",
+          request_options: request_options
+        )
+      end
+
+      # Isındırma planını sil
+      #
+      # DELETE /v1/apps/{appId}/email-deliverability/warmup-plans/{planId}
+      def delete(plan_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/email-deliverability/warmup-plans/{planId}",
+          path_params: { "planId" => plan_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+
+      # Isındırma planı gün × sağlayıcı kullanımı
+      #
+      # GET /v1/apps/{appId}/email-deliverability/warmup-plans/{planId}/usage
+      def usage(plan_id, days: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/email-deliverability/warmup-plans/{planId}/usage",
+          path_params: { "planId" => plan_id },
+          query: { "days" => days },
+          app_id: app_id,
+          response: "EmailWarmupUsage",
+          request_options: request_options
+        )
+      end
+    end
+
     # identityKeys kaynağı.
     class IdentityKeys < HeroSignal::BaseResource
       # SDK kimlik doğrulama (JWT) genel anahtarları
@@ -1941,6 +2362,65 @@ module HeroSignal
           path_params: { "keyId" => key_id },
           app_id: app_id,
           response: "IdentityKey",
+          request_options: request_options
+        )
+      end
+    end
+
+    # integrations kaynağı.
+    class Integrations < HeroSignal::BaseResource
+      # Zapier bağlantı testi: anahtarın app’i ve kapsamları
+      #
+      # GET /v1/apps/{appId}/integrations/zapier/me
+      def me(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/integrations/zapier/me",
+          path_params: {},
+          app_id: app_id,
+          response: "ZapierMe",
+          request_options: request_options
+        )
+      end
+
+      # REST Hook aboneliği (Zap açıldı)
+      #
+      # POST /v1/apps/{appId}/integrations/zapier/hooks
+      def subscribe(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/integrations/zapier/hooks",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "ZapierHook",
+          request_options: request_options
+        )
+      end
+
+      # REST Hook aboneliğini sil (Zap kapatıldı)
+      #
+      # DELETE /v1/apps/{appId}/integrations/zapier/hooks/{hookId}
+      def unsubscribe(hook_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/integrations/zapier/hooks/{hookId}",
+          path_params: { "hookId" => hook_id },
+          app_id: app_id,
+          response: "IntegrationOk",
+          request_options: request_options
+        )
+      end
+
+      # Tetik örnekleri (performList): son kayıtlar, abonelik gövdesiyle aynı biçim
+      #
+      # GET /v1/apps/{appId}/integrations/zapier/samples
+      #
+      # @param event Değerler: "subscription.created", "subscription.unsubscribed", "event.received", "delivery.delivered", "delivery.opened", "delivery.clicked", "user.created", "user.updated", "conversion.created", "campaign.completed".
+      def samples(event:, event_name: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/integrations/zapier/samples",
+          path_params: {},
+          query: { "event" => event, "event_name" => event_name },
+          app_id: app_id,
+          response: [:array, "ZapierSamplesItem"],
           request_options: request_options
         )
       end
@@ -2327,6 +2807,37 @@ module HeroSignal
       end
     end
 
+    # mcp kaynağı.
+    class Mcp < HeroSignal::BaseResource
+      # Kampanya taslağı oluştur (MCP onaylı mod; gönderim yapmaz)
+      #
+      # POST /v1/apps/{appId}/mcp/campaign-drafts
+      def create_campaign_draft(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/mcp/campaign-drafts",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "Campaign",
+          request_options: request_options
+        )
+      end
+
+      # Segment taslağı oluştur (MCP onaylı mod; dinamik segment)
+      #
+      # POST /v1/apps/{appId}/mcp/segment-drafts
+      def create_segment_draft(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/mcp/segment-drafts",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "Segment",
+          request_options: request_options
+        )
+      end
+    end
+
     # preferences kaynağı.
     class Preferences < HeroSignal::BaseResource
       # Kullanıcının tercihleri (alias ile)
@@ -2356,6 +2867,237 @@ module HeroSignal
         )
       end
     end
+
+    # smsKeywords kaynağı.
+    class SmsKeywords < HeroSignal::BaseResource
+      # İki yönlü mesaj anahtar sözcükleri (org geneli + bu app) ve yasal (ayrılmış) sözcükler
+      #
+      # GET /v1/apps/{appId}/sms-keywords
+      def keywords(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/sms-keywords",
+          path_params: {},
+          app_id: app_id,
+          response: "SmsKeywordList",
+          request_options: request_options
+        )
+      end
+
+      # Anahtar sözcük oluştur (tag ekle/kaldır, olay → journey tetiği, otomatik yanıt, abonelik)
+      #
+      # POST /v1/apps/{appId}/sms-keywords
+      def create_keyword(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/sms-keywords",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "SmsKeyword",
+          request_options: request_options
+        )
+      end
+
+      # Anahtar sözcüğü güncelle
+      #
+      # PATCH /v1/apps/{appId}/sms-keywords/{keywordId}
+      def update_keyword(keyword_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/sms-keywords/{keywordId}",
+          path_params: { "keywordId" => keyword_id },
+          body: body,
+          app_id: app_id,
+          response: "SmsKeyword",
+          request_options: request_options
+        )
+      end
+
+      # Anahtar sözcüğü sil
+      #
+      # DELETE /v1/apps/{appId}/sms-keywords/{keywordId}
+      def delete_keyword(keyword_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/sms-keywords/{keywordId}",
+          path_params: { "keywordId" => keyword_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+    end
+
+    # warehouseExports kaynağı.
+    class WarehouseExports < HeroSignal::BaseResource
+      # Dışa aktarılabilir tablolar, kolonlar ve şema sürümleri
+      #
+      # GET /v1/apps/{appId}/warehouse-exports/tables
+      def tables(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/warehouse-exports/tables",
+          path_params: {},
+          app_id: app_id,
+          response: "WarehouseTables",
+          request_options: request_options
+        )
+      end
+
+      # Kaydetmeden bağlantı testi
+      #
+      # POST /v1/apps/{appId}/warehouse-exports/test-connection
+      def test(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/warehouse-exports/test-connection",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "WarehouseConnectionResult",
+          request_options: request_options
+        )
+      end
+
+      # Veri ambarı dışa aktarımları
+      #
+      # GET /v1/apps/{appId}/warehouse-exports
+      def list(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/warehouse-exports",
+          path_params: {},
+          app_id: app_id,
+          response: "WarehouseExportList",
+          request_options: request_options
+        )
+      end
+
+      # Dışa aktarım oluştur (kimlik bilgisi şifreli saklanır, yanıtta dönmez)
+      #
+      # POST /v1/apps/{appId}/warehouse-exports
+      def create(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/warehouse-exports",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "WarehouseExport",
+          request_options: request_options
+        )
+      end
+
+      # Dışa aktarım detayı
+      #
+      # GET /v1/apps/{appId}/warehouse-exports/{exportId}
+      def get(export_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/warehouse-exports/{exportId}",
+          path_params: { "exportId" => export_id },
+          app_id: app_id,
+          response: "WarehouseExport",
+          request_options: request_options
+        )
+      end
+
+      # Dışa aktarımı güncelle (ad, tablolar, zamanlama, etkin/duraklat, hedef ayarı, kimlik bilgisi)
+      #
+      # PATCH /v1/apps/{appId}/warehouse-exports/{exportId}
+      def update(export_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/warehouse-exports/{exportId}",
+          path_params: { "exportId" => export_id },
+          body: body,
+          app_id: app_id,
+          response: "WarehouseExport",
+          request_options: request_options
+        )
+      end
+
+      # Dışa aktarımı sil (hedefteki veriler silinmez)
+      #
+      # DELETE /v1/apps/{appId}/warehouse-exports/{exportId}
+      def delete(export_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/warehouse-exports/{exportId}",
+          path_params: { "exportId" => export_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+
+      # Kayıtlı dışa aktarımın bağlantı testi
+      #
+      # POST /v1/apps/{appId}/warehouse-exports/{exportId}/test
+      def test_saved(export_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/warehouse-exports/{exportId}/test",
+          path_params: { "exportId" => export_id },
+          app_id: app_id,
+          response: "WarehouseConnectionResult",
+          request_options: request_options
+        )
+      end
+
+      # Şimdi çalıştır (son başarılı imleçten itibaren)
+      #
+      # POST /v1/apps/{appId}/warehouse-exports/{exportId}/run
+      def run(export_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/warehouse-exports/{exportId}/run",
+          path_params: { "exportId" => export_id },
+          app_id: app_id,
+          response: "WarehouseExportRun",
+          request_options: request_options
+        )
+      end
+
+      # Çalıştırma geçmişi (cursor)
+      #
+      # GET /v1/apps/{appId}/warehouse-exports/{exportId}/runs
+      def runs(export_id, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/warehouse-exports/{exportId}/runs",
+          path_params: { "exportId" => export_id },
+          query: { "limit" => limit, "cursor" => cursor },
+          app_id: app_id,
+          response: "WarehouseExportRunPage",
+          request_options: request_options
+        )
+      end
+
+      # runs sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def runs_all(export_id, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          runs(export_id, limit: limit, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+    end
+
+    # whatsapp kaynağı.
+    class Whatsapp < HeroSignal::BaseResource
+      # WhatsApp şablonları (Meta onay durumu ile)
+      #
+      # GET /v1/apps/{appId}/whatsapp/templates
+      def templates(status: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/whatsapp/templates",
+          path_params: {},
+          query: { "status" => status },
+          app_id: app_id,
+          response: "WhatsAppTemplateList",
+          request_options: request_options
+        )
+      end
+
+      # WhatsApp şablonlarını Meta Graph API’den senkronla
+      #
+      # POST /v1/apps/{appId}/whatsapp/templates/sync
+      def sync(app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/whatsapp/templates/sync",
+          path_params: {},
+          app_id: app_id,
+          response: "WhatsAppTemplateSync",
+          request_options: request_options
+        )
+      end
+    end
   end
 
   # İstemciye kaynak erişimcilerini ekleyen üretilmiş modül.
@@ -2363,7 +3105,7 @@ module HeroSignal
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "0.1.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization categories identity_keys journeys live_activities preferences].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization categories content_tables conversations data_feeds email_deliverability identity_keys integrations journeys live_activities mcp preferences sms_keywords warehouse_exports whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -2464,8 +3206,28 @@ module HeroSignal
       @categories ||= HeroSignal::Resources::Categories.new(self)
     end
 
+    def content_tables
+      @content_tables ||= HeroSignal::Resources::ContentTables.new(self)
+    end
+
+    def conversations
+      @conversations ||= HeroSignal::Resources::Conversations.new(self)
+    end
+
+    def data_feeds
+      @data_feeds ||= HeroSignal::Resources::DataFeeds.new(self)
+    end
+
+    def email_deliverability
+      @email_deliverability ||= HeroSignal::Resources::EmailDeliverability.new(self)
+    end
+
     def identity_keys
       @identity_keys ||= HeroSignal::Resources::IdentityKeys.new(self)
+    end
+
+    def integrations
+      @integrations ||= HeroSignal::Resources::Integrations.new(self)
     end
 
     def journeys
@@ -2476,8 +3238,24 @@ module HeroSignal
       @live_activities ||= HeroSignal::Resources::LiveActivities.new(self)
     end
 
+    def mcp
+      @mcp ||= HeroSignal::Resources::Mcp.new(self)
+    end
+
     def preferences
       @preferences ||= HeroSignal::Resources::Preferences.new(self)
+    end
+
+    def sms_keywords
+      @sms_keywords ||= HeroSignal::Resources::SmsKeywords.new(self)
+    end
+
+    def warehouse_exports
+      @warehouse_exports ||= HeroSignal::Resources::WarehouseExports.new(self)
+    end
+
+    def whatsapp
+      @whatsapp ||= HeroSignal::Resources::Whatsapp.new(self)
     end
   end
 end

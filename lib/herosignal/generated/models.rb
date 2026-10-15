@@ -12,13 +12,14 @@ module HeroSignal
 
     # AddSubscriptionDto şeması.
     class AddSubscriptionDto < HeroSignal::BaseModel
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu.
       field "token", :token, :string
       field "device", :device, "AddSubscriptionDtoDevice"
       # Değerler: "subscribed", "unsubscribed".
       field "status", :status, :string
+      field "opt_in", :opt_in, "AddSubscriptionDtoOptIn"
     end
 
     # AddSubscriptionDtoDevice şeması.
@@ -37,6 +38,13 @@ module HeroSignal
       field "push_environment", :push_environment, :string
     end
 
+    # AddSubscriptionDtoOptIn şeması.
+    class AddSubscriptionDtoOptIn < HeroSignal::BaseModel
+      # Zorunlu.
+      field "source", :source, :string
+      field "at", :at, :string
+    end
+
     # ApiEventsDto şeması.
     class ApiEventsDto < HeroSignal::BaseModel
       # Zorunlu.
@@ -50,6 +58,7 @@ module HeroSignal
       field "properties", :properties, [:map, :any]
       field "value", :value, :number
       field "occurred_at", :occurred_at, :string
+      field "event_id", :event_id, :string
       field "subscription_id", :subscription_id, :string
       field "external_id", :external_id, :string
     end
@@ -181,7 +190,7 @@ module HeroSignal
       field "max", :max, :integer
       # Zorunlu.
       field "window", :window, "AppSettingsFrequencyCapsItemWindow"
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
     end
 
@@ -488,6 +497,8 @@ module HeroSignal
       field "requested_at", :requested_at, :string
       field "approved_by", :approved_by, :string
       field "approved_at", :approved_at, :string
+      field "rejected_by", :rejected_by, :string
+      field "rejected_at", :rejected_at, :string
     end
 
     # CampaignDelivery şeması.
@@ -567,7 +578,7 @@ module HeroSignal
       field "exclude_segments", :exclude_segments, [:array, :string]
       # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
       field "filters", :filters, "CampaignsCreateBodyAudienceFilters"
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
       field "test_devices_only", :test_devices_only, :boolean
     end
@@ -647,7 +658,7 @@ module HeroSignal
 
     # CampaignStatsChannelsItem şeması.
     class CampaignStatsChannelsItem < HeroSignal::BaseModel
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu.
       field "targeted", :targeted, :integer
@@ -741,7 +752,7 @@ module HeroSignal
       field "exclude_segments", :exclude_segments, [:array, :string]
       # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
       field "filters", :filters, "CampaignsUpdateBodyAudienceFilters"
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
       field "test_devices_only", :test_devices_only, :boolean
     end
@@ -890,9 +901,9 @@ module HeroSignal
 
     # ChannelConfig şeması.
     class ChannelConfig < HeroSignal::BaseModel
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
-      # Zorunlu. Değerler: "apns", "fcm", "hms", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "mock".
+      # Zorunlu. Değerler: "apns", "fcm", "hms", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "meta_whatsapp", "google_rbm", "mock".
       field "provider", :provider, :string
       # Zorunlu. Değerler: "unconfigured", "active", "invalid", "suspended".
       field "status", :status, :string
@@ -953,6 +964,14 @@ module HeroSignal
       field "msgheader", :msgheader, :string
       # Değerler: "0", "11", "12".
       field "iys_filter", :iys_filter, :string
+      field "waba_id", :waba_id, :string
+      field "phone_number_id", :phone_number_id, :string
+      field "graph_api_version", :graph_api_version, :string
+      field "display_phone_number", :display_phone_number, :string
+      field "verified_name", :verified_name, :string
+      field "rbm_agent_id", :rbm_agent_id, :string
+      field "content_sid", :content_sid, :string
+      field "sms_fallback", :sms_fallback, :boolean
     end
 
     # ChannelConfigDnsCheck şeması.
@@ -1023,6 +1042,256 @@ module HeroSignal
       field "details", :details, [:map, :any]
       # Zorunlu.
       field "channel", :channel, "ChannelConfig"
+    end
+
+    # ContentTable şeması.
+    class ContentTable < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "key_column", :key_column, :string
+      # Zorunlu.
+      field "columns", :columns, [:array, :string]
+      # Zorunlu.
+      field "row_count", :row_count, :integer
+      # Zorunlu.
+      field "version", :version, :integer
+      # Zorunlu.
+      field "source_file_name", :source_file_name, :string
+      # Zorunlu.
+      field "liquid", :liquid, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # ContentTableList şeması.
+    class ContentTableList < HeroSignal::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "ContentTable"]
+    end
+
+    # ContentTableRows şeması.
+    class ContentTableRows < HeroSignal::BaseModel
+      # Zorunlu.
+      field "columns", :columns, [:array, :string]
+      # Zorunlu.
+      field "key_column", :key_column, :string
+      # Zorunlu.
+      field "total", :total, :integer
+      # Zorunlu.
+      field "data", :data, [:array, [:map, :string]]
+    end
+
+    # Conversation şeması.
+    class Conversation < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu. Değerler: "sms", "whatsapp", "rcs".
+      field "channel", :channel, :string
+      # Zorunlu. Değerler: "open", "closed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "subscription_id", :subscription_id, :string
+      # Zorunlu.
+      field "subscription_status", :subscription_status, :string
+      # Zorunlu.
+      field "user_id", :user_id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu.
+      field "contact", :contact, :string
+      # Zorunlu.
+      field "opted_in", :opted_in, :boolean
+      # Zorunlu.
+      field "last_message_at", :last_message_at, :string
+      # Zorunlu.
+      field "last_inbound_at", :last_inbound_at, :string
+      # Zorunlu. Değerler: "inbound", "outbound".
+      field "last_direction", :last_direction, :string
+      # Zorunlu.
+      field "last_message_preview", :last_message_preview, :string
+      # Zorunlu.
+      field "unread_count", :unread_count, :integer
+      # Zorunlu.
+      field "window", :window, "ConversationWindow"
+      # Zorunlu.
+      field "created_at", :created_at, :string
+    end
+
+    # ConversationMessagePage şeması.
+    class ConversationMessagePage < HeroSignal::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "ConversationMessagePageDataItem"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
+    end
+
+    # ConversationMessagePageDataItem şeması.
+    class ConversationMessagePageDataItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu. Değerler: "inbound", "outbound".
+      field "direction", :direction, :string
+      # Zorunlu.
+      field "status", :status, :string
+      # Zorunlu.
+      field "body", :body, :string
+      # Zorunlu.
+      field "content", :content, [:map, :any]
+      # Zorunlu.
+      field "message_id", :message_id, :string
+      # Zorunlu.
+      field "delivery_id", :delivery_id, :string
+      # Zorunlu.
+      field "sent_by", :sent_by, :string
+      # Zorunlu.
+      field "error_code", :error_code, :string
+      # Zorunlu.
+      field "read_at", :read_at, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+    end
+
+    # ConversationPage şeması.
+    class ConversationPage < HeroSignal::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "Conversation"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
+    end
+
+    # ConversationReplyDto şeması.
+    class ConversationReplyDto < HeroSignal::BaseModel
+      field "text", :text, :string
+      field "template", :template, "ConversationReplyDtoTemplate"
+      field "media", :media, "ConversationReplyDtoMedia"
+      field "interactive", :interactive, "ConversationReplyDtoInteractive"
+    end
+
+    # ConversationReplyDtoInteractive şeması.
+    class ConversationReplyDtoInteractive < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "button", "list".
+      field "type", :type, :string
+      field "header", :header, :string
+      field "footer", :footer, :string
+      field "buttons", :buttons, [:array, "ConversationReplyDtoInteractiveButtonsItem"]
+      field "list", :list, "ConversationReplyDtoInteractiveList"
+    end
+
+    # ConversationReplyDtoInteractiveButtonsItem şeması.
+    class ConversationReplyDtoInteractiveButtonsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "title", :title, :string
+    end
+
+    # ConversationReplyDtoInteractiveList şeması.
+    class ConversationReplyDtoInteractiveList < HeroSignal::BaseModel
+      # Zorunlu.
+      field "button", :button, :string
+      # Zorunlu.
+      field "sections", :sections, [:array, "ConversationReplyDtoInteractiveListSectionsItem"]
+    end
+
+    # ConversationReplyDtoInteractiveListSectionsItem şeması.
+    class ConversationReplyDtoInteractiveListSectionsItem < HeroSignal::BaseModel
+      field "title", :title, :string
+      # Zorunlu.
+      field "rows", :rows, [:array, "ConversationReplyDtoInteractiveListSectionsItemRowsItem"]
+    end
+
+    # ConversationReplyDtoInteractiveListSectionsItemRowsItem şeması.
+    class ConversationReplyDtoInteractiveListSectionsItemRowsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "title", :title, :string
+      field "description", :description, :string
+    end
+
+    # ConversationReplyDtoMedia şeması.
+    class ConversationReplyDtoMedia < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "image", "video", "document", "audio".
+      field "type", :type, :string
+      # Zorunlu.
+      field "url", :url, :string
+      field "filename", :filename, :string
+    end
+
+    # ConversationReplyDtoTemplate şeması.
+    class ConversationReplyDtoTemplate < HeroSignal::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "language", :language, :string
+      field "header", :header, :any
+      field "body_params", :body_params, [:array, :string]
+      field "button_params", :button_params, [:array, "ConversationReplyDtoTemplateButtonParamsItem"]
+    end
+
+    # ConversationReplyDtoTemplateButtonParamsItem şeması.
+    class ConversationReplyDtoTemplateButtonParamsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "index", :index, :integer
+      # Zorunlu. Değerler: "url", "quick_reply", "copy_code".
+      field "sub_type", :sub_type, :string
+      # Zorunlu.
+      field "value", :value, :string
+    end
+
+    # ConversationReplyResult şeması.
+    class ConversationReplyResult < HeroSignal::BaseModel
+      # Zorunlu.
+      field "message_id", :message_id, :string
+      # Zorunlu.
+      field "conversation_message", :conversation_message, "ConversationReplyResultConversationMessage"
+    end
+
+    # ConversationReplyResultConversationMessage şeması.
+    class ConversationReplyResultConversationMessage < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu. Değerler: "inbound", "outbound".
+      field "direction", :direction, :string
+      # Zorunlu.
+      field "status", :status, :string
+      # Zorunlu.
+      field "body", :body, :string
+      # Zorunlu.
+      field "content", :content, [:map, :any]
+      # Zorunlu.
+      field "message_id", :message_id, :string
+      # Zorunlu.
+      field "delivery_id", :delivery_id, :string
+      # Zorunlu.
+      field "sent_by", :sent_by, :string
+      # Zorunlu.
+      field "error_code", :error_code, :string
+      # Zorunlu.
+      field "read_at", :read_at, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+    end
+
+    # ConversationWindow şeması.
+    class ConversationWindow < HeroSignal::BaseModel
+      # Zorunlu.
+      field "open", :open_value, :boolean
+      # Zorunlu.
+      field "expires_at", :expires_at, :string
     end
 
     # ConversionsReport şeması.
@@ -1112,7 +1381,7 @@ module HeroSignal
     class CreateAppApiKeyDto < HeroSignal::BaseModel
       # Zorunlu.
       field "name", :name, :string
-      # Zorunlu. Değerler: "admin", "notifications:write", "users:read", "users:write", "events:write", "segments:read", "analytics:read".
+      # Zorunlu. Değerler: "admin", "notifications:write", "users:read", "users:write", "events:write", "segments:read", "analytics:read", "mcp:write".
       field "scopes", :scopes, [:array, :string]
       # Değerler: "live", "test".
       field "environment", :environment, :string
@@ -1146,7 +1415,7 @@ module HeroSignal
       # Zorunlu.
       field "name", :name, [:map, :string]
       field "description", :description, [:map, :string]
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
       field "default_opted_in", :default_opted_in, :boolean
       field "position", :position, :integer
@@ -1184,6 +1453,23 @@ module HeroSignal
       field "key", :key, :string
     end
 
+    # CreateDataFeedDto şeması.
+    class CreateDataFeedDto < HeroSignal::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      # Zorunlu.
+      field "url_template", :url_template, :string
+      # Değerler: "GET", "POST".
+      field "method", :method_value, :string
+      field "body_template", :body_template, :string
+      field "headers", :headers, [:map, :string]
+      field "secret_headers", :secret_headers, [:map, :string]
+      field "cache_ttl_seconds", :cache_ttl_seconds, :integer
+      field "timeout_ms", :timeout_ms, :integer
+      field "enabled", :enabled, :boolean
+    end
+
     # CreateExportDto şeması.
     class CreateExportDto < HeroSignal::BaseModel
       # Zorunlu. Değerler: "users", "subscriptions", "events", "deliveries", "message_events".
@@ -1199,7 +1485,7 @@ module HeroSignal
       field "message_id", :message_id, :string
       field "campaign_id", :campaign_id, :string
       field "status", :status, :string
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       field "segment_id", :segment_id, :string
     end
@@ -1258,6 +1544,10 @@ module HeroSignal
       field "text_color", :text_color, :string
       field "dismissible", :dismissible, :boolean
       field "auto_dismiss_seconds", :auto_dismiss_seconds, :integer
+      # Değerler: "blocks", "html".
+      field "content_type", :content_type, :string
+      field "html", :html, [:map, :string]
+      field "html_height", :html_height, :integer
       # Zorunlu.
       field "blocks", :blocks, [:array, :any]
     end
@@ -1289,8 +1579,48 @@ module HeroSignal
       field "text_color", :text_color, :string
       field "dismissible", :dismissible, :boolean
       field "auto_dismiss_seconds", :auto_dismiss_seconds, :integer
+      # Değerler: "blocks", "html".
+      field "content_type", :content_type, :string
+      field "html", :html, [:map, :string]
+      field "html_height", :html_height, :integer
       # Zorunlu.
       field "blocks", :blocks, [:array, :any]
+    end
+
+    # CreateKeywordDto şeması.
+    class CreateKeywordDto < HeroSignal::BaseModel
+      # Zorunlu.
+      field "keyword", :keyword, :string
+      # Değerler: "org", "app".
+      field "scope", :scope, :string
+      # Değerler: "sms", "whatsapp", "rcs".
+      field "channels", :channels, [:array, :string]
+      # Zorunlu.
+      field "actions", :actions, "CreateKeywordDtoActions"
+      field "enabled", :enabled, :boolean
+      field "description", :description, :string
+    end
+
+    # CreateKeywordDtoActions şeması.
+    class CreateKeywordDtoActions < HeroSignal::BaseModel
+      field "add_tags", :add_tags, [:map, :string]
+      field "remove_tags", :remove_tags, [:array, :string]
+      field "event", :event, "CreateKeywordDtoActionsEvent"
+      field "reply", :reply, "CreateKeywordDtoActionsReply"
+      field "opt_in", :opt_in, :boolean
+    end
+
+    # CreateKeywordDtoActionsEvent şeması.
+    class CreateKeywordDtoActionsEvent < HeroSignal::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "properties", :properties, [:map, :string]
+    end
+
+    # CreateKeywordDtoActionsReply şeması.
+    class CreateKeywordDtoActionsReply < HeroSignal::BaseModel
+      # Zorunlu.
+      field "text", :text, :string
     end
 
     # CreateLiveActivityTypeDto şeması.
@@ -1405,6 +1735,14 @@ module HeroSignal
       field "sms_from", :sms_from, :string
       field "sms_media_urls", :sms_media_urls, [:array, :string]
       field "disable_sms_link_shortening", :disable_sms_link_shortening, :boolean
+      field "whatsapp_template", :whatsapp_template, "CreateNotificationDtoWhatsappTemplate"
+      field "whatsapp_media", :whatsapp_media, "CreateNotificationDtoWhatsappMedia"
+      field "whatsapp_interactive", :whatsapp_interactive, "CreateNotificationDtoWhatsappInteractive"
+      field "rcs_card", :rcs_card, "CreateNotificationDtoRcsCard"
+      field "rcs_suggestions", :rcs_suggestions, [:array, :any]
+      field "rcs_content_sid", :rcs_content_sid, :string
+      field "rcs_content_variables", :rcs_content_variables, [:map, :string]
+      field "rcs_fallback_text", :rcs_fallback_text, [:map, :string]
       field "add_to_inbox", :add_to_inbox, :boolean
       field "inbox_ttl", :inbox_ttl, :integer
       field "frequency_cap_exempt", :frequency_cap_exempt, :boolean
@@ -1427,6 +1765,17 @@ module HeroSignal
       field "url", :url, :string
     end
 
+    # CreateNotificationDtoRcsCard şeması.
+    class CreateNotificationDtoRcsCard < HeroSignal::BaseModel
+      field "title", :title, [:map, :string]
+      field "description", :description, [:map, :string]
+      field "media_url", :media_url, :string
+      # Değerler: "SHORT", "MEDIUM", "TALL".
+      field "media_height", :media_height, :string
+      # Değerler: "VERTICAL", "HORIZONTAL".
+      field "orientation", :orientation, :string
+    end
+
     # CreateNotificationDtoTarget şeması.
     class CreateNotificationDtoTarget < HeroSignal::BaseModel
       field "all", :all, :boolean
@@ -1436,7 +1785,7 @@ module HeroSignal
       field "included_segments", :included_segments, [:array, :string]
       field "excluded_segments", :excluded_segments, [:array, :string]
       field "filters", :filters, :any
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
       field "test_devices_only", :test_devices_only, :boolean
       field "email_to", :email_to, [:array, :string]
@@ -1453,6 +1802,78 @@ module HeroSignal
       field "url", :url, :string
     end
 
+    # CreateNotificationDtoWhatsappInteractive şeması.
+    class CreateNotificationDtoWhatsappInteractive < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "button", "list".
+      field "type", :type, :string
+      field "header", :header, :string
+      field "footer", :footer, :string
+      field "buttons", :buttons, [:array, "CreateNotificationDtoWhatsappInteractiveButtonsItem"]
+      field "list", :list, "CreateNotificationDtoWhatsappInteractiveList"
+    end
+
+    # CreateNotificationDtoWhatsappInteractiveButtonsItem şeması.
+    class CreateNotificationDtoWhatsappInteractiveButtonsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "title", :title, :string
+    end
+
+    # CreateNotificationDtoWhatsappInteractiveList şeması.
+    class CreateNotificationDtoWhatsappInteractiveList < HeroSignal::BaseModel
+      # Zorunlu.
+      field "button", :button, :string
+      # Zorunlu.
+      field "sections", :sections, [:array, "CreateNotificationDtoWhatsappInteractiveListSectionsItem"]
+    end
+
+    # CreateNotificationDtoWhatsappInteractiveListSectionsItem şeması.
+    class CreateNotificationDtoWhatsappInteractiveListSectionsItem < HeroSignal::BaseModel
+      field "title", :title, :string
+      # Zorunlu.
+      field "rows", :rows, [:array, "CreateNotificationDtoWhatsappInteractiveListSectionsItemRowsItem"]
+    end
+
+    # CreateNotificationDtoWhatsappInteractiveListSectionsItemRowsItem şeması.
+    class CreateNotificationDtoWhatsappInteractiveListSectionsItemRowsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "title", :title, :string
+      field "description", :description, :string
+    end
+
+    # CreateNotificationDtoWhatsappMedia şeması.
+    class CreateNotificationDtoWhatsappMedia < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "image", "video", "document", "audio".
+      field "type", :type, :string
+      # Zorunlu.
+      field "url", :url, :string
+      field "filename", :filename, :string
+    end
+
+    # CreateNotificationDtoWhatsappTemplate şeması.
+    class CreateNotificationDtoWhatsappTemplate < HeroSignal::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "language", :language, :string
+      field "header", :header, :any
+      field "body_params", :body_params, [:array, :string]
+      field "button_params", :button_params, [:array, "CreateNotificationDtoWhatsappTemplateButtonParamsItem"]
+    end
+
+    # CreateNotificationDtoWhatsappTemplateButtonParamsItem şeması.
+    class CreateNotificationDtoWhatsappTemplateButtonParamsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "index", :index, :integer
+      # Zorunlu. Değerler: "url", "quick_reply", "copy_code".
+      field "sub_type", :sub_type, :string
+      # Zorunlu.
+      field "value", :value, :string
+    end
+
     # CreateNotificationResult şeması.
     class CreateNotificationResult < HeroSignal::BaseModel
       # Zorunlu.
@@ -1467,7 +1888,7 @@ module HeroSignal
 
     # CreateSuppressionDto şeması.
     class CreateSuppressionDto < HeroSignal::BaseModel
-      # Zorunlu. Değerler: "email", "sms".
+      # Zorunlu. Değerler: "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu.
       field "value", :value, :string
@@ -1481,7 +1902,7 @@ module HeroSignal
     class CreateTemplateDto < HeroSignal::BaseModel
       # Zorunlu.
       field "name", :name, :string
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       field "tags", :tags, [:array, :string]
       # Zorunlu.
@@ -1539,6 +1960,14 @@ module HeroSignal
       field "web_buttons", :web_buttons, [:array, "CreateTemplateDtoContentWebButtonsItem"]
       field "require_interaction", :require_interaction, :boolean
       field "sms_media_urls", :sms_media_urls, [:array, :string]
+      field "whatsapp_template", :whatsapp_template, "CreateTemplateDtoContentWhatsappTemplate"
+      field "whatsapp_media", :whatsapp_media, "CreateTemplateDtoContentWhatsappMedia"
+      field "whatsapp_interactive", :whatsapp_interactive, "CreateTemplateDtoContentWhatsappInteractive"
+      field "rcs_card", :rcs_card, "CreateTemplateDtoContentRcsCard"
+      field "rcs_suggestions", :rcs_suggestions, [:array, :any]
+      field "rcs_content_sid", :rcs_content_sid, :string
+      field "rcs_content_variables", :rcs_content_variables, [:map, :string]
+      field "rcs_fallback_text", :rcs_fallback_text, [:map, :string]
     end
 
     # CreateTemplateDtoContentButtonsItem şeması.
@@ -1551,6 +1980,17 @@ module HeroSignal
       field "url", :url, :string
     end
 
+    # CreateTemplateDtoContentRcsCard şeması.
+    class CreateTemplateDtoContentRcsCard < HeroSignal::BaseModel
+      field "title", :title, [:map, :string]
+      field "description", :description, [:map, :string]
+      field "media_url", :media_url, :string
+      # Değerler: "SHORT", "MEDIUM", "TALL".
+      field "media_height", :media_height, :string
+      # Değerler: "VERTICAL", "HORIZONTAL".
+      field "orientation", :orientation, :string
+    end
+
     # CreateTemplateDtoContentWebButtonsItem şeması.
     class CreateTemplateDtoContentWebButtonsItem < HeroSignal::BaseModel
       # Zorunlu.
@@ -1559,6 +1999,115 @@ module HeroSignal
       field "text", :text, :string
       field "icon", :icon, :string
       field "url", :url, :string
+    end
+
+    # CreateTemplateDtoContentWhatsappInteractive şeması.
+    class CreateTemplateDtoContentWhatsappInteractive < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "button", "list".
+      field "type", :type, :string
+      field "header", :header, :string
+      field "footer", :footer, :string
+      field "buttons", :buttons, [:array, "CreateTemplateDtoContentWhatsappInteractiveButtonsItem"]
+      field "list", :list, "CreateTemplateDtoContentWhatsappInteractiveList"
+    end
+
+    # CreateTemplateDtoContentWhatsappInteractiveButtonsItem şeması.
+    class CreateTemplateDtoContentWhatsappInteractiveButtonsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "title", :title, :string
+    end
+
+    # CreateTemplateDtoContentWhatsappInteractiveList şeması.
+    class CreateTemplateDtoContentWhatsappInteractiveList < HeroSignal::BaseModel
+      # Zorunlu.
+      field "button", :button, :string
+      # Zorunlu.
+      field "sections", :sections, [:array, "CreateTemplateDtoContentWhatsappInteractiveListSectionsItem"]
+    end
+
+    # CreateTemplateDtoContentWhatsappInteractiveListSectionsItem şeması.
+    class CreateTemplateDtoContentWhatsappInteractiveListSectionsItem < HeroSignal::BaseModel
+      field "title", :title, :string
+      # Zorunlu.
+      field "rows", :rows, [:array, "CreateTemplateDtoContentWhatsappInteractiveListSectionsItemRowsItem"]
+    end
+
+    # CreateTemplateDtoContentWhatsappInteractiveListSectionsItemRowsItem şeması.
+    class CreateTemplateDtoContentWhatsappInteractiveListSectionsItemRowsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "title", :title, :string
+      field "description", :description, :string
+    end
+
+    # CreateTemplateDtoContentWhatsappMedia şeması.
+    class CreateTemplateDtoContentWhatsappMedia < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "image", "video", "document", "audio".
+      field "type", :type, :string
+      # Zorunlu.
+      field "url", :url, :string
+      field "filename", :filename, :string
+    end
+
+    # CreateTemplateDtoContentWhatsappTemplate şeması.
+    class CreateTemplateDtoContentWhatsappTemplate < HeroSignal::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "language", :language, :string
+      field "header", :header, :any
+      field "body_params", :body_params, [:array, :string]
+      field "button_params", :button_params, [:array, "CreateTemplateDtoContentWhatsappTemplateButtonParamsItem"]
+    end
+
+    # CreateTemplateDtoContentWhatsappTemplateButtonParamsItem şeması.
+    class CreateTemplateDtoContentWhatsappTemplateButtonParamsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "index", :index, :integer
+      # Zorunlu. Değerler: "url", "quick_reply", "copy_code".
+      field "sub_type", :sub_type, :string
+      # Zorunlu.
+      field "value", :value, :string
+    end
+
+    # CreateWarmupPlanDto şeması.
+    class CreateWarmupPlanDto < HeroSignal::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "domain", "ip".
+      field "kind", :kind, :string
+      # Zorunlu.
+      field "target", :target, :string
+      field "start_date", :start_date, :string
+      field "daily_limits", :daily_limits, [:array, :integer]
+      field "curve", :curve, "CreateWarmupPlanDtoCurve"
+      field "provider_shares", :provider_shares, "CreateWarmupPlanDtoProviderShares"
+      field "timezone", :timezone, :string
+    end
+
+    # CreateWarmupPlanDtoCurve şeması.
+    class CreateWarmupPlanDtoCurve < HeroSignal::BaseModel
+      # Zorunlu.
+      field "start", :start, :integer
+      # Zorunlu.
+      field "growth", :growth, :number
+      # Zorunlu.
+      field "target", :target, :integer
+    end
+
+    # CreateWarmupPlanDtoProviderShares şeması.
+    class CreateWarmupPlanDtoProviderShares < HeroSignal::BaseModel
+      # Zorunlu.
+      field "gmail", :gmail, :number
+      # Zorunlu.
+      field "outlook", :outlook, :number
+      # Zorunlu.
+      field "yahoo", :yahoo, :number
+      # Zorunlu.
+      field "other", :other, :number
     end
 
     # CreateWebhookDto şeması.
@@ -1571,11 +2120,123 @@ module HeroSignal
       field "event_filters", :event_filters, "CreateWebhookDtoEventFilters"
       field "batch", :batch, :boolean
       field "headers", :headers, [:map, :string]
+      field "body_template", :body_template, :string
+      # Şablon çıktısının içerik türü (varsayılan application/json). Değerler: "application/json", "text/plain".
+      field "body_content_type", :body_content_type, :string
+      field "filters", :filters, "CreateWebhookDtoFilters"
     end
 
     # CreateWebhookDtoEventFilters şeması.
     class CreateWebhookDtoEventFilters < HeroSignal::BaseModel
       field "event_names", :event_names, [:array, :string]
+    end
+
+    # Olay filtresi: { match: all|any, conditions: [{ field, op, value? }] }.
+    class CreateWebhookDtoFilters < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "all", "any".
+      field "match", :match, :string
+      # Zorunlu.
+      field "conditions", :conditions, [:array, "CreateWebhookDtoFiltersConditionsItem"]
+    end
+
+    # CreateWebhookDtoFiltersConditionsItem şeması.
+    class CreateWebhookDtoFiltersConditionsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "field", :field, :string
+      # Zorunlu. Değerler: "eq", "neq", "in", "not_in", "starts_with", "contains", "exists", "not_exists".
+      field "op", :op, :string
+      field "value", :value, :any
+    end
+
+    # DataFeed şeması.
+    class DataFeed < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "url_template", :url_template, :string
+      # Zorunlu. Değerler: "GET", "POST".
+      field "method", :method_value, :string
+      # Zorunlu.
+      field "body_template", :body_template, :string
+      # Zorunlu.
+      field "headers", :headers, [:map, :string]
+      # Zorunlu.
+      field "secret_header_names", :secret_header_names, [:array, :string]
+      # Zorunlu.
+      field "cache_ttl_seconds", :cache_ttl_seconds, :integer
+      # Zorunlu.
+      field "timeout_ms", :timeout_ms, :integer
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "liquid", :liquid, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # DataFeedList şeması.
+    class DataFeedList < HeroSignal::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "DataFeed"]
+    end
+
+    # DataFeedTestResult şeması.
+    class DataFeedTestResult < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "ok", "cached", "timeout", "error", "circuit_open", "blocked", "invalid_json", "too_large", "http_error".
+      field "status", :status, :string
+      # Zorunlu.
+      field "http_status", :http_status, :integer
+      # Zorunlu.
+      field "duration_ms", :duration_ms, :integer
+      # Zorunlu.
+      field "error", :error, :string
+      # Zorunlu.
+      field "url", :url, :string
+      # Zorunlu.
+      field "preview", :preview, :any
+      # Zorunlu.
+      field "truncated", :truncated, :boolean
+      # Zorunlu.
+      field "user", :user, "DataFeedTestResultUser"
+    end
+
+    # DataFeedTestResultUser şeması.
+    class DataFeedTestResultUser < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+    end
+
+    # DeliverabilitySettingsDto şeması.
+    class DeliverabilitySettingsDto < HeroSignal::BaseModel
+      field "bcc_address", :bcc_address, :string
+      field "validation", :validation, "DeliverabilitySettingsDtoValidation"
+      field "verifier", :verifier, "DeliverabilitySettingsDtoVerifier"
+    end
+
+    # DeliverabilitySettingsDtoValidation şeması.
+    class DeliverabilitySettingsDtoValidation < HeroSignal::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      field "check_mx", :check_mx, :boolean
+      field "block_disposable", :block_disposable, :boolean
+      field "block_role", :block_role, :boolean
+    end
+
+    # DeliverabilitySettingsDtoVerifier şeması.
+    class DeliverabilitySettingsDtoVerifier < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "zerobounce", "neverbounce", "mock".
+      field "provider", :provider, :string
+      field "api_key", :api_key, :string
     end
 
     # Delivery şeması.
@@ -1588,7 +2249,7 @@ module HeroSignal
       field "subscription_id", :subscription_id, :string
       # Zorunlu.
       field "user_id", :user_id, :string
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu.
       field "provider", :provider, :string
@@ -1628,6 +2289,126 @@ module HeroSignal
       field "next_cursor", :next_cursor, :string
       # Zorunlu.
       field "has_more", :has_more, :boolean
+    end
+
+    # EmailAddressCheck şeması.
+    class EmailAddressCheck < HeroSignal::BaseModel
+      # Zorunlu.
+      field "ok", :ok, :boolean
+      # Zorunlu. Değerler: "syntax", "no_mx", "disposable", "role", "verifier_invalid".
+      field "reason", :reason, :string
+      # Zorunlu.
+      field "detail", :detail, :string
+      # Zorunlu.
+      field "checks", :checks, [:array, :string]
+      # Zorunlu.
+      field "unknown", :unknown, [:array, :string]
+    end
+
+    # EmailDeliverabilitySettings şeması.
+    class EmailDeliverabilitySettings < HeroSignal::BaseModel
+      # Zorunlu.
+      field "bcc_address", :bcc_address, :string
+      # Zorunlu.
+      field "validation", :validation, "EmailDeliverabilitySettingsValidation"
+      # Zorunlu.
+      field "verifier", :verifier, "EmailDeliverabilitySettingsVerifier"
+    end
+
+    # EmailDeliverabilitySettingsValidation şeması.
+    class EmailDeliverabilitySettingsValidation < HeroSignal::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "check_mx", :check_mx, :boolean
+      # Zorunlu.
+      field "block_disposable", :block_disposable, :boolean
+      # Zorunlu.
+      field "block_role", :block_role, :boolean
+    end
+
+    # EmailDeliverabilitySettingsVerifier şeması.
+    class EmailDeliverabilitySettingsVerifier < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "zerobounce", "neverbounce", "mock".
+      field "provider", :provider, :string
+      # Zorunlu.
+      field "has_key", :has_key, :boolean
+    end
+
+    # EmailWarmupPlan şeması.
+    class EmailWarmupPlan < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "domain", "ip".
+      field "kind", :kind, :string
+      # Zorunlu.
+      field "target", :target, :string
+      # Zorunlu.
+      field "start_date", :start_date, :string
+      # Zorunlu.
+      field "daily_limits", :daily_limits, [:array, :integer]
+      # Zorunlu.
+      field "provider_shares", :provider_shares, [:map, :number]
+      # Zorunlu.
+      field "timezone", :timezone, :string
+      # Zorunlu. Değerler: "active", "paused", "completed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "today", :today, "EmailWarmupPlanToday"
+      # Zorunlu.
+      field "scheduled_ahead", :scheduled_ahead, :integer
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # EmailWarmupPlanList şeması.
+    class EmailWarmupPlanList < HeroSignal::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "EmailWarmupPlan"]
+    end
+
+    # EmailWarmupPlanToday şeması.
+    class EmailWarmupPlanToday < HeroSignal::BaseModel
+      # Zorunlu.
+      field "day", :day, :string
+      # Zorunlu.
+      field "index", :index, :integer
+      # Zorunlu.
+      field "limit", :limit, :integer
+      # Zorunlu.
+      field "used", :used, :integer
+      # Zorunlu.
+      field "buckets", :buckets, [:map, "EmailWarmupPlanTodayBucketsValue"]
+    end
+
+    # EmailWarmupPlanTodayBucketsValue şeması.
+    class EmailWarmupPlanTodayBucketsValue < HeroSignal::BaseModel
+      # Zorunlu.
+      field "limit", :limit, :integer
+      # Zorunlu.
+      field "used", :used, :integer
+    end
+
+    # EmailWarmupUsage şeması.
+    class EmailWarmupUsage < HeroSignal::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "EmailWarmupUsageDataItem"]
+    end
+
+    # EmailWarmupUsageDataItem şeması.
+    class EmailWarmupUsageDataItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "day", :day, :string
+      # Zorunlu.
+      field "bucket", :bucket, :string
+      # Zorunlu.
+      field "used", :used, :integer
+      # Zorunlu.
+      field "limit", :limit, :integer
     end
 
     # EndLiveActivityDto şeması.
@@ -1724,7 +2505,7 @@ module HeroSignal
       field "included_segments", :included_segments, [:array, :string]
       field "excluded_segments", :excluded_segments, [:array, :string]
       field "filters", :filters, :any
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
       field "test_devices_only", :test_devices_only, :boolean
       field "email_to", :email_to, [:array, :string]
@@ -1935,7 +2716,7 @@ module HeroSignal
       field "message_id", :message_id, :string
       field "campaign_id", :campaign_id, :string
       field "status", :status, :string
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       field "segment_id", :segment_id, :string
     end
@@ -2160,6 +2941,10 @@ module HeroSignal
       field "text_color", :text_color, :string
       field "dismissible", :dismissible, :boolean
       field "auto_dismiss_seconds", :auto_dismiss_seconds, :integer
+      # Değerler: "blocks", "html".
+      field "content_type", :content_type, :string
+      field "html", :html, [:map, :string]
+      field "html_height", :html_height, :integer
       # Zorunlu.
       field "blocks", :blocks, [:array, :any]
     end
@@ -2225,6 +3010,10 @@ module HeroSignal
       field "text_color", :text_color, :string
       field "dismissible", :dismissible, :boolean
       field "auto_dismiss_seconds", :auto_dismiss_seconds, :integer
+      # Değerler: "blocks", "html".
+      field "content_type", :content_type, :string
+      field "html", :html, [:map, :string]
+      field "html_height", :html_height, :integer
       # Zorunlu.
       field "blocks", :blocks, [:array, :any]
     end
@@ -2299,6 +3088,12 @@ module HeroSignal
       field "updated", :updated, :integer
       # Zorunlu.
       field "unread_count", :unread_count, :integer
+    end
+
+    # IntegrationOk şeması.
+    class IntegrationOk < HeroSignal::BaseModel
+      # Zorunlu.
+      field "ok", :ok, :boolean
     end
 
     # Journey şeması.
@@ -2786,6 +3581,112 @@ module HeroSignal
       field "data", :data, [:array, "LiveActivityType"]
     end
 
+    # McpCreateCampaignDraftBody şeması.
+    class McpCreateCampaignDraftBody < HeroSignal::BaseModel
+      field "name", :name, :string
+      # Değerler: "one_time", "scheduled", "recurring".
+      field "type", :type, :string
+      field "audience", :audience, "McpCreateCampaignDraftBodyAudience"
+      # messages.content ile aynı şema (headings, contents, url, buttons…)
+      field "content", :content, [:map, :any]
+      field "labels", :labels, [:array, :string]
+      # Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır
+      field "category", :category, :string
+      field "ab_test", :ab_test, "McpCreateCampaignDraftBodyAbTest"
+      # A/B varyantları (ağırlıklar toplamı 100; en fazla bir is_control)
+      field "variants", :variants, [:array, "McpCreateCampaignDraftBodyVariantsItem"]
+      field "template_id", :template_id, :string
+      field "template_version", :template_version, :integer
+      field "delivery", :delivery, "McpCreateCampaignDraftBodyDelivery"
+      field "recurrence", :recurrence, "McpCreateCampaignDraftBodyRecurrence"
+      field "send_at", :send_at, :string
+    end
+
+    # McpCreateCampaignDraftBodyAbTest şeması.
+    class McpCreateCampaignDraftBodyAbTest < HeroSignal::BaseModel
+      field "enabled", :enabled, :boolean
+      field "test_percentage", :test_percentage, :integer
+      field "winner", :winner, "McpCreateCampaignDraftBodyAbTestWinner"
+    end
+
+    # McpCreateCampaignDraftBodyAbTestWinner şeması.
+    class McpCreateCampaignDraftBodyAbTestWinner < HeroSignal::BaseModel
+      # Değerler: "manual", "auto".
+      field "mode", :mode, :string
+      # Değerler: "open_rate", "click_rate", "conversion_rate".
+      field "metric", :metric, :string
+      field "evaluate_after_minutes", :evaluate_after_minutes, :integer
+    end
+
+    # McpCreateCampaignDraftBodyAudience şeması.
+    class McpCreateCampaignDraftBodyAudience < HeroSignal::BaseModel
+      field "all", :all, :boolean
+      field "segments", :segments, [:array, :string]
+      field "exclude_segments", :exclude_segments, [:array, :string]
+      # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
+      field "filters", :filters, "McpCreateCampaignDraftBodyAudienceFilters"
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      field "channels", :channels, [:array, :string]
+      field "test_devices_only", :test_devices_only, :boolean
+    end
+
+    # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
+    class McpCreateCampaignDraftBodyAudienceFilters < HeroSignal::BaseModel
+      field "all", :all, [:array, [:map, :any]]
+      field "any", :any, [:array, [:map, :any]]
+      field "none", :none, [:array, [:map, :any]]
+    end
+
+    # McpCreateCampaignDraftBodyDelivery şeması.
+    class McpCreateCampaignDraftBodyDelivery < HeroSignal::BaseModel
+      # Değerler: "immediate", "per_user_timezone", "optimized".
+      field "timezone_mode", :timezone_mode, :string
+      field "delivery_time_of_day", :delivery_time_of_day, :string
+      field "throttle_per_minute", :throttle_per_minute, :integer
+      field "ttl", :ttl, :integer
+      # Değerler: 5, 10.
+      field "priority", :priority, :integer
+      field "collapse_id", :collapse_id, :string
+      field "frequency_cap_exempt", :frequency_cap_exempt, :boolean
+      field "quiet_hours_exempt", :quiet_hours_exempt, :boolean
+      field "one_per_user", :one_per_user, :boolean
+    end
+
+    # McpCreateCampaignDraftBodyRecurrence şeması.
+    class McpCreateCampaignDraftBodyRecurrence < HeroSignal::BaseModel
+      field "cron", :cron, :string
+      field "until", :until_, :string
+      field "timezone", :timezone, :string
+    end
+
+    # McpCreateCampaignDraftBodyVariantsItem şeması.
+    class McpCreateCampaignDraftBodyVariantsItem < HeroSignal::BaseModel
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "weight_percent", :weight_percent, :integer
+      field "content", :content, [:map, :any]
+      field "is_control", :is_control, :boolean
+    end
+
+    # McpCreateSegmentDraftBody şeması.
+    class McpCreateSegmentDraftBody < HeroSignal::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      # Zorunlu. Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
+      field "definition", :definition, "McpCreateSegmentDraftBodyDefinition"
+      field "is_dynamic", :is_dynamic, :boolean
+    end
+
+    # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
+    class McpCreateSegmentDraftBodyDefinition < HeroSignal::BaseModel
+      field "all", :all, [:array, [:map, :any]]
+      field "any", :any, [:array, [:map, :any]]
+      field "none", :none, [:array, [:map, :any]]
+    end
+
     # Member şeması.
     class Member < HeroSignal::BaseModel
       # Zorunlu.
@@ -3043,6 +3944,10 @@ module HeroSignal
       field "settings", :settings, "OrgSettings"
       # Zorunlu.
       field "created_at", :created_at, :string
+      # Zorunlu.
+      field "region", :region, :string
+      # Zorunlu.
+      field "managed_by_reseller", :managed_by_reseller, :boolean
     end
 
     # OrgSettings şeması.
@@ -3084,9 +3989,9 @@ module HeroSignal
 
     # OverviewStatsChannelsItem şeması.
     class OverviewStatsChannelsItem < HeroSignal::BaseModel
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
-      # Zorunlu. Değerler: "apns", "fcm", "hms", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "mock".
+      # Zorunlu. Değerler: "apns", "fcm", "hms", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "meta_whatsapp", "google_rbm", "mock".
       field "provider", :provider, :string
       # Zorunlu. Değerler: "unconfigured", "active", "invalid", "suspended".
       field "status", :status, :string
@@ -3287,7 +4192,7 @@ module HeroSignal
 
     # RenderPreview şeması.
     class RenderPreview < HeroSignal::BaseModel
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu.
       field "language", :language, :string
@@ -3355,7 +4260,7 @@ module HeroSignal
 
     # RenderTemplateDto şeması.
     class RenderTemplateDto < HeroSignal::BaseModel
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       field "language", :language, :string
       field "user", :user, "RenderTemplateDtoUser"
@@ -3415,6 +4320,14 @@ module HeroSignal
       field "web_buttons", :web_buttons, [:array, "RenderTemplateDtoContentWebButtonsItem"]
       field "require_interaction", :require_interaction, :boolean
       field "sms_media_urls", :sms_media_urls, [:array, :string]
+      field "whatsapp_template", :whatsapp_template, "RenderTemplateDtoContentWhatsappTemplate"
+      field "whatsapp_media", :whatsapp_media, "RenderTemplateDtoContentWhatsappMedia"
+      field "whatsapp_interactive", :whatsapp_interactive, "RenderTemplateDtoContentWhatsappInteractive"
+      field "rcs_card", :rcs_card, "RenderTemplateDtoContentRcsCard"
+      field "rcs_suggestions", :rcs_suggestions, [:array, :any]
+      field "rcs_content_sid", :rcs_content_sid, :string
+      field "rcs_content_variables", :rcs_content_variables, [:map, :string]
+      field "rcs_fallback_text", :rcs_fallback_text, [:map, :string]
     end
 
     # RenderTemplateDtoContentButtonsItem şeması.
@@ -3427,6 +4340,17 @@ module HeroSignal
       field "url", :url, :string
     end
 
+    # RenderTemplateDtoContentRcsCard şeması.
+    class RenderTemplateDtoContentRcsCard < HeroSignal::BaseModel
+      field "title", :title, [:map, :string]
+      field "description", :description, [:map, :string]
+      field "media_url", :media_url, :string
+      # Değerler: "SHORT", "MEDIUM", "TALL".
+      field "media_height", :media_height, :string
+      # Değerler: "VERTICAL", "HORIZONTAL".
+      field "orientation", :orientation, :string
+    end
+
     # RenderTemplateDtoContentWebButtonsItem şeması.
     class RenderTemplateDtoContentWebButtonsItem < HeroSignal::BaseModel
       # Zorunlu.
@@ -3435,6 +4359,78 @@ module HeroSignal
       field "text", :text, :string
       field "icon", :icon, :string
       field "url", :url, :string
+    end
+
+    # RenderTemplateDtoContentWhatsappInteractive şeması.
+    class RenderTemplateDtoContentWhatsappInteractive < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "button", "list".
+      field "type", :type, :string
+      field "header", :header, :string
+      field "footer", :footer, :string
+      field "buttons", :buttons, [:array, "RenderTemplateDtoContentWhatsappInteractiveButtonsItem"]
+      field "list", :list, "RenderTemplateDtoContentWhatsappInteractiveList"
+    end
+
+    # RenderTemplateDtoContentWhatsappInteractiveButtonsItem şeması.
+    class RenderTemplateDtoContentWhatsappInteractiveButtonsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "title", :title, :string
+    end
+
+    # RenderTemplateDtoContentWhatsappInteractiveList şeması.
+    class RenderTemplateDtoContentWhatsappInteractiveList < HeroSignal::BaseModel
+      # Zorunlu.
+      field "button", :button, :string
+      # Zorunlu.
+      field "sections", :sections, [:array, "RenderTemplateDtoContentWhatsappInteractiveListSectionsItem"]
+    end
+
+    # RenderTemplateDtoContentWhatsappInteractiveListSectionsItem şeması.
+    class RenderTemplateDtoContentWhatsappInteractiveListSectionsItem < HeroSignal::BaseModel
+      field "title", :title, :string
+      # Zorunlu.
+      field "rows", :rows, [:array, "RenderTemplateDtoContentWhatsappInteractiveListSectionsItemRowsItem"]
+    end
+
+    # RenderTemplateDtoContentWhatsappInteractiveListSectionsItemRowsItem şeması.
+    class RenderTemplateDtoContentWhatsappInteractiveListSectionsItemRowsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "title", :title, :string
+      field "description", :description, :string
+    end
+
+    # RenderTemplateDtoContentWhatsappMedia şeması.
+    class RenderTemplateDtoContentWhatsappMedia < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "image", "video", "document", "audio".
+      field "type", :type, :string
+      # Zorunlu.
+      field "url", :url, :string
+      field "filename", :filename, :string
+    end
+
+    # RenderTemplateDtoContentWhatsappTemplate şeması.
+    class RenderTemplateDtoContentWhatsappTemplate < HeroSignal::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "language", :language, :string
+      field "header", :header, :any
+      field "body_params", :body_params, [:array, :string]
+      field "button_params", :button_params, [:array, "RenderTemplateDtoContentWhatsappTemplateButtonParamsItem"]
+    end
+
+    # RenderTemplateDtoContentWhatsappTemplateButtonParamsItem şeması.
+    class RenderTemplateDtoContentWhatsappTemplateButtonParamsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "index", :index, :integer
+      # Zorunlu. Değerler: "url", "quick_reply", "copy_code".
+      field "sub_type", :sub_type, :string
+      # Zorunlu.
+      field "value", :value, :string
     end
 
     # RenderTemplateDtoUser şeması.
@@ -3645,10 +4641,42 @@ module HeroSignal
     class SetPreferencesDtoPreferencesItem < HeroSignal::BaseModel
       # Zorunlu.
       field "category", :category, :string
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu.
       field "opted_in", :opted_in, :boolean
+    end
+
+    # SmsKeyword şeması.
+    class SmsKeyword < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "keyword", :keyword, :string
+      # Zorunlu. Değerler: "org", "app".
+      field "scope", :scope, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu. Değerler: "sms", "whatsapp", "rcs".
+      field "channels", :channels, [:array, :string]
+      # Zorunlu.
+      field "actions", :actions, [:map, :any]
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # SmsKeywordList şeması.
+    class SmsKeywordList < HeroSignal::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "SmsKeyword"]
+      # Zorunlu.
+      field "reserved", :reserved, [:array, :string]
     end
 
     # StartLiveActivityDto şeması.
@@ -3691,7 +4719,7 @@ module HeroSignal
       field "app_id", :app_id, :string
       # Zorunlu.
       field "user_id", :user_id, :string
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu.
       field "token", :token, :string
@@ -3713,6 +4741,8 @@ module HeroSignal
       field "last_delivered_at", :last_delivered_at, :string
       # Zorunlu.
       field "opted_in_at", :opted_in_at, :string
+      # Zorunlu.
+      field "opt_in_source", :opt_in_source, :string
       # Zorunlu.
       field "unsubscribed_at", :unsubscribed_at, :string
       # Zorunlu.
@@ -3829,7 +4859,7 @@ module HeroSignal
       field "id", :id, :string
       # Zorunlu.
       field "app_id", :app_id, :string
-      # Zorunlu. Değerler: "email", "sms".
+      # Zorunlu. Değerler: "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu.
       field "value_masked", :value_masked, :string
@@ -3865,7 +4895,7 @@ module HeroSignal
       field "app_id", :app_id, :string
       # Zorunlu.
       field "name", :name, :string
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu.
       field "current_version", :current_version, :integer
@@ -3941,6 +4971,12 @@ module HeroSignal
       field "created_at", :created_at, :string
     end
 
+    # TestDataFeedDto şeması.
+    class TestDataFeedDto < HeroSignal::BaseModel
+      field "external_id", :external_id, :string
+      field "user_id", :user_id, :string
+    end
+
     # TriggerRunDto şeması.
     class TriggerRunDto < HeroSignal::BaseModel
       field "external_id", :external_id, :string
@@ -3960,7 +4996,7 @@ module HeroSignal
     # UpdateApiKeyDto şeması.
     class UpdateApiKeyDto < HeroSignal::BaseModel
       field "name", :name, :string
-      # Değerler: "admin", "notifications:write", "users:read", "users:write", "events:write", "segments:read", "analytics:read".
+      # Değerler: "admin", "notifications:write", "users:read", "users:write", "events:write", "segments:read", "analytics:read", "mcp:write".
       field "scopes", :scopes, [:array, :string]
       field "ip_allowlist", :ip_allowlist, [:array, :string]
       field "expires_at", :expires_at, :string
@@ -4033,7 +5069,7 @@ module HeroSignal
       field "max", :max, :integer
       # Zorunlu.
       field "window", :window, "UpdateAppDtoSettingsFrequencyCapsItemWindow"
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
     end
 
@@ -4204,10 +5240,29 @@ module HeroSignal
     class UpdateCategoryDto < HeroSignal::BaseModel
       field "name", :name, [:map, :string]
       field "description", :description, [:map, :string]
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
       field "default_opted_in", :default_opted_in, :boolean
       field "position", :position, :integer
+    end
+
+    # UpdateContentTableDto şeması.
+    class UpdateContentTableDto < HeroSignal::BaseModel
+      field "description", :description, :string
+    end
+
+    # UpdateDataFeedDto şeması.
+    class UpdateDataFeedDto < HeroSignal::BaseModel
+      field "description", :description, :string
+      field "url_template", :url_template, :string
+      # Değerler: "GET", "POST".
+      field "method", :method_value, :string
+      field "body_template", :body_template, :string
+      field "headers", :headers, [:map, :string]
+      field "secret_headers", :secret_headers, [:map, :string]
+      field "cache_ttl_seconds", :cache_ttl_seconds, :integer
+      field "timeout_ms", :timeout_ms, :integer
+      field "enabled", :enabled, :boolean
     end
 
     # UpdateInAppDto şeması.
@@ -4253,6 +5308,10 @@ module HeroSignal
       field "text_color", :text_color, :string
       field "dismissible", :dismissible, :boolean
       field "auto_dismiss_seconds", :auto_dismiss_seconds, :integer
+      # Değerler: "blocks", "html".
+      field "content_type", :content_type, :string
+      field "html", :html, [:map, :string]
+      field "html_height", :html_height, :integer
       # Zorunlu.
       field "blocks", :blocks, [:array, :any]
     end
@@ -4284,6 +5343,10 @@ module HeroSignal
       field "text_color", :text_color, :string
       field "dismissible", :dismissible, :boolean
       field "auto_dismiss_seconds", :auto_dismiss_seconds, :integer
+      # Değerler: "blocks", "html".
+      field "content_type", :content_type, :string
+      field "html", :html, [:map, :string]
+      field "html_height", :html_height, :integer
       # Zorunlu.
       field "blocks", :blocks, [:array, :any]
     end
@@ -4292,6 +5355,38 @@ module HeroSignal
     class UpdateJourneyDto < HeroSignal::BaseModel
       field "name", :name, :string
       field "description", :description, :string
+    end
+
+    # UpdateKeywordDto şeması.
+    class UpdateKeywordDto < HeroSignal::BaseModel
+      field "keyword", :keyword, :string
+      # Değerler: "sms", "whatsapp", "rcs".
+      field "channels", :channels, [:array, :string]
+      field "actions", :actions, "UpdateKeywordDtoActions"
+      field "enabled", :enabled, :boolean
+      field "description", :description, :string
+    end
+
+    # UpdateKeywordDtoActions şeması.
+    class UpdateKeywordDtoActions < HeroSignal::BaseModel
+      field "add_tags", :add_tags, [:map, :string]
+      field "remove_tags", :remove_tags, [:array, :string]
+      field "event", :event, "UpdateKeywordDtoActionsEvent"
+      field "reply", :reply, "UpdateKeywordDtoActionsReply"
+      field "opt_in", :opt_in, :boolean
+    end
+
+    # UpdateKeywordDtoActionsEvent şeması.
+    class UpdateKeywordDtoActionsEvent < HeroSignal::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "properties", :properties, [:map, :string]
+    end
+
+    # UpdateKeywordDtoActionsReply şeması.
+    class UpdateKeywordDtoActionsReply < HeroSignal::BaseModel
+      # Zorunlu.
+      field "text", :text, :string
     end
 
     # UpdateLiveActivityDto şeması.
@@ -4380,7 +5475,7 @@ module HeroSignal
     # UpdateTemplateDto şeması.
     class UpdateTemplateDto < HeroSignal::BaseModel
       field "name", :name, :string
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       field "tags", :tags, [:array, :string]
       field "content", :content, "UpdateTemplateDtoContent"
@@ -4437,6 +5532,14 @@ module HeroSignal
       field "web_buttons", :web_buttons, [:array, "UpdateTemplateDtoContentWebButtonsItem"]
       field "require_interaction", :require_interaction, :boolean
       field "sms_media_urls", :sms_media_urls, [:array, :string]
+      field "whatsapp_template", :whatsapp_template, "UpdateTemplateDtoContentWhatsappTemplate"
+      field "whatsapp_media", :whatsapp_media, "UpdateTemplateDtoContentWhatsappMedia"
+      field "whatsapp_interactive", :whatsapp_interactive, "UpdateTemplateDtoContentWhatsappInteractive"
+      field "rcs_card", :rcs_card, "UpdateTemplateDtoContentRcsCard"
+      field "rcs_suggestions", :rcs_suggestions, [:array, :any]
+      field "rcs_content_sid", :rcs_content_sid, :string
+      field "rcs_content_variables", :rcs_content_variables, [:map, :string]
+      field "rcs_fallback_text", :rcs_fallback_text, [:map, :string]
     end
 
     # UpdateTemplateDtoContentButtonsItem şeması.
@@ -4449,6 +5552,17 @@ module HeroSignal
       field "url", :url, :string
     end
 
+    # UpdateTemplateDtoContentRcsCard şeması.
+    class UpdateTemplateDtoContentRcsCard < HeroSignal::BaseModel
+      field "title", :title, [:map, :string]
+      field "description", :description, [:map, :string]
+      field "media_url", :media_url, :string
+      # Değerler: "SHORT", "MEDIUM", "TALL".
+      field "media_height", :media_height, :string
+      # Değerler: "VERTICAL", "HORIZONTAL".
+      field "orientation", :orientation, :string
+    end
+
     # UpdateTemplateDtoContentWebButtonsItem şeması.
     class UpdateTemplateDtoContentWebButtonsItem < HeroSignal::BaseModel
       # Zorunlu.
@@ -4457,6 +5571,111 @@ module HeroSignal
       field "text", :text, :string
       field "icon", :icon, :string
       field "url", :url, :string
+    end
+
+    # UpdateTemplateDtoContentWhatsappInteractive şeması.
+    class UpdateTemplateDtoContentWhatsappInteractive < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "button", "list".
+      field "type", :type, :string
+      field "header", :header, :string
+      field "footer", :footer, :string
+      field "buttons", :buttons, [:array, "UpdateTemplateDtoContentWhatsappInteractiveButtonsItem"]
+      field "list", :list, "UpdateTemplateDtoContentWhatsappInteractiveList"
+    end
+
+    # UpdateTemplateDtoContentWhatsappInteractiveButtonsItem şeması.
+    class UpdateTemplateDtoContentWhatsappInteractiveButtonsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "title", :title, :string
+    end
+
+    # UpdateTemplateDtoContentWhatsappInteractiveList şeması.
+    class UpdateTemplateDtoContentWhatsappInteractiveList < HeroSignal::BaseModel
+      # Zorunlu.
+      field "button", :button, :string
+      # Zorunlu.
+      field "sections", :sections, [:array, "UpdateTemplateDtoContentWhatsappInteractiveListSectionsItem"]
+    end
+
+    # UpdateTemplateDtoContentWhatsappInteractiveListSectionsItem şeması.
+    class UpdateTemplateDtoContentWhatsappInteractiveListSectionsItem < HeroSignal::BaseModel
+      field "title", :title, :string
+      # Zorunlu.
+      field "rows", :rows, [:array, "UpdateTemplateDtoContentWhatsappInteractiveListSectionsItemRowsItem"]
+    end
+
+    # UpdateTemplateDtoContentWhatsappInteractiveListSectionsItemRowsItem şeması.
+    class UpdateTemplateDtoContentWhatsappInteractiveListSectionsItemRowsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "title", :title, :string
+      field "description", :description, :string
+    end
+
+    # UpdateTemplateDtoContentWhatsappMedia şeması.
+    class UpdateTemplateDtoContentWhatsappMedia < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "image", "video", "document", "audio".
+      field "type", :type, :string
+      # Zorunlu.
+      field "url", :url, :string
+      field "filename", :filename, :string
+    end
+
+    # UpdateTemplateDtoContentWhatsappTemplate şeması.
+    class UpdateTemplateDtoContentWhatsappTemplate < HeroSignal::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "language", :language, :string
+      field "header", :header, :any
+      field "body_params", :body_params, [:array, :string]
+      field "button_params", :button_params, [:array, "UpdateTemplateDtoContentWhatsappTemplateButtonParamsItem"]
+    end
+
+    # UpdateTemplateDtoContentWhatsappTemplateButtonParamsItem şeması.
+    class UpdateTemplateDtoContentWhatsappTemplateButtonParamsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "index", :index, :integer
+      # Zorunlu. Değerler: "url", "quick_reply", "copy_code".
+      field "sub_type", :sub_type, :string
+      # Zorunlu.
+      field "value", :value, :string
+    end
+
+    # UpdateWarehouseExportDto şeması.
+    class UpdateWarehouseExportDto < HeroSignal::BaseModel
+      field "name", :name, :string
+      # Değerler: "deliveries", "delivery_events", "events", "conversions", "users", "subscriptions".
+      field "tables", :tables, [:array, :string]
+      # Değerler: "hourly", "daily".
+      field "schedule", :schedule, :string
+      field "enabled", :enabled, :boolean
+      field "config", :config, [:map, :any]
+      field "credentials", :credentials, [:map, :any]
+    end
+
+    # UpdateWarmupPlanDto şeması.
+    class UpdateWarmupPlanDto < HeroSignal::BaseModel
+      field "name", :name, :string
+      # Değerler: "active", "paused".
+      field "status", :status, :string
+      field "daily_limits", :daily_limits, [:array, :integer]
+      field "provider_shares", :provider_shares, "UpdateWarmupPlanDtoProviderShares"
+    end
+
+    # UpdateWarmupPlanDtoProviderShares şeması.
+    class UpdateWarmupPlanDtoProviderShares < HeroSignal::BaseModel
+      # Zorunlu.
+      field "gmail", :gmail, :number
+      # Zorunlu.
+      field "outlook", :outlook, :number
+      # Zorunlu.
+      field "yahoo", :yahoo, :number
+      # Zorunlu.
+      field "other", :other, :number
     end
 
     # UpdateWebhookDto şeması.
@@ -4470,11 +5689,32 @@ module HeroSignal
       field "headers", :headers, [:map, :string]
       # Değerler: "active", "disabled".
       field "status", :status, :string
+      field "body_template", :body_template, :string
+      # Şablon çıktısının içerik türü (varsayılan application/json). Değerler: "application/json", "text/plain".
+      field "body_content_type", :body_content_type, :string
+      field "filters", :filters, "UpdateWebhookDtoFilters"
     end
 
     # UpdateWebhookDtoEventFilters şeması.
     class UpdateWebhookDtoEventFilters < HeroSignal::BaseModel
       field "event_names", :event_names, [:array, :string]
+    end
+
+    # Olay filtresi: { match: all|any, conditions: [{ field, op, value? }] }.
+    class UpdateWebhookDtoFilters < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "all", "any".
+      field "match", :match, :string
+      # Zorunlu.
+      field "conditions", :conditions, [:array, "UpdateWebhookDtoFiltersConditionsItem"]
+    end
+
+    # UpdateWebhookDtoFiltersConditionsItem şeması.
+    class UpdateWebhookDtoFiltersConditionsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "field", :field, :string
+      # Zorunlu. Değerler: "eq", "neq", "in", "not_in", "starts_with", "contains", "exists", "not_exists".
+      field "op", :op, :string
+      field "value", :value, :any
     end
 
     # UpsertUserDto şeması.
@@ -4582,7 +5822,7 @@ module HeroSignal
       field "updated_at", :updated_at, :string
       # Zorunlu.
       field "subscription_count", :subscription_count, :integer
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
     end
 
@@ -4614,7 +5854,7 @@ module HeroSignal
       field "updated_at", :updated_at, :string
       # Zorunlu.
       field "subscription_count", :subscription_count, :integer
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
       # Zorunlu.
       field "aliases", :aliases, [:array, "UserDetailAliasesItem"]
@@ -4757,6 +5997,184 @@ module HeroSignal
       field "none", :none, [:array, [:map, :any]]
     end
 
+    # VerifyAddressDto şeması.
+    class VerifyAddressDto < HeroSignal::BaseModel
+      # Zorunlu.
+      field "address", :address, :string
+    end
+
+    # WarehouseConnectionResult şeması.
+    class WarehouseConnectionResult < HeroSignal::BaseModel
+      # Zorunlu.
+      field "ok", :ok, :boolean
+      # Zorunlu.
+      field "detail", :detail, :string
+      # Zorunlu.
+      field "error", :error, "WarehouseConnectionResultError"
+    end
+
+    # WarehouseConnectionResultError şeması.
+    class WarehouseConnectionResultError < HeroSignal::BaseModel
+      # Zorunlu.
+      field "code", :code, :string
+      # Zorunlu.
+      field "message", :message, :string
+    end
+
+    # WarehouseExport şeması.
+    class WarehouseExport < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "bigquery", "snowflake", "s3_parquet".
+      field "destination", :destination, :string
+      # Zorunlu.
+      field "config", :config, [:map, :any]
+      # Zorunlu.
+      field "credentials_hint", :credentials_hint, :string
+      # Zorunlu. Değerler: "deliveries", "delivery_events", "events", "conversions", "users", "subscriptions".
+      field "tables", :tables, [:array, :string]
+      # Zorunlu. Değerler: "hourly", "daily".
+      field "schedule", :schedule, :string
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu. Değerler: "active", "paused", "failing".
+      field "status", :status, :string
+      # Zorunlu.
+      field "consecutive_failures", :consecutive_failures, :integer
+      # Zorunlu.
+      field "last_error", :last_error, :string
+      # Zorunlu.
+      field "cursors", :cursors, [:map, "WarehouseExportCursorsValue"]
+      # Zorunlu.
+      field "schema_versions", :schema_versions, [:map, :integer]
+      # Zorunlu.
+      field "last_run_at", :last_run_at, :string
+      # Zorunlu.
+      field "last_success_at", :last_success_at, :string
+      # Zorunlu.
+      field "next_run_at", :next_run_at, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # WarehouseExportCursorsValue şeması.
+    class WarehouseExportCursorsValue < HeroSignal::BaseModel
+      # Zorunlu.
+      field "ts", :ts, :string
+      # Zorunlu.
+      field "id", :id, :string
+    end
+
+    # WarehouseExportList şeması.
+    class WarehouseExportList < HeroSignal::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "WarehouseExport"]
+    end
+
+    # WarehouseExportRun şeması.
+    class WarehouseExportRun < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "export_id", :export_id, :string
+      # Zorunlu. Değerler: "schedule", "manual".
+      field "trigger", :trigger, :string
+      # Zorunlu. Değerler: "queued", "running", "succeeded", "failed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "tables", :tables, [:map, "WarehouseExportRunTablesValue"]
+      # Zorunlu.
+      field "row_count", :row_count, :integer
+      # Zorunlu.
+      field "attempt", :attempt, :integer
+      # Zorunlu.
+      field "error", :error, :string
+      # Zorunlu.
+      field "started_at", :started_at, :string
+      # Zorunlu.
+      field "finished_at", :finished_at, :string
+      # Zorunlu.
+      field "duration_ms", :duration_ms, :integer
+      # Zorunlu.
+      field "created_at", :created_at, :string
+    end
+
+    # WarehouseExportRunPage şeması.
+    class WarehouseExportRunPage < HeroSignal::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "WarehouseExportRun"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
+    end
+
+    # WarehouseExportRunTablesValue şeması.
+    class WarehouseExportRunTablesValue < HeroSignal::BaseModel
+      # Zorunlu.
+      field "rows", :rows, :integer
+      # Zorunlu.
+      field "schema_version", :schema_version, :integer
+      # Zorunlu.
+      field "from", :from, "WarehouseExportRunTablesValueFrom"
+      # Zorunlu.
+      field "to", :to, "WarehouseExportRunTablesValueTo"
+      # Zorunlu.
+      field "objects", :objects, :integer
+    end
+
+    # WarehouseExportRunTablesValueFrom şeması.
+    class WarehouseExportRunTablesValueFrom < HeroSignal::BaseModel
+      # Zorunlu.
+      field "ts", :ts, :string
+      # Zorunlu.
+      field "id", :id, :string
+    end
+
+    # WarehouseExportRunTablesValueTo şeması.
+    class WarehouseExportRunTablesValueTo < HeroSignal::BaseModel
+      # Zorunlu.
+      field "ts", :ts, :string
+      # Zorunlu.
+      field "id", :id, :string
+    end
+
+    # WarehouseTables şeması.
+    class WarehouseTables < HeroSignal::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "WarehouseTablesDataItem"]
+    end
+
+    # WarehouseTablesDataItem şeması.
+    class WarehouseTablesDataItem < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "deliveries", "delivery_events", "events", "conversions", "users", "subscriptions".
+      field "name", :name, :string
+      # Zorunlu. Değerler: "incremental", "snapshot".
+      field "mode", :mode, :string
+      # Zorunlu.
+      field "schema_version", :schema_version, :integer
+      # Zorunlu.
+      field "cursor_column", :cursor_column, :string
+      # Zorunlu.
+      field "columns", :columns, [:array, "WarehouseTablesDataItemColumnsItem"]
+    end
+
+    # WarehouseTablesDataItemColumnsItem şeması.
+    class WarehouseTablesDataItemColumnsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "type", :type, :string
+      # Zorunlu.
+      field "nullable", :nullable, :boolean
+    end
+
     # Webhook şeması.
     class Webhook < HeroSignal::BaseModel
       # Zorunlu.
@@ -4789,6 +6207,12 @@ module HeroSignal
       field "header_names", :header_names, [:array, :string]
       # Zorunlu.
       field "previous_secret_expires_at", :previous_secret_expires_at, :string
+      # Zorunlu.
+      field "body_template", :body_template, :string
+      # Zorunlu. Değerler: "application/json", "text/plain".
+      field "body_content_type", :body_content_type, :string
+      # Zorunlu.
+      field "filters", :filters, "WebhookFilters"
       # Zorunlu.
       field "created_at", :created_at, :string
       # Zorunlu.
@@ -4880,10 +6304,89 @@ module HeroSignal
       field "event_names", :event_names, [:array, :string]
     end
 
+    # WebhookFilters şeması.
+    class WebhookFilters < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "all", "any".
+      field "match", :match, :string
+      # Zorunlu.
+      field "conditions", :conditions, [:array, "WebhookFiltersConditionsItem"]
+    end
+
+    # WebhookFiltersConditionsItem şeması.
+    class WebhookFiltersConditionsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "field", :field, :string
+      # Zorunlu. Değerler: "eq", "neq", "in", "not_in", "starts_with", "contains", "exists", "not_exists".
+      field "op", :op, :string
+      field "value", :value, :any
+    end
+
     # WebhookList şeması.
     class WebhookList < HeroSignal::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "Webhook"]
+    end
+
+    # WebhookPreviewDto şeması.
+    class WebhookPreviewDto < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited", "audit.created", "webhook.test".
+      field "event_type", :event_type, :string
+      field "data", :data, [:map, :any]
+      field "body_template", :body_template, :string
+      # Şablon çıktısının içerik türü (varsayılan application/json). Değerler: "application/json", "text/plain".
+      field "body_content_type", :body_content_type, :string
+      field "filters", :filters, "WebhookPreviewDtoFilters"
+      field "batch", :batch, :boolean
+    end
+
+    # Olay filtresi: { match: all|any, conditions: [{ field, op, value? }] }.
+    class WebhookPreviewDtoFilters < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "all", "any".
+      field "match", :match, :string
+      # Zorunlu.
+      field "conditions", :conditions, [:array, "WebhookPreviewDtoFiltersConditionsItem"]
+    end
+
+    # WebhookPreviewDtoFiltersConditionsItem şeması.
+    class WebhookPreviewDtoFiltersConditionsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "field", :field, :string
+      # Zorunlu. Değerler: "eq", "neq", "in", "not_in", "starts_with", "contains", "exists", "not_exists".
+      field "op", :op, :string
+      field "value", :value, :any
+    end
+
+    # WebhookPreviewResult şeması.
+    class WebhookPreviewResult < HeroSignal::BaseModel
+      # Zorunlu.
+      field "payload", :payload, [:map, :any]
+      # Zorunlu. Olay filtreden geçer mi (geçmezse gönderilmez).
+      field "matched", :matched, :boolean
+      # Zorunlu.
+      field "failed_conditions", :failed_conditions, [:array, "WebhookPreviewResultFailedConditionsItem"]
+      # Zorunlu.
+      field "body", :body, :string
+      # Zorunlu.
+      field "content_type", :content_type, :string
+      # Zorunlu.
+      field "error", :error, "WebhookPreviewResultError"
+    end
+
+    # WebhookPreviewResultError şeması.
+    class WebhookPreviewResultError < HeroSignal::BaseModel
+      # Zorunlu.
+      field "code", :code, :string
+      # Zorunlu.
+      field "message", :message, :string
+    end
+
+    # WebhookPreviewResultFailedConditionsItem şeması.
+    class WebhookPreviewResultFailedConditionsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "field", :field, :string
+      # Zorunlu.
+      field "op", :op, :string
+      field "value", :value, :any
     end
 
     # WebhookWithSecret şeması.
@@ -4919,6 +6422,12 @@ module HeroSignal
       # Zorunlu.
       field "previous_secret_expires_at", :previous_secret_expires_at, :string
       # Zorunlu.
+      field "body_template", :body_template, :string
+      # Zorunlu. Değerler: "application/json", "text/plain".
+      field "body_content_type", :body_content_type, :string
+      # Zorunlu.
+      field "filters", :filters, "WebhookWithSecretFilters"
+      # Zorunlu.
       field "created_at", :created_at, :string
       # Zorunlu.
       field "updated_at", :updated_at, :string
@@ -4929,6 +6438,144 @@ module HeroSignal
     # WebhookWithSecretEventFilters şeması.
     class WebhookWithSecretEventFilters < HeroSignal::BaseModel
       field "event_names", :event_names, [:array, :string]
+    end
+
+    # WebhookWithSecretFilters şeması.
+    class WebhookWithSecretFilters < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "all", "any".
+      field "match", :match, :string
+      # Zorunlu.
+      field "conditions", :conditions, [:array, "WebhookWithSecretFiltersConditionsItem"]
+    end
+
+    # WebhookWithSecretFiltersConditionsItem şeması.
+    class WebhookWithSecretFiltersConditionsItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "field", :field, :string
+      # Zorunlu. Değerler: "eq", "neq", "in", "not_in", "starts_with", "contains", "exists", "not_exists".
+      field "op", :op, :string
+      field "value", :value, :any
+    end
+
+    # WhatsAppTemplateList şeması.
+    class WhatsAppTemplateList < HeroSignal::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "WhatsAppTemplateListDataItem"]
+    end
+
+    # WhatsAppTemplateListDataItem şeması.
+    class WhatsAppTemplateListDataItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "language", :language, :string
+      # Zorunlu.
+      field "category", :category, :string
+      # Zorunlu.
+      field "status", :status, :string
+      # Zorunlu.
+      field "components", :components, [:array, [:map, :any]]
+      # Zorunlu.
+      field "body_params", :body_params, :integer
+      # Zorunlu.
+      field "rejected_reason", :rejected_reason, :string
+      # Zorunlu.
+      field "quality_score", :quality_score, :string
+      # Zorunlu.
+      field "synced_at", :synced_at, :string
+    end
+
+    # WhatsAppTemplateSync şeması.
+    class WhatsAppTemplateSync < HeroSignal::BaseModel
+      # Zorunlu.
+      field "total", :total, :integer
+      # Zorunlu.
+      field "removed", :removed, :integer
+      # Zorunlu.
+      field "data", :data, [:array, "WhatsAppTemplateSyncDataItem"]
+    end
+
+    # WhatsAppTemplateSyncDataItem şeması.
+    class WhatsAppTemplateSyncDataItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "language", :language, :string
+      # Zorunlu.
+      field "category", :category, :string
+      # Zorunlu.
+      field "status", :status, :string
+      # Zorunlu.
+      field "components", :components, [:array, [:map, :any]]
+      # Zorunlu.
+      field "body_params", :body_params, :integer
+      # Zorunlu.
+      field "rejected_reason", :rejected_reason, :string
+      # Zorunlu.
+      field "quality_score", :quality_score, :string
+      # Zorunlu.
+      field "synced_at", :synced_at, :string
+    end
+
+    # ZapierHook şeması.
+    class ZapierHook < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "event", :event, :string
+      # Zorunlu.
+      field "event_name", :event_name, :string
+      # Zorunlu.
+      field "target_url", :target_url, :string
+      # Zorunlu.
+      field "last_delivered_at", :last_delivered_at, :string
+      # Zorunlu.
+      field "failure_count", :failure_count, :integer
+      # Zorunlu.
+      field "created_at", :created_at, :string
+    end
+
+    # ZapierMe şeması.
+    class ZapierMe < HeroSignal::BaseModel
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "app_name", :app_name, :string
+      # Zorunlu.
+      field "org_id", :org_id, :string
+      # Zorunlu.
+      field "scopes", :scopes, [:array, :string]
+    end
+
+    # ZapierSamplesItem şeması.
+    class ZapierSamplesItem < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "type", :type, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "data", :data, [:map, :any]
+    end
+
+    # ZapierSubscribeDto şeması.
+    class ZapierSubscribeDto < HeroSignal::BaseModel
+      # Zorunlu.
+      field "target_url", :target_url, :string
+      # Zorunlu. Değerler: "subscription.created", "subscription.unsubscribed", "event.received", "delivery.delivered", "delivery.opened", "delivery.clicked", "user.created", "user.updated", "conversion.created", "campaign.completed".
+      field "event", :event, :string
+      field "event_name", :event_name, :string
     end
   end
 end
