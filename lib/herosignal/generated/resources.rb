@@ -2224,6 +2224,109 @@ module HeroSignal
       end
     end
 
+    # liveActivities kaynağı.
+    class LiveActivities < HeroSignal::BaseResource
+      # Live Activity türleri
+      #
+      # GET /v1/apps/{appId}/live-activities/types
+      def list_types(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/live-activities/types",
+          path_params: {},
+          app_id: app_id,
+          response: "LiveActivityTypeList",
+          request_options: request_options
+        )
+      end
+
+      # Live Activity türü oluştur
+      #
+      # POST /v1/apps/{appId}/live-activities/types
+      def create_type(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/live-activities/types",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "LiveActivityType",
+          request_options: request_options
+        )
+      end
+
+      # Live Activity türünü güncelle
+      #
+      # PATCH /v1/apps/{appId}/live-activities/types/{activityType}
+      def update_type(activity_type, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/live-activities/types/{activityType}",
+          path_params: { "activityType" => activity_type },
+          body: body,
+          app_id: app_id,
+          response: "LiveActivityType",
+          request_options: request_options
+        )
+      end
+
+      # Live Activity türünü sil
+      #
+      # DELETE /v1/apps/{appId}/live-activities/types/{activityType}
+      def delete_type(activity_type, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/live-activities/types/{activityType}",
+          path_params: { "activityType" => activity_type },
+          app_id: app_id,
+          response: "LiveActivityTokenResult",
+          request_options: request_options
+        )
+      end
+
+      # Live Activity başlat (push-to-start)
+      #
+      # POST /v1/apps/{appId}/live-activities/{activityType}/start
+      #
+      # Hedefteki iOS aboneliklerinin push-to-start belirteçleriyle etkinliği uzaktan başlatır (iOS 17.2+). `attributes` ve `content_state` türün şemasına uymalıdır. Dönen `activity_id` ile sonraki update/end yapılır.
+      def start(activity_type, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/live-activities/{activityType}/start",
+          path_params: { "activityType" => activity_type },
+          body: body,
+          app_id: app_id,
+          response: "LiveActivitySendResult",
+          request_options: request_options
+        )
+      end
+
+      # Live Activity güncelle
+      #
+      # POST /v1/apps/{appId}/live-activities/{activityType}/update
+      #
+      # Etkinliğin cihazlardan bildirilen güncelleme belirteçlerine yeni içerik durumu gönderir. Sessiz saat ve frekans sınırı uygulanmaz; priority 5 Apple bütçesini korur.
+      def update(activity_type, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/live-activities/{activityType}/update",
+          path_params: { "activityType" => activity_type },
+          body: body,
+          app_id: app_id,
+          response: "LiveActivitySendResult",
+          request_options: request_options
+        )
+      end
+
+      # Live Activity bitir
+      #
+      # POST /v1/apps/{appId}/live-activities/{activityType}/end
+      def end_(activity_type, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/live-activities/{activityType}/end",
+          path_params: { "activityType" => activity_type },
+          body: body,
+          app_id: app_id,
+          response: "LiveActivitySendResult",
+          request_options: request_options
+        )
+      end
+    end
+
     # preferences kaynağı.
     class Preferences < HeroSignal::BaseResource
       # Kullanıcının tercihleri (alias ile)
@@ -2260,7 +2363,7 @@ module HeroSignal
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "0.1.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization categories identity_keys journeys preferences].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization categories identity_keys journeys live_activities preferences].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -2367,6 +2470,10 @@ module HeroSignal
 
     def journeys
       @journeys ||= HeroSignal::Resources::Journeys.new(self)
+    end
+
+    def live_activities
+      @live_activities ||= HeroSignal::Resources::LiveActivities.new(self)
     end
 
     def preferences

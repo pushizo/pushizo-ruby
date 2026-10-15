@@ -17,6 +17,7 @@ require_relative "herosignal/generated/resources"
 require_relative "herosignal/transport"
 require_relative "herosignal/client"
 require_relative "herosignal/webhook"
+require_relative "herosignal/identity_token"
 
 module HeroSignal
   # SDK identity verification için identity_hash = HMAC-SHA256(sdk_secret, external_id) (hex).
