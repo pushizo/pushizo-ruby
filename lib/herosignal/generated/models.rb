@@ -1291,6 +1291,56 @@ module HeroSignal
       field "blocks", :blocks, [:array, :any]
     end
 
+    # CreateLiveActivityTypeDto şeması.
+    class CreateLiveActivityTypeDto < HeroSignal::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      # Zorunlu.
+      field "content_state_schema", :content_state_schema, "CreateLiveActivityTypeDtoContentStateSchema"
+      field "attributes_schema", :attributes_schema, "CreateLiveActivityTypeDtoAttributesSchema"
+    end
+
+    # CreateLiveActivityTypeDtoAttributesSchema şeması.
+    class CreateLiveActivityTypeDtoAttributesSchema < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "object".
+      field "type", :type, :string
+      # Zorunlu.
+      field "properties", :properties, [:map, "CreateLiveActivityTypeDtoAttributesSchemaPropertiesValue"]
+      field "required", :required, [:array, :string]
+    end
+
+    # CreateLiveActivityTypeDtoAttributesSchemaPropertiesValue şeması.
+    class CreateLiveActivityTypeDtoAttributesSchemaPropertiesValue < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "string", "number", "integer", "boolean".
+      field "type", :type, :string
+      field "enum", :enum, [:array, :any]
+      field "maxLength", :max_length, :integer
+      field "minimum", :minimum, :number
+      field "maximum", :maximum, :number
+      field "description", :description, :string
+    end
+
+    # CreateLiveActivityTypeDtoContentStateSchema şeması.
+    class CreateLiveActivityTypeDtoContentStateSchema < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "object".
+      field "type", :type, :string
+      # Zorunlu.
+      field "properties", :properties, [:map, "CreateLiveActivityTypeDtoContentStateSchemaPropertiesValue"]
+      field "required", :required, [:array, :string]
+    end
+
+    # CreateLiveActivityTypeDtoContentStateSchemaPropertiesValue şeması.
+    class CreateLiveActivityTypeDtoContentStateSchemaPropertiesValue < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "string", "number", "integer", "boolean".
+      field "type", :type, :string
+      field "enum", :enum, [:array, :any]
+      field "maxLength", :max_length, :integer
+      field "minimum", :minimum, :number
+      field "maximum", :maximum, :number
+      field "description", :description, :string
+    end
+
     # CreateNotificationDto şeması.
     class CreateNotificationDto < HeroSignal::BaseModel
       field "app_id", :app_id, :string
@@ -1576,6 +1626,27 @@ module HeroSignal
       field "next_cursor", :next_cursor, :string
       # Zorunlu.
       field "has_more", :has_more, :boolean
+    end
+
+    # EndLiveActivityDto şeması.
+    class EndLiveActivityDto < HeroSignal::BaseModel
+      # Zorunlu.
+      field "activity_id", :activity_id, :string
+      field "content_state", :content_state, [:map, :any]
+      field "alert", :alert, "EndLiveActivityDtoAlert"
+      field "stale_date", :stale_date, :integer
+      field "dismissal_date", :dismissal_date, :integer
+      field "relevance_score", :relevance_score, :number
+      # Değerler: 5, 10.
+      field "priority", :priority, :integer
+      field "name", :name, :string
+    end
+
+    # EndLiveActivityDtoAlert şeması.
+    class EndLiveActivityDtoAlert < HeroSignal::BaseModel
+      field "title", :title, [:map, :string]
+      field "body", :body, [:map, :string]
+      field "sound", :sound, :string
     end
 
     # EngagementReport şeması.
@@ -2629,6 +2700,90 @@ module HeroSignal
       field "updated_at", :updated_at, :string
     end
 
+    # LiveActivitySendResult şeması.
+    class LiveActivitySendResult < HeroSignal::BaseModel
+      # Zorunlu.
+      field "message_id", :message_id, :string
+      # Zorunlu.
+      field "activity_id", :activity_id, :string
+      # Zorunlu. Değerler: "start", "update", "end".
+      field "event", :event, :string
+      # Zorunlu.
+      field "recipients_estimate", :recipients_estimate, :integer
+    end
+
+    # LiveActivityTokenResult şeması.
+    class LiveActivityTokenResult < HeroSignal::BaseModel
+      # Zorunlu.
+      field "ok", :ok, :boolean
+    end
+
+    # LiveActivityType şeması.
+    class LiveActivityType < HeroSignal::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "content_state_schema", :content_state_schema, "LiveActivityTypeContentStateSchema"
+      # Zorunlu.
+      field "attributes_schema", :attributes_schema, "LiveActivityTypeAttributesSchema"
+      # Zorunlu.
+      field "push_to_start_tokens", :push_to_start_tokens, :integer
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # LiveActivityTypeAttributesSchema şeması.
+    class LiveActivityTypeAttributesSchema < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "object".
+      field "type", :type, :string
+      # Zorunlu.
+      field "properties", :properties, [:map, "LiveActivityTypeAttributesSchemaPropertiesValue"]
+      field "required", :required, [:array, :string]
+    end
+
+    # LiveActivityTypeAttributesSchemaPropertiesValue şeması.
+    class LiveActivityTypeAttributesSchemaPropertiesValue < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "string", "number", "integer", "boolean".
+      field "type", :type, :string
+      field "enum", :enum, [:array, :any]
+      field "maxLength", :max_length, :integer
+      field "minimum", :minimum, :number
+      field "maximum", :maximum, :number
+      field "description", :description, :string
+    end
+
+    # LiveActivityTypeContentStateSchema şeması.
+    class LiveActivityTypeContentStateSchema < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "object".
+      field "type", :type, :string
+      # Zorunlu.
+      field "properties", :properties, [:map, "LiveActivityTypeContentStateSchemaPropertiesValue"]
+      field "required", :required, [:array, :string]
+    end
+
+    # LiveActivityTypeContentStateSchemaPropertiesValue şeması.
+    class LiveActivityTypeContentStateSchemaPropertiesValue < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "string", "number", "integer", "boolean".
+      field "type", :type, :string
+      field "enum", :enum, [:array, :any]
+      field "maxLength", :max_length, :integer
+      field "minimum", :minimum, :number
+      field "maximum", :maximum, :number
+      field "description", :description, :string
+    end
+
+    # LiveActivityTypeList şeması.
+    class LiveActivityTypeList < HeroSignal::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "LiveActivityType"]
+    end
+
     # Member şeması.
     class Member < HeroSignal::BaseModel
       # Zorunlu.
@@ -3494,6 +3649,38 @@ module HeroSignal
       field "opted_in", :opted_in, :boolean
     end
 
+    # StartLiveActivityDto şeması.
+    class StartLiveActivityDto < HeroSignal::BaseModel
+      field "activity_id", :activity_id, :string
+      field "attributes", :attributes_value, [:map, :any]
+      # Zorunlu.
+      field "target", :target, "StartLiveActivityDtoTarget"
+      # Zorunlu.
+      field "content_state", :content_state, [:map, :any]
+      field "alert", :alert, "StartLiveActivityDtoAlert"
+      field "stale_date", :stale_date, :integer
+      field "dismissal_date", :dismissal_date, :integer
+      field "relevance_score", :relevance_score, :number
+      # Değerler: 5, 10.
+      field "priority", :priority, :integer
+      field "name", :name, :string
+    end
+
+    # StartLiveActivityDtoAlert şeması.
+    class StartLiveActivityDtoAlert < HeroSignal::BaseModel
+      field "title", :title, [:map, :string]
+      field "body", :body, [:map, :string]
+      field "sound", :sound, :string
+    end
+
+    # StartLiveActivityDtoTarget şeması.
+    class StartLiveActivityDtoTarget < HeroSignal::BaseModel
+      field "include_external_ids", :include_external_ids, [:array, :string]
+      field "include_subscription_ids", :include_subscription_ids, [:array, :string]
+      field "included_segments", :included_segments, [:array, :string]
+      field "all", :all, :boolean
+    end
+
     # Subscription şeması.
     class Subscription < HeroSignal::BaseModel
       # Zorunlu.
@@ -4084,6 +4271,75 @@ module HeroSignal
     # UpdateJourneyDto şeması.
     class UpdateJourneyDto < HeroSignal::BaseModel
       field "name", :name, :string
+      field "description", :description, :string
+    end
+
+    # UpdateLiveActivityDto şeması.
+    class UpdateLiveActivityDto < HeroSignal::BaseModel
+      # Zorunlu.
+      field "activity_id", :activity_id, :string
+      # Zorunlu.
+      field "content_state", :content_state, [:map, :any]
+      field "alert", :alert, "UpdateLiveActivityDtoAlert"
+      field "stale_date", :stale_date, :integer
+      field "dismissal_date", :dismissal_date, :integer
+      field "relevance_score", :relevance_score, :number
+      # Değerler: 5, 10.
+      field "priority", :priority, :integer
+      field "name", :name, :string
+    end
+
+    # UpdateLiveActivityDtoAlert şeması.
+    class UpdateLiveActivityDtoAlert < HeroSignal::BaseModel
+      field "title", :title, [:map, :string]
+      field "body", :body, [:map, :string]
+      field "sound", :sound, :string
+    end
+
+    # UpdateLiveActivityTypeDto şeması.
+    class UpdateLiveActivityTypeDto < HeroSignal::BaseModel
+      field "description", :description, :string
+      field "content_state_schema", :content_state_schema, "UpdateLiveActivityTypeDtoContentStateSchema"
+      field "attributes_schema", :attributes_schema, "UpdateLiveActivityTypeDtoAttributesSchema"
+    end
+
+    # UpdateLiveActivityTypeDtoAttributesSchema şeması.
+    class UpdateLiveActivityTypeDtoAttributesSchema < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "object".
+      field "type", :type, :string
+      # Zorunlu.
+      field "properties", :properties, [:map, "UpdateLiveActivityTypeDtoAttributesSchemaPropertiesValue"]
+      field "required", :required, [:array, :string]
+    end
+
+    # UpdateLiveActivityTypeDtoAttributesSchemaPropertiesValue şeması.
+    class UpdateLiveActivityTypeDtoAttributesSchemaPropertiesValue < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "string", "number", "integer", "boolean".
+      field "type", :type, :string
+      field "enum", :enum, [:array, :any]
+      field "maxLength", :max_length, :integer
+      field "minimum", :minimum, :number
+      field "maximum", :maximum, :number
+      field "description", :description, :string
+    end
+
+    # UpdateLiveActivityTypeDtoContentStateSchema şeması.
+    class UpdateLiveActivityTypeDtoContentStateSchema < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "object".
+      field "type", :type, :string
+      # Zorunlu.
+      field "properties", :properties, [:map, "UpdateLiveActivityTypeDtoContentStateSchemaPropertiesValue"]
+      field "required", :required, [:array, :string]
+    end
+
+    # UpdateLiveActivityTypeDtoContentStateSchemaPropertiesValue şeması.
+    class UpdateLiveActivityTypeDtoContentStateSchemaPropertiesValue < HeroSignal::BaseModel
+      # Zorunlu. Değerler: "string", "number", "integer", "boolean".
+      field "type", :type, :string
+      field "enum", :enum, [:array, :any]
+      field "maxLength", :max_length, :integer
+      field "minimum", :minimum, :number
+      field "maximum", :maximum, :number
       field "description", :description, :string
     end
 
