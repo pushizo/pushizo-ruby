@@ -12,7 +12,7 @@ module HeroSignal
 
     # AddSubscriptionDto şeması.
     class AddSubscriptionDto < HeroSignal::BaseModel
-      # Zorunlu. Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channel", :channel, :string
       # Zorunlu.
       field "token", :token, :string
@@ -181,7 +181,7 @@ module HeroSignal
       field "max", :max, :integer
       # Zorunlu.
       field "window", :window, "AppSettingsFrequencyCapsItemWindow"
-      # Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channels", :channels, [:array, :string]
     end
 
@@ -567,7 +567,7 @@ module HeroSignal
       field "exclude_segments", :exclude_segments, [:array, :string]
       # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
       field "filters", :filters, "CampaignsCreateBodyAudienceFilters"
-      # Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channels", :channels, [:array, :string]
       field "test_devices_only", :test_devices_only, :boolean
     end
@@ -647,7 +647,7 @@ module HeroSignal
 
     # CampaignStatsChannelsItem şeması.
     class CampaignStatsChannelsItem < HeroSignal::BaseModel
-      # Zorunlu. Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channel", :channel, :string
       # Zorunlu.
       field "targeted", :targeted, :integer
@@ -741,7 +741,7 @@ module HeroSignal
       field "exclude_segments", :exclude_segments, [:array, :string]
       # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
       field "filters", :filters, "CampaignsUpdateBodyAudienceFilters"
-      # Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channels", :channels, [:array, :string]
       field "test_devices_only", :test_devices_only, :boolean
     end
@@ -890,9 +890,9 @@ module HeroSignal
 
     # ChannelConfig şeması.
     class ChannelConfig < HeroSignal::BaseModel
-      # Zorunlu. Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channel", :channel, :string
-      # Zorunlu. Değerler: "apns", "fcm", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "mock".
+      # Zorunlu. Değerler: "apns", "fcm", "hms", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "mock".
       field "provider", :provider, :string
       # Zorunlu. Değerler: "unconfigured", "active", "invalid", "suspended".
       field "status", :status, :string
@@ -929,6 +929,8 @@ module HeroSignal
       field "environment", :environment, :string
       field "project_id", :project_id, :string
       field "client_email", :client_email, :string
+      field "hms_app_id", :hms_app_id, :string
+      field "high_priority", :high_priority, :boolean
       field "subject", :subject, :string
       field "vapid_public_key", :vapid_public_key, :string
       field "site_url", :site_url, :string
@@ -1144,7 +1146,7 @@ module HeroSignal
       # Zorunlu.
       field "name", :name, [:map, :string]
       field "description", :description, [:map, :string]
-      # Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channels", :channels, [:array, :string]
       field "default_opted_in", :default_opted_in, :boolean
       field "position", :position, :integer
@@ -1197,7 +1199,7 @@ module HeroSignal
       field "message_id", :message_id, :string
       field "campaign_id", :campaign_id, :string
       field "status", :status, :string
-      # Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channel", :channel, :string
       field "segment_id", :segment_id, :string
     end
@@ -1434,7 +1436,7 @@ module HeroSignal
       field "included_segments", :included_segments, [:array, :string]
       field "excluded_segments", :excluded_segments, [:array, :string]
       field "filters", :filters, :any
-      # Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channels", :channels, [:array, :string]
       field "test_devices_only", :test_devices_only, :boolean
       field "email_to", :email_to, [:array, :string]
@@ -1479,7 +1481,7 @@ module HeroSignal
     class CreateTemplateDto < HeroSignal::BaseModel
       # Zorunlu.
       field "name", :name, :string
-      # Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channel", :channel, :string
       field "tags", :tags, [:array, :string]
       # Zorunlu.
@@ -1586,7 +1588,7 @@ module HeroSignal
       field "subscription_id", :subscription_id, :string
       # Zorunlu.
       field "user_id", :user_id, :string
-      # Zorunlu. Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channel", :channel, :string
       # Zorunlu.
       field "provider", :provider, :string
@@ -1722,7 +1724,7 @@ module HeroSignal
       field "included_segments", :included_segments, [:array, :string]
       field "excluded_segments", :excluded_segments, [:array, :string]
       field "filters", :filters, :any
-      # Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channels", :channels, [:array, :string]
       field "test_devices_only", :test_devices_only, :boolean
       field "email_to", :email_to, [:array, :string]
@@ -1933,7 +1935,7 @@ module HeroSignal
       field "message_id", :message_id, :string
       field "campaign_id", :campaign_id, :string
       field "status", :status, :string
-      # Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channel", :channel, :string
       field "segment_id", :segment_id, :string
     end
@@ -3082,9 +3084,9 @@ module HeroSignal
 
     # OverviewStatsChannelsItem şeması.
     class OverviewStatsChannelsItem < HeroSignal::BaseModel
-      # Zorunlu. Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channel", :channel, :string
-      # Zorunlu. Değerler: "apns", "fcm", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "mock".
+      # Zorunlu. Değerler: "apns", "fcm", "hms", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "mock".
       field "provider", :provider, :string
       # Zorunlu. Değerler: "unconfigured", "active", "invalid", "suspended".
       field "status", :status, :string
@@ -3285,7 +3287,7 @@ module HeroSignal
 
     # RenderPreview şeması.
     class RenderPreview < HeroSignal::BaseModel
-      # Zorunlu. Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channel", :channel, :string
       # Zorunlu.
       field "language", :language, :string
@@ -3353,7 +3355,7 @@ module HeroSignal
 
     # RenderTemplateDto şeması.
     class RenderTemplateDto < HeroSignal::BaseModel
-      # Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channel", :channel, :string
       field "language", :language, :string
       field "user", :user, "RenderTemplateDtoUser"
@@ -3643,7 +3645,7 @@ module HeroSignal
     class SetPreferencesDtoPreferencesItem < HeroSignal::BaseModel
       # Zorunlu.
       field "category", :category, :string
-      # Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channel", :channel, :string
       # Zorunlu.
       field "opted_in", :opted_in, :boolean
@@ -3689,7 +3691,7 @@ module HeroSignal
       field "app_id", :app_id, :string
       # Zorunlu.
       field "user_id", :user_id, :string
-      # Zorunlu. Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channel", :channel, :string
       # Zorunlu.
       field "token", :token, :string
@@ -3714,6 +3716,8 @@ module HeroSignal
       # Zorunlu.
       field "unsubscribed_at", :unsubscribed_at, :string
       # Zorunlu.
+      field "location", :location, "SubscriptionLocation"
+      # Zorunlu.
       field "created_at", :created_at, :string
     end
 
@@ -3731,6 +3735,22 @@ module HeroSignal
       field "push_capable", :push_capable, :boolean
       # Değerler: "sandbox", "production".
       field "push_environment", :push_environment, :string
+    end
+
+    # SubscriptionLocation şeması.
+    class SubscriptionLocation < HeroSignal::BaseModel
+      # Zorunlu.
+      field "lat", :lat, :number
+      # Zorunlu.
+      field "lng", :lng, :number
+      # Zorunlu.
+      field "accuracy_m", :accuracy_m, :number
+      # Zorunlu.
+      field "geohash", :geohash, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+      # Zorunlu.
+      field "consent_at", :consent_at, :string
     end
 
     # SubscriptionsReport şeması.
@@ -3845,7 +3865,7 @@ module HeroSignal
       field "app_id", :app_id, :string
       # Zorunlu.
       field "name", :name, :string
-      # Zorunlu. Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channel", :channel, :string
       # Zorunlu.
       field "current_version", :current_version, :integer
@@ -4013,7 +4033,7 @@ module HeroSignal
       field "max", :max, :integer
       # Zorunlu.
       field "window", :window, "UpdateAppDtoSettingsFrequencyCapsItemWindow"
-      # Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channels", :channels, [:array, :string]
     end
 
@@ -4184,7 +4204,7 @@ module HeroSignal
     class UpdateCategoryDto < HeroSignal::BaseModel
       field "name", :name, [:map, :string]
       field "description", :description, [:map, :string]
-      # Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channels", :channels, [:array, :string]
       field "default_opted_in", :default_opted_in, :boolean
       field "position", :position, :integer
@@ -4360,7 +4380,7 @@ module HeroSignal
     # UpdateTemplateDto şeması.
     class UpdateTemplateDto < HeroSignal::BaseModel
       field "name", :name, :string
-      # Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channel", :channel, :string
       field "tags", :tags, [:array, :string]
       field "content", :content, "UpdateTemplateDtoContent"
@@ -4562,7 +4582,7 @@ module HeroSignal
       field "updated_at", :updated_at, :string
       # Zorunlu.
       field "subscription_count", :subscription_count, :integer
-      # Zorunlu. Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channels", :channels, [:array, :string]
     end
 
@@ -4594,7 +4614,7 @@ module HeroSignal
       field "updated_at", :updated_at, :string
       # Zorunlu.
       field "subscription_count", :subscription_count, :integer
-      # Zorunlu. Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
       field "channels", :channels, [:array, :string]
       # Zorunlu.
       field "aliases", :aliases, [:array, "UserDetailAliasesItem"]
