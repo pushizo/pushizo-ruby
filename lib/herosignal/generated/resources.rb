@@ -1901,6 +1901,51 @@ module HeroSignal
       end
     end
 
+    # identityKeys kaynağı.
+    class IdentityKeys < HeroSignal::BaseResource
+      # SDK kimlik doğrulama (JWT) genel anahtarları
+      #
+      # GET /v1/apps/{appId}/identity-keys
+      def list(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/identity-keys",
+          path_params: {},
+          app_id: app_id,
+          response: "IdentityKeyList",
+          request_options: request_options
+        )
+      end
+
+      # Genel anahtar ekle (ES256)
+      #
+      # POST /v1/apps/{appId}/identity-keys
+      #
+      # SDK JWT identity verification için ES256 (EC P-256) genel anahtarı ekler; özel anahtar gönderilmez. Belirteç sunucunuzda imzalanır (`sub` = external_id, `aud` = app_id, `exp` ≤ 24 saat) ve SDK isteklerinde `Authorization: Bearer <jwt>` başlığıyla taşınır. Kip app ayarında `identity_verification_mode` ile seçilir.
+      def create(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/identity-keys",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "IdentityKey",
+          request_options: request_options
+        )
+      end
+
+      # Genel anahtarı iptal et
+      #
+      # DELETE /v1/apps/{appId}/identity-keys/{keyId}
+      def revoke(key_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/identity-keys/{keyId}",
+          path_params: { "keyId" => key_id },
+          app_id: app_id,
+          response: "IdentityKey",
+          request_options: request_options
+        )
+      end
+    end
+
     # journeys kaynağı.
     class Journeys < HeroSignal::BaseResource
       # Journey listesi
@@ -2215,7 +2260,7 @@ module HeroSignal
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "0.1.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization categories journeys preferences].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization categories identity_keys journeys preferences].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -2314,6 +2359,10 @@ module HeroSignal
 
     def categories
       @categories ||= HeroSignal::Resources::Categories.new(self)
+    end
+
+    def identity_keys
+      @identity_keys ||= HeroSignal::Resources::IdentityKeys.new(self)
     end
 
     def journeys
