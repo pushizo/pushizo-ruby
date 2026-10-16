@@ -213,6 +213,13 @@ module HeroSignal
       field "step", :step, :integer
       field "simulation", :simulation, :boolean
       field "completed_at", :completed_at, :string
+      field "version", :version, :integer
+      # Değerler: "ios", "android", "huawei", "web".
+      field "platforms", :platforms, [:array, :string]
+      # Değerler: "native", "flutter", "react-native", "unity", "capacitor", "cordova", "maui".
+      field "framework", :framework, :string
+      # Değerler: "code", "wordpress".
+      field "web_integration", :web_integration, :string
     end
 
     # AppSettingsPreferenceCenter şeması.
@@ -5092,6 +5099,13 @@ module HeroSignal
       field "step", :step, :integer
       field "simulation", :simulation, :boolean
       field "completed_at", :completed_at, :string
+      field "version", :version, :integer
+      # Değerler: "ios", "android", "huawei", "web".
+      field "platforms", :platforms, [:array, :string]
+      # Değerler: "native", "flutter", "react-native", "unity", "capacitor", "cordova", "maui".
+      field "framework", :framework, :string
+      # Değerler: "code", "wordpress".
+      field "web_integration", :web_integration, :string
     end
 
     # UpdateAppDtoSettingsPreferenceCenter şeması.
