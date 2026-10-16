@@ -1,17 +1,17 @@
 # Bu dosya api/openapi.yaml'dan sdk/scripts/generate-server-sdks.mjs ile üretilmiştir; elle düzenlemeyin.
 # frozen_string_literal: true
 
-module HeroSignal
+module Pushizo
   # API şemalarının model sınıfları (hash tabanlı; bilinmeyen alanlar korunur).
   module Models
     # AddAliasDto şeması.
-    class AddAliasDto < HeroSignal::BaseModel
+    class AddAliasDto < Pushizo::BaseModel
       # Zorunlu.
       field "identity", :identity, [:map, :string]
     end
 
     # AddSubscriptionDto şeması.
-    class AddSubscriptionDto < HeroSignal::BaseModel
+    class AddSubscriptionDto < Pushizo::BaseModel
       # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu.
@@ -23,7 +23,7 @@ module HeroSignal
     end
 
     # AddSubscriptionDtoDevice şeması.
-    class AddSubscriptionDtoDevice < HeroSignal::BaseModel
+    class AddSubscriptionDtoDevice < Pushizo::BaseModel
       field "model", :model, :string
       field "os", :os, :string
       field "os_version", :os_version, :string
@@ -39,20 +39,20 @@ module HeroSignal
     end
 
     # AddSubscriptionDtoOptIn şeması.
-    class AddSubscriptionDtoOptIn < HeroSignal::BaseModel
+    class AddSubscriptionDtoOptIn < Pushizo::BaseModel
       # Zorunlu.
       field "source", :source, :string
       field "at", :at, :string
     end
 
     # ApiEventsDto şeması.
-    class ApiEventsDto < HeroSignal::BaseModel
+    class ApiEventsDto < Pushizo::BaseModel
       # Zorunlu.
       field "events", :events, [:array, "ApiEventsDtoEventsItem"]
     end
 
     # ApiEventsDtoEventsItem şeması.
-    class ApiEventsDtoEventsItem < HeroSignal::BaseModel
+    class ApiEventsDtoEventsItem < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
       field "properties", :properties, [:map, :any]
@@ -64,7 +64,7 @@ module HeroSignal
     end
 
     # ApiKey şeması.
-    class ApiKey < HeroSignal::BaseModel
+    class ApiKey < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -94,13 +94,13 @@ module HeroSignal
     end
 
     # ApiKeyList şeması.
-    class ApiKeyList < HeroSignal::BaseModel
+    class ApiKeyList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "ApiKey"]
     end
 
     # App şeması.
-    class App < HeroSignal::BaseModel
+    class App < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -130,13 +130,13 @@ module HeroSignal
     end
 
     # AppList şeması.
-    class AppList < HeroSignal::BaseModel
+    class AppList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "App"]
     end
 
     # AppPlatformFlags şeması.
-    class AppPlatformFlags < HeroSignal::BaseModel
+    class AppPlatformFlags < Pushizo::BaseModel
       field "ios", :ios, :boolean
       field "android", :android, :boolean
       field "web", :web, :boolean
@@ -145,7 +145,7 @@ module HeroSignal
     end
 
     # AppSettings şeması.
-    class AppSettings < HeroSignal::BaseModel
+    class AppSettings < Pushizo::BaseModel
       field "quietHours", :quiet_hours, "AppSettingsQuietHours"
       field "frequencyCap", :frequency_cap, "AppSettingsFrequencyCap"
       field "frequencyCaps", :frequency_caps, [:array, "AppSettingsFrequencyCapsItem"]
@@ -163,7 +163,7 @@ module HeroSignal
     end
 
     # AppSettingsAndroidChannelsItem şeması.
-    class AppSettingsAndroidChannelsItem < HeroSignal::BaseModel
+    class AppSettingsAndroidChannelsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -177,7 +177,7 @@ module HeroSignal
     end
 
     # AppSettingsFrequencyCap şeması.
-    class AppSettingsFrequencyCap < HeroSignal::BaseModel
+    class AppSettingsFrequencyCap < Pushizo::BaseModel
       # Zorunlu.
       field "max", :max, :integer
       # Zorunlu.
@@ -185,7 +185,7 @@ module HeroSignal
     end
 
     # AppSettingsFrequencyCapsItem şeması.
-    class AppSettingsFrequencyCapsItem < HeroSignal::BaseModel
+    class AppSettingsFrequencyCapsItem < Pushizo::BaseModel
       # Zorunlu.
       field "max", :max, :integer
       # Zorunlu.
@@ -195,7 +195,7 @@ module HeroSignal
     end
 
     # AppSettingsFrequencyCapsItemWindow şeması.
-    class AppSettingsFrequencyCapsItemWindow < HeroSignal::BaseModel
+    class AppSettingsFrequencyCapsItemWindow < Pushizo::BaseModel
       # Zorunlu.
       field "value", :value, :integer
       # Zorunlu. Değerler: "minutes", "hours", "days", "weeks".
@@ -203,12 +203,12 @@ module HeroSignal
     end
 
     # AppSettingsInApp şeması.
-    class AppSettingsInApp < HeroSignal::BaseModel
+    class AppSettingsInApp < Pushizo::BaseModel
       field "minIntervalSeconds", :min_interval_seconds, :integer
     end
 
     # AppSettingsOnboarding şeması.
-    class AppSettingsOnboarding < HeroSignal::BaseModel
+    class AppSettingsOnboarding < Pushizo::BaseModel
       # Zorunlu.
       field "step", :step, :integer
       field "simulation", :simulation, :boolean
@@ -223,7 +223,7 @@ module HeroSignal
     end
 
     # AppSettingsPreferenceCenter şeması.
-    class AppSettingsPreferenceCenter < HeroSignal::BaseModel
+    class AppSettingsPreferenceCenter < Pushizo::BaseModel
       field "enabled", :enabled, :boolean
       field "brandName", :brand_name, :string
       field "logoUrl", :logo_url, :string
@@ -233,7 +233,7 @@ module HeroSignal
     end
 
     # AppSettingsPreferenceCenterTextsValue şeması.
-    class AppSettingsPreferenceCenterTextsValue < HeroSignal::BaseModel
+    class AppSettingsPreferenceCenterTextsValue < Pushizo::BaseModel
       field "title", :title, :string
       field "description", :description, :string
       field "unsubscribeAll", :unsubscribe_all, :string
@@ -241,7 +241,7 @@ module HeroSignal
     end
 
     # AppSettingsQuietHours şeması.
-    class AppSettingsQuietHours < HeroSignal::BaseModel
+    class AppSettingsQuietHours < Pushizo::BaseModel
       # Zorunlu.
       field "start", :start, :string
       # Zorunlu.
@@ -251,7 +251,7 @@ module HeroSignal
     end
 
     # AppSettingsSdkSetup şeması.
-    class AppSettingsSdkSetup < HeroSignal::BaseModel
+    class AppSettingsSdkSetup < Pushizo::BaseModel
       # Zorunlu.
       field "version", :version, :integer
       # Zorunlu.
@@ -267,14 +267,14 @@ module HeroSignal
     end
 
     # AppSettingsSms şeması.
-    class AppSettingsSms < HeroSignal::BaseModel
+    class AppSettingsSms < Pushizo::BaseModel
       field "helpReply", :help_reply, :string
       field "stopReply", :stop_reply, :string
       field "autoReply", :auto_reply, :boolean
     end
 
     # AppSettingsWebPush şeması.
-    class AppSettingsWebPush < HeroSignal::BaseModel
+    class AppSettingsWebPush < Pushizo::BaseModel
       field "serviceWorkerPath", :service_worker_path, :string
       field "serviceWorkerScope", :service_worker_scope, :string
       field "prompt", :prompt, "AppSettingsWebPushPrompt"
@@ -285,7 +285,7 @@ module HeroSignal
     end
 
     # AppSettingsWebPushClickBehavior şeması.
-    class AppSettingsWebPushClickBehavior < HeroSignal::BaseModel
+    class AppSettingsWebPushClickBehavior < Pushizo::BaseModel
       # Zorunlu. Değerler: "exact", "origin".
       field "match", :match, :string
       # Zorunlu. Değerler: "navigate", "focus".
@@ -293,7 +293,7 @@ module HeroSignal
     end
 
     # AppSettingsWebPushCustomLink şeması.
-    class AppSettingsWebPushCustomLink < HeroSignal::BaseModel
+    class AppSettingsWebPushCustomLink < Pushizo::BaseModel
       # Zorunlu.
       field "enabled", :enabled, :boolean
       # Zorunlu. Değerler: "button", "link".
@@ -306,20 +306,20 @@ module HeroSignal
     end
 
     # AppSettingsWebPushCustomLinkColor şeması.
-    class AppSettingsWebPushCustomLinkColor < HeroSignal::BaseModel
+    class AppSettingsWebPushCustomLinkColor < Pushizo::BaseModel
       field "button", :button, :string
       field "text", :text, :string
     end
 
     # AppSettingsWebPushCustomLinkTextsValue şeması.
-    class AppSettingsWebPushCustomLinkTextsValue < HeroSignal::BaseModel
+    class AppSettingsWebPushCustomLinkTextsValue < Pushizo::BaseModel
       field "subscribe", :subscribe, :string
       field "unsubscribe", :unsubscribe, :string
       field "explanation", :explanation, :string
     end
 
     # AppSettingsWebPushPrompt şeması.
-    class AppSettingsWebPushPrompt < HeroSignal::BaseModel
+    class AppSettingsWebPushPrompt < Pushizo::BaseModel
       # Zorunlu.
       field "enabled", :enabled, :boolean
       # Zorunlu. Değerler: "slidedown", "native".
@@ -335,7 +335,7 @@ module HeroSignal
     end
 
     # AppSettingsWebPushPromptCategoriesItem şeması.
-    class AppSettingsWebPushPromptCategoriesItem < HeroSignal::BaseModel
+    class AppSettingsWebPushPromptCategoriesItem < Pushizo::BaseModel
       # Zorunlu.
       field "tag", :tag, :string
       # Zorunlu.
@@ -343,7 +343,7 @@ module HeroSignal
     end
 
     # AppSettingsWebPushPromptTextsValue şeması.
-    class AppSettingsWebPushPromptTextsValue < HeroSignal::BaseModel
+    class AppSettingsWebPushPromptTextsValue < Pushizo::BaseModel
       field "title", :title, :string
       field "message", :message, :string
       field "accept", :accept, :string
@@ -351,7 +351,7 @@ module HeroSignal
     end
 
     # AppSettingsWebPushWelcomeNotification şeması.
-    class AppSettingsWebPushWelcomeNotification < HeroSignal::BaseModel
+    class AppSettingsWebPushWelcomeNotification < Pushizo::BaseModel
       # Zorunlu.
       field "enabled", :enabled, :boolean
       field "url", :url, :string
@@ -359,13 +359,13 @@ module HeroSignal
     end
 
     # AppSettingsWebPushWelcomeNotificationTextsValue şeması.
-    class AppSettingsWebPushWelcomeNotificationTextsValue < HeroSignal::BaseModel
+    class AppSettingsWebPushWelcomeNotificationTextsValue < Pushizo::BaseModel
       field "title", :title, :string
       field "message", :message, :string
     end
 
     # AuditEntry şeması.
-    class AuditEntry < HeroSignal::BaseModel
+    class AuditEntry < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -393,7 +393,7 @@ module HeroSignal
     end
 
     # AuditPage şeması.
-    class AuditPage < HeroSignal::BaseModel
+    class AuditPage < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "AuditEntry"]
       # Zorunlu.
@@ -403,7 +403,7 @@ module HeroSignal
     end
 
     # Campaign şeması.
-    class Campaign < HeroSignal::BaseModel
+    class Campaign < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -463,7 +463,7 @@ module HeroSignal
     end
 
     # CampaignAbTest şeması.
-    class CampaignAbTest < HeroSignal::BaseModel
+    class CampaignAbTest < Pushizo::BaseModel
       field "enabled", :enabled, :boolean
       field "test_percentage", :test_percentage, :integer
       field "winner", :winner, "CampaignAbTestWinner"
@@ -476,7 +476,7 @@ module HeroSignal
     end
 
     # CampaignAbTestSignificance şeması.
-    class CampaignAbTestSignificance < HeroSignal::BaseModel
+    class CampaignAbTestSignificance < Pushizo::BaseModel
       # Zorunlu.
       field "p_value", :p_value, :number
       # Zorunlu.
@@ -486,7 +486,7 @@ module HeroSignal
     end
 
     # CampaignAbTestWinner şeması.
-    class CampaignAbTestWinner < HeroSignal::BaseModel
+    class CampaignAbTestWinner < Pushizo::BaseModel
       # Zorunlu. Değerler: "manual", "auto".
       field "mode", :mode, :string
       # Zorunlu. Değerler: "open_rate", "click_rate", "conversion_rate".
@@ -495,7 +495,7 @@ module HeroSignal
     end
 
     # CampaignApproval şeması.
-    class CampaignApproval < HeroSignal::BaseModel
+    class CampaignApproval < Pushizo::BaseModel
       # Zorunlu.
       field "required", :required, :boolean
       # Değerler: "send", "schedule".
@@ -509,7 +509,7 @@ module HeroSignal
     end
 
     # CampaignDelivery şeması.
-    class CampaignDelivery < HeroSignal::BaseModel
+    class CampaignDelivery < Pushizo::BaseModel
       # Değerler: "immediate", "per_user_timezone", "optimized".
       field "timezone_mode", :timezone_mode, :string
       field "delivery_time_of_day", :delivery_time_of_day, :string
@@ -524,7 +524,7 @@ module HeroSignal
     end
 
     # CampaignPage şeması.
-    class CampaignPage < HeroSignal::BaseModel
+    class CampaignPage < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "Campaign"]
       # Zorunlu.
@@ -534,7 +534,7 @@ module HeroSignal
     end
 
     # CampaignRecurrence şeması.
-    class CampaignRecurrence < HeroSignal::BaseModel
+    class CampaignRecurrence < Pushizo::BaseModel
       # Zorunlu.
       field "cron", :cron, :string
       field "until", :until_, :string
@@ -542,7 +542,7 @@ module HeroSignal
     end
 
     # CampaignsCreateBody şeması.
-    class CampaignsCreateBody < HeroSignal::BaseModel
+    class CampaignsCreateBody < Pushizo::BaseModel
       field "name", :name, :string
       # Değerler: "one_time", "scheduled", "recurring".
       field "type", :type, :string
@@ -563,14 +563,14 @@ module HeroSignal
     end
 
     # CampaignsCreateBodyAbTest şeması.
-    class CampaignsCreateBodyAbTest < HeroSignal::BaseModel
+    class CampaignsCreateBodyAbTest < Pushizo::BaseModel
       field "enabled", :enabled, :boolean
       field "test_percentage", :test_percentage, :integer
       field "winner", :winner, "CampaignsCreateBodyAbTestWinner"
     end
 
     # CampaignsCreateBodyAbTestWinner şeması.
-    class CampaignsCreateBodyAbTestWinner < HeroSignal::BaseModel
+    class CampaignsCreateBodyAbTestWinner < Pushizo::BaseModel
       # Değerler: "manual", "auto".
       field "mode", :mode, :string
       # Değerler: "open_rate", "click_rate", "conversion_rate".
@@ -579,7 +579,7 @@ module HeroSignal
     end
 
     # CampaignsCreateBodyAudience şeması.
-    class CampaignsCreateBodyAudience < HeroSignal::BaseModel
+    class CampaignsCreateBodyAudience < Pushizo::BaseModel
       field "all", :all, :boolean
       field "segments", :segments, [:array, :string]
       field "exclude_segments", :exclude_segments, [:array, :string]
@@ -591,14 +591,14 @@ module HeroSignal
     end
 
     # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
-    class CampaignsCreateBodyAudienceFilters < HeroSignal::BaseModel
+    class CampaignsCreateBodyAudienceFilters < Pushizo::BaseModel
       field "all", :all, [:array, [:map, :any]]
       field "any", :any, [:array, [:map, :any]]
       field "none", :none, [:array, [:map, :any]]
     end
 
     # CampaignsCreateBodyDelivery şeması.
-    class CampaignsCreateBodyDelivery < HeroSignal::BaseModel
+    class CampaignsCreateBodyDelivery < Pushizo::BaseModel
       # Değerler: "immediate", "per_user_timezone", "optimized".
       field "timezone_mode", :timezone_mode, :string
       field "delivery_time_of_day", :delivery_time_of_day, :string
@@ -613,14 +613,14 @@ module HeroSignal
     end
 
     # CampaignsCreateBodyRecurrence şeması.
-    class CampaignsCreateBodyRecurrence < HeroSignal::BaseModel
+    class CampaignsCreateBodyRecurrence < Pushizo::BaseModel
       field "cron", :cron, :string
       field "until", :until_, :string
       field "timezone", :timezone, :string
     end
 
     # CampaignsCreateBodyVariantsItem şeması.
-    class CampaignsCreateBodyVariantsItem < HeroSignal::BaseModel
+    class CampaignsCreateBodyVariantsItem < Pushizo::BaseModel
       field "id", :id, :string
       # Zorunlu.
       field "name", :name, :string
@@ -631,7 +631,7 @@ module HeroSignal
     end
 
     # CampaignStats şeması.
-    class CampaignStats < HeroSignal::BaseModel
+    class CampaignStats < Pushizo::BaseModel
       # Zorunlu.
       field "campaign", :campaign, "Campaign"
       # Zorunlu.
@@ -647,7 +647,7 @@ module HeroSignal
     end
 
     # CampaignStats2 şeması.
-    class CampaignStats2 < HeroSignal::BaseModel
+    class CampaignStats2 < Pushizo::BaseModel
       field "runs", :runs, :integer
       field "targeted", :targeted, :integer
       field "suppressed", :suppressed, :integer
@@ -664,7 +664,7 @@ module HeroSignal
     end
 
     # CampaignStatsChannelsItem şeması.
-    class CampaignStatsChannelsItem < HeroSignal::BaseModel
+    class CampaignStatsChannelsItem < Pushizo::BaseModel
       # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu.
@@ -680,7 +680,7 @@ module HeroSignal
     end
 
     # CampaignStatsErrorsItem şeması.
-    class CampaignStatsErrorsItem < HeroSignal::BaseModel
+    class CampaignStatsErrorsItem < Pushizo::BaseModel
       # Zorunlu.
       field "code", :code, :string
       # Zorunlu.
@@ -688,7 +688,7 @@ module HeroSignal
     end
 
     # CampaignStatsHourlyItem şeması.
-    class CampaignStatsHourlyItem < HeroSignal::BaseModel
+    class CampaignStatsHourlyItem < Pushizo::BaseModel
       # Zorunlu.
       field "hour", :hour, :string
       # Zorunlu.
@@ -702,7 +702,7 @@ module HeroSignal
     end
 
     # CampaignStatsRates şeması.
-    class CampaignStatsRates < HeroSignal::BaseModel
+    class CampaignStatsRates < Pushizo::BaseModel
       # Zorunlu.
       field "delivery_rate", :delivery_rate, :number
       # Zorunlu.
@@ -716,7 +716,7 @@ module HeroSignal
     end
 
     # CampaignsUpdateBody şeması.
-    class CampaignsUpdateBody < HeroSignal::BaseModel
+    class CampaignsUpdateBody < Pushizo::BaseModel
       field "name", :name, :string
       # Değerler: "one_time", "scheduled", "recurring".
       field "type", :type, :string
@@ -737,14 +737,14 @@ module HeroSignal
     end
 
     # CampaignsUpdateBodyAbTest şeması.
-    class CampaignsUpdateBodyAbTest < HeroSignal::BaseModel
+    class CampaignsUpdateBodyAbTest < Pushizo::BaseModel
       field "enabled", :enabled, :boolean
       field "test_percentage", :test_percentage, :integer
       field "winner", :winner, "CampaignsUpdateBodyAbTestWinner"
     end
 
     # CampaignsUpdateBodyAbTestWinner şeması.
-    class CampaignsUpdateBodyAbTestWinner < HeroSignal::BaseModel
+    class CampaignsUpdateBodyAbTestWinner < Pushizo::BaseModel
       # Değerler: "manual", "auto".
       field "mode", :mode, :string
       # Değerler: "open_rate", "click_rate", "conversion_rate".
@@ -753,7 +753,7 @@ module HeroSignal
     end
 
     # CampaignsUpdateBodyAudience şeması.
-    class CampaignsUpdateBodyAudience < HeroSignal::BaseModel
+    class CampaignsUpdateBodyAudience < Pushizo::BaseModel
       field "all", :all, :boolean
       field "segments", :segments, [:array, :string]
       field "exclude_segments", :exclude_segments, [:array, :string]
@@ -765,14 +765,14 @@ module HeroSignal
     end
 
     # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
-    class CampaignsUpdateBodyAudienceFilters < HeroSignal::BaseModel
+    class CampaignsUpdateBodyAudienceFilters < Pushizo::BaseModel
       field "all", :all, [:array, [:map, :any]]
       field "any", :any, [:array, [:map, :any]]
       field "none", :none, [:array, [:map, :any]]
     end
 
     # CampaignsUpdateBodyDelivery şeması.
-    class CampaignsUpdateBodyDelivery < HeroSignal::BaseModel
+    class CampaignsUpdateBodyDelivery < Pushizo::BaseModel
       # Değerler: "immediate", "per_user_timezone", "optimized".
       field "timezone_mode", :timezone_mode, :string
       field "delivery_time_of_day", :delivery_time_of_day, :string
@@ -787,14 +787,14 @@ module HeroSignal
     end
 
     # CampaignsUpdateBodyRecurrence şeması.
-    class CampaignsUpdateBodyRecurrence < HeroSignal::BaseModel
+    class CampaignsUpdateBodyRecurrence < Pushizo::BaseModel
       field "cron", :cron, :string
       field "until", :until_, :string
       field "timezone", :timezone, :string
     end
 
     # CampaignsUpdateBodyVariantsItem şeması.
-    class CampaignsUpdateBodyVariantsItem < HeroSignal::BaseModel
+    class CampaignsUpdateBodyVariantsItem < Pushizo::BaseModel
       field "id", :id, :string
       # Zorunlu.
       field "name", :name, :string
@@ -805,7 +805,7 @@ module HeroSignal
     end
 
     # CampaignVariantsItem şeması.
-    class CampaignVariantsItem < HeroSignal::BaseModel
+    class CampaignVariantsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -821,7 +821,7 @@ module HeroSignal
     end
 
     # CampaignVariantStats şeması.
-    class CampaignVariantStats < HeroSignal::BaseModel
+    class CampaignVariantStats < Pushizo::BaseModel
       # Zorunlu.
       field "ab_test", :ab_test, "CampaignVariantStatsAbTest"
       # Zorunlu.
@@ -833,7 +833,7 @@ module HeroSignal
     end
 
     # CampaignVariantStatsAbTest şeması.
-    class CampaignVariantStatsAbTest < HeroSignal::BaseModel
+    class CampaignVariantStatsAbTest < Pushizo::BaseModel
       field "enabled", :enabled, :boolean
       field "test_percentage", :test_percentage, :integer
       field "winner", :winner, "CampaignVariantStatsAbTestWinner"
@@ -846,7 +846,7 @@ module HeroSignal
     end
 
     # CampaignVariantStatsAbTestSignificance şeması.
-    class CampaignVariantStatsAbTestSignificance < HeroSignal::BaseModel
+    class CampaignVariantStatsAbTestSignificance < Pushizo::BaseModel
       # Zorunlu.
       field "p_value", :p_value, :number
       # Zorunlu.
@@ -856,7 +856,7 @@ module HeroSignal
     end
 
     # CampaignVariantStatsAbTestWinner şeması.
-    class CampaignVariantStatsAbTestWinner < HeroSignal::BaseModel
+    class CampaignVariantStatsAbTestWinner < Pushizo::BaseModel
       # Zorunlu. Değerler: "manual", "auto".
       field "mode", :mode, :string
       # Zorunlu. Değerler: "open_rate", "click_rate", "conversion_rate".
@@ -865,7 +865,7 @@ module HeroSignal
     end
 
     # CampaignVariantStatsSignificance şeması.
-    class CampaignVariantStatsSignificance < HeroSignal::BaseModel
+    class CampaignVariantStatsSignificance < Pushizo::BaseModel
       # Zorunlu.
       field "p_value", :p_value, :number
       # Zorunlu.
@@ -875,7 +875,7 @@ module HeroSignal
     end
 
     # CampaignVariantStatsVariantsItem şeması.
-    class CampaignVariantStatsVariantsItem < HeroSignal::BaseModel
+    class CampaignVariantStatsVariantsItem < Pushizo::BaseModel
       # Zorunlu.
       field "variant_id", :variant_id, :string
       # Zorunlu.
@@ -907,7 +907,7 @@ module HeroSignal
     end
 
     # ChannelConfig şeması.
-    class ChannelConfig < HeroSignal::BaseModel
+    class ChannelConfig < Pushizo::BaseModel
       # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu. Değerler: "apns", "fcm", "hms", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "meta_whatsapp", "google_rbm", "mock".
@@ -933,7 +933,7 @@ module HeroSignal
     end
 
     # ChannelConfigConfig şeması.
-    class ChannelConfigConfig < HeroSignal::BaseModel
+    class ChannelConfigConfig < Pushizo::BaseModel
       # Değerler: "token", "certificate".
       field "auth_type", :auth_type, :string
       # Değerler: "sandbox", "production", "universal".
@@ -982,7 +982,7 @@ module HeroSignal
     end
 
     # ChannelConfigDnsCheck şeması.
-    class ChannelConfigDnsCheck < HeroSignal::BaseModel
+    class ChannelConfigDnsCheck < Pushizo::BaseModel
       # Zorunlu.
       field "domain", :domain, :string
       # Zorunlu.
@@ -998,7 +998,7 @@ module HeroSignal
     end
 
     # ChannelConfigDnsCheckDkim şeması.
-    class ChannelConfigDnsCheckDkim < HeroSignal::BaseModel
+    class ChannelConfigDnsCheckDkim < Pushizo::BaseModel
       # Zorunlu.
       field "ok", :ok, :boolean
       # Zorunlu.
@@ -1010,7 +1010,7 @@ module HeroSignal
     end
 
     # ChannelConfigDnsCheckDmarc şeması.
-    class ChannelConfigDnsCheckDmarc < HeroSignal::BaseModel
+    class ChannelConfigDnsCheckDmarc < Pushizo::BaseModel
       # Zorunlu.
       field "ok", :ok, :boolean
       # Zorunlu.
@@ -1020,7 +1020,7 @@ module HeroSignal
     end
 
     # ChannelConfigDnsCheckSpf şeması.
-    class ChannelConfigDnsCheckSpf < HeroSignal::BaseModel
+    class ChannelConfigDnsCheckSpf < Pushizo::BaseModel
       # Zorunlu.
       field "ok", :ok, :boolean
       # Zorunlu.
@@ -1030,13 +1030,13 @@ module HeroSignal
     end
 
     # ChannelList şeması.
-    class ChannelList < HeroSignal::BaseModel
+    class ChannelList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "ChannelConfig"]
     end
 
     # ChannelValidation şeması.
-    class ChannelValidation < HeroSignal::BaseModel
+    class ChannelValidation < Pushizo::BaseModel
       # Zorunlu.
       field "ok", :ok, :boolean
       # Zorunlu. Değerler: "auth", "config", "transient".
@@ -1052,7 +1052,7 @@ module HeroSignal
     end
 
     # ContentTable şeması.
-    class ContentTable < HeroSignal::BaseModel
+    class ContentTable < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -1080,13 +1080,13 @@ module HeroSignal
     end
 
     # ContentTableList şeması.
-    class ContentTableList < HeroSignal::BaseModel
+    class ContentTableList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "ContentTable"]
     end
 
     # ContentTableRows şeması.
-    class ContentTableRows < HeroSignal::BaseModel
+    class ContentTableRows < Pushizo::BaseModel
       # Zorunlu.
       field "columns", :columns, [:array, :string]
       # Zorunlu.
@@ -1098,7 +1098,7 @@ module HeroSignal
     end
 
     # Conversation şeması.
-    class Conversation < HeroSignal::BaseModel
+    class Conversation < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu. Değerler: "sms", "whatsapp", "rcs".
@@ -1134,7 +1134,7 @@ module HeroSignal
     end
 
     # ConversationMessagePage şeması.
-    class ConversationMessagePage < HeroSignal::BaseModel
+    class ConversationMessagePage < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "ConversationMessagePageDataItem"]
       # Zorunlu.
@@ -1144,7 +1144,7 @@ module HeroSignal
     end
 
     # ConversationMessagePageDataItem şeması.
-    class ConversationMessagePageDataItem < HeroSignal::BaseModel
+    class ConversationMessagePageDataItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu. Değerler: "inbound", "outbound".
@@ -1170,7 +1170,7 @@ module HeroSignal
     end
 
     # ConversationPage şeması.
-    class ConversationPage < HeroSignal::BaseModel
+    class ConversationPage < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "Conversation"]
       # Zorunlu.
@@ -1180,7 +1180,7 @@ module HeroSignal
     end
 
     # ConversationReplyDto şeması.
-    class ConversationReplyDto < HeroSignal::BaseModel
+    class ConversationReplyDto < Pushizo::BaseModel
       field "text", :text, :string
       field "template", :template, "ConversationReplyDtoTemplate"
       field "media", :media, "ConversationReplyDtoMedia"
@@ -1188,7 +1188,7 @@ module HeroSignal
     end
 
     # ConversationReplyDtoInteractive şeması.
-    class ConversationReplyDtoInteractive < HeroSignal::BaseModel
+    class ConversationReplyDtoInteractive < Pushizo::BaseModel
       # Zorunlu. Değerler: "button", "list".
       field "type", :type, :string
       field "header", :header, :string
@@ -1198,7 +1198,7 @@ module HeroSignal
     end
 
     # ConversationReplyDtoInteractiveButtonsItem şeması.
-    class ConversationReplyDtoInteractiveButtonsItem < HeroSignal::BaseModel
+    class ConversationReplyDtoInteractiveButtonsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -1206,7 +1206,7 @@ module HeroSignal
     end
 
     # ConversationReplyDtoInteractiveList şeması.
-    class ConversationReplyDtoInteractiveList < HeroSignal::BaseModel
+    class ConversationReplyDtoInteractiveList < Pushizo::BaseModel
       # Zorunlu.
       field "button", :button, :string
       # Zorunlu.
@@ -1214,14 +1214,14 @@ module HeroSignal
     end
 
     # ConversationReplyDtoInteractiveListSectionsItem şeması.
-    class ConversationReplyDtoInteractiveListSectionsItem < HeroSignal::BaseModel
+    class ConversationReplyDtoInteractiveListSectionsItem < Pushizo::BaseModel
       field "title", :title, :string
       # Zorunlu.
       field "rows", :rows, [:array, "ConversationReplyDtoInteractiveListSectionsItemRowsItem"]
     end
 
     # ConversationReplyDtoInteractiveListSectionsItemRowsItem şeması.
-    class ConversationReplyDtoInteractiveListSectionsItemRowsItem < HeroSignal::BaseModel
+    class ConversationReplyDtoInteractiveListSectionsItemRowsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -1230,7 +1230,7 @@ module HeroSignal
     end
 
     # ConversationReplyDtoMedia şeması.
-    class ConversationReplyDtoMedia < HeroSignal::BaseModel
+    class ConversationReplyDtoMedia < Pushizo::BaseModel
       # Zorunlu. Değerler: "image", "video", "document", "audio".
       field "type", :type, :string
       # Zorunlu.
@@ -1239,7 +1239,7 @@ module HeroSignal
     end
 
     # ConversationReplyDtoTemplate şeması.
-    class ConversationReplyDtoTemplate < HeroSignal::BaseModel
+    class ConversationReplyDtoTemplate < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
       # Zorunlu.
@@ -1250,7 +1250,7 @@ module HeroSignal
     end
 
     # ConversationReplyDtoTemplateButtonParamsItem şeması.
-    class ConversationReplyDtoTemplateButtonParamsItem < HeroSignal::BaseModel
+    class ConversationReplyDtoTemplateButtonParamsItem < Pushizo::BaseModel
       # Zorunlu.
       field "index", :index, :integer
       # Zorunlu. Değerler: "url", "quick_reply", "copy_code".
@@ -1260,7 +1260,7 @@ module HeroSignal
     end
 
     # ConversationReplyResult şeması.
-    class ConversationReplyResult < HeroSignal::BaseModel
+    class ConversationReplyResult < Pushizo::BaseModel
       # Zorunlu.
       field "message_id", :message_id, :string
       # Zorunlu.
@@ -1268,7 +1268,7 @@ module HeroSignal
     end
 
     # ConversationReplyResultConversationMessage şeması.
-    class ConversationReplyResultConversationMessage < HeroSignal::BaseModel
+    class ConversationReplyResultConversationMessage < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu. Değerler: "inbound", "outbound".
@@ -1294,7 +1294,7 @@ module HeroSignal
     end
 
     # ConversationWindow şeması.
-    class ConversationWindow < HeroSignal::BaseModel
+    class ConversationWindow < Pushizo::BaseModel
       # Zorunlu.
       field "open", :open_value, :boolean
       # Zorunlu.
@@ -1302,7 +1302,7 @@ module HeroSignal
     end
 
     # ConversionsReport şeması.
-    class ConversionsReport < HeroSignal::BaseModel
+    class ConversionsReport < Pushizo::BaseModel
       # Zorunlu.
       field "from", :from, :string
       # Zorunlu.
@@ -1318,7 +1318,7 @@ module HeroSignal
     end
 
     # ConversionsReportByCampaignItem şeması.
-    class ConversionsReportByCampaignItem < HeroSignal::BaseModel
+    class ConversionsReportByCampaignItem < Pushizo::BaseModel
       # Zorunlu.
       field "campaign_id", :campaign_id, :string
       # Zorunlu.
@@ -1340,7 +1340,7 @@ module HeroSignal
     end
 
     # ConversionsReportPrevious şeması.
-    class ConversionsReportPrevious < HeroSignal::BaseModel
+    class ConversionsReportPrevious < Pushizo::BaseModel
       # Zorunlu.
       field "conversions", :conversions, :integer
       # Zorunlu.
@@ -1354,7 +1354,7 @@ module HeroSignal
     end
 
     # ConversionsReportRowsItem şeması.
-    class ConversionsReportRowsItem < HeroSignal::BaseModel
+    class ConversionsReportRowsItem < Pushizo::BaseModel
       # Zorunlu.
       field "date", :date, :string
       # Zorunlu.
@@ -1364,7 +1364,7 @@ module HeroSignal
     end
 
     # ConversionsReportTotals şeması.
-    class ConversionsReportTotals < HeroSignal::BaseModel
+    class ConversionsReportTotals < Pushizo::BaseModel
       # Zorunlu.
       field "conversions", :conversions, :integer
       # Zorunlu.
@@ -1378,14 +1378,14 @@ module HeroSignal
     end
 
     # CopyTemplateDto şeması.
-    class CopyTemplateDto < HeroSignal::BaseModel
+    class CopyTemplateDto < Pushizo::BaseModel
       # Zorunlu.
       field "target_app_id", :target_app_id, :string
       field "name", :name, :string
     end
 
     # CreateAppApiKeyDto şeması.
-    class CreateAppApiKeyDto < HeroSignal::BaseModel
+    class CreateAppApiKeyDto < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
       # Zorunlu. Değerler: "admin", "notifications:write", "users:read", "users:write", "events:write", "segments:read", "analytics:read", "mcp:write".
@@ -1397,7 +1397,7 @@ module HeroSignal
     end
 
     # CreateAppDto şeması.
-    class CreateAppDto < HeroSignal::BaseModel
+    class CreateAppDto < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
       field "slug", :slug, :string
@@ -1407,7 +1407,7 @@ module HeroSignal
     end
 
     # CreateAppDtoPlatformFlags şeması.
-    class CreateAppDtoPlatformFlags < HeroSignal::BaseModel
+    class CreateAppDtoPlatformFlags < Pushizo::BaseModel
       field "ios", :ios, :boolean
       field "android", :android, :boolean
       field "web", :web, :boolean
@@ -1416,7 +1416,7 @@ module HeroSignal
     end
 
     # CreateCategoryDto şeması.
-    class CreateCategoryDto < HeroSignal::BaseModel
+    class CreateCategoryDto < Pushizo::BaseModel
       # Zorunlu.
       field "key", :key, :string
       # Zorunlu.
@@ -1429,7 +1429,7 @@ module HeroSignal
     end
 
     # CreatedApiKey şeması.
-    class CreatedApiKey < HeroSignal::BaseModel
+    class CreatedApiKey < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -1461,7 +1461,7 @@ module HeroSignal
     end
 
     # CreateDataFeedDto şeması.
-    class CreateDataFeedDto < HeroSignal::BaseModel
+    class CreateDataFeedDto < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
       field "description", :description, :string
@@ -1478,14 +1478,14 @@ module HeroSignal
     end
 
     # CreateExportDto şeması.
-    class CreateExportDto < HeroSignal::BaseModel
+    class CreateExportDto < Pushizo::BaseModel
       # Zorunlu. Değerler: "users", "subscriptions", "events", "deliveries", "message_events".
       field "type", :type, :string
       field "filters", :filters, "CreateExportDtoFilters"
     end
 
     # CreateExportDtoFilters şeması.
-    class CreateExportDtoFilters < HeroSignal::BaseModel
+    class CreateExportDtoFilters < Pushizo::BaseModel
       field "from", :from, :string
       field "to", :to, :string
       field "name", :name, :string
@@ -1498,7 +1498,7 @@ module HeroSignal
     end
 
     # CreateIdentityKeyDto şeması.
-    class CreateIdentityKeyDto < HeroSignal::BaseModel
+    class CreateIdentityKeyDto < Pushizo::BaseModel
       field "kid", :kid, :string
       field "label", :label, :string
       field "public_jwk", :public_jwk, [:map, :any]
@@ -1506,7 +1506,7 @@ module HeroSignal
     end
 
     # CreateInAppDto şeması.
-    class CreateInAppDto < HeroSignal::BaseModel
+    class CreateInAppDto < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
       # Zorunlu.
@@ -1525,12 +1525,12 @@ module HeroSignal
     end
 
     # CreateInAppDtoAbTest şeması.
-    class CreateInAppDtoAbTest < HeroSignal::BaseModel
+    class CreateInAppDtoAbTest < Pushizo::BaseModel
       field "winner", :winner, "CreateInAppDtoAbTestWinner"
     end
 
     # CreateInAppDtoAbTestWinner şeması.
-    class CreateInAppDtoAbTestWinner < HeroSignal::BaseModel
+    class CreateInAppDtoAbTestWinner < Pushizo::BaseModel
       # Zorunlu. Değerler: "manual", "auto".
       field "mode", :mode, :string
       field "min_impressions", :min_impressions, :integer
@@ -1538,13 +1538,13 @@ module HeroSignal
     end
 
     # CreateInAppDtoAudience şeması.
-    class CreateInAppDtoAudience < HeroSignal::BaseModel
+    class CreateInAppDtoAudience < Pushizo::BaseModel
       field "included_segments", :included_segments, [:array, :string]
       field "excluded_segments", :excluded_segments, [:array, :string]
     end
 
     # CreateInAppDtoDisplay şeması.
-    class CreateInAppDtoDisplay < HeroSignal::BaseModel
+    class CreateInAppDtoDisplay < Pushizo::BaseModel
       # Zorunlu. Değerler: "modal", "banner_top", "banner_bottom", "fullscreen".
       field "layout", :layout, :string
       field "background_color", :background_color, :string
@@ -1560,14 +1560,14 @@ module HeroSignal
     end
 
     # CreateInAppDtoFrequency şeması.
-    class CreateInAppDtoFrequency < HeroSignal::BaseModel
+    class CreateInAppDtoFrequency < Pushizo::BaseModel
       field "max_impressions", :max_impressions, :integer
       field "min_interval_seconds", :min_interval_seconds, :integer
       field "stop_after_interaction", :stop_after_interaction, :boolean
     end
 
     # CreateInAppDtoVariantsItem şeması.
-    class CreateInAppDtoVariantsItem < HeroSignal::BaseModel
+    class CreateInAppDtoVariantsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -1579,7 +1579,7 @@ module HeroSignal
     end
 
     # CreateInAppDtoVariantsItemDisplay şeması.
-    class CreateInAppDtoVariantsItemDisplay < HeroSignal::BaseModel
+    class CreateInAppDtoVariantsItemDisplay < Pushizo::BaseModel
       # Zorunlu. Değerler: "modal", "banner_top", "banner_bottom", "fullscreen".
       field "layout", :layout, :string
       field "background_color", :background_color, :string
@@ -1595,7 +1595,7 @@ module HeroSignal
     end
 
     # CreateKeywordDto şeması.
-    class CreateKeywordDto < HeroSignal::BaseModel
+    class CreateKeywordDto < Pushizo::BaseModel
       # Zorunlu.
       field "keyword", :keyword, :string
       # Değerler: "org", "app".
@@ -1609,7 +1609,7 @@ module HeroSignal
     end
 
     # CreateKeywordDtoActions şeması.
-    class CreateKeywordDtoActions < HeroSignal::BaseModel
+    class CreateKeywordDtoActions < Pushizo::BaseModel
       field "add_tags", :add_tags, [:map, :string]
       field "remove_tags", :remove_tags, [:array, :string]
       field "event", :event, "CreateKeywordDtoActionsEvent"
@@ -1618,20 +1618,20 @@ module HeroSignal
     end
 
     # CreateKeywordDtoActionsEvent şeması.
-    class CreateKeywordDtoActionsEvent < HeroSignal::BaseModel
+    class CreateKeywordDtoActionsEvent < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
       field "properties", :properties, [:map, :string]
     end
 
     # CreateKeywordDtoActionsReply şeması.
-    class CreateKeywordDtoActionsReply < HeroSignal::BaseModel
+    class CreateKeywordDtoActionsReply < Pushizo::BaseModel
       # Zorunlu.
       field "text", :text, :string
     end
 
     # CreateLiveActivityTypeDto şeması.
-    class CreateLiveActivityTypeDto < HeroSignal::BaseModel
+    class CreateLiveActivityTypeDto < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
       field "description", :description, :string
@@ -1641,7 +1641,7 @@ module HeroSignal
     end
 
     # CreateLiveActivityTypeDtoAttributesSchema şeması.
-    class CreateLiveActivityTypeDtoAttributesSchema < HeroSignal::BaseModel
+    class CreateLiveActivityTypeDtoAttributesSchema < Pushizo::BaseModel
       # Zorunlu. Değerler: "object".
       field "type", :type, :string
       # Zorunlu.
@@ -1650,7 +1650,7 @@ module HeroSignal
     end
 
     # CreateLiveActivityTypeDtoAttributesSchemaPropertiesValue şeması.
-    class CreateLiveActivityTypeDtoAttributesSchemaPropertiesValue < HeroSignal::BaseModel
+    class CreateLiveActivityTypeDtoAttributesSchemaPropertiesValue < Pushizo::BaseModel
       # Zorunlu. Değerler: "string", "number", "integer", "boolean".
       field "type", :type, :string
       field "enum", :enum, [:array, :any]
@@ -1661,7 +1661,7 @@ module HeroSignal
     end
 
     # CreateLiveActivityTypeDtoContentStateSchema şeması.
-    class CreateLiveActivityTypeDtoContentStateSchema < HeroSignal::BaseModel
+    class CreateLiveActivityTypeDtoContentStateSchema < Pushizo::BaseModel
       # Zorunlu. Değerler: "object".
       field "type", :type, :string
       # Zorunlu.
@@ -1670,7 +1670,7 @@ module HeroSignal
     end
 
     # CreateLiveActivityTypeDtoContentStateSchemaPropertiesValue şeması.
-    class CreateLiveActivityTypeDtoContentStateSchemaPropertiesValue < HeroSignal::BaseModel
+    class CreateLiveActivityTypeDtoContentStateSchemaPropertiesValue < Pushizo::BaseModel
       # Zorunlu. Değerler: "string", "number", "integer", "boolean".
       field "type", :type, :string
       field "enum", :enum, [:array, :any]
@@ -1681,7 +1681,7 @@ module HeroSignal
     end
 
     # CreateNotificationDto şeması.
-    class CreateNotificationDto < HeroSignal::BaseModel
+    class CreateNotificationDto < Pushizo::BaseModel
       field "app_id", :app_id, :string
       field "idempotency_key", :idempotency_key, :string
       # Zorunlu.
@@ -1763,7 +1763,7 @@ module HeroSignal
     end
 
     # CreateNotificationDtoButtonsItem şeması.
-    class CreateNotificationDtoButtonsItem < HeroSignal::BaseModel
+    class CreateNotificationDtoButtonsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -1773,7 +1773,7 @@ module HeroSignal
     end
 
     # CreateNotificationDtoRcsCard şeması.
-    class CreateNotificationDtoRcsCard < HeroSignal::BaseModel
+    class CreateNotificationDtoRcsCard < Pushizo::BaseModel
       field "title", :title, [:map, :string]
       field "description", :description, [:map, :string]
       field "media_url", :media_url, :string
@@ -1784,7 +1784,7 @@ module HeroSignal
     end
 
     # CreateNotificationDtoTarget şeması.
-    class CreateNotificationDtoTarget < HeroSignal::BaseModel
+    class CreateNotificationDtoTarget < Pushizo::BaseModel
       field "all", :all, :boolean
       field "include_subscription_ids", :include_subscription_ids, [:array, :string]
       field "include_external_ids", :include_external_ids, [:array, :string]
@@ -1800,7 +1800,7 @@ module HeroSignal
     end
 
     # CreateNotificationDtoWebButtonsItem şeması.
-    class CreateNotificationDtoWebButtonsItem < HeroSignal::BaseModel
+    class CreateNotificationDtoWebButtonsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -1810,7 +1810,7 @@ module HeroSignal
     end
 
     # CreateNotificationDtoWhatsappInteractive şeması.
-    class CreateNotificationDtoWhatsappInteractive < HeroSignal::BaseModel
+    class CreateNotificationDtoWhatsappInteractive < Pushizo::BaseModel
       # Zorunlu. Değerler: "button", "list".
       field "type", :type, :string
       field "header", :header, :string
@@ -1820,7 +1820,7 @@ module HeroSignal
     end
 
     # CreateNotificationDtoWhatsappInteractiveButtonsItem şeması.
-    class CreateNotificationDtoWhatsappInteractiveButtonsItem < HeroSignal::BaseModel
+    class CreateNotificationDtoWhatsappInteractiveButtonsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -1828,7 +1828,7 @@ module HeroSignal
     end
 
     # CreateNotificationDtoWhatsappInteractiveList şeması.
-    class CreateNotificationDtoWhatsappInteractiveList < HeroSignal::BaseModel
+    class CreateNotificationDtoWhatsappInteractiveList < Pushizo::BaseModel
       # Zorunlu.
       field "button", :button, :string
       # Zorunlu.
@@ -1836,14 +1836,14 @@ module HeroSignal
     end
 
     # CreateNotificationDtoWhatsappInteractiveListSectionsItem şeması.
-    class CreateNotificationDtoWhatsappInteractiveListSectionsItem < HeroSignal::BaseModel
+    class CreateNotificationDtoWhatsappInteractiveListSectionsItem < Pushizo::BaseModel
       field "title", :title, :string
       # Zorunlu.
       field "rows", :rows, [:array, "CreateNotificationDtoWhatsappInteractiveListSectionsItemRowsItem"]
     end
 
     # CreateNotificationDtoWhatsappInteractiveListSectionsItemRowsItem şeması.
-    class CreateNotificationDtoWhatsappInteractiveListSectionsItemRowsItem < HeroSignal::BaseModel
+    class CreateNotificationDtoWhatsappInteractiveListSectionsItemRowsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -1852,7 +1852,7 @@ module HeroSignal
     end
 
     # CreateNotificationDtoWhatsappMedia şeması.
-    class CreateNotificationDtoWhatsappMedia < HeroSignal::BaseModel
+    class CreateNotificationDtoWhatsappMedia < Pushizo::BaseModel
       # Zorunlu. Değerler: "image", "video", "document", "audio".
       field "type", :type, :string
       # Zorunlu.
@@ -1861,7 +1861,7 @@ module HeroSignal
     end
 
     # CreateNotificationDtoWhatsappTemplate şeması.
-    class CreateNotificationDtoWhatsappTemplate < HeroSignal::BaseModel
+    class CreateNotificationDtoWhatsappTemplate < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
       # Zorunlu.
@@ -1872,7 +1872,7 @@ module HeroSignal
     end
 
     # CreateNotificationDtoWhatsappTemplateButtonParamsItem şeması.
-    class CreateNotificationDtoWhatsappTemplateButtonParamsItem < HeroSignal::BaseModel
+    class CreateNotificationDtoWhatsappTemplateButtonParamsItem < Pushizo::BaseModel
       # Zorunlu.
       field "index", :index, :integer
       # Zorunlu. Değerler: "url", "quick_reply", "copy_code".
@@ -1882,7 +1882,7 @@ module HeroSignal
     end
 
     # CreateNotificationResult şeması.
-    class CreateNotificationResult < HeroSignal::BaseModel
+    class CreateNotificationResult < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu. Değerler: "queued", "processing", "completed", "cancelled", "failed".
@@ -1894,7 +1894,7 @@ module HeroSignal
     end
 
     # CreateSuppressionDto şeması.
-    class CreateSuppressionDto < HeroSignal::BaseModel
+    class CreateSuppressionDto < Pushizo::BaseModel
       # Zorunlu. Değerler: "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu.
@@ -1906,7 +1906,7 @@ module HeroSignal
     end
 
     # CreateTemplateDto şeması.
-    class CreateTemplateDto < HeroSignal::BaseModel
+    class CreateTemplateDto < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
       # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
@@ -1917,7 +1917,7 @@ module HeroSignal
     end
 
     # CreateTemplateDtoContent şeması.
-    class CreateTemplateDtoContent < HeroSignal::BaseModel
+    class CreateTemplateDtoContent < Pushizo::BaseModel
       field "headings", :headings, [:map, :string]
       field "contents", :contents, [:map, :string]
       field "subtitle", :subtitle, [:map, :string]
@@ -1978,7 +1978,7 @@ module HeroSignal
     end
 
     # CreateTemplateDtoContentButtonsItem şeması.
-    class CreateTemplateDtoContentButtonsItem < HeroSignal::BaseModel
+    class CreateTemplateDtoContentButtonsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -1988,7 +1988,7 @@ module HeroSignal
     end
 
     # CreateTemplateDtoContentRcsCard şeması.
-    class CreateTemplateDtoContentRcsCard < HeroSignal::BaseModel
+    class CreateTemplateDtoContentRcsCard < Pushizo::BaseModel
       field "title", :title, [:map, :string]
       field "description", :description, [:map, :string]
       field "media_url", :media_url, :string
@@ -1999,7 +1999,7 @@ module HeroSignal
     end
 
     # CreateTemplateDtoContentWebButtonsItem şeması.
-    class CreateTemplateDtoContentWebButtonsItem < HeroSignal::BaseModel
+    class CreateTemplateDtoContentWebButtonsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -2009,7 +2009,7 @@ module HeroSignal
     end
 
     # CreateTemplateDtoContentWhatsappInteractive şeması.
-    class CreateTemplateDtoContentWhatsappInteractive < HeroSignal::BaseModel
+    class CreateTemplateDtoContentWhatsappInteractive < Pushizo::BaseModel
       # Zorunlu. Değerler: "button", "list".
       field "type", :type, :string
       field "header", :header, :string
@@ -2019,7 +2019,7 @@ module HeroSignal
     end
 
     # CreateTemplateDtoContentWhatsappInteractiveButtonsItem şeması.
-    class CreateTemplateDtoContentWhatsappInteractiveButtonsItem < HeroSignal::BaseModel
+    class CreateTemplateDtoContentWhatsappInteractiveButtonsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -2027,7 +2027,7 @@ module HeroSignal
     end
 
     # CreateTemplateDtoContentWhatsappInteractiveList şeması.
-    class CreateTemplateDtoContentWhatsappInteractiveList < HeroSignal::BaseModel
+    class CreateTemplateDtoContentWhatsappInteractiveList < Pushizo::BaseModel
       # Zorunlu.
       field "button", :button, :string
       # Zorunlu.
@@ -2035,14 +2035,14 @@ module HeroSignal
     end
 
     # CreateTemplateDtoContentWhatsappInteractiveListSectionsItem şeması.
-    class CreateTemplateDtoContentWhatsappInteractiveListSectionsItem < HeroSignal::BaseModel
+    class CreateTemplateDtoContentWhatsappInteractiveListSectionsItem < Pushizo::BaseModel
       field "title", :title, :string
       # Zorunlu.
       field "rows", :rows, [:array, "CreateTemplateDtoContentWhatsappInteractiveListSectionsItemRowsItem"]
     end
 
     # CreateTemplateDtoContentWhatsappInteractiveListSectionsItemRowsItem şeması.
-    class CreateTemplateDtoContentWhatsappInteractiveListSectionsItemRowsItem < HeroSignal::BaseModel
+    class CreateTemplateDtoContentWhatsappInteractiveListSectionsItemRowsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -2051,7 +2051,7 @@ module HeroSignal
     end
 
     # CreateTemplateDtoContentWhatsappMedia şeması.
-    class CreateTemplateDtoContentWhatsappMedia < HeroSignal::BaseModel
+    class CreateTemplateDtoContentWhatsappMedia < Pushizo::BaseModel
       # Zorunlu. Değerler: "image", "video", "document", "audio".
       field "type", :type, :string
       # Zorunlu.
@@ -2060,7 +2060,7 @@ module HeroSignal
     end
 
     # CreateTemplateDtoContentWhatsappTemplate şeması.
-    class CreateTemplateDtoContentWhatsappTemplate < HeroSignal::BaseModel
+    class CreateTemplateDtoContentWhatsappTemplate < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
       # Zorunlu.
@@ -2071,7 +2071,7 @@ module HeroSignal
     end
 
     # CreateTemplateDtoContentWhatsappTemplateButtonParamsItem şeması.
-    class CreateTemplateDtoContentWhatsappTemplateButtonParamsItem < HeroSignal::BaseModel
+    class CreateTemplateDtoContentWhatsappTemplateButtonParamsItem < Pushizo::BaseModel
       # Zorunlu.
       field "index", :index, :integer
       # Zorunlu. Değerler: "url", "quick_reply", "copy_code".
@@ -2081,7 +2081,7 @@ module HeroSignal
     end
 
     # CreateWarmupPlanDto şeması.
-    class CreateWarmupPlanDto < HeroSignal::BaseModel
+    class CreateWarmupPlanDto < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
       # Zorunlu. Değerler: "domain", "ip".
@@ -2096,7 +2096,7 @@ module HeroSignal
     end
 
     # CreateWarmupPlanDtoCurve şeması.
-    class CreateWarmupPlanDtoCurve < HeroSignal::BaseModel
+    class CreateWarmupPlanDtoCurve < Pushizo::BaseModel
       # Zorunlu.
       field "start", :start, :integer
       # Zorunlu.
@@ -2106,7 +2106,7 @@ module HeroSignal
     end
 
     # CreateWarmupPlanDtoProviderShares şeması.
-    class CreateWarmupPlanDtoProviderShares < HeroSignal::BaseModel
+    class CreateWarmupPlanDtoProviderShares < Pushizo::BaseModel
       # Zorunlu.
       field "gmail", :gmail, :number
       # Zorunlu.
@@ -2118,7 +2118,7 @@ module HeroSignal
     end
 
     # CreateWebhookDto şeması.
-    class CreateWebhookDto < HeroSignal::BaseModel
+    class CreateWebhookDto < Pushizo::BaseModel
       # Zorunlu.
       field "url", :url, :string
       field "description", :description, :string
@@ -2134,12 +2134,12 @@ module HeroSignal
     end
 
     # CreateWebhookDtoEventFilters şeması.
-    class CreateWebhookDtoEventFilters < HeroSignal::BaseModel
+    class CreateWebhookDtoEventFilters < Pushizo::BaseModel
       field "event_names", :event_names, [:array, :string]
     end
 
     # Olay filtresi: { match: all|any, conditions: [{ field, op, value? }] }.
-    class CreateWebhookDtoFilters < HeroSignal::BaseModel
+    class CreateWebhookDtoFilters < Pushizo::BaseModel
       # Zorunlu. Değerler: "all", "any".
       field "match", :match, :string
       # Zorunlu.
@@ -2147,7 +2147,7 @@ module HeroSignal
     end
 
     # CreateWebhookDtoFiltersConditionsItem şeması.
-    class CreateWebhookDtoFiltersConditionsItem < HeroSignal::BaseModel
+    class CreateWebhookDtoFiltersConditionsItem < Pushizo::BaseModel
       # Zorunlu.
       field "field", :field, :string
       # Zorunlu. Değerler: "eq", "neq", "in", "not_in", "starts_with", "contains", "exists", "not_exists".
@@ -2156,7 +2156,7 @@ module HeroSignal
     end
 
     # DataFeed şeması.
-    class DataFeed < HeroSignal::BaseModel
+    class DataFeed < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -2190,13 +2190,13 @@ module HeroSignal
     end
 
     # DataFeedList şeması.
-    class DataFeedList < HeroSignal::BaseModel
+    class DataFeedList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "DataFeed"]
     end
 
     # DataFeedTestResult şeması.
-    class DataFeedTestResult < HeroSignal::BaseModel
+    class DataFeedTestResult < Pushizo::BaseModel
       # Zorunlu. Değerler: "ok", "cached", "timeout", "error", "circuit_open", "blocked", "invalid_json", "too_large", "http_error".
       field "status", :status, :string
       # Zorunlu.
@@ -2216,7 +2216,7 @@ module HeroSignal
     end
 
     # DataFeedTestResultUser şeması.
-    class DataFeedTestResultUser < HeroSignal::BaseModel
+    class DataFeedTestResultUser < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -2224,14 +2224,14 @@ module HeroSignal
     end
 
     # DeliverabilitySettingsDto şeması.
-    class DeliverabilitySettingsDto < HeroSignal::BaseModel
+    class DeliverabilitySettingsDto < Pushizo::BaseModel
       field "bcc_address", :bcc_address, :string
       field "validation", :validation, "DeliverabilitySettingsDtoValidation"
       field "verifier", :verifier, "DeliverabilitySettingsDtoVerifier"
     end
 
     # DeliverabilitySettingsDtoValidation şeması.
-    class DeliverabilitySettingsDtoValidation < HeroSignal::BaseModel
+    class DeliverabilitySettingsDtoValidation < Pushizo::BaseModel
       # Zorunlu.
       field "enabled", :enabled, :boolean
       field "check_mx", :check_mx, :boolean
@@ -2240,14 +2240,14 @@ module HeroSignal
     end
 
     # DeliverabilitySettingsDtoVerifier şeması.
-    class DeliverabilitySettingsDtoVerifier < HeroSignal::BaseModel
+    class DeliverabilitySettingsDtoVerifier < Pushizo::BaseModel
       # Zorunlu. Değerler: "zerobounce", "neverbounce", "mock".
       field "provider", :provider, :string
       field "api_key", :api_key, :string
     end
 
     # Delivery şeması.
-    class Delivery < HeroSignal::BaseModel
+    class Delivery < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -2289,7 +2289,7 @@ module HeroSignal
     end
 
     # DeliveryList şeması.
-    class DeliveryList < HeroSignal::BaseModel
+    class DeliveryList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "Delivery"]
       # Zorunlu.
@@ -2299,7 +2299,7 @@ module HeroSignal
     end
 
     # EmailAddressCheck şeması.
-    class EmailAddressCheck < HeroSignal::BaseModel
+    class EmailAddressCheck < Pushizo::BaseModel
       # Zorunlu.
       field "ok", :ok, :boolean
       # Zorunlu. Değerler: "syntax", "no_mx", "disposable", "role", "verifier_invalid".
@@ -2313,7 +2313,7 @@ module HeroSignal
     end
 
     # EmailDeliverabilitySettings şeması.
-    class EmailDeliverabilitySettings < HeroSignal::BaseModel
+    class EmailDeliverabilitySettings < Pushizo::BaseModel
       # Zorunlu.
       field "bcc_address", :bcc_address, :string
       # Zorunlu.
@@ -2323,7 +2323,7 @@ module HeroSignal
     end
 
     # EmailDeliverabilitySettingsValidation şeması.
-    class EmailDeliverabilitySettingsValidation < HeroSignal::BaseModel
+    class EmailDeliverabilitySettingsValidation < Pushizo::BaseModel
       # Zorunlu.
       field "enabled", :enabled, :boolean
       # Zorunlu.
@@ -2335,7 +2335,7 @@ module HeroSignal
     end
 
     # EmailDeliverabilitySettingsVerifier şeması.
-    class EmailDeliverabilitySettingsVerifier < HeroSignal::BaseModel
+    class EmailDeliverabilitySettingsVerifier < Pushizo::BaseModel
       # Zorunlu. Değerler: "zerobounce", "neverbounce", "mock".
       field "provider", :provider, :string
       # Zorunlu.
@@ -2343,7 +2343,7 @@ module HeroSignal
     end
 
     # EmailWarmupPlan şeması.
-    class EmailWarmupPlan < HeroSignal::BaseModel
+    class EmailWarmupPlan < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -2373,13 +2373,13 @@ module HeroSignal
     end
 
     # EmailWarmupPlanList şeması.
-    class EmailWarmupPlanList < HeroSignal::BaseModel
+    class EmailWarmupPlanList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "EmailWarmupPlan"]
     end
 
     # EmailWarmupPlanToday şeması.
-    class EmailWarmupPlanToday < HeroSignal::BaseModel
+    class EmailWarmupPlanToday < Pushizo::BaseModel
       # Zorunlu.
       field "day", :day, :string
       # Zorunlu.
@@ -2393,7 +2393,7 @@ module HeroSignal
     end
 
     # EmailWarmupPlanTodayBucketsValue şeması.
-    class EmailWarmupPlanTodayBucketsValue < HeroSignal::BaseModel
+    class EmailWarmupPlanTodayBucketsValue < Pushizo::BaseModel
       # Zorunlu.
       field "limit", :limit, :integer
       # Zorunlu.
@@ -2401,13 +2401,13 @@ module HeroSignal
     end
 
     # EmailWarmupUsage şeması.
-    class EmailWarmupUsage < HeroSignal::BaseModel
+    class EmailWarmupUsage < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "EmailWarmupUsageDataItem"]
     end
 
     # EmailWarmupUsageDataItem şeması.
-    class EmailWarmupUsageDataItem < HeroSignal::BaseModel
+    class EmailWarmupUsageDataItem < Pushizo::BaseModel
       # Zorunlu.
       field "day", :day, :string
       # Zorunlu.
@@ -2419,7 +2419,7 @@ module HeroSignal
     end
 
     # EndLiveActivityDto şeması.
-    class EndLiveActivityDto < HeroSignal::BaseModel
+    class EndLiveActivityDto < Pushizo::BaseModel
       # Zorunlu.
       field "activity_id", :activity_id, :string
       field "content_state", :content_state, [:map, :any]
@@ -2433,14 +2433,14 @@ module HeroSignal
     end
 
     # EndLiveActivityDtoAlert şeması.
-    class EndLiveActivityDtoAlert < HeroSignal::BaseModel
+    class EndLiveActivityDtoAlert < Pushizo::BaseModel
       field "title", :title, [:map, :string]
       field "body", :body, [:map, :string]
       field "sound", :sound, :string
     end
 
     # EngagementReport şeması.
-    class EngagementReport < HeroSignal::BaseModel
+    class EngagementReport < Pushizo::BaseModel
       # Zorunlu.
       field "from", :from, :string
       # Zorunlu.
@@ -2458,7 +2458,7 @@ module HeroSignal
     end
 
     # EngagementReportCellsItem şeması.
-    class EngagementReportCellsItem < HeroSignal::BaseModel
+    class EngagementReportCellsItem < Pushizo::BaseModel
       # Zorunlu.
       field "weekday", :weekday, :integer
       # Zorunlu.
@@ -2470,7 +2470,7 @@ module HeroSignal
     end
 
     # EngagementReportPrevious şeması.
-    class EngagementReportPrevious < HeroSignal::BaseModel
+    class EngagementReportPrevious < Pushizo::BaseModel
       # Zorunlu.
       field "opened", :opened, :integer
       # Zorunlu.
@@ -2478,7 +2478,7 @@ module HeroSignal
     end
 
     # EngagementReportRowsItem şeması.
-    class EngagementReportRowsItem < HeroSignal::BaseModel
+    class EngagementReportRowsItem < Pushizo::BaseModel
       # Zorunlu.
       field "date", :date, :string
       # Zorunlu.
@@ -2488,7 +2488,7 @@ module HeroSignal
     end
 
     # EngagementReportTotals şeması.
-    class EngagementReportTotals < HeroSignal::BaseModel
+    class EngagementReportTotals < Pushizo::BaseModel
       # Zorunlu.
       field "opened", :opened, :integer
       # Zorunlu.
@@ -2496,7 +2496,7 @@ module HeroSignal
     end
 
     # EstimateAudienceDto şeması.
-    class EstimateAudienceDto < HeroSignal::BaseModel
+    class EstimateAudienceDto < Pushizo::BaseModel
       field "app_id", :app_id, :string
       # Zorunlu.
       field "target", :target, "EstimateAudienceDtoTarget"
@@ -2504,7 +2504,7 @@ module HeroSignal
     end
 
     # EstimateAudienceDtoTarget şeması.
-    class EstimateAudienceDtoTarget < HeroSignal::BaseModel
+    class EstimateAudienceDtoTarget < Pushizo::BaseModel
       field "all", :all, :boolean
       field "include_subscription_ids", :include_subscription_ids, [:array, :string]
       field "include_external_ids", :include_external_ids, [:array, :string]
@@ -2520,7 +2520,7 @@ module HeroSignal
     end
 
     # EstimateAudienceResult şeması.
-    class EstimateAudienceResult < HeroSignal::BaseModel
+    class EstimateAudienceResult < Pushizo::BaseModel
       # Zorunlu.
       field "recipients", :recipients, :integer
       # Zorunlu.
@@ -2532,7 +2532,7 @@ module HeroSignal
     end
 
     # EventDefinition şeması.
-    class EventDefinition < HeroSignal::BaseModel
+    class EventDefinition < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -2564,7 +2564,7 @@ module HeroSignal
     end
 
     # EventDefinitionDetail şeması.
-    class EventDefinitionDetail < HeroSignal::BaseModel
+    class EventDefinitionDetail < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -2600,7 +2600,7 @@ module HeroSignal
     end
 
     # EventDefinitionDetailDailyItem şeması.
-    class EventDefinitionDetailDailyItem < HeroSignal::BaseModel
+    class EventDefinitionDetailDailyItem < Pushizo::BaseModel
       # Zorunlu.
       field "date", :date, :string
       # Zorunlu.
@@ -2610,7 +2610,7 @@ module HeroSignal
     end
 
     # EventDefinitionDetailPropertiesItem şeması.
-    class EventDefinitionDetailPropertiesItem < HeroSignal::BaseModel
+    class EventDefinitionDetailPropertiesItem < Pushizo::BaseModel
       # Zorunlu.
       field "key", :key, :string
       # Zorunlu.
@@ -2620,7 +2620,7 @@ module HeroSignal
     end
 
     # EventDefinitionDetailPropertiesItemValuesItem şeması.
-    class EventDefinitionDetailPropertiesItemValuesItem < HeroSignal::BaseModel
+    class EventDefinitionDetailPropertiesItemValuesItem < Pushizo::BaseModel
       # Zorunlu.
       field "value", :value, :string
       # Zorunlu.
@@ -2628,7 +2628,7 @@ module HeroSignal
     end
 
     # EventDefinitionList şeması.
-    class EventDefinitionList < HeroSignal::BaseModel
+    class EventDefinitionList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "EventDefinition"]
       # Zorunlu.
@@ -2638,13 +2638,13 @@ module HeroSignal
     end
 
     # EventsAccepted şeması.
-    class EventsAccepted < HeroSignal::BaseModel
+    class EventsAccepted < Pushizo::BaseModel
       # Zorunlu.
       field "accepted", :accepted, :integer
     end
 
     # EventsReport şeması.
-    class EventsReport < HeroSignal::BaseModel
+    class EventsReport < Pushizo::BaseModel
       # Zorunlu.
       field "from", :from, :string
       # Zorunlu.
@@ -2662,7 +2662,7 @@ module HeroSignal
     end
 
     # EventsReportPrevious şeması.
-    class EventsReportPrevious < HeroSignal::BaseModel
+    class EventsReportPrevious < Pushizo::BaseModel
       # Zorunlu.
       field "count", :count, :integer
       # Zorunlu.
@@ -2670,7 +2670,7 @@ module HeroSignal
     end
 
     # EventsReportRowsItem şeması.
-    class EventsReportRowsItem < HeroSignal::BaseModel
+    class EventsReportRowsItem < Pushizo::BaseModel
       # Zorunlu.
       field "key", :key, :string
       # Zorunlu.
@@ -2680,7 +2680,7 @@ module HeroSignal
     end
 
     # EventsReportTotals şeması.
-    class EventsReportTotals < HeroSignal::BaseModel
+    class EventsReportTotals < Pushizo::BaseModel
       # Zorunlu.
       field "count", :count, :integer
       # Zorunlu.
@@ -2688,7 +2688,7 @@ module HeroSignal
     end
 
     # Export şeması.
-    class Export < HeroSignal::BaseModel
+    class Export < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -2716,7 +2716,7 @@ module HeroSignal
     end
 
     # ExportFilters şeması.
-    class ExportFilters < HeroSignal::BaseModel
+    class ExportFilters < Pushizo::BaseModel
       field "from", :from, :string
       field "to", :to, :string
       field "name", :name, :string
@@ -2729,7 +2729,7 @@ module HeroSignal
     end
 
     # ExportList şeması.
-    class ExportList < HeroSignal::BaseModel
+    class ExportList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "Export"]
       # Zorunlu.
@@ -2739,7 +2739,7 @@ module HeroSignal
     end
 
     # FunnelBodyDto şeması.
-    class FunnelBodyDto < HeroSignal::BaseModel
+    class FunnelBodyDto < Pushizo::BaseModel
       # Zorunlu.
       field "steps", :steps, [:array, "FunnelBodyDtoStepsItem"]
       field "from", :from, :string
@@ -2751,14 +2751,14 @@ module HeroSignal
     end
 
     # FunnelBodyDtoStepsItem şeması.
-    class FunnelBodyDtoStepsItem < HeroSignal::BaseModel
+    class FunnelBodyDtoStepsItem < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
       field "where", :where, "FunnelBodyDtoStepsItemWhere"
     end
 
     # FunnelBodyDtoStepsItemWhere şeması.
-    class FunnelBodyDtoStepsItemWhere < HeroSignal::BaseModel
+    class FunnelBodyDtoStepsItemWhere < Pushizo::BaseModel
       # Zorunlu.
       field "key", :key, :string
       # Zorunlu.
@@ -2766,7 +2766,7 @@ module HeroSignal
     end
 
     # FunnelReport şeması.
-    class FunnelReport < HeroSignal::BaseModel
+    class FunnelReport < Pushizo::BaseModel
       # Zorunlu.
       field "from", :from, :string
       # Zorunlu.
@@ -2782,7 +2782,7 @@ module HeroSignal
     end
 
     # FunnelReportPrevious şeması.
-    class FunnelReportPrevious < HeroSignal::BaseModel
+    class FunnelReportPrevious < Pushizo::BaseModel
       # Zorunlu.
       field "steps", :steps, [:array, :integer]
       # Zorunlu.
@@ -2790,7 +2790,7 @@ module HeroSignal
     end
 
     # FunnelReportStepsItem şeması.
-    class FunnelReportStepsItem < HeroSignal::BaseModel
+    class FunnelReportStepsItem < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
       # Zorunlu.
@@ -2802,7 +2802,7 @@ module HeroSignal
     end
 
     # IdentityKey şeması.
-    class IdentityKey < HeroSignal::BaseModel
+    class IdentityKey < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -2820,13 +2820,13 @@ module HeroSignal
     end
 
     # IdentityKeyList şeması.
-    class IdentityKeyList < HeroSignal::BaseModel
+    class IdentityKeyList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "IdentityKey"]
     end
 
     # Import şeması.
-    class Import < HeroSignal::BaseModel
+    class Import < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -2852,7 +2852,7 @@ module HeroSignal
     end
 
     # ImportList şeması.
-    class ImportList < HeroSignal::BaseModel
+    class ImportList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "Import"]
       # Zorunlu.
@@ -2862,7 +2862,7 @@ module HeroSignal
     end
 
     # ImportStats şeması.
-    class ImportStats < HeroSignal::BaseModel
+    class ImportStats < Pushizo::BaseModel
       field "processed", :processed, :integer
       field "created_users", :created_users, :integer
       field "updated_users", :updated_users, :integer
@@ -2872,7 +2872,7 @@ module HeroSignal
     end
 
     # InAppMessage şeması.
-    class InAppMessage < HeroSignal::BaseModel
+    class InAppMessage < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -2916,7 +2916,7 @@ module HeroSignal
     end
 
     # InAppMessageAbTest şeması.
-    class InAppMessageAbTest < HeroSignal::BaseModel
+    class InAppMessageAbTest < Pushizo::BaseModel
       field "winner", :winner, "InAppMessageAbTestWinner"
       # Zorunlu.
       field "winner_variant_id", :winner_variant_id, :string
@@ -2927,7 +2927,7 @@ module HeroSignal
     end
 
     # InAppMessageAbTestWinner şeması.
-    class InAppMessageAbTestWinner < HeroSignal::BaseModel
+    class InAppMessageAbTestWinner < Pushizo::BaseModel
       # Zorunlu. Değerler: "manual", "auto".
       field "mode", :mode, :string
       field "min_impressions", :min_impressions, :integer
@@ -2935,13 +2935,13 @@ module HeroSignal
     end
 
     # InAppMessageAudience şeması.
-    class InAppMessageAudience < HeroSignal::BaseModel
+    class InAppMessageAudience < Pushizo::BaseModel
       field "included_segments", :included_segments, [:array, :string]
       field "excluded_segments", :excluded_segments, [:array, :string]
     end
 
     # InAppMessageDisplay şeması.
-    class InAppMessageDisplay < HeroSignal::BaseModel
+    class InAppMessageDisplay < Pushizo::BaseModel
       # Zorunlu. Değerler: "modal", "banner_top", "banner_bottom", "fullscreen".
       field "layout", :layout, :string
       field "background_color", :background_color, :string
@@ -2957,14 +2957,14 @@ module HeroSignal
     end
 
     # InAppMessageFrequency şeması.
-    class InAppMessageFrequency < HeroSignal::BaseModel
+    class InAppMessageFrequency < Pushizo::BaseModel
       field "max_impressions", :max_impressions, :integer
       field "min_interval_seconds", :min_interval_seconds, :integer
       field "stop_after_interaction", :stop_after_interaction, :boolean
     end
 
     # InAppMessagePage şeması.
-    class InAppMessagePage < HeroSignal::BaseModel
+    class InAppMessagePage < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "InAppMessage"]
       # Zorunlu.
@@ -2974,7 +2974,7 @@ module HeroSignal
     end
 
     # InAppMessageStats şeması.
-    class InAppMessageStats < HeroSignal::BaseModel
+    class InAppMessageStats < Pushizo::BaseModel
       # Zorunlu.
       field "impressions", :impressions, :integer
       # Zorunlu.
@@ -2988,7 +2988,7 @@ module HeroSignal
     end
 
     # InAppMessageVariantSignificance şeması.
-    class InAppMessageVariantSignificance < HeroSignal::BaseModel
+    class InAppMessageVariantSignificance < Pushizo::BaseModel
       # Zorunlu.
       field "leader", :leader, :string
       # Zorunlu.
@@ -2998,7 +2998,7 @@ module HeroSignal
     end
 
     # InAppMessageVariantsItem şeması.
-    class InAppMessageVariantsItem < HeroSignal::BaseModel
+    class InAppMessageVariantsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -3010,7 +3010,7 @@ module HeroSignal
     end
 
     # InAppMessageVariantsItemDisplay şeması.
-    class InAppMessageVariantsItemDisplay < HeroSignal::BaseModel
+    class InAppMessageVariantsItemDisplay < Pushizo::BaseModel
       # Zorunlu. Değerler: "modal", "banner_top", "banner_bottom", "fullscreen".
       field "layout", :layout, :string
       field "background_color", :background_color, :string
@@ -3026,7 +3026,7 @@ module HeroSignal
     end
 
     # InAppMessageVariantStatsItem şeması.
-    class InAppMessageVariantStatsItem < HeroSignal::BaseModel
+    class InAppMessageVariantStatsItem < Pushizo::BaseModel
       # Zorunlu.
       field "variant_id", :variant_id, :string
       # Zorunlu.
@@ -3038,19 +3038,19 @@ module HeroSignal
     end
 
     # InAppStatusDto şeması.
-    class InAppStatusDto < HeroSignal::BaseModel
+    class InAppStatusDto < Pushizo::BaseModel
       # Zorunlu. Değerler: "draft", "active", "paused", "archived".
       field "status", :status, :string
     end
 
     # InAppWinnerDto şeması.
-    class InAppWinnerDto < HeroSignal::BaseModel
+    class InAppWinnerDto < Pushizo::BaseModel
       # Zorunlu.
       field "variant_id", :variant_id, :string
     end
 
     # InboxItem şeması.
-    class InboxItem < HeroSignal::BaseModel
+    class InboxItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -3078,7 +3078,7 @@ module HeroSignal
     end
 
     # InboxPage şeması.
-    class InboxPage < HeroSignal::BaseModel
+    class InboxPage < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "InboxItem"]
       # Zorunlu.
@@ -3090,7 +3090,7 @@ module HeroSignal
     end
 
     # InboxReadAllResult şeması.
-    class InboxReadAllResult < HeroSignal::BaseModel
+    class InboxReadAllResult < Pushizo::BaseModel
       # Zorunlu.
       field "updated", :updated, :integer
       # Zorunlu.
@@ -3098,13 +3098,13 @@ module HeroSignal
     end
 
     # IntegrationOk şeması.
-    class IntegrationOk < HeroSignal::BaseModel
+    class IntegrationOk < Pushizo::BaseModel
       # Zorunlu.
       field "ok", :ok, :boolean
     end
 
     # Journey şeması.
-    class Journey < HeroSignal::BaseModel
+    class Journey < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -3134,7 +3134,7 @@ module HeroSignal
     end
 
     # JourneyDetail şeması.
-    class JourneyDetail < HeroSignal::BaseModel
+    class JourneyDetail < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -3168,7 +3168,7 @@ module HeroSignal
     end
 
     # JourneyDetailEditing şeması.
-    class JourneyDetailEditing < HeroSignal::BaseModel
+    class JourneyDetailEditing < Pushizo::BaseModel
       # Zorunlu.
       field "version", :version, :integer
       # Zorunlu.
@@ -3186,7 +3186,7 @@ module HeroSignal
     end
 
     # JourneyDetailIssuesItem şeması.
-    class JourneyDetailIssuesItem < HeroSignal::BaseModel
+    class JourneyDetailIssuesItem < Pushizo::BaseModel
       # Zorunlu.
       field "code", :code, :string
       field "node_id", :node_id, :string
@@ -3196,7 +3196,7 @@ module HeroSignal
     end
 
     # JourneyDetailSummary şeması.
-    class JourneyDetailSummary < HeroSignal::BaseModel
+    class JourneyDetailSummary < Pushizo::BaseModel
       # Zorunlu.
       field "runs_total", :runs_total, :integer
       # Zorunlu.
@@ -3212,7 +3212,7 @@ module HeroSignal
     end
 
     # JourneyPage şeması.
-    class JourneyPage < HeroSignal::BaseModel
+    class JourneyPage < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "Journey"]
       # Zorunlu.
@@ -3222,7 +3222,7 @@ module HeroSignal
     end
 
     # JourneyPublishResult şeması.
-    class JourneyPublishResult < HeroSignal::BaseModel
+    class JourneyPublishResult < Pushizo::BaseModel
       # Zorunlu.
       field "journey", :journey, "Journey"
       # Zorunlu.
@@ -3232,7 +3232,7 @@ module HeroSignal
     end
 
     # JourneyPublishResultIssuesItem şeması.
-    class JourneyPublishResultIssuesItem < HeroSignal::BaseModel
+    class JourneyPublishResultIssuesItem < Pushizo::BaseModel
       # Zorunlu.
       field "code", :code, :string
       field "node_id", :node_id, :string
@@ -3242,7 +3242,7 @@ module HeroSignal
     end
 
     # JourneyRun şeması.
-    class JourneyRun < HeroSignal::BaseModel
+    class JourneyRun < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -3274,7 +3274,7 @@ module HeroSignal
     end
 
     # JourneyRunDetail şeması.
-    class JourneyRunDetail < HeroSignal::BaseModel
+    class JourneyRunDetail < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -3310,7 +3310,7 @@ module HeroSignal
     end
 
     # JourneyRunDetailStepsItem şeması.
-    class JourneyRunDetailStepsItem < HeroSignal::BaseModel
+    class JourneyRunDetailStepsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -3330,7 +3330,7 @@ module HeroSignal
     end
 
     # JourneyRunPage şeması.
-    class JourneyRunPage < HeroSignal::BaseModel
+    class JourneyRunPage < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "JourneyRun"]
       # Zorunlu.
@@ -3340,7 +3340,7 @@ module HeroSignal
     end
 
     # JourneysCreateBody şeması.
-    class JourneysCreateBody < HeroSignal::BaseModel
+    class JourneysCreateBody < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
       field "description", :description, :string
@@ -3351,7 +3351,7 @@ module HeroSignal
     end
 
     # React Flow uyumlu journey grafı: { nodes: [{ id, type, position, data }], edges: [{ id, source, target, sourceHandle }] } (docs/journeys.md)
-    class JourneysCreateBodyGraph < HeroSignal::BaseModel
+    class JourneysCreateBodyGraph < Pushizo::BaseModel
       # Zorunlu.
       field "nodes", :nodes, [:array, [:map, :any]]
       # Zorunlu.
@@ -3359,7 +3359,7 @@ module HeroSignal
     end
 
     # JourneysSaveDraftBody şeması.
-    class JourneysSaveDraftBody < HeroSignal::BaseModel
+    class JourneysSaveDraftBody < Pushizo::BaseModel
       # Zorunlu. React Flow uyumlu journey grafı: { nodes: [{ id, type, position, data }], edges: [{ id, source, target, sourceHandle }] } (docs/journeys.md)
       field "graph", :graph, "JourneysSaveDraftBodyGraph"
       # Yeniden giriş, yalnızca yeni girenler, çıkış kuralları, çıkış tag'leri, hedefler, takvim (docs/journeys.md)
@@ -3367,7 +3367,7 @@ module HeroSignal
     end
 
     # React Flow uyumlu journey grafı: { nodes: [{ id, type, position, data }], edges: [{ id, source, target, sourceHandle }] } (docs/journeys.md)
-    class JourneysSaveDraftBodyGraph < HeroSignal::BaseModel
+    class JourneysSaveDraftBodyGraph < Pushizo::BaseModel
       # Zorunlu.
       field "nodes", :nodes, [:array, [:map, :any]]
       # Zorunlu.
@@ -3375,7 +3375,7 @@ module HeroSignal
     end
 
     # JourneyStats şeması.
-    class JourneyStats < HeroSignal::BaseModel
+    class JourneyStats < Pushizo::BaseModel
       # Zorunlu.
       field "version", :version, :integer
       # Zorunlu.
@@ -3389,7 +3389,7 @@ module HeroSignal
     end
 
     # JourneyStatsGoalsItem şeması.
-    class JourneyStatsGoalsItem < HeroSignal::BaseModel
+    class JourneyStatsGoalsItem < Pushizo::BaseModel
       # Zorunlu.
       field "goal_id", :goal_id, :string
       # Zorunlu.
@@ -3397,7 +3397,7 @@ module HeroSignal
     end
 
     # JourneyStatsNodesItem şeması.
-    class JourneyStatsNodesItem < HeroSignal::BaseModel
+    class JourneyStatsNodesItem < Pushizo::BaseModel
       # Zorunlu.
       field "node_id", :node_id, :string
       # Zorunlu.
@@ -3419,7 +3419,7 @@ module HeroSignal
     end
 
     # JourneyStatsNodesItemVariantsItem şeması.
-    class JourneyStatsNodesItemVariantsItem < HeroSignal::BaseModel
+    class JourneyStatsNodesItemVariantsItem < Pushizo::BaseModel
       # Zorunlu.
       field "variant_id", :variant_id, :string
       # Zorunlu.
@@ -3435,7 +3435,7 @@ module HeroSignal
     end
 
     # JourneyStatsSummary şeması.
-    class JourneyStatsSummary < HeroSignal::BaseModel
+    class JourneyStatsSummary < Pushizo::BaseModel
       # Zorunlu.
       field "runs_total", :runs_total, :integer
       # Zorunlu.
@@ -3455,7 +3455,7 @@ module HeroSignal
     end
 
     # JourneySummary şeması.
-    class JourneySummary < HeroSignal::BaseModel
+    class JourneySummary < Pushizo::BaseModel
       # Zorunlu.
       field "runs_total", :runs_total, :integer
       # Zorunlu.
@@ -3471,7 +3471,7 @@ module HeroSignal
     end
 
     # JourneyTriggerResult şeması.
-    class JourneyTriggerResult < HeroSignal::BaseModel
+    class JourneyTriggerResult < Pushizo::BaseModel
       # Zorunlu.
       field "entered", :entered, :boolean
       # Zorunlu.
@@ -3481,13 +3481,13 @@ module HeroSignal
     end
 
     # JourneyVersionList şeması.
-    class JourneyVersionList < HeroSignal::BaseModel
+    class JourneyVersionList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "JourneyVersionListDataItem"]
     end
 
     # JourneyVersionListDataItem şeması.
-    class JourneyVersionListDataItem < HeroSignal::BaseModel
+    class JourneyVersionListDataItem < Pushizo::BaseModel
       # Zorunlu.
       field "version", :version, :integer
       # Zorunlu.
@@ -3505,7 +3505,7 @@ module HeroSignal
     end
 
     # LiveActivitySendResult şeması.
-    class LiveActivitySendResult < HeroSignal::BaseModel
+    class LiveActivitySendResult < Pushizo::BaseModel
       # Zorunlu.
       field "message_id", :message_id, :string
       # Zorunlu.
@@ -3517,13 +3517,13 @@ module HeroSignal
     end
 
     # LiveActivityTokenResult şeması.
-    class LiveActivityTokenResult < HeroSignal::BaseModel
+    class LiveActivityTokenResult < Pushizo::BaseModel
       # Zorunlu.
       field "ok", :ok, :boolean
     end
 
     # LiveActivityType şeması.
-    class LiveActivityType < HeroSignal::BaseModel
+    class LiveActivityType < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -3543,7 +3543,7 @@ module HeroSignal
     end
 
     # LiveActivityTypeAttributesSchema şeması.
-    class LiveActivityTypeAttributesSchema < HeroSignal::BaseModel
+    class LiveActivityTypeAttributesSchema < Pushizo::BaseModel
       # Zorunlu. Değerler: "object".
       field "type", :type, :string
       # Zorunlu.
@@ -3552,7 +3552,7 @@ module HeroSignal
     end
 
     # LiveActivityTypeAttributesSchemaPropertiesValue şeması.
-    class LiveActivityTypeAttributesSchemaPropertiesValue < HeroSignal::BaseModel
+    class LiveActivityTypeAttributesSchemaPropertiesValue < Pushizo::BaseModel
       # Zorunlu. Değerler: "string", "number", "integer", "boolean".
       field "type", :type, :string
       field "enum", :enum, [:array, :any]
@@ -3563,7 +3563,7 @@ module HeroSignal
     end
 
     # LiveActivityTypeContentStateSchema şeması.
-    class LiveActivityTypeContentStateSchema < HeroSignal::BaseModel
+    class LiveActivityTypeContentStateSchema < Pushizo::BaseModel
       # Zorunlu. Değerler: "object".
       field "type", :type, :string
       # Zorunlu.
@@ -3572,7 +3572,7 @@ module HeroSignal
     end
 
     # LiveActivityTypeContentStateSchemaPropertiesValue şeması.
-    class LiveActivityTypeContentStateSchemaPropertiesValue < HeroSignal::BaseModel
+    class LiveActivityTypeContentStateSchemaPropertiesValue < Pushizo::BaseModel
       # Zorunlu. Değerler: "string", "number", "integer", "boolean".
       field "type", :type, :string
       field "enum", :enum, [:array, :any]
@@ -3583,13 +3583,13 @@ module HeroSignal
     end
 
     # LiveActivityTypeList şeması.
-    class LiveActivityTypeList < HeroSignal::BaseModel
+    class LiveActivityTypeList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "LiveActivityType"]
     end
 
     # McpCreateCampaignDraftBody şeması.
-    class McpCreateCampaignDraftBody < HeroSignal::BaseModel
+    class McpCreateCampaignDraftBody < Pushizo::BaseModel
       field "name", :name, :string
       # Değerler: "one_time", "scheduled", "recurring".
       field "type", :type, :string
@@ -3610,14 +3610,14 @@ module HeroSignal
     end
 
     # McpCreateCampaignDraftBodyAbTest şeması.
-    class McpCreateCampaignDraftBodyAbTest < HeroSignal::BaseModel
+    class McpCreateCampaignDraftBodyAbTest < Pushizo::BaseModel
       field "enabled", :enabled, :boolean
       field "test_percentage", :test_percentage, :integer
       field "winner", :winner, "McpCreateCampaignDraftBodyAbTestWinner"
     end
 
     # McpCreateCampaignDraftBodyAbTestWinner şeması.
-    class McpCreateCampaignDraftBodyAbTestWinner < HeroSignal::BaseModel
+    class McpCreateCampaignDraftBodyAbTestWinner < Pushizo::BaseModel
       # Değerler: "manual", "auto".
       field "mode", :mode, :string
       # Değerler: "open_rate", "click_rate", "conversion_rate".
@@ -3626,7 +3626,7 @@ module HeroSignal
     end
 
     # McpCreateCampaignDraftBodyAudience şeması.
-    class McpCreateCampaignDraftBodyAudience < HeroSignal::BaseModel
+    class McpCreateCampaignDraftBodyAudience < Pushizo::BaseModel
       field "all", :all, :boolean
       field "segments", :segments, [:array, :string]
       field "exclude_segments", :exclude_segments, [:array, :string]
@@ -3638,14 +3638,14 @@ module HeroSignal
     end
 
     # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
-    class McpCreateCampaignDraftBodyAudienceFilters < HeroSignal::BaseModel
+    class McpCreateCampaignDraftBodyAudienceFilters < Pushizo::BaseModel
       field "all", :all, [:array, [:map, :any]]
       field "any", :any, [:array, [:map, :any]]
       field "none", :none, [:array, [:map, :any]]
     end
 
     # McpCreateCampaignDraftBodyDelivery şeması.
-    class McpCreateCampaignDraftBodyDelivery < HeroSignal::BaseModel
+    class McpCreateCampaignDraftBodyDelivery < Pushizo::BaseModel
       # Değerler: "immediate", "per_user_timezone", "optimized".
       field "timezone_mode", :timezone_mode, :string
       field "delivery_time_of_day", :delivery_time_of_day, :string
@@ -3660,14 +3660,14 @@ module HeroSignal
     end
 
     # McpCreateCampaignDraftBodyRecurrence şeması.
-    class McpCreateCampaignDraftBodyRecurrence < HeroSignal::BaseModel
+    class McpCreateCampaignDraftBodyRecurrence < Pushizo::BaseModel
       field "cron", :cron, :string
       field "until", :until_, :string
       field "timezone", :timezone, :string
     end
 
     # McpCreateCampaignDraftBodyVariantsItem şeması.
-    class McpCreateCampaignDraftBodyVariantsItem < HeroSignal::BaseModel
+    class McpCreateCampaignDraftBodyVariantsItem < Pushizo::BaseModel
       field "id", :id, :string
       # Zorunlu.
       field "name", :name, :string
@@ -3678,7 +3678,7 @@ module HeroSignal
     end
 
     # McpCreateSegmentDraftBody şeması.
-    class McpCreateSegmentDraftBody < HeroSignal::BaseModel
+    class McpCreateSegmentDraftBody < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
       field "description", :description, :string
@@ -3688,14 +3688,14 @@ module HeroSignal
     end
 
     # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
-    class McpCreateSegmentDraftBodyDefinition < HeroSignal::BaseModel
+    class McpCreateSegmentDraftBodyDefinition < Pushizo::BaseModel
       field "all", :all, [:array, [:map, :any]]
       field "any", :any, [:array, [:map, :any]]
       field "none", :none, [:array, [:map, :any]]
     end
 
     # Member şeması.
-    class Member < HeroSignal::BaseModel
+    class Member < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -3717,13 +3717,13 @@ module HeroSignal
     end
 
     # MemberList şeması.
-    class MemberList < HeroSignal::BaseModel
+    class MemberList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "Member"]
     end
 
     # Message şeması.
-    class Message < HeroSignal::BaseModel
+    class Message < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -3771,7 +3771,7 @@ module HeroSignal
     end
 
     # MessageCategory şeması.
-    class MessageCategory < HeroSignal::BaseModel
+    class MessageCategory < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -3797,13 +3797,13 @@ module HeroSignal
     end
 
     # MessageCategoryList şeması.
-    class MessageCategoryList < HeroSignal::BaseModel
+    class MessageCategoryList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "MessageCategory"]
     end
 
     # MessageCounts şeması.
-    class MessageCounts < HeroSignal::BaseModel
+    class MessageCounts < Pushizo::BaseModel
       field "targeted", :targeted, :integer
       field "suppressed", :suppressed, :integer
       field "sent", :sent, :integer
@@ -3821,7 +3821,7 @@ module HeroSignal
     end
 
     # MessageList şeması.
-    class MessageList < HeroSignal::BaseModel
+    class MessageList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "Message"]
       # Zorunlu.
@@ -3831,14 +3831,14 @@ module HeroSignal
     end
 
     # MessageRequestedBy şeması.
-    class MessageRequestedBy < HeroSignal::BaseModel
+    class MessageRequestedBy < Pushizo::BaseModel
       # Zorunlu. Değerler: "api_key", "account", "system".
       field "type", :type, :string
       field "id", :id, :string
     end
 
     # MessagesReport şeması.
-    class MessagesReport < HeroSignal::BaseModel
+    class MessagesReport < Pushizo::BaseModel
       # Zorunlu.
       field "from", :from, :string
       # Zorunlu.
@@ -3854,7 +3854,7 @@ module HeroSignal
     end
 
     # MessagesReportPrevious şeması.
-    class MessagesReportPrevious < HeroSignal::BaseModel
+    class MessagesReportPrevious < Pushizo::BaseModel
       # Zorunlu.
       field "sent", :sent, :integer
       # Zorunlu.
@@ -3876,7 +3876,7 @@ module HeroSignal
     end
 
     # MessagesReportRowsItem şeması.
-    class MessagesReportRowsItem < HeroSignal::BaseModel
+    class MessagesReportRowsItem < Pushizo::BaseModel
       # Zorunlu.
       field "key", :key, :string
       # Zorunlu.
@@ -3896,7 +3896,7 @@ module HeroSignal
     end
 
     # MessagesReportTotals şeması.
-    class MessagesReportTotals < HeroSignal::BaseModel
+    class MessagesReportTotals < Pushizo::BaseModel
       # Zorunlu.
       field "sent", :sent, :integer
       # Zorunlu.
@@ -3918,7 +3918,7 @@ module HeroSignal
     end
 
     # MessageVariantsItem şeması.
-    class MessageVariantsItem < HeroSignal::BaseModel
+    class MessageVariantsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -3930,13 +3930,13 @@ module HeroSignal
     end
 
     # Ok şeması.
-    class Ok < HeroSignal::BaseModel
+    class Ok < Pushizo::BaseModel
       # Zorunlu.
       field "ok", :ok, :boolean
     end
 
     # Org şeması.
-    class Org < HeroSignal::BaseModel
+    class Org < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -3958,7 +3958,7 @@ module HeroSignal
     end
 
     # OrgSettings şeması.
-    class OrgSettings < HeroSignal::BaseModel
+    class OrgSettings < Pushizo::BaseModel
       field "mfaRequired", :mfa_required, :boolean
       field "ipAllowlist", :ip_allowlist, [:array, :string]
       field "retentionDays", :retention_days, :integer
@@ -3967,13 +3967,13 @@ module HeroSignal
     end
 
     # OrgSettingsAuditStream şeması.
-    class OrgSettingsAuditStream < HeroSignal::BaseModel
+    class OrgSettingsAuditStream < Pushizo::BaseModel
       field "s3", :s3, :boolean
       field "webhookAppId", :webhook_app_id, :string
     end
 
     # OverviewStats şeması.
-    class OverviewStats < HeroSignal::BaseModel
+    class OverviewStats < Pushizo::BaseModel
       # Zorunlu. Değerler: "7d", "30d", "custom".
       field "range", :range, :string
       # Zorunlu.
@@ -3995,7 +3995,7 @@ module HeroSignal
     end
 
     # OverviewStatsChannelsItem şeması.
-    class OverviewStatsChannelsItem < HeroSignal::BaseModel
+    class OverviewStatsChannelsItem < Pushizo::BaseModel
       # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu. Değerler: "apns", "fcm", "hms", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "meta_whatsapp", "google_rbm", "mock".
@@ -4009,7 +4009,7 @@ module HeroSignal
     end
 
     # OverviewStatsKpis şeması.
-    class OverviewStatsKpis < HeroSignal::BaseModel
+    class OverviewStatsKpis < Pushizo::BaseModel
       # Zorunlu.
       field "sent", :sent, :integer
       # Zorunlu.
@@ -4035,7 +4035,7 @@ module HeroSignal
     end
 
     # OverviewStatsRecentCampaignsItem şeması.
-    class OverviewStatsRecentCampaignsItem < HeroSignal::BaseModel
+    class OverviewStatsRecentCampaignsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -4055,7 +4055,7 @@ module HeroSignal
     end
 
     # OverviewStatsSeriesItem şeması.
-    class OverviewStatsSeriesItem < HeroSignal::BaseModel
+    class OverviewStatsSeriesItem < Pushizo::BaseModel
       # Zorunlu.
       field "date", :date, :string
       # Zorunlu.
@@ -4069,7 +4069,7 @@ module HeroSignal
     end
 
     # OverviewStatsTopErrorsItem şeması.
-    class OverviewStatsTopErrorsItem < HeroSignal::BaseModel
+    class OverviewStatsTopErrorsItem < Pushizo::BaseModel
       # Zorunlu.
       field "code", :code, :string
       # Zorunlu.
@@ -4077,7 +4077,7 @@ module HeroSignal
     end
 
     # PatchEventDefinitionDto şeması.
-    class PatchEventDefinitionDto < HeroSignal::BaseModel
+    class PatchEventDefinitionDto < Pushizo::BaseModel
       field "display_name", :display_name, :string
       field "is_conversion", :is_conversion, :boolean
       field "outcome_unique", :outcome_unique, :boolean
@@ -4086,7 +4086,7 @@ module HeroSignal
     end
 
     # PatchSubscriptionDto şeması.
-    class PatchSubscriptionDto < HeroSignal::BaseModel
+    class PatchSubscriptionDto < Pushizo::BaseModel
       field "token", :token, :string
       field "device", :device, "PatchSubscriptionDtoDevice"
       # Değerler: "subscribed", "unsubscribed".
@@ -4096,7 +4096,7 @@ module HeroSignal
     end
 
     # PatchSubscriptionDtoDevice şeması.
-    class PatchSubscriptionDtoDevice < HeroSignal::BaseModel
+    class PatchSubscriptionDtoDevice < Pushizo::BaseModel
       field "model", :model, :string
       field "os", :os, :string
       field "os_version", :os_version, :string
@@ -4112,21 +4112,21 @@ module HeroSignal
     end
 
     # PatchUserDto şeması.
-    class PatchUserDto < HeroSignal::BaseModel
+    class PatchUserDto < Pushizo::BaseModel
       field "properties", :properties, [:map, :any]
       field "tags", :tags, [:map, :string]
       field "deltas", :deltas, "PatchUserDtoDeltas"
     end
 
     # PatchUserDtoDeltas şeması.
-    class PatchUserDtoDeltas < HeroSignal::BaseModel
+    class PatchUserDtoDeltas < Pushizo::BaseModel
       field "session_count", :session_count, :integer
       field "session_time", :session_time, :integer
       field "purchases", :purchases, [:array, "PatchUserDtoDeltasPurchasesItem"]
     end
 
     # PatchUserDtoDeltasPurchasesItem şeması.
-    class PatchUserDtoDeltasPurchasesItem < HeroSignal::BaseModel
+    class PatchUserDtoDeltasPurchasesItem < Pushizo::BaseModel
       # Zorunlu.
       field "sku", :sku, :string
       # Zorunlu.
@@ -4136,7 +4136,7 @@ module HeroSignal
     end
 
     # ProvidersReport şeması.
-    class ProvidersReport < HeroSignal::BaseModel
+    class ProvidersReport < Pushizo::BaseModel
       # Zorunlu.
       field "from", :from, :string
       # Zorunlu.
@@ -4150,7 +4150,7 @@ module HeroSignal
     end
 
     # ProvidersReportPrevious şeması.
-    class ProvidersReportPrevious < HeroSignal::BaseModel
+    class ProvidersReportPrevious < Pushizo::BaseModel
       # Zorunlu.
       field "sent", :sent, :integer
       # Zorunlu.
@@ -4160,7 +4160,7 @@ module HeroSignal
     end
 
     # ProvidersReportRowsItem şeması.
-    class ProvidersReportRowsItem < HeroSignal::BaseModel
+    class ProvidersReportRowsItem < Pushizo::BaseModel
       # Zorunlu.
       field "channel", :channel, :string
       # Zorunlu.
@@ -4180,7 +4180,7 @@ module HeroSignal
     end
 
     # ProvidersReportRowsItemErrorsItem şeması.
-    class ProvidersReportRowsItemErrorsItem < HeroSignal::BaseModel
+    class ProvidersReportRowsItemErrorsItem < Pushizo::BaseModel
       # Zorunlu.
       field "code", :code, :string
       # Zorunlu.
@@ -4188,7 +4188,7 @@ module HeroSignal
     end
 
     # ProvidersReportTotals şeması.
-    class ProvidersReportTotals < HeroSignal::BaseModel
+    class ProvidersReportTotals < Pushizo::BaseModel
       # Zorunlu.
       field "sent", :sent, :integer
       # Zorunlu.
@@ -4198,7 +4198,7 @@ module HeroSignal
     end
 
     # RenderPreview şeması.
-    class RenderPreview < HeroSignal::BaseModel
+    class RenderPreview < Pushizo::BaseModel
       # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu.
@@ -4226,7 +4226,7 @@ module HeroSignal
     end
 
     # RenderPreviewButtonsItem şeması.
-    class RenderPreviewButtonsItem < HeroSignal::BaseModel
+    class RenderPreviewButtonsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -4236,7 +4236,7 @@ module HeroSignal
     end
 
     # RenderPreviewEmail şeması.
-    class RenderPreviewEmail < HeroSignal::BaseModel
+    class RenderPreviewEmail < Pushizo::BaseModel
       # Zorunlu.
       field "subject", :subject, :string
       # Zorunlu.
@@ -4248,7 +4248,7 @@ module HeroSignal
     end
 
     # RenderPreviewSms şeması.
-    class RenderPreviewSms < HeroSignal::BaseModel
+    class RenderPreviewSms < Pushizo::BaseModel
       # Zorunlu.
       field "body", :body, :string
       # Zorunlu. Değerler: "gsm7", "gsm7_tr", "ucs2".
@@ -4266,7 +4266,7 @@ module HeroSignal
     end
 
     # RenderTemplateDto şeması.
-    class RenderTemplateDto < HeroSignal::BaseModel
+    class RenderTemplateDto < Pushizo::BaseModel
       # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       field "language", :language, :string
@@ -4277,7 +4277,7 @@ module HeroSignal
     end
 
     # RenderTemplateDtoContent şeması.
-    class RenderTemplateDtoContent < HeroSignal::BaseModel
+    class RenderTemplateDtoContent < Pushizo::BaseModel
       field "headings", :headings, [:map, :string]
       field "contents", :contents, [:map, :string]
       field "subtitle", :subtitle, [:map, :string]
@@ -4338,7 +4338,7 @@ module HeroSignal
     end
 
     # RenderTemplateDtoContentButtonsItem şeması.
-    class RenderTemplateDtoContentButtonsItem < HeroSignal::BaseModel
+    class RenderTemplateDtoContentButtonsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -4348,7 +4348,7 @@ module HeroSignal
     end
 
     # RenderTemplateDtoContentRcsCard şeması.
-    class RenderTemplateDtoContentRcsCard < HeroSignal::BaseModel
+    class RenderTemplateDtoContentRcsCard < Pushizo::BaseModel
       field "title", :title, [:map, :string]
       field "description", :description, [:map, :string]
       field "media_url", :media_url, :string
@@ -4359,7 +4359,7 @@ module HeroSignal
     end
 
     # RenderTemplateDtoContentWebButtonsItem şeması.
-    class RenderTemplateDtoContentWebButtonsItem < HeroSignal::BaseModel
+    class RenderTemplateDtoContentWebButtonsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -4369,7 +4369,7 @@ module HeroSignal
     end
 
     # RenderTemplateDtoContentWhatsappInteractive şeması.
-    class RenderTemplateDtoContentWhatsappInteractive < HeroSignal::BaseModel
+    class RenderTemplateDtoContentWhatsappInteractive < Pushizo::BaseModel
       # Zorunlu. Değerler: "button", "list".
       field "type", :type, :string
       field "header", :header, :string
@@ -4379,7 +4379,7 @@ module HeroSignal
     end
 
     # RenderTemplateDtoContentWhatsappInteractiveButtonsItem şeması.
-    class RenderTemplateDtoContentWhatsappInteractiveButtonsItem < HeroSignal::BaseModel
+    class RenderTemplateDtoContentWhatsappInteractiveButtonsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -4387,7 +4387,7 @@ module HeroSignal
     end
 
     # RenderTemplateDtoContentWhatsappInteractiveList şeması.
-    class RenderTemplateDtoContentWhatsappInteractiveList < HeroSignal::BaseModel
+    class RenderTemplateDtoContentWhatsappInteractiveList < Pushizo::BaseModel
       # Zorunlu.
       field "button", :button, :string
       # Zorunlu.
@@ -4395,14 +4395,14 @@ module HeroSignal
     end
 
     # RenderTemplateDtoContentWhatsappInteractiveListSectionsItem şeması.
-    class RenderTemplateDtoContentWhatsappInteractiveListSectionsItem < HeroSignal::BaseModel
+    class RenderTemplateDtoContentWhatsappInteractiveListSectionsItem < Pushizo::BaseModel
       field "title", :title, :string
       # Zorunlu.
       field "rows", :rows, [:array, "RenderTemplateDtoContentWhatsappInteractiveListSectionsItemRowsItem"]
     end
 
     # RenderTemplateDtoContentWhatsappInteractiveListSectionsItemRowsItem şeması.
-    class RenderTemplateDtoContentWhatsappInteractiveListSectionsItemRowsItem < HeroSignal::BaseModel
+    class RenderTemplateDtoContentWhatsappInteractiveListSectionsItemRowsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -4411,7 +4411,7 @@ module HeroSignal
     end
 
     # RenderTemplateDtoContentWhatsappMedia şeması.
-    class RenderTemplateDtoContentWhatsappMedia < HeroSignal::BaseModel
+    class RenderTemplateDtoContentWhatsappMedia < Pushizo::BaseModel
       # Zorunlu. Değerler: "image", "video", "document", "audio".
       field "type", :type, :string
       # Zorunlu.
@@ -4420,7 +4420,7 @@ module HeroSignal
     end
 
     # RenderTemplateDtoContentWhatsappTemplate şeması.
-    class RenderTemplateDtoContentWhatsappTemplate < HeroSignal::BaseModel
+    class RenderTemplateDtoContentWhatsappTemplate < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
       # Zorunlu.
@@ -4431,7 +4431,7 @@ module HeroSignal
     end
 
     # RenderTemplateDtoContentWhatsappTemplateButtonParamsItem şeması.
-    class RenderTemplateDtoContentWhatsappTemplateButtonParamsItem < HeroSignal::BaseModel
+    class RenderTemplateDtoContentWhatsappTemplateButtonParamsItem < Pushizo::BaseModel
       # Zorunlu.
       field "index", :index, :integer
       # Zorunlu. Değerler: "url", "quick_reply", "copy_code".
@@ -4441,14 +4441,14 @@ module HeroSignal
     end
 
     # RenderTemplateDtoUser şeması.
-    class RenderTemplateDtoUser < HeroSignal::BaseModel
+    class RenderTemplateDtoUser < Pushizo::BaseModel
       field "external_id", :external_id, :string
       field "tags", :tags, [:map, :string]
       field "properties", :properties, [:map, :any]
     end
 
     # RetentionReport şeması.
-    class RetentionReport < HeroSignal::BaseModel
+    class RetentionReport < Pushizo::BaseModel
       # Zorunlu.
       field "weeks", :weeks, :integer
       # Zorunlu.
@@ -4458,7 +4458,7 @@ module HeroSignal
     end
 
     # RetentionReportCohortsItem şeması.
-    class RetentionReportCohortsItem < HeroSignal::BaseModel
+    class RetentionReportCohortsItem < Pushizo::BaseModel
       # Zorunlu.
       field "week", :week, :string
       # Zorunlu.
@@ -4468,13 +4468,13 @@ module HeroSignal
     end
 
     # ScheduleCampaignDto şeması.
-    class ScheduleCampaignDto < HeroSignal::BaseModel
+    class ScheduleCampaignDto < Pushizo::BaseModel
       field "send_at", :send_at, :string
       field "recurrence", :recurrence, "ScheduleCampaignDtoRecurrence"
     end
 
     # ScheduleCampaignDtoRecurrence şeması.
-    class ScheduleCampaignDtoRecurrence < HeroSignal::BaseModel
+    class ScheduleCampaignDtoRecurrence < Pushizo::BaseModel
       # Zorunlu.
       field "cron", :cron, :string
       field "until", :until_, :string
@@ -4482,7 +4482,7 @@ module HeroSignal
     end
 
     # Segment şeması.
-    class Segment < HeroSignal::BaseModel
+    class Segment < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -4508,13 +4508,13 @@ module HeroSignal
     end
 
     # SegmentCampaigns şeması.
-    class SegmentCampaigns < HeroSignal::BaseModel
+    class SegmentCampaigns < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "SegmentCampaignsDataItem"]
     end
 
     # SegmentCampaignsDataItem şeması.
-    class SegmentCampaignsDataItem < HeroSignal::BaseModel
+    class SegmentCampaignsDataItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -4530,7 +4530,7 @@ module HeroSignal
     end
 
     # SegmentEstimate şeması.
-    class SegmentEstimate < HeroSignal::BaseModel
+    class SegmentEstimate < Pushizo::BaseModel
       # Zorunlu.
       field "segment_id", :segment_id, :string
       # Zorunlu.
@@ -4546,7 +4546,7 @@ module HeroSignal
     end
 
     # SegmentPage şeması.
-    class SegmentPage < HeroSignal::BaseModel
+    class SegmentPage < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "Segment"]
       # Zorunlu.
@@ -4556,7 +4556,7 @@ module HeroSignal
     end
 
     # SegmentPreview şeması.
-    class SegmentPreview < HeroSignal::BaseModel
+    class SegmentPreview < Pushizo::BaseModel
       # Zorunlu.
       field "subscriptions", :subscriptions, :integer
       # Zorunlu.
@@ -4568,7 +4568,7 @@ module HeroSignal
     end
 
     # SegmentPreviewSampleItem şeması.
-    class SegmentPreviewSampleItem < HeroSignal::BaseModel
+    class SegmentPreviewSampleItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -4580,7 +4580,7 @@ module HeroSignal
     end
 
     # SegmentsCreateBody şeması.
-    class SegmentsCreateBody < HeroSignal::BaseModel
+    class SegmentsCreateBody < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
       field "description", :description, :string
@@ -4590,28 +4590,28 @@ module HeroSignal
     end
 
     # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
-    class SegmentsCreateBodyDefinition < HeroSignal::BaseModel
+    class SegmentsCreateBodyDefinition < Pushizo::BaseModel
       field "all", :all, [:array, [:map, :any]]
       field "any", :any, [:array, [:map, :any]]
       field "none", :none, [:array, [:map, :any]]
     end
 
     # SegmentsPreviewBody şeması.
-    class SegmentsPreviewBody < HeroSignal::BaseModel
+    class SegmentsPreviewBody < Pushizo::BaseModel
       # Zorunlu. Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
       field "definition", :definition, "SegmentsPreviewBodyDefinition"
       field "limit", :limit, :integer
     end
 
     # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
-    class SegmentsPreviewBodyDefinition < HeroSignal::BaseModel
+    class SegmentsPreviewBodyDefinition < Pushizo::BaseModel
       field "all", :all, [:array, [:map, :any]]
       field "any", :any, [:array, [:map, :any]]
       field "none", :none, [:array, [:map, :any]]
     end
 
     # SegmentsUpdateBody şeması.
-    class SegmentsUpdateBody < HeroSignal::BaseModel
+    class SegmentsUpdateBody < Pushizo::BaseModel
       field "name", :name, :string
       field "description", :description, :string
       # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
@@ -4620,32 +4620,32 @@ module HeroSignal
     end
 
     # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
-    class SegmentsUpdateBodyDefinition < HeroSignal::BaseModel
+    class SegmentsUpdateBodyDefinition < Pushizo::BaseModel
       field "all", :all, [:array, [:map, :any]]
       field "any", :any, [:array, [:map, :any]]
       field "none", :none, [:array, [:map, :any]]
     end
 
     # SelectWinnerDto şeması.
-    class SelectWinnerDto < HeroSignal::BaseModel
+    class SelectWinnerDto < Pushizo::BaseModel
       # Zorunlu.
       field "variant_id", :variant_id, :string
     end
 
     # SetOwnerDto şeması.
-    class SetOwnerDto < HeroSignal::BaseModel
+    class SetOwnerDto < Pushizo::BaseModel
       # Zorunlu.
       field "external_id", :external_id, :string
     end
 
     # SetPreferencesDto şeması.
-    class SetPreferencesDto < HeroSignal::BaseModel
+    class SetPreferencesDto < Pushizo::BaseModel
       # Zorunlu.
       field "preferences", :preferences, [:array, "SetPreferencesDtoPreferencesItem"]
     end
 
     # SetPreferencesDtoPreferencesItem şeması.
-    class SetPreferencesDtoPreferencesItem < HeroSignal::BaseModel
+    class SetPreferencesDtoPreferencesItem < Pushizo::BaseModel
       # Zorunlu.
       field "category", :category, :string
       # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
@@ -4655,7 +4655,7 @@ module HeroSignal
     end
 
     # SmsKeyword şeması.
-    class SmsKeyword < HeroSignal::BaseModel
+    class SmsKeyword < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -4679,7 +4679,7 @@ module HeroSignal
     end
 
     # SmsKeywordList şeması.
-    class SmsKeywordList < HeroSignal::BaseModel
+    class SmsKeywordList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "SmsKeyword"]
       # Zorunlu.
@@ -4687,7 +4687,7 @@ module HeroSignal
     end
 
     # StartLiveActivityDto şeması.
-    class StartLiveActivityDto < HeroSignal::BaseModel
+    class StartLiveActivityDto < Pushizo::BaseModel
       field "activity_id", :activity_id, :string
       field "attributes", :attributes_value, [:map, :any]
       # Zorunlu.
@@ -4704,14 +4704,14 @@ module HeroSignal
     end
 
     # StartLiveActivityDtoAlert şeması.
-    class StartLiveActivityDtoAlert < HeroSignal::BaseModel
+    class StartLiveActivityDtoAlert < Pushizo::BaseModel
       field "title", :title, [:map, :string]
       field "body", :body, [:map, :string]
       field "sound", :sound, :string
     end
 
     # StartLiveActivityDtoTarget şeması.
-    class StartLiveActivityDtoTarget < HeroSignal::BaseModel
+    class StartLiveActivityDtoTarget < Pushizo::BaseModel
       field "include_external_ids", :include_external_ids, [:array, :string]
       field "include_subscription_ids", :include_subscription_ids, [:array, :string]
       field "included_segments", :included_segments, [:array, :string]
@@ -4719,7 +4719,7 @@ module HeroSignal
     end
 
     # Subscription şeması.
-    class Subscription < HeroSignal::BaseModel
+    class Subscription < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -4759,7 +4759,7 @@ module HeroSignal
     end
 
     # SubscriptionDevice şeması.
-    class SubscriptionDevice < HeroSignal::BaseModel
+    class SubscriptionDevice < Pushizo::BaseModel
       field "model", :model, :string
       field "os", :os, :string
       field "os_version", :os_version, :string
@@ -4775,7 +4775,7 @@ module HeroSignal
     end
 
     # SubscriptionLocation şeması.
-    class SubscriptionLocation < HeroSignal::BaseModel
+    class SubscriptionLocation < Pushizo::BaseModel
       # Zorunlu.
       field "lat", :lat, :number
       # Zorunlu.
@@ -4791,7 +4791,7 @@ module HeroSignal
     end
 
     # SubscriptionsReport şeması.
-    class SubscriptionsReport < HeroSignal::BaseModel
+    class SubscriptionsReport < Pushizo::BaseModel
       # Zorunlu.
       field "from", :from, :string
       # Zorunlu.
@@ -4807,7 +4807,7 @@ module HeroSignal
     end
 
     # SubscriptionsReportByChannelItem şeması.
-    class SubscriptionsReportByChannelItem < HeroSignal::BaseModel
+    class SubscriptionsReportByChannelItem < Pushizo::BaseModel
       # Zorunlu.
       field "channel", :channel, :string
       # Zorunlu.
@@ -4819,7 +4819,7 @@ module HeroSignal
     end
 
     # SubscriptionsReportPrevious şeması.
-    class SubscriptionsReportPrevious < HeroSignal::BaseModel
+    class SubscriptionsReportPrevious < Pushizo::BaseModel
       # Zorunlu.
       field "active", :active, :integer
       # Zorunlu.
@@ -4833,7 +4833,7 @@ module HeroSignal
     end
 
     # SubscriptionsReportRowsItem şeması.
-    class SubscriptionsReportRowsItem < HeroSignal::BaseModel
+    class SubscriptionsReportRowsItem < Pushizo::BaseModel
       # Zorunlu.
       field "date", :date, :string
       # Zorunlu.
@@ -4847,7 +4847,7 @@ module HeroSignal
     end
 
     # SubscriptionsReportTotals şeması.
-    class SubscriptionsReportTotals < HeroSignal::BaseModel
+    class SubscriptionsReportTotals < Pushizo::BaseModel
       # Zorunlu.
       field "active", :active, :integer
       # Zorunlu.
@@ -4861,7 +4861,7 @@ module HeroSignal
     end
 
     # Suppression şeması.
-    class Suppression < HeroSignal::BaseModel
+    class Suppression < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -4885,7 +4885,7 @@ module HeroSignal
     end
 
     # SuppressionPage şeması.
-    class SuppressionPage < HeroSignal::BaseModel
+    class SuppressionPage < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "Suppression"]
       # Zorunlu.
@@ -4895,7 +4895,7 @@ module HeroSignal
     end
 
     # Template şeması.
-    class Template < HeroSignal::BaseModel
+    class Template < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -4919,7 +4919,7 @@ module HeroSignal
     end
 
     # TemplatePage şeması.
-    class TemplatePage < HeroSignal::BaseModel
+    class TemplatePage < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "Template"]
       # Zorunlu.
@@ -4929,7 +4929,7 @@ module HeroSignal
     end
 
     # TemplateStats şeması.
-    class TemplateStats < HeroSignal::BaseModel
+    class TemplateStats < Pushizo::BaseModel
       # Zorunlu.
       field "template_id", :template_id, :string
       # Zorunlu.
@@ -4959,13 +4959,13 @@ module HeroSignal
     end
 
     # TemplateVersionList şeması.
-    class TemplateVersionList < HeroSignal::BaseModel
+    class TemplateVersionList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "TemplateVersionListDataItem"]
     end
 
     # TemplateVersionListDataItem şeması.
-    class TemplateVersionListDataItem < HeroSignal::BaseModel
+    class TemplateVersionListDataItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -4979,13 +4979,13 @@ module HeroSignal
     end
 
     # TestDataFeedDto şeması.
-    class TestDataFeedDto < HeroSignal::BaseModel
+    class TestDataFeedDto < Pushizo::BaseModel
       field "external_id", :external_id, :string
       field "user_id", :user_id, :string
     end
 
     # TriggerRunDto şeması.
-    class TriggerRunDto < HeroSignal::BaseModel
+    class TriggerRunDto < Pushizo::BaseModel
       field "external_id", :external_id, :string
       field "user_id", :user_id, :string
       field "alias", :alias_, "TriggerRunDtoAlias"
@@ -4993,7 +4993,7 @@ module HeroSignal
     end
 
     # TriggerRunDtoAlias şeması.
-    class TriggerRunDtoAlias < HeroSignal::BaseModel
+    class TriggerRunDtoAlias < Pushizo::BaseModel
       # Zorunlu.
       field "label", :label, :string
       # Zorunlu.
@@ -5001,7 +5001,7 @@ module HeroSignal
     end
 
     # UpdateApiKeyDto şeması.
-    class UpdateApiKeyDto < HeroSignal::BaseModel
+    class UpdateApiKeyDto < Pushizo::BaseModel
       field "name", :name, :string
       # Değerler: "admin", "notifications:write", "users:read", "users:write", "events:write", "segments:read", "analytics:read", "mcp:write".
       field "scopes", :scopes, [:array, :string]
@@ -5010,7 +5010,7 @@ module HeroSignal
     end
 
     # UpdateAppDto şeması.
-    class UpdateAppDto < HeroSignal::BaseModel
+    class UpdateAppDto < Pushizo::BaseModel
       field "name", :name, :string
       field "platform_flags", :platform_flags, "UpdateAppDtoPlatformFlags"
       field "icon_url", :icon_url, :string
@@ -5022,7 +5022,7 @@ module HeroSignal
     end
 
     # UpdateAppDtoPlatformFlags şeması.
-    class UpdateAppDtoPlatformFlags < HeroSignal::BaseModel
+    class UpdateAppDtoPlatformFlags < Pushizo::BaseModel
       field "ios", :ios, :boolean
       field "android", :android, :boolean
       field "web", :web, :boolean
@@ -5031,7 +5031,7 @@ module HeroSignal
     end
 
     # UpdateAppDtoSettings şeması.
-    class UpdateAppDtoSettings < HeroSignal::BaseModel
+    class UpdateAppDtoSettings < Pushizo::BaseModel
       field "quietHours", :quiet_hours, "UpdateAppDtoSettingsQuietHours"
       field "frequencyCap", :frequency_cap, "UpdateAppDtoSettingsFrequencyCap"
       field "frequencyCaps", :frequency_caps, [:array, "UpdateAppDtoSettingsFrequencyCapsItem"]
@@ -5049,7 +5049,7 @@ module HeroSignal
     end
 
     # UpdateAppDtoSettingsAndroidChannelsItem şeması.
-    class UpdateAppDtoSettingsAndroidChannelsItem < HeroSignal::BaseModel
+    class UpdateAppDtoSettingsAndroidChannelsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -5063,7 +5063,7 @@ module HeroSignal
     end
 
     # UpdateAppDtoSettingsFrequencyCap şeması.
-    class UpdateAppDtoSettingsFrequencyCap < HeroSignal::BaseModel
+    class UpdateAppDtoSettingsFrequencyCap < Pushizo::BaseModel
       # Zorunlu.
       field "max", :max, :integer
       # Zorunlu.
@@ -5071,7 +5071,7 @@ module HeroSignal
     end
 
     # UpdateAppDtoSettingsFrequencyCapsItem şeması.
-    class UpdateAppDtoSettingsFrequencyCapsItem < HeroSignal::BaseModel
+    class UpdateAppDtoSettingsFrequencyCapsItem < Pushizo::BaseModel
       # Zorunlu.
       field "max", :max, :integer
       # Zorunlu.
@@ -5081,7 +5081,7 @@ module HeroSignal
     end
 
     # UpdateAppDtoSettingsFrequencyCapsItemWindow şeması.
-    class UpdateAppDtoSettingsFrequencyCapsItemWindow < HeroSignal::BaseModel
+    class UpdateAppDtoSettingsFrequencyCapsItemWindow < Pushizo::BaseModel
       # Zorunlu.
       field "value", :value, :integer
       # Zorunlu. Değerler: "minutes", "hours", "days", "weeks".
@@ -5089,12 +5089,12 @@ module HeroSignal
     end
 
     # UpdateAppDtoSettingsInApp şeması.
-    class UpdateAppDtoSettingsInApp < HeroSignal::BaseModel
+    class UpdateAppDtoSettingsInApp < Pushizo::BaseModel
       field "minIntervalSeconds", :min_interval_seconds, :integer
     end
 
     # UpdateAppDtoSettingsOnboarding şeması.
-    class UpdateAppDtoSettingsOnboarding < HeroSignal::BaseModel
+    class UpdateAppDtoSettingsOnboarding < Pushizo::BaseModel
       # Zorunlu.
       field "step", :step, :integer
       field "simulation", :simulation, :boolean
@@ -5109,7 +5109,7 @@ module HeroSignal
     end
 
     # UpdateAppDtoSettingsPreferenceCenter şeması.
-    class UpdateAppDtoSettingsPreferenceCenter < HeroSignal::BaseModel
+    class UpdateAppDtoSettingsPreferenceCenter < Pushizo::BaseModel
       field "enabled", :enabled, :boolean
       field "brandName", :brand_name, :string
       field "logoUrl", :logo_url, :string
@@ -5119,7 +5119,7 @@ module HeroSignal
     end
 
     # UpdateAppDtoSettingsPreferenceCenterTextsValue şeması.
-    class UpdateAppDtoSettingsPreferenceCenterTextsValue < HeroSignal::BaseModel
+    class UpdateAppDtoSettingsPreferenceCenterTextsValue < Pushizo::BaseModel
       field "title", :title, :string
       field "description", :description, :string
       field "unsubscribeAll", :unsubscribe_all, :string
@@ -5127,7 +5127,7 @@ module HeroSignal
     end
 
     # UpdateAppDtoSettingsQuietHours şeması.
-    class UpdateAppDtoSettingsQuietHours < HeroSignal::BaseModel
+    class UpdateAppDtoSettingsQuietHours < Pushizo::BaseModel
       # Zorunlu.
       field "start", :start, :string
       # Zorunlu.
@@ -5137,7 +5137,7 @@ module HeroSignal
     end
 
     # UpdateAppDtoSettingsSdkSetup şeması.
-    class UpdateAppDtoSettingsSdkSetup < HeroSignal::BaseModel
+    class UpdateAppDtoSettingsSdkSetup < Pushizo::BaseModel
       # Zorunlu.
       field "version", :version, :integer
       # Zorunlu.
@@ -5153,14 +5153,14 @@ module HeroSignal
     end
 
     # UpdateAppDtoSettingsSms şeması.
-    class UpdateAppDtoSettingsSms < HeroSignal::BaseModel
+    class UpdateAppDtoSettingsSms < Pushizo::BaseModel
       field "helpReply", :help_reply, :string
       field "stopReply", :stop_reply, :string
       field "autoReply", :auto_reply, :boolean
     end
 
     # UpdateAppDtoSettingsWebPush şeması.
-    class UpdateAppDtoSettingsWebPush < HeroSignal::BaseModel
+    class UpdateAppDtoSettingsWebPush < Pushizo::BaseModel
       field "serviceWorkerPath", :service_worker_path, :string
       field "serviceWorkerScope", :service_worker_scope, :string
       field "prompt", :prompt, "UpdateAppDtoSettingsWebPushPrompt"
@@ -5171,7 +5171,7 @@ module HeroSignal
     end
 
     # UpdateAppDtoSettingsWebPushClickBehavior şeması.
-    class UpdateAppDtoSettingsWebPushClickBehavior < HeroSignal::BaseModel
+    class UpdateAppDtoSettingsWebPushClickBehavior < Pushizo::BaseModel
       # Zorunlu. Değerler: "exact", "origin".
       field "match", :match, :string
       # Zorunlu. Değerler: "navigate", "focus".
@@ -5179,7 +5179,7 @@ module HeroSignal
     end
 
     # UpdateAppDtoSettingsWebPushCustomLink şeması.
-    class UpdateAppDtoSettingsWebPushCustomLink < HeroSignal::BaseModel
+    class UpdateAppDtoSettingsWebPushCustomLink < Pushizo::BaseModel
       # Zorunlu.
       field "enabled", :enabled, :boolean
       # Zorunlu. Değerler: "button", "link".
@@ -5192,20 +5192,20 @@ module HeroSignal
     end
 
     # UpdateAppDtoSettingsWebPushCustomLinkColor şeması.
-    class UpdateAppDtoSettingsWebPushCustomLinkColor < HeroSignal::BaseModel
+    class UpdateAppDtoSettingsWebPushCustomLinkColor < Pushizo::BaseModel
       field "button", :button, :string
       field "text", :text, :string
     end
 
     # UpdateAppDtoSettingsWebPushCustomLinkTextsValue şeması.
-    class UpdateAppDtoSettingsWebPushCustomLinkTextsValue < HeroSignal::BaseModel
+    class UpdateAppDtoSettingsWebPushCustomLinkTextsValue < Pushizo::BaseModel
       field "subscribe", :subscribe, :string
       field "unsubscribe", :unsubscribe, :string
       field "explanation", :explanation, :string
     end
 
     # UpdateAppDtoSettingsWebPushPrompt şeması.
-    class UpdateAppDtoSettingsWebPushPrompt < HeroSignal::BaseModel
+    class UpdateAppDtoSettingsWebPushPrompt < Pushizo::BaseModel
       # Zorunlu.
       field "enabled", :enabled, :boolean
       # Zorunlu. Değerler: "slidedown", "native".
@@ -5221,7 +5221,7 @@ module HeroSignal
     end
 
     # UpdateAppDtoSettingsWebPushPromptCategoriesItem şeması.
-    class UpdateAppDtoSettingsWebPushPromptCategoriesItem < HeroSignal::BaseModel
+    class UpdateAppDtoSettingsWebPushPromptCategoriesItem < Pushizo::BaseModel
       # Zorunlu.
       field "tag", :tag, :string
       # Zorunlu.
@@ -5229,7 +5229,7 @@ module HeroSignal
     end
 
     # UpdateAppDtoSettingsWebPushPromptTextsValue şeması.
-    class UpdateAppDtoSettingsWebPushPromptTextsValue < HeroSignal::BaseModel
+    class UpdateAppDtoSettingsWebPushPromptTextsValue < Pushizo::BaseModel
       field "title", :title, :string
       field "message", :message, :string
       field "accept", :accept, :string
@@ -5237,7 +5237,7 @@ module HeroSignal
     end
 
     # UpdateAppDtoSettingsWebPushWelcomeNotification şeması.
-    class UpdateAppDtoSettingsWebPushWelcomeNotification < HeroSignal::BaseModel
+    class UpdateAppDtoSettingsWebPushWelcomeNotification < Pushizo::BaseModel
       # Zorunlu.
       field "enabled", :enabled, :boolean
       field "url", :url, :string
@@ -5245,13 +5245,13 @@ module HeroSignal
     end
 
     # UpdateAppDtoSettingsWebPushWelcomeNotificationTextsValue şeması.
-    class UpdateAppDtoSettingsWebPushWelcomeNotificationTextsValue < HeroSignal::BaseModel
+    class UpdateAppDtoSettingsWebPushWelcomeNotificationTextsValue < Pushizo::BaseModel
       field "title", :title, :string
       field "message", :message, :string
     end
 
     # UpdateCategoryDto şeması.
-    class UpdateCategoryDto < HeroSignal::BaseModel
+    class UpdateCategoryDto < Pushizo::BaseModel
       field "name", :name, [:map, :string]
       field "description", :description, [:map, :string]
       # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
@@ -5261,12 +5261,12 @@ module HeroSignal
     end
 
     # UpdateContentTableDto şeması.
-    class UpdateContentTableDto < HeroSignal::BaseModel
+    class UpdateContentTableDto < Pushizo::BaseModel
       field "description", :description, :string
     end
 
     # UpdateDataFeedDto şeması.
-    class UpdateDataFeedDto < HeroSignal::BaseModel
+    class UpdateDataFeedDto < Pushizo::BaseModel
       field "description", :description, :string
       field "url_template", :url_template, :string
       # Değerler: "GET", "POST".
@@ -5280,7 +5280,7 @@ module HeroSignal
     end
 
     # UpdateInAppDto şeması.
-    class UpdateInAppDto < HeroSignal::BaseModel
+    class UpdateInAppDto < Pushizo::BaseModel
       field "name", :name, :string
       field "triggers", :triggers, [:array, :any]
       field "trigger_groups", :trigger_groups, [:array, [:array, :any]]
@@ -5296,12 +5296,12 @@ module HeroSignal
     end
 
     # UpdateInAppDtoAbTest şeması.
-    class UpdateInAppDtoAbTest < HeroSignal::BaseModel
+    class UpdateInAppDtoAbTest < Pushizo::BaseModel
       field "winner", :winner, "UpdateInAppDtoAbTestWinner"
     end
 
     # UpdateInAppDtoAbTestWinner şeması.
-    class UpdateInAppDtoAbTestWinner < HeroSignal::BaseModel
+    class UpdateInAppDtoAbTestWinner < Pushizo::BaseModel
       # Zorunlu. Değerler: "manual", "auto".
       field "mode", :mode, :string
       field "min_impressions", :min_impressions, :integer
@@ -5309,13 +5309,13 @@ module HeroSignal
     end
 
     # UpdateInAppDtoAudience şeması.
-    class UpdateInAppDtoAudience < HeroSignal::BaseModel
+    class UpdateInAppDtoAudience < Pushizo::BaseModel
       field "included_segments", :included_segments, [:array, :string]
       field "excluded_segments", :excluded_segments, [:array, :string]
     end
 
     # UpdateInAppDtoDisplay şeması.
-    class UpdateInAppDtoDisplay < HeroSignal::BaseModel
+    class UpdateInAppDtoDisplay < Pushizo::BaseModel
       # Zorunlu. Değerler: "modal", "banner_top", "banner_bottom", "fullscreen".
       field "layout", :layout, :string
       field "background_color", :background_color, :string
@@ -5331,14 +5331,14 @@ module HeroSignal
     end
 
     # UpdateInAppDtoFrequency şeması.
-    class UpdateInAppDtoFrequency < HeroSignal::BaseModel
+    class UpdateInAppDtoFrequency < Pushizo::BaseModel
       field "max_impressions", :max_impressions, :integer
       field "min_interval_seconds", :min_interval_seconds, :integer
       field "stop_after_interaction", :stop_after_interaction, :boolean
     end
 
     # UpdateInAppDtoVariantsItem şeması.
-    class UpdateInAppDtoVariantsItem < HeroSignal::BaseModel
+    class UpdateInAppDtoVariantsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -5350,7 +5350,7 @@ module HeroSignal
     end
 
     # UpdateInAppDtoVariantsItemDisplay şeması.
-    class UpdateInAppDtoVariantsItemDisplay < HeroSignal::BaseModel
+    class UpdateInAppDtoVariantsItemDisplay < Pushizo::BaseModel
       # Zorunlu. Değerler: "modal", "banner_top", "banner_bottom", "fullscreen".
       field "layout", :layout, :string
       field "background_color", :background_color, :string
@@ -5366,13 +5366,13 @@ module HeroSignal
     end
 
     # UpdateJourneyDto şeması.
-    class UpdateJourneyDto < HeroSignal::BaseModel
+    class UpdateJourneyDto < Pushizo::BaseModel
       field "name", :name, :string
       field "description", :description, :string
     end
 
     # UpdateKeywordDto şeması.
-    class UpdateKeywordDto < HeroSignal::BaseModel
+    class UpdateKeywordDto < Pushizo::BaseModel
       field "keyword", :keyword, :string
       # Değerler: "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
@@ -5382,7 +5382,7 @@ module HeroSignal
     end
 
     # UpdateKeywordDtoActions şeması.
-    class UpdateKeywordDtoActions < HeroSignal::BaseModel
+    class UpdateKeywordDtoActions < Pushizo::BaseModel
       field "add_tags", :add_tags, [:map, :string]
       field "remove_tags", :remove_tags, [:array, :string]
       field "event", :event, "UpdateKeywordDtoActionsEvent"
@@ -5391,20 +5391,20 @@ module HeroSignal
     end
 
     # UpdateKeywordDtoActionsEvent şeması.
-    class UpdateKeywordDtoActionsEvent < HeroSignal::BaseModel
+    class UpdateKeywordDtoActionsEvent < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
       field "properties", :properties, [:map, :string]
     end
 
     # UpdateKeywordDtoActionsReply şeması.
-    class UpdateKeywordDtoActionsReply < HeroSignal::BaseModel
+    class UpdateKeywordDtoActionsReply < Pushizo::BaseModel
       # Zorunlu.
       field "text", :text, :string
     end
 
     # UpdateLiveActivityDto şeması.
-    class UpdateLiveActivityDto < HeroSignal::BaseModel
+    class UpdateLiveActivityDto < Pushizo::BaseModel
       # Zorunlu.
       field "activity_id", :activity_id, :string
       # Zorunlu.
@@ -5419,21 +5419,21 @@ module HeroSignal
     end
 
     # UpdateLiveActivityDtoAlert şeması.
-    class UpdateLiveActivityDtoAlert < HeroSignal::BaseModel
+    class UpdateLiveActivityDtoAlert < Pushizo::BaseModel
       field "title", :title, [:map, :string]
       field "body", :body, [:map, :string]
       field "sound", :sound, :string
     end
 
     # UpdateLiveActivityTypeDto şeması.
-    class UpdateLiveActivityTypeDto < HeroSignal::BaseModel
+    class UpdateLiveActivityTypeDto < Pushizo::BaseModel
       field "description", :description, :string
       field "content_state_schema", :content_state_schema, "UpdateLiveActivityTypeDtoContentStateSchema"
       field "attributes_schema", :attributes_schema, "UpdateLiveActivityTypeDtoAttributesSchema"
     end
 
     # UpdateLiveActivityTypeDtoAttributesSchema şeması.
-    class UpdateLiveActivityTypeDtoAttributesSchema < HeroSignal::BaseModel
+    class UpdateLiveActivityTypeDtoAttributesSchema < Pushizo::BaseModel
       # Zorunlu. Değerler: "object".
       field "type", :type, :string
       # Zorunlu.
@@ -5442,7 +5442,7 @@ module HeroSignal
     end
 
     # UpdateLiveActivityTypeDtoAttributesSchemaPropertiesValue şeması.
-    class UpdateLiveActivityTypeDtoAttributesSchemaPropertiesValue < HeroSignal::BaseModel
+    class UpdateLiveActivityTypeDtoAttributesSchemaPropertiesValue < Pushizo::BaseModel
       # Zorunlu. Değerler: "string", "number", "integer", "boolean".
       field "type", :type, :string
       field "enum", :enum, [:array, :any]
@@ -5453,7 +5453,7 @@ module HeroSignal
     end
 
     # UpdateLiveActivityTypeDtoContentStateSchema şeması.
-    class UpdateLiveActivityTypeDtoContentStateSchema < HeroSignal::BaseModel
+    class UpdateLiveActivityTypeDtoContentStateSchema < Pushizo::BaseModel
       # Zorunlu. Değerler: "object".
       field "type", :type, :string
       # Zorunlu.
@@ -5462,7 +5462,7 @@ module HeroSignal
     end
 
     # UpdateLiveActivityTypeDtoContentStateSchemaPropertiesValue şeması.
-    class UpdateLiveActivityTypeDtoContentStateSchemaPropertiesValue < HeroSignal::BaseModel
+    class UpdateLiveActivityTypeDtoContentStateSchemaPropertiesValue < Pushizo::BaseModel
       # Zorunlu. Değerler: "string", "number", "integer", "boolean".
       field "type", :type, :string
       field "enum", :enum, [:array, :any]
@@ -5473,13 +5473,13 @@ module HeroSignal
     end
 
     # UpdateNodeDto şeması.
-    class UpdateNodeDto < HeroSignal::BaseModel
+    class UpdateNodeDto < Pushizo::BaseModel
       field "data", :data, [:map, :any]
       field "position", :position, "UpdateNodeDtoPosition"
     end
 
     # UpdateNodeDtoPosition şeması.
-    class UpdateNodeDtoPosition < HeroSignal::BaseModel
+    class UpdateNodeDtoPosition < Pushizo::BaseModel
       # Zorunlu.
       field "x", :x, :number
       # Zorunlu.
@@ -5487,7 +5487,7 @@ module HeroSignal
     end
 
     # UpdateTemplateDto şeması.
-    class UpdateTemplateDto < HeroSignal::BaseModel
+    class UpdateTemplateDto < Pushizo::BaseModel
       field "name", :name, :string
       # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
@@ -5496,7 +5496,7 @@ module HeroSignal
     end
 
     # UpdateTemplateDtoContent şeması.
-    class UpdateTemplateDtoContent < HeroSignal::BaseModel
+    class UpdateTemplateDtoContent < Pushizo::BaseModel
       field "headings", :headings, [:map, :string]
       field "contents", :contents, [:map, :string]
       field "subtitle", :subtitle, [:map, :string]
@@ -5557,7 +5557,7 @@ module HeroSignal
     end
 
     # UpdateTemplateDtoContentButtonsItem şeması.
-    class UpdateTemplateDtoContentButtonsItem < HeroSignal::BaseModel
+    class UpdateTemplateDtoContentButtonsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -5567,7 +5567,7 @@ module HeroSignal
     end
 
     # UpdateTemplateDtoContentRcsCard şeması.
-    class UpdateTemplateDtoContentRcsCard < HeroSignal::BaseModel
+    class UpdateTemplateDtoContentRcsCard < Pushizo::BaseModel
       field "title", :title, [:map, :string]
       field "description", :description, [:map, :string]
       field "media_url", :media_url, :string
@@ -5578,7 +5578,7 @@ module HeroSignal
     end
 
     # UpdateTemplateDtoContentWebButtonsItem şeması.
-    class UpdateTemplateDtoContentWebButtonsItem < HeroSignal::BaseModel
+    class UpdateTemplateDtoContentWebButtonsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -5588,7 +5588,7 @@ module HeroSignal
     end
 
     # UpdateTemplateDtoContentWhatsappInteractive şeması.
-    class UpdateTemplateDtoContentWhatsappInteractive < HeroSignal::BaseModel
+    class UpdateTemplateDtoContentWhatsappInteractive < Pushizo::BaseModel
       # Zorunlu. Değerler: "button", "list".
       field "type", :type, :string
       field "header", :header, :string
@@ -5598,7 +5598,7 @@ module HeroSignal
     end
 
     # UpdateTemplateDtoContentWhatsappInteractiveButtonsItem şeması.
-    class UpdateTemplateDtoContentWhatsappInteractiveButtonsItem < HeroSignal::BaseModel
+    class UpdateTemplateDtoContentWhatsappInteractiveButtonsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -5606,7 +5606,7 @@ module HeroSignal
     end
 
     # UpdateTemplateDtoContentWhatsappInteractiveList şeması.
-    class UpdateTemplateDtoContentWhatsappInteractiveList < HeroSignal::BaseModel
+    class UpdateTemplateDtoContentWhatsappInteractiveList < Pushizo::BaseModel
       # Zorunlu.
       field "button", :button, :string
       # Zorunlu.
@@ -5614,14 +5614,14 @@ module HeroSignal
     end
 
     # UpdateTemplateDtoContentWhatsappInteractiveListSectionsItem şeması.
-    class UpdateTemplateDtoContentWhatsappInteractiveListSectionsItem < HeroSignal::BaseModel
+    class UpdateTemplateDtoContentWhatsappInteractiveListSectionsItem < Pushizo::BaseModel
       field "title", :title, :string
       # Zorunlu.
       field "rows", :rows, [:array, "UpdateTemplateDtoContentWhatsappInteractiveListSectionsItemRowsItem"]
     end
 
     # UpdateTemplateDtoContentWhatsappInteractiveListSectionsItemRowsItem şeması.
-    class UpdateTemplateDtoContentWhatsappInteractiveListSectionsItemRowsItem < HeroSignal::BaseModel
+    class UpdateTemplateDtoContentWhatsappInteractiveListSectionsItemRowsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -5630,7 +5630,7 @@ module HeroSignal
     end
 
     # UpdateTemplateDtoContentWhatsappMedia şeması.
-    class UpdateTemplateDtoContentWhatsappMedia < HeroSignal::BaseModel
+    class UpdateTemplateDtoContentWhatsappMedia < Pushizo::BaseModel
       # Zorunlu. Değerler: "image", "video", "document", "audio".
       field "type", :type, :string
       # Zorunlu.
@@ -5639,7 +5639,7 @@ module HeroSignal
     end
 
     # UpdateTemplateDtoContentWhatsappTemplate şeması.
-    class UpdateTemplateDtoContentWhatsappTemplate < HeroSignal::BaseModel
+    class UpdateTemplateDtoContentWhatsappTemplate < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
       # Zorunlu.
@@ -5650,7 +5650,7 @@ module HeroSignal
     end
 
     # UpdateTemplateDtoContentWhatsappTemplateButtonParamsItem şeması.
-    class UpdateTemplateDtoContentWhatsappTemplateButtonParamsItem < HeroSignal::BaseModel
+    class UpdateTemplateDtoContentWhatsappTemplateButtonParamsItem < Pushizo::BaseModel
       # Zorunlu.
       field "index", :index, :integer
       # Zorunlu. Değerler: "url", "quick_reply", "copy_code".
@@ -5660,7 +5660,7 @@ module HeroSignal
     end
 
     # UpdateWarehouseExportDto şeması.
-    class UpdateWarehouseExportDto < HeroSignal::BaseModel
+    class UpdateWarehouseExportDto < Pushizo::BaseModel
       field "name", :name, :string
       # Değerler: "deliveries", "delivery_events", "events", "conversions", "users", "subscriptions".
       field "tables", :tables, [:array, :string]
@@ -5672,7 +5672,7 @@ module HeroSignal
     end
 
     # UpdateWarmupPlanDto şeması.
-    class UpdateWarmupPlanDto < HeroSignal::BaseModel
+    class UpdateWarmupPlanDto < Pushizo::BaseModel
       field "name", :name, :string
       # Değerler: "active", "paused".
       field "status", :status, :string
@@ -5681,7 +5681,7 @@ module HeroSignal
     end
 
     # UpdateWarmupPlanDtoProviderShares şeması.
-    class UpdateWarmupPlanDtoProviderShares < HeroSignal::BaseModel
+    class UpdateWarmupPlanDtoProviderShares < Pushizo::BaseModel
       # Zorunlu.
       field "gmail", :gmail, :number
       # Zorunlu.
@@ -5693,7 +5693,7 @@ module HeroSignal
     end
 
     # UpdateWebhookDto şeması.
-    class UpdateWebhookDto < HeroSignal::BaseModel
+    class UpdateWebhookDto < Pushizo::BaseModel
       field "url", :url, :string
       field "description", :description, :string
       # Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited", "audit.created".
@@ -5710,12 +5710,12 @@ module HeroSignal
     end
 
     # UpdateWebhookDtoEventFilters şeması.
-    class UpdateWebhookDtoEventFilters < HeroSignal::BaseModel
+    class UpdateWebhookDtoEventFilters < Pushizo::BaseModel
       field "event_names", :event_names, [:array, :string]
     end
 
     # Olay filtresi: { match: all|any, conditions: [{ field, op, value? }] }.
-    class UpdateWebhookDtoFilters < HeroSignal::BaseModel
+    class UpdateWebhookDtoFilters < Pushizo::BaseModel
       # Zorunlu. Değerler: "all", "any".
       field "match", :match, :string
       # Zorunlu.
@@ -5723,7 +5723,7 @@ module HeroSignal
     end
 
     # UpdateWebhookDtoFiltersConditionsItem şeması.
-    class UpdateWebhookDtoFiltersConditionsItem < HeroSignal::BaseModel
+    class UpdateWebhookDtoFiltersConditionsItem < Pushizo::BaseModel
       # Zorunlu.
       field "field", :field, :string
       # Zorunlu. Değerler: "eq", "neq", "in", "not_in", "starts_with", "contains", "exists", "not_exists".
@@ -5732,7 +5732,7 @@ module HeroSignal
     end
 
     # UpsertUserDto şeması.
-    class UpsertUserDto < HeroSignal::BaseModel
+    class UpsertUserDto < Pushizo::BaseModel
       field "identity", :identity, :any
       field "external_id", :external_id, :string
       field "properties", :properties, [:map, :any]
@@ -5741,7 +5741,7 @@ module HeroSignal
     end
 
     # UsageReport şeması.
-    class UsageReport < HeroSignal::BaseModel
+    class UsageReport < Pushizo::BaseModel
       # Zorunlu.
       field "org_id", :org_id, :string
       # Zorunlu.
@@ -5761,7 +5761,7 @@ module HeroSignal
     end
 
     # UsageReportAppsItem şeması.
-    class UsageReportAppsItem < HeroSignal::BaseModel
+    class UsageReportAppsItem < Pushizo::BaseModel
       # Zorunlu.
       field "app_id", :app_id, :string
       # Zorunlu.
@@ -5775,7 +5775,7 @@ module HeroSignal
     end
 
     # UsageReportDailyItem şeması.
-    class UsageReportDailyItem < HeroSignal::BaseModel
+    class UsageReportDailyItem < Pushizo::BaseModel
       # Zorunlu.
       field "date", :date, :string
       # Zorunlu.
@@ -5787,7 +5787,7 @@ module HeroSignal
     end
 
     # UsageReportMetricsItem şeması.
-    class UsageReportMetricsItem < HeroSignal::BaseModel
+    class UsageReportMetricsItem < Pushizo::BaseModel
       # Zorunlu.
       field "metric", :metric, :string
       # Zorunlu.
@@ -5801,7 +5801,7 @@ module HeroSignal
     end
 
     # UsageReportPeriod şeması.
-    class UsageReportPeriod < HeroSignal::BaseModel
+    class UsageReportPeriod < Pushizo::BaseModel
       # Zorunlu.
       field "start", :start, :string
       # Zorunlu.
@@ -5809,7 +5809,7 @@ module HeroSignal
     end
 
     # User şeması.
-    class User < HeroSignal::BaseModel
+    class User < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -5841,7 +5841,7 @@ module HeroSignal
     end
 
     # UserDetail şeması.
-    class UserDetail < HeroSignal::BaseModel
+    class UserDetail < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -5877,7 +5877,7 @@ module HeroSignal
     end
 
     # UserDetailAliasesItem şeması.
-    class UserDetailAliasesItem < HeroSignal::BaseModel
+    class UserDetailAliasesItem < Pushizo::BaseModel
       # Zorunlu.
       field "label", :label, :string
       # Zorunlu.
@@ -5885,7 +5885,7 @@ module HeroSignal
     end
 
     # UserExport şeması.
-    class UserExport < HeroSignal::BaseModel
+    class UserExport < Pushizo::BaseModel
       # Zorunlu.
       field "exported_at", :exported_at, :string
       # Zorunlu.
@@ -5895,7 +5895,7 @@ module HeroSignal
     end
 
     # UserExportEventsItem şeması.
-    class UserExportEventsItem < HeroSignal::BaseModel
+    class UserExportEventsItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -5915,19 +5915,19 @@ module HeroSignal
     end
 
     # UserIdentity şeması.
-    class UserIdentity < HeroSignal::BaseModel
+    class UserIdentity < Pushizo::BaseModel
       # Zorunlu.
       field "identity", :identity, [:map, :string]
     end
 
     # UserJourneyRuns şeması.
-    class UserJourneyRuns < HeroSignal::BaseModel
+    class UserJourneyRuns < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "UserJourneyRunsDataItem"]
     end
 
     # UserJourneyRunsDataItem şeması.
-    class UserJourneyRunsDataItem < HeroSignal::BaseModel
+    class UserJourneyRunsDataItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -5961,7 +5961,7 @@ module HeroSignal
     end
 
     # UserList şeması.
-    class UserList < HeroSignal::BaseModel
+    class UserList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "User"]
       # Zorunlu.
@@ -5971,7 +5971,7 @@ module HeroSignal
     end
 
     # UserPreferences şeması.
-    class UserPreferences < HeroSignal::BaseModel
+    class UserPreferences < Pushizo::BaseModel
       # Zorunlu.
       field "user_id", :user_id, :string
       # Zorunlu.
@@ -5981,7 +5981,7 @@ module HeroSignal
     end
 
     # UserPreferencesDataItem şeması.
-    class UserPreferencesDataItem < HeroSignal::BaseModel
+    class UserPreferencesDataItem < Pushizo::BaseModel
       # Zorunlu.
       field "category", :category, :string
       # Zorunlu.
@@ -5997,7 +5997,7 @@ module HeroSignal
     end
 
     # UsersSearchBody şeması.
-    class UsersSearchBody < HeroSignal::BaseModel
+    class UsersSearchBody < Pushizo::BaseModel
       # Zorunlu. Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
       field "definition", :definition, "UsersSearchBodyDefinition"
       field "limit", :limit, :integer
@@ -6005,20 +6005,20 @@ module HeroSignal
     end
 
     # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
-    class UsersSearchBodyDefinition < HeroSignal::BaseModel
+    class UsersSearchBodyDefinition < Pushizo::BaseModel
       field "all", :all, [:array, [:map, :any]]
       field "any", :any, [:array, [:map, :any]]
       field "none", :none, [:array, [:map, :any]]
     end
 
     # VerifyAddressDto şeması.
-    class VerifyAddressDto < HeroSignal::BaseModel
+    class VerifyAddressDto < Pushizo::BaseModel
       # Zorunlu.
       field "address", :address, :string
     end
 
     # WarehouseConnectionResult şeması.
-    class WarehouseConnectionResult < HeroSignal::BaseModel
+    class WarehouseConnectionResult < Pushizo::BaseModel
       # Zorunlu.
       field "ok", :ok, :boolean
       # Zorunlu.
@@ -6028,7 +6028,7 @@ module HeroSignal
     end
 
     # WarehouseConnectionResultError şeması.
-    class WarehouseConnectionResultError < HeroSignal::BaseModel
+    class WarehouseConnectionResultError < Pushizo::BaseModel
       # Zorunlu.
       field "code", :code, :string
       # Zorunlu.
@@ -6036,7 +6036,7 @@ module HeroSignal
     end
 
     # WarehouseExport şeması.
-    class WarehouseExport < HeroSignal::BaseModel
+    class WarehouseExport < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -6078,7 +6078,7 @@ module HeroSignal
     end
 
     # WarehouseExportCursorsValue şeması.
-    class WarehouseExportCursorsValue < HeroSignal::BaseModel
+    class WarehouseExportCursorsValue < Pushizo::BaseModel
       # Zorunlu.
       field "ts", :ts, :string
       # Zorunlu.
@@ -6086,13 +6086,13 @@ module HeroSignal
     end
 
     # WarehouseExportList şeması.
-    class WarehouseExportList < HeroSignal::BaseModel
+    class WarehouseExportList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "WarehouseExport"]
     end
 
     # WarehouseExportRun şeması.
-    class WarehouseExportRun < HeroSignal::BaseModel
+    class WarehouseExportRun < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -6120,7 +6120,7 @@ module HeroSignal
     end
 
     # WarehouseExportRunPage şeması.
-    class WarehouseExportRunPage < HeroSignal::BaseModel
+    class WarehouseExportRunPage < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "WarehouseExportRun"]
       # Zorunlu.
@@ -6130,7 +6130,7 @@ module HeroSignal
     end
 
     # WarehouseExportRunTablesValue şeması.
-    class WarehouseExportRunTablesValue < HeroSignal::BaseModel
+    class WarehouseExportRunTablesValue < Pushizo::BaseModel
       # Zorunlu.
       field "rows", :rows, :integer
       # Zorunlu.
@@ -6144,7 +6144,7 @@ module HeroSignal
     end
 
     # WarehouseExportRunTablesValueFrom şeması.
-    class WarehouseExportRunTablesValueFrom < HeroSignal::BaseModel
+    class WarehouseExportRunTablesValueFrom < Pushizo::BaseModel
       # Zorunlu.
       field "ts", :ts, :string
       # Zorunlu.
@@ -6152,7 +6152,7 @@ module HeroSignal
     end
 
     # WarehouseExportRunTablesValueTo şeması.
-    class WarehouseExportRunTablesValueTo < HeroSignal::BaseModel
+    class WarehouseExportRunTablesValueTo < Pushizo::BaseModel
       # Zorunlu.
       field "ts", :ts, :string
       # Zorunlu.
@@ -6160,13 +6160,13 @@ module HeroSignal
     end
 
     # WarehouseTables şeması.
-    class WarehouseTables < HeroSignal::BaseModel
+    class WarehouseTables < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "WarehouseTablesDataItem"]
     end
 
     # WarehouseTablesDataItem şeması.
-    class WarehouseTablesDataItem < HeroSignal::BaseModel
+    class WarehouseTablesDataItem < Pushizo::BaseModel
       # Zorunlu. Değerler: "deliveries", "delivery_events", "events", "conversions", "users", "subscriptions".
       field "name", :name, :string
       # Zorunlu. Değerler: "incremental", "snapshot".
@@ -6180,7 +6180,7 @@ module HeroSignal
     end
 
     # WarehouseTablesDataItemColumnsItem şeması.
-    class WarehouseTablesDataItemColumnsItem < HeroSignal::BaseModel
+    class WarehouseTablesDataItemColumnsItem < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
       # Zorunlu.
@@ -6190,7 +6190,7 @@ module HeroSignal
     end
 
     # Webhook şeması.
-    class Webhook < HeroSignal::BaseModel
+    class Webhook < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -6234,7 +6234,7 @@ module HeroSignal
     end
 
     # WebhookDeliveryDetail şeması.
-    class WebhookDeliveryDetail < HeroSignal::BaseModel
+    class WebhookDeliveryDetail < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -6270,7 +6270,7 @@ module HeroSignal
     end
 
     # WebhookDeliveryPage şeması.
-    class WebhookDeliveryPage < HeroSignal::BaseModel
+    class WebhookDeliveryPage < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "WebhookDeliveryPageDataItem"]
       # Zorunlu.
@@ -6280,7 +6280,7 @@ module HeroSignal
     end
 
     # WebhookDeliveryPageDataItem şeması.
-    class WebhookDeliveryPageDataItem < HeroSignal::BaseModel
+    class WebhookDeliveryPageDataItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -6314,12 +6314,12 @@ module HeroSignal
     end
 
     # WebhookEventFilters şeması.
-    class WebhookEventFilters < HeroSignal::BaseModel
+    class WebhookEventFilters < Pushizo::BaseModel
       field "event_names", :event_names, [:array, :string]
     end
 
     # WebhookFilters şeması.
-    class WebhookFilters < HeroSignal::BaseModel
+    class WebhookFilters < Pushizo::BaseModel
       # Zorunlu. Değerler: "all", "any".
       field "match", :match, :string
       # Zorunlu.
@@ -6327,7 +6327,7 @@ module HeroSignal
     end
 
     # WebhookFiltersConditionsItem şeması.
-    class WebhookFiltersConditionsItem < HeroSignal::BaseModel
+    class WebhookFiltersConditionsItem < Pushizo::BaseModel
       # Zorunlu.
       field "field", :field, :string
       # Zorunlu. Değerler: "eq", "neq", "in", "not_in", "starts_with", "contains", "exists", "not_exists".
@@ -6336,13 +6336,13 @@ module HeroSignal
     end
 
     # WebhookList şeması.
-    class WebhookList < HeroSignal::BaseModel
+    class WebhookList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "Webhook"]
     end
 
     # WebhookPreviewDto şeması.
-    class WebhookPreviewDto < HeroSignal::BaseModel
+    class WebhookPreviewDto < Pushizo::BaseModel
       # Zorunlu. Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited", "audit.created", "webhook.test".
       field "event_type", :event_type, :string
       field "data", :data, [:map, :any]
@@ -6354,7 +6354,7 @@ module HeroSignal
     end
 
     # Olay filtresi: { match: all|any, conditions: [{ field, op, value? }] }.
-    class WebhookPreviewDtoFilters < HeroSignal::BaseModel
+    class WebhookPreviewDtoFilters < Pushizo::BaseModel
       # Zorunlu. Değerler: "all", "any".
       field "match", :match, :string
       # Zorunlu.
@@ -6362,7 +6362,7 @@ module HeroSignal
     end
 
     # WebhookPreviewDtoFiltersConditionsItem şeması.
-    class WebhookPreviewDtoFiltersConditionsItem < HeroSignal::BaseModel
+    class WebhookPreviewDtoFiltersConditionsItem < Pushizo::BaseModel
       # Zorunlu.
       field "field", :field, :string
       # Zorunlu. Değerler: "eq", "neq", "in", "not_in", "starts_with", "contains", "exists", "not_exists".
@@ -6371,7 +6371,7 @@ module HeroSignal
     end
 
     # WebhookPreviewResult şeması.
-    class WebhookPreviewResult < HeroSignal::BaseModel
+    class WebhookPreviewResult < Pushizo::BaseModel
       # Zorunlu.
       field "payload", :payload, [:map, :any]
       # Zorunlu. Olay filtreden geçer mi (geçmezse gönderilmez).
@@ -6387,7 +6387,7 @@ module HeroSignal
     end
 
     # WebhookPreviewResultError şeması.
-    class WebhookPreviewResultError < HeroSignal::BaseModel
+    class WebhookPreviewResultError < Pushizo::BaseModel
       # Zorunlu.
       field "code", :code, :string
       # Zorunlu.
@@ -6395,7 +6395,7 @@ module HeroSignal
     end
 
     # WebhookPreviewResultFailedConditionsItem şeması.
-    class WebhookPreviewResultFailedConditionsItem < HeroSignal::BaseModel
+    class WebhookPreviewResultFailedConditionsItem < Pushizo::BaseModel
       # Zorunlu.
       field "field", :field, :string
       # Zorunlu.
@@ -6404,7 +6404,7 @@ module HeroSignal
     end
 
     # WebhookWithSecret şeması.
-    class WebhookWithSecret < HeroSignal::BaseModel
+    class WebhookWithSecret < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -6450,12 +6450,12 @@ module HeroSignal
     end
 
     # WebhookWithSecretEventFilters şeması.
-    class WebhookWithSecretEventFilters < HeroSignal::BaseModel
+    class WebhookWithSecretEventFilters < Pushizo::BaseModel
       field "event_names", :event_names, [:array, :string]
     end
 
     # WebhookWithSecretFilters şeması.
-    class WebhookWithSecretFilters < HeroSignal::BaseModel
+    class WebhookWithSecretFilters < Pushizo::BaseModel
       # Zorunlu. Değerler: "all", "any".
       field "match", :match, :string
       # Zorunlu.
@@ -6463,7 +6463,7 @@ module HeroSignal
     end
 
     # WebhookWithSecretFiltersConditionsItem şeması.
-    class WebhookWithSecretFiltersConditionsItem < HeroSignal::BaseModel
+    class WebhookWithSecretFiltersConditionsItem < Pushizo::BaseModel
       # Zorunlu.
       field "field", :field, :string
       # Zorunlu. Değerler: "eq", "neq", "in", "not_in", "starts_with", "contains", "exists", "not_exists".
@@ -6472,13 +6472,13 @@ module HeroSignal
     end
 
     # WhatsAppTemplateList şeması.
-    class WhatsAppTemplateList < HeroSignal::BaseModel
+    class WhatsAppTemplateList < Pushizo::BaseModel
       # Zorunlu.
       field "data", :data, [:array, "WhatsAppTemplateListDataItem"]
     end
 
     # WhatsAppTemplateListDataItem şeması.
-    class WhatsAppTemplateListDataItem < HeroSignal::BaseModel
+    class WhatsAppTemplateListDataItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -6504,7 +6504,7 @@ module HeroSignal
     end
 
     # WhatsAppTemplateSync şeması.
-    class WhatsAppTemplateSync < HeroSignal::BaseModel
+    class WhatsAppTemplateSync < Pushizo::BaseModel
       # Zorunlu.
       field "total", :total, :integer
       # Zorunlu.
@@ -6514,7 +6514,7 @@ module HeroSignal
     end
 
     # WhatsAppTemplateSyncDataItem şeması.
-    class WhatsAppTemplateSyncDataItem < HeroSignal::BaseModel
+    class WhatsAppTemplateSyncDataItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -6540,7 +6540,7 @@ module HeroSignal
     end
 
     # ZapierHook şeması.
-    class ZapierHook < HeroSignal::BaseModel
+    class ZapierHook < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -6558,7 +6558,7 @@ module HeroSignal
     end
 
     # ZapierMe şeması.
-    class ZapierMe < HeroSignal::BaseModel
+    class ZapierMe < Pushizo::BaseModel
       # Zorunlu.
       field "app_id", :app_id, :string
       # Zorunlu.
@@ -6570,7 +6570,7 @@ module HeroSignal
     end
 
     # ZapierSamplesItem şeması.
-    class ZapierSamplesItem < HeroSignal::BaseModel
+    class ZapierSamplesItem < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
       # Zorunlu.
@@ -6584,7 +6584,7 @@ module HeroSignal
     end
 
     # ZapierSubscribeDto şeması.
-    class ZapierSubscribeDto < HeroSignal::BaseModel
+    class ZapierSubscribeDto < Pushizo::BaseModel
       # Zorunlu.
       field "target_url", :target_url, :string
       # Zorunlu. Değerler: "subscription.created", "subscription.unsubscribed", "event.received", "delivery.delivered", "delivery.opened", "delivery.clicked", "user.created", "user.updated", "conversion.created", "campaign.completed".

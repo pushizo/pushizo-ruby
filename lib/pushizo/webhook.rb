@@ -3,19 +3,19 @@
 require "json"
 require "openssl"
 
-module HeroSignal
+module Pushizo
   # Giden webhook imza doğrulaması (alıcı tarafı).
   #
-  # Başlık: HeroSignal-Signature: t=<unix>,v1=<hex> — v1 = HMAC-SHA256(secret, "#{t}.#{ham_gövde}").
+  # Başlık: Pushizo-Signature: t=<unix>,v1=<hex> — v1 = HMAC-SHA256(secret, "#{t}.#{ham_gövde}").
   # Secret rotasyonunda başlıkta iki v1 bulunabilir; herhangi biri eşleşirse imza geçerlidir.
   #
   #   payload = request.body.read                       # ham gövde (JSON.parse etmeden)
-  #   header = request.get_header("HTTP_HEROSIGNAL_SIGNATURE")
-  #   events = HeroSignal::Webhook.construct_events(payload, header, ENV.fetch("HS_WEBHOOK_SECRET"))
-  #   # HeroSignal-Event-Id ile tekrarları ayıklayın; 2xx ile hızlı yanıt verin.
+  #   header = request.get_header("HTTP_PUSHIZO_SIGNATURE")
+  #   events = Pushizo::Webhook.construct_events(payload, header, ENV.fetch("HS_WEBHOOK_SECRET"))
+  #   # Pushizo-Event-Id ile tekrarları ayıklayın; 2xx ile hızlı yanıt verin.
   module Webhook
-    SIGNATURE_HEADER = "HeroSignal-Signature"
-    EVENT_ID_HEADER = "HeroSignal-Event-Id"
+    SIGNATURE_HEADER = "Pushizo-Signature"
+    EVENT_ID_HEADER = "Pushizo-Event-Id"
     # Varsayılan zaman damgası toleransı (sn); daha eski t tekrar (replay) sayılır.
     DEFAULT_TOLERANCE = 300
 

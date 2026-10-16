@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module HeroSignal
+module Pushizo
   # Multipart dosya alanı. İçerik bellekte tutulur ki yeniden denemeler aynı gövdeyi göndersin.
   class FileUpload
     attr_reader :filename, :content, :content_type
