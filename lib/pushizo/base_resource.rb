@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module HeroSignal
+module Pushizo
   # Üretilmiş kaynak sınıflarının tabanı.
   class BaseResource
     def initialize(client)

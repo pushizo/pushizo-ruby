@@ -9,21 +9,21 @@ class TestClient < Minitest::Test
   end
 
   def client(transport, **opts)
-    HeroSignal::Client.new(api_key: "hs_live_test", app_id: "app_1", base_url: "https://api.test/",
+    Pushizo::Client.new(api_key: "hs_live_test", app_id: "app_1", base_url: "https://api.test/",
                            transport: transport, sleeper: ->(s) { @slept << s }, **opts)
   end
 
   def test_create_notification_sends_auth_app_and_idempotency_key
     t = FakeTransport.new([202, '{"id":"msg_1","status":"queued"}'])
     res = client(t).notifications.create({ target: { include_aliases: { external_id: ["u1"] } }, contents: { tr: "Merhaba" } })
-    assert_instance_of HeroSignal::Models::CreateNotificationResult, res
+    assert_instance_of Pushizo::Models::CreateNotificationResult, res
     assert_equal "msg_1", res.id
     assert_equal "msg_1", res["id"]
     r = t.requests.first
     assert_equal :post, r.method
     assert_equal "https://api.test/v1/notifications", r.url
     assert_equal "Bearer hs_live_test", r.headers["Authorization"]
-    assert r.headers["User-Agent"].start_with?("herosignal-ruby/")
+    assert r.headers["User-Agent"].start_with?("pushizo-ruby/")
     assert_match(/\A[0-9a-f-]{36}\z/, r.headers["Idempotency-Key"])
     body = t.json(0)
     assert_equal "app_1", body["app_id"]
@@ -34,7 +34,7 @@ class TestClient < Minitest::Test
   def test_model_body_explicit_and_body_idempotency_key
     t = FakeTransport.new([202, '{"id":"m"}'], [202, '{"id":"m"}'])
     hs = client(t)
-    dto = HeroSignal::Models::CreateNotificationDto.new(contents: { "en" => "x" })
+    dto = Pushizo::Models::CreateNotificationDto.new(contents: { "en" => "x" })
     hs.notifications.create(dto, idempotency_key: "order-1")
     assert_nil dto.app_id, "çağıranın nesnesi değiştirilmez"
     hs.notifications.create({ "contents" => { "en" => "x" }, "idempotency_key" => "order-2" }, app_id: "app_2")
@@ -63,9 +63,9 @@ class TestClient < Minitest::Test
   end
 
   def test_missing_app_id
-    hs = HeroSignal::Client.new(api_key: "k", transport: FakeTransport.new)
+    hs = Pushizo::Client.new(api_key: "k", transport: FakeTransport.new)
     assert_raises(ArgumentError) { hs.apps.get }
-    assert_raises(ArgumentError) { HeroSignal::Client.new(api_key: "") }
+    assert_raises(ArgumentError) { Pushizo::Client.new(api_key: "") }
     refute_includes hs.inspect, "k\""
   end
 
@@ -89,29 +89,29 @@ class TestClient < Minitest::Test
       [401, '{"error":{"code":"HS_UNAUTHENTICATED","message":"anahtar"}}']
     )
     hs = client(t)
-    err = assert_raises(HeroSignal::NotFoundError) { hs.notifications.get("msg_x") }
-    assert_kind_of HeroSignal::Error, err
-    assert_equal [404, HeroSignal::ErrorCode::NOT_FOUND, "req_1", { "id" => "x" }], [err.status, err.code, err.request_id, err.details]
+    err = assert_raises(Pushizo::NotFoundError) { hs.notifications.get("msg_x") }
+    assert_kind_of Pushizo::Error, err
+    assert_equal [404, Pushizo::ErrorCode::NOT_FOUND, "req_1", { "id" => "x" }], [err.status, err.code, err.request_id, err.details]
     refute err.retryable?
-    invalid = assert_raises(HeroSignal::InvalidRequestError) { hs.segments.get("seg_1") }
-    assert_equal HeroSignal::ErrorCode::NO_RECIPIENTS, invalid.code
-    assert_raises(HeroSignal::AuthenticationError) { hs.apps.list }
+    invalid = assert_raises(Pushizo::InvalidRequestError) { hs.segments.get("seg_1") }
+    assert_equal Pushizo::ErrorCode::NO_RECIPIENTS, invalid.code
+    assert_raises(Pushizo::AuthenticationError) { hs.apps.list }
     assert_empty @slept
     assert_equal 3, t.requests.size
   end
 
   def test_retries_exhausted
     t = FakeTransport.new([500, "{}"], [500, "{}"], [500, "{}"], [500, "{}"])
-    err = assert_raises(HeroSignal::ServerError) { client(t).apps.list }
+    err = assert_raises(Pushizo::ServerError) { client(t).apps.list }
     assert_equal "HTTP_500", err.code
     assert_equal 4, t.requests.size
     assert_equal [0.3, 1.0, 3.0], @slept
 
-    net = assert_raises(HeroSignal::NetworkError) { client(FakeTransport.new(:network, :network), max_retries: 1).apps.list }
+    net = assert_raises(Pushizo::NetworkError) { client(FakeTransport.new(:network, :network), max_retries: 1).apps.list }
     assert_equal 0, net.status
-    assert_equal HeroSignal::ErrorCode::NETWORK, net.code
+    assert_equal Pushizo::ErrorCode::NETWORK, net.code
 
-    assert_raises(HeroSignal::RateLimitError) do
+    assert_raises(Pushizo::RateLimitError) do
       client(FakeTransport.new([429, "{}"])).apps.list(request_options: { max_retries: 0 })
     end
   end
@@ -120,18 +120,18 @@ class TestClient < Minitest::Test
 
   def test_post_without_idempotency_key_not_retried_on_5xx
     t = FakeTransport.new(UNAVAILABLE, [200, '{"accepted":1}'])
-    assert_raises(HeroSignal::ServerError) { client(t).events.send_events({ events: [] }) }
+    assert_raises(Pushizo::ServerError) { client(t).events.send_events({ events: [] }) }
     assert_equal 1, t.requests.size
     assert_empty @slept
 
     # Otomatik anahtar kapalıyken notifications.create de anahtarsız POST'tur.
     t = FakeTransport.new(UNAVAILABLE, [202, '{"id":"m"}'])
-    assert_raises(HeroSignal::ServerError) { client(t, auto_idempotency_key: false).notifications.create({ contents: { en: "x" } }) }
+    assert_raises(Pushizo::ServerError) { client(t, auto_idempotency_key: false).notifications.create({ contents: { en: "x" } }) }
     assert_equal 1, t.requests.size
 
     # Gönderildikten sonra kopan bağlantı: sunucu isteği işlemiş olabilir, tekrarlanmaz.
     t = FakeTransport.new(:network, [200, "{}"])
-    assert_raises(HeroSignal::NetworkError) { client(t).events.send_events({ events: [] }) }
+    assert_raises(Pushizo::NetworkError) { client(t).events.send_events({ events: [] }) }
     assert_equal 1, t.requests.size
   end
 
@@ -174,9 +174,9 @@ class TestClient < Minitest::Test
     port = server.addr[1]
     server.close
     slept = []
-    hs = HeroSignal::Client.new(api_key: "k", app_id: "app_1", base_url: "http://127.0.0.1:#{port}", max_retries: 1,
+    hs = Pushizo::Client.new(api_key: "k", app_id: "app_1", base_url: "http://127.0.0.1:#{port}", max_retries: 1,
                                 sleeper: ->(s) { slept << s })
-    assert_raises(HeroSignal::NetworkError) { hs.events.send_events({ events: [] }) }
+    assert_raises(Pushizo::NetworkError) { hs.events.send_events({ events: [] }) }
     assert_equal [0.3], slept
   end
 
@@ -204,7 +204,7 @@ class TestClient < Minitest::Test
 
   def test_multipart_import
     t = FakeTransport.new([202, '{"id":"imp_1"}'])
-    client(t).imports.create(type: "csv_users", file: HeroSignal::FileUpload.new("external_id\nu1\n", filename: "users.csv"))
+    client(t).imports.create(type: "csv_users", file: Pushizo::FileUpload.new("external_id\nu1\n", filename: "users.csv"))
     r = t.requests.first
     assert r.headers["Content-Type"].start_with?("multipart/form-data; boundary=")
     assert_includes r.body, "name=\"type\"\r\n\r\ncsv_users"
@@ -217,7 +217,7 @@ class TestClient < Minitest::Test
     t = FakeTransport.new([200, '{"data":[{"id":"msg_1","status":"queued","yeni_alan":1}],"has_more":false,"next_cursor":null}'])
     page = client(t).notifications.list
     msg = page.data.first
-    assert_instance_of HeroSignal::Models::Message, msg
+    assert_instance_of Pushizo::Models::Message, msg
     assert_equal "queued", msg.status
     assert_equal 1, msg["yeni_alan"]
     assert_equal false, page.has_more
@@ -240,7 +240,7 @@ class TestClient < Minitest::Test
       conn.write("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: #{body.bytesize}\r\nConnection: close\r\n\r\n#{body}")
       conn.close
     end
-    hs = HeroSignal::Client.new(api_key: "hs_live_x", base_url: "http://127.0.0.1:#{port}")
+    hs = Pushizo::Client.new(api_key: "hs_live_x", base_url: "http://127.0.0.1:#{port}")
     apps = hs.apps.list
     assert_equal "Demo", apps.data.first.name
     assert_equal ["GET /v1/apps HTTP/1.1", "Bearer hs_live_x"], seen.pop

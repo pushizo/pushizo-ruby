@@ -4,7 +4,7 @@ require "net/http"
 require "openssl"
 require "uri"
 
-module HeroSignal
+module Pushizo
   # Net::HTTP tabanlı varsayılan taşıma. Özel taşıma aynı imzalı #call(method, url, headers, body, timeout)
   # metodu sağlar ve [durum, başlıklar (küçük harf anahtar), gövde] döndürür; ağ hatasında istisna fırlatır.
   class NetHttpTransport

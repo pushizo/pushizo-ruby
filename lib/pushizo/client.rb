@@ -6,15 +6,15 @@ require "openssl"
 require "securerandom"
 require "time"
 
-module HeroSignal
-  # HeroSignal API istemcisi. Kaynak erişimcileri (notifications, users, segments …) api/openapi.yaml'dan üretilir.
+module Pushizo
+  # Pushizo API istemcisi. Kaynak erişimcileri (notifications, users, segments …) api/openapi.yaml'dan üretilir.
   #
-  #   hs = HeroSignal::Client.new(api_key: ENV.fetch("HS_API_KEY"), app_id: "app_…")
+  #   hs = Pushizo::Client.new(api_key: ENV.fetch("HS_API_KEY"), app_id: "app_…")
   #   hs.segments.list_all(limit: 50).each { |segment| puts segment.name }
   class Client
     include GeneratedResources
 
-    DEFAULT_BASE_URL = "https://api.herosignal.dev"
+    DEFAULT_BASE_URL = "https://api.pushizo.com"
     BACKOFF = [0.3, 1.0, 3.0].freeze
     NETWORK_ERRORS = [
       IOError, EOFError, SocketError, SystemCallError, Timeout::Error, OpenSSL::SSL::SSLError,
@@ -42,7 +42,7 @@ module HeroSignal
     # sleeper:: Yeniden deneme beklemesi (testlerde değiştirilebilir).
     def initialize(api_key:, app_id: nil, base_url: DEFAULT_BASE_URL, timeout: 30, max_retries: 3,
                    auto_idempotency_key: true, user_agent: nil, transport: nil, sleeper: nil)
-      raise ArgumentError, "HeroSignal: api_key gerekli." if api_key.nil? || api_key.to_s.empty?
+      raise ArgumentError, "Pushizo: api_key gerekli." if api_key.nil? || api_key.to_s.empty?
 
       @api_key = api_key.to_s
       @app_id = app_id
@@ -50,7 +50,7 @@ module HeroSignal
       @timeout = timeout
       @max_retries = max_retries
       @auto_idempotency_key = auto_idempotency_key
-      @user_agent = user_agent || "herosignal-ruby/#{VERSION}"
+      @user_agent = user_agent || "pushizo-ruby/#{VERSION}"
       @transport = transport || NetHttpTransport.new
       @sleeper = sleeper || ->(seconds) { sleep(seconds) }
     end
@@ -62,7 +62,7 @@ module HeroSignal
 
     # SDK identity verification için identity_hash = HMAC-SHA256(sdk_secret, external_id) (hex).
     def self.identity_hash(sdk_secret, external_id)
-      HeroSignal.identity_hash(sdk_secret, external_id)
+      Pushizo.identity_hash(sdk_secret, external_id)
     end
 
     # Düşük seviyeli istek (SDK'da metodu olmayan uçlar veya format=csv gibi JSON dışı yanıtlar için).
@@ -78,7 +78,7 @@ module HeroSignal
       url_path = path.dup
       url_path = url_path.gsub("{appId}", escape(resolve_app_id(app_id))) if url_path.include?("{appId}")
       path_params.each do |name, value|
-        raise ArgumentError, "HeroSignal: '#{name}' yol parametresi boş olamaz." if value.nil? || value.to_s.empty?
+        raise ArgumentError, "Pushizo: '#{name}' yol parametresi boş olamaz." if value.nil? || value.to_s.empty?
 
         url_path = url_path.gsub("{#{name}}", escape(value.to_s))
       end
@@ -101,7 +101,7 @@ module HeroSignal
       }
       payload = nil
       if form
-        boundary = "----herosignal#{SecureRandom.hex(16)}"
+        boundary = "----pushizo#{SecureRandom.hex(16)}"
         payload = multipart(form, boundary)
         headers["Content-Type"] = "multipart/form-data; boundary=#{boundary}"
       elsif !body.nil?
@@ -139,7 +139,7 @@ module HeroSignal
 
     def resolve_app_id(app_id)
       id = app_id || @app_id
-      raise ArgumentError, "HeroSignal: app_id verilmedi (istemci seçeneği veya çağrı parametresi)." if id.nil? || id.to_s.empty?
+      raise ArgumentError, "Pushizo: app_id verilmedi (istemci seçeneği veya çağrı parametresi)." if id.nil? || id.to_s.empty?
 
       id.to_s
     end

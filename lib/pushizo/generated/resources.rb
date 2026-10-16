@@ -1,11 +1,11 @@
 # Bu dosya api/openapi.yaml'dan sdk/scripts/generate-server-sdks.mjs ile üretilmiştir; elle düzenlemeyin.
 # frozen_string_literal: true
 
-module HeroSignal
+module Pushizo
   # API kaynakları; her metot bir OpenAPI işlemine karşılık gelir.
   module Resources
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
-    class Notifications < HeroSignal::BaseResource
+    class Notifications < Pushizo::BaseResource
       # Bildirim oluştur (202, asenkron teslimat)
       #
       # POST /v1/notifications
@@ -149,7 +149,7 @@ module HeroSignal
     end
 
     # Kullanıcı oluşturma/güncelleme (tag, özellik), arama ve abonelik ekleme.
-    class Users < HeroSignal::BaseResource
+    class Users < Pushizo::BaseResource
       # Kullanıcı listesi
       #
       # GET /v1/apps/{appId}/users
@@ -287,7 +287,7 @@ module HeroSignal
     end
 
     # Kullanıcı kimlikleri (alias): ekleme ve kaldırma.
-    class Aliases < HeroSignal::BaseResource
+    class Aliases < Pushizo::BaseResource
       # Alias ekle
       #
       # PATCH /v1/apps/{appId}/users/by/{label}/{value}/identity
@@ -317,7 +317,7 @@ module HeroSignal
     end
 
     # Abonelik (cihaz/e-posta/SMS) okuma, güncelleme, silme ve sahip atama.
-    class Subscriptions < HeroSignal::BaseResource
+    class Subscriptions < Pushizo::BaseResource
       # Abonelik detayı
       #
       # GET /v1/apps/{appId}/subscriptions/{subscriptionId}
@@ -401,7 +401,7 @@ module HeroSignal
     end
 
     # Özel olay gönderimi ve olay tanımları.
-    class Events < HeroSignal::BaseResource
+    class Events < Pushizo::BaseResource
       # Toplu olay gönder (en fazla 500)
       #
       # POST /v1/apps/{appId}/events
@@ -466,7 +466,7 @@ module HeroSignal
     end
 
     # Segment yönetimi, önizleme ve kitle tahmini.
-    class Segments < HeroSignal::BaseResource
+    class Segments < Pushizo::BaseResource
       # Segment listesi
       #
       # GET /v1/apps/{appId}/segments
@@ -587,7 +587,7 @@ module HeroSignal
     end
 
     # Şablon yönetimi, sürümler ve önizleme.
-    class Templates < HeroSignal::BaseResource
+    class Templates < Pushizo::BaseResource
       # Şablon listesi
       #
       # GET /v1/apps/{appId}/templates
@@ -721,7 +721,7 @@ module HeroSignal
     end
 
     # Kampanya yaşam döngüsü (zamanlama, gönderim, duraklatma, onay) ve istatistikler.
-    class Campaigns < HeroSignal::BaseResource
+    class Campaigns < Pushizo::BaseResource
       # Kampanya listesi
       #
       # GET /v1/apps/{appId}/campaigns
@@ -984,7 +984,7 @@ module HeroSignal
     end
 
     # Uygulama içi (in-app) mesaj yönetimi ve durum değişiklikleri.
-    class InAppMessages < HeroSignal::BaseResource
+    class InAppMessages < Pushizo::BaseResource
       # In-app mesajlar (durum filtresi; istatistik dahil)
       #
       # GET /v1/apps/{appId}/in-app-messages
@@ -1108,7 +1108,7 @@ module HeroSignal
     end
 
     # Kullanıcı bildirim kutusu (inbox): listeleme, okundu işaretleme ve arşivleme.
-    class Inbox < HeroSignal::BaseResource
+    class Inbox < Pushizo::BaseResource
       # Kullanıcının bildirim kutusu (okunmamış sayısı dahil)
       #
       # GET /v1/apps/{appId}/users/by/{label}/{value}/inbox
@@ -1173,7 +1173,7 @@ module HeroSignal
     end
 
     # E-posta/SMS gönderim engeli (suppression) listesi.
-    class Suppressions < HeroSignal::BaseResource
+    class Suppressions < Pushizo::BaseResource
       # Suppression list (e-posta/SMS gönderilmeyecek adresler; kanal/neden/değer filtresi)
       #
       # GET /v1/apps/{appId}/suppressions
@@ -1227,7 +1227,7 @@ module HeroSignal
     end
 
     # Veri dışa aktarma işleri.
-    class Exports < HeroSignal::BaseResource
+    class Exports < Pushizo::BaseResource
       # Export işi başlat
       #
       # POST /v1/apps/{appId}/exports
@@ -1278,7 +1278,7 @@ module HeroSignal
     end
 
     # Veri içe aktarma işleri (CSV, multipart).
-    class Imports < HeroSignal::BaseResource
+    class Imports < Pushizo::BaseResource
       # Import işi başlat (multipart: type, file)
       #
       # POST /v1/apps/{appId}/imports
@@ -1332,7 +1332,7 @@ module HeroSignal
     end
 
     # Giden webhook uç noktaları, teslimatlar ve yeniden gönderim.
-    class Webhooks < HeroSignal::BaseResource
+    class Webhooks < Pushizo::BaseResource
       # Webhook endpoint'leri
       #
       # GET /v1/apps/{appId}/webhooks
@@ -1478,7 +1478,7 @@ module HeroSignal
     end
 
     # Kanal (APNs, FCM, Web Push, e-posta, SMS) yapılandırması ve doğrulaması.
-    class Channels < HeroSignal::BaseResource
+    class Channels < Pushizo::BaseResource
       # Kanal yapılandırmaları
       #
       # GET /v1/apps/{appId}/channels
@@ -1521,7 +1521,7 @@ module HeroSignal
     end
 
     # Analitik raporları.
-    class Analytics < HeroSignal::BaseResource
+    class Analytics < Pushizo::BaseResource
       # Genel bakış KPI
       #
       # GET /v1/apps/{appId}/analytics/overview
@@ -1674,7 +1674,7 @@ module HeroSignal
     end
 
     # App listesi ve ayarları.
-    class Apps < HeroSignal::BaseResource
+    class Apps < Pushizo::BaseResource
       # App listesi (org geneli admin anahtarı)
       #
       # GET /v1/apps
@@ -1729,7 +1729,7 @@ module HeroSignal
     end
 
     # App API anahtarları: oluşturma, kapsam/IP izin listesi güncelleme, rotasyon ve iptal.
-    class ApiKeys < HeroSignal::BaseResource
+    class ApiKeys < Pushizo::BaseResource
       # App'e bağlı API anahtarları
       #
       # GET /v1/apps/{appId}/api-keys
@@ -1799,7 +1799,7 @@ module HeroSignal
     end
 
     # Organizasyon, üyeler ve denetim kayıtları.
-    class Organization < HeroSignal::BaseResource
+    class Organization < Pushizo::BaseResource
       # Anahtarın ait olduğu organizasyon (org geneli admin anahtarı)
       #
       # GET /v1/organization
@@ -1859,7 +1859,7 @@ module HeroSignal
     end
 
     # categories kaynağı.
-    class Categories < HeroSignal::BaseResource
+    class Categories < Pushizo::BaseResource
       # Mesaj kategorileri
       #
       # GET /v1/apps/{appId}/categories
@@ -1916,7 +1916,7 @@ module HeroSignal
     end
 
     # contentTables kaynağı.
-    class ContentTables < HeroSignal::BaseResource
+    class ContentTables < Pushizo::BaseResource
       # İçerik tabloları
       #
       # GET /v1/apps/{appId}/content-tables
@@ -2023,7 +2023,7 @@ module HeroSignal
     end
 
     # conversations kaynağı.
-    class Conversations < HeroSignal::BaseResource
+    class Conversations < Pushizo::BaseResource
       # Konuşmalar (SMS, WhatsApp, RCS; son mesaja göre; kanal/durum/okunmamış/kişi filtresi)
       #
       # GET /v1/apps/{appId}/conversations
@@ -2112,7 +2112,7 @@ module HeroSignal
     end
 
     # dataFeeds kaynağı.
-    class DataFeeds < HeroSignal::BaseResource
+    class DataFeeds < Pushizo::BaseResource
       # Data feed listesi
       #
       # GET /v1/apps/{appId}/data-feeds
@@ -2198,7 +2198,7 @@ module HeroSignal
     end
 
     # emailDeliverability kaynağı.
-    class EmailDeliverability < HeroSignal::BaseResource
+    class EmailDeliverability < Pushizo::BaseResource
       # E-posta teslim ayarları (BCC/arşiv, gönderim öncesi adres doğrulama, üçüncü taraf doğrulayıcı)
       #
       # GET /v1/apps/{appId}/email-deliverability
@@ -2323,7 +2323,7 @@ module HeroSignal
     end
 
     # identityKeys kaynağı.
-    class IdentityKeys < HeroSignal::BaseResource
+    class IdentityKeys < Pushizo::BaseResource
       # SDK kimlik doğrulama (JWT) genel anahtarları
       #
       # GET /v1/apps/{appId}/identity-keys
@@ -2368,7 +2368,7 @@ module HeroSignal
     end
 
     # integrations kaynağı.
-    class Integrations < HeroSignal::BaseResource
+    class Integrations < Pushizo::BaseResource
       # Zapier bağlantı testi: anahtarın app’i ve kapsamları
       #
       # GET /v1/apps/{appId}/integrations/zapier/me
@@ -2427,7 +2427,7 @@ module HeroSignal
     end
 
     # journeys kaynağı.
-    class Journeys < HeroSignal::BaseResource
+    class Journeys < Pushizo::BaseResource
       # Journey listesi
       #
       # GET /v1/apps/{appId}/journeys
@@ -2705,7 +2705,7 @@ module HeroSignal
     end
 
     # liveActivities kaynağı.
-    class LiveActivities < HeroSignal::BaseResource
+    class LiveActivities < Pushizo::BaseResource
       # Live Activity türleri
       #
       # GET /v1/apps/{appId}/live-activities/types
@@ -2808,7 +2808,7 @@ module HeroSignal
     end
 
     # mcp kaynağı.
-    class Mcp < HeroSignal::BaseResource
+    class Mcp < Pushizo::BaseResource
       # Kampanya taslağı oluştur (MCP onaylı mod; gönderim yapmaz)
       #
       # POST /v1/apps/{appId}/mcp/campaign-drafts
@@ -2839,7 +2839,7 @@ module HeroSignal
     end
 
     # preferences kaynağı.
-    class Preferences < HeroSignal::BaseResource
+    class Preferences < Pushizo::BaseResource
       # Kullanıcının tercihleri (alias ile)
       #
       # GET /v1/apps/{appId}/users/by/{label}/{value}/preferences
@@ -2869,7 +2869,7 @@ module HeroSignal
     end
 
     # smsKeywords kaynağı.
-    class SmsKeywords < HeroSignal::BaseResource
+    class SmsKeywords < Pushizo::BaseResource
       # İki yönlü mesaj anahtar sözcükleri (org geneli + bu app) ve yasal (ayrılmış) sözcükler
       #
       # GET /v1/apps/{appId}/sms-keywords
@@ -2926,7 +2926,7 @@ module HeroSignal
     end
 
     # warehouseExports kaynağı.
-    class WarehouseExports < HeroSignal::BaseResource
+    class WarehouseExports < Pushizo::BaseResource
       # Dışa aktarılabilir tablolar, kolonlar ve şema sürümleri
       #
       # GET /v1/apps/{appId}/warehouse-exports/tables
@@ -3070,7 +3070,7 @@ module HeroSignal
     end
 
     # whatsapp kaynağı.
-    class Whatsapp < HeroSignal::BaseResource
+    class Whatsapp < Pushizo::BaseResource
       # WhatsApp şablonları (Meta onay durumu ile)
       #
       # GET /v1/apps/{appId}/whatsapp/templates
@@ -3103,159 +3103,159 @@ module HeroSignal
   # İstemciye kaynak erişimcilerini ekleyen üretilmiş modül.
   module GeneratedResources
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
-    API_VERSION = "0.1.0"
+    API_VERSION = "1.0.0"
 
     RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization categories content_tables conversations data_feeds email_deliverability identity_keys integrations journeys live_activities mcp preferences sms_keywords warehouse_exports whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
-      @notifications ||= HeroSignal::Resources::Notifications.new(self)
+      @notifications ||= Pushizo::Resources::Notifications.new(self)
     end
 
     # Kullanıcı oluşturma/güncelleme (tag, özellik), arama ve abonelik ekleme.
     def users
-      @users ||= HeroSignal::Resources::Users.new(self)
+      @users ||= Pushizo::Resources::Users.new(self)
     end
 
     # Kullanıcı kimlikleri (alias): ekleme ve kaldırma.
     def aliases
-      @aliases ||= HeroSignal::Resources::Aliases.new(self)
+      @aliases ||= Pushizo::Resources::Aliases.new(self)
     end
 
     # Abonelik (cihaz/e-posta/SMS) okuma, güncelleme, silme ve sahip atama.
     def subscriptions
-      @subscriptions ||= HeroSignal::Resources::Subscriptions.new(self)
+      @subscriptions ||= Pushizo::Resources::Subscriptions.new(self)
     end
 
     # Özel olay gönderimi ve olay tanımları.
     def events
-      @events ||= HeroSignal::Resources::Events.new(self)
+      @events ||= Pushizo::Resources::Events.new(self)
     end
 
     # Segment yönetimi, önizleme ve kitle tahmini.
     def segments
-      @segments ||= HeroSignal::Resources::Segments.new(self)
+      @segments ||= Pushizo::Resources::Segments.new(self)
     end
 
     # Şablon yönetimi, sürümler ve önizleme.
     def templates
-      @templates ||= HeroSignal::Resources::Templates.new(self)
+      @templates ||= Pushizo::Resources::Templates.new(self)
     end
 
     # Kampanya yaşam döngüsü (zamanlama, gönderim, duraklatma, onay) ve istatistikler.
     def campaigns
-      @campaigns ||= HeroSignal::Resources::Campaigns.new(self)
+      @campaigns ||= Pushizo::Resources::Campaigns.new(self)
     end
 
     # Uygulama içi (in-app) mesaj yönetimi ve durum değişiklikleri.
     def in_app_messages
-      @in_app_messages ||= HeroSignal::Resources::InAppMessages.new(self)
+      @in_app_messages ||= Pushizo::Resources::InAppMessages.new(self)
     end
 
     # Kullanıcı bildirim kutusu (inbox): listeleme, okundu işaretleme ve arşivleme.
     def inbox
-      @inbox ||= HeroSignal::Resources::Inbox.new(self)
+      @inbox ||= Pushizo::Resources::Inbox.new(self)
     end
 
     # E-posta/SMS gönderim engeli (suppression) listesi.
     def suppressions
-      @suppressions ||= HeroSignal::Resources::Suppressions.new(self)
+      @suppressions ||= Pushizo::Resources::Suppressions.new(self)
     end
 
     # Veri dışa aktarma işleri.
     def exports
-      @exports ||= HeroSignal::Resources::Exports.new(self)
+      @exports ||= Pushizo::Resources::Exports.new(self)
     end
 
     # Veri içe aktarma işleri (CSV, multipart).
     def imports
-      @imports ||= HeroSignal::Resources::Imports.new(self)
+      @imports ||= Pushizo::Resources::Imports.new(self)
     end
 
     # Giden webhook uç noktaları, teslimatlar ve yeniden gönderim.
     def webhooks
-      @webhooks ||= HeroSignal::Resources::Webhooks.new(self)
+      @webhooks ||= Pushizo::Resources::Webhooks.new(self)
     end
 
     # Kanal (APNs, FCM, Web Push, e-posta, SMS) yapılandırması ve doğrulaması.
     def channels
-      @channels ||= HeroSignal::Resources::Channels.new(self)
+      @channels ||= Pushizo::Resources::Channels.new(self)
     end
 
     # Analitik raporları.
     def analytics
-      @analytics ||= HeroSignal::Resources::Analytics.new(self)
+      @analytics ||= Pushizo::Resources::Analytics.new(self)
     end
 
     # App listesi ve ayarları.
     def apps
-      @apps ||= HeroSignal::Resources::Apps.new(self)
+      @apps ||= Pushizo::Resources::Apps.new(self)
     end
 
     # App API anahtarları: oluşturma, kapsam/IP izin listesi güncelleme, rotasyon ve iptal.
     def api_keys
-      @api_keys ||= HeroSignal::Resources::ApiKeys.new(self)
+      @api_keys ||= Pushizo::Resources::ApiKeys.new(self)
     end
 
     # Organizasyon, üyeler ve denetim kayıtları.
     def organization
-      @organization ||= HeroSignal::Resources::Organization.new(self)
+      @organization ||= Pushizo::Resources::Organization.new(self)
     end
 
     def categories
-      @categories ||= HeroSignal::Resources::Categories.new(self)
+      @categories ||= Pushizo::Resources::Categories.new(self)
     end
 
     def content_tables
-      @content_tables ||= HeroSignal::Resources::ContentTables.new(self)
+      @content_tables ||= Pushizo::Resources::ContentTables.new(self)
     end
 
     def conversations
-      @conversations ||= HeroSignal::Resources::Conversations.new(self)
+      @conversations ||= Pushizo::Resources::Conversations.new(self)
     end
 
     def data_feeds
-      @data_feeds ||= HeroSignal::Resources::DataFeeds.new(self)
+      @data_feeds ||= Pushizo::Resources::DataFeeds.new(self)
     end
 
     def email_deliverability
-      @email_deliverability ||= HeroSignal::Resources::EmailDeliverability.new(self)
+      @email_deliverability ||= Pushizo::Resources::EmailDeliverability.new(self)
     end
 
     def identity_keys
-      @identity_keys ||= HeroSignal::Resources::IdentityKeys.new(self)
+      @identity_keys ||= Pushizo::Resources::IdentityKeys.new(self)
     end
 
     def integrations
-      @integrations ||= HeroSignal::Resources::Integrations.new(self)
+      @integrations ||= Pushizo::Resources::Integrations.new(self)
     end
 
     def journeys
-      @journeys ||= HeroSignal::Resources::Journeys.new(self)
+      @journeys ||= Pushizo::Resources::Journeys.new(self)
     end
 
     def live_activities
-      @live_activities ||= HeroSignal::Resources::LiveActivities.new(self)
+      @live_activities ||= Pushizo::Resources::LiveActivities.new(self)
     end
 
     def mcp
-      @mcp ||= HeroSignal::Resources::Mcp.new(self)
+      @mcp ||= Pushizo::Resources::Mcp.new(self)
     end
 
     def preferences
-      @preferences ||= HeroSignal::Resources::Preferences.new(self)
+      @preferences ||= Pushizo::Resources::Preferences.new(self)
     end
 
     def sms_keywords
-      @sms_keywords ||= HeroSignal::Resources::SmsKeywords.new(self)
+      @sms_keywords ||= Pushizo::Resources::SmsKeywords.new(self)
     end
 
     def warehouse_exports
-      @warehouse_exports ||= HeroSignal::Resources::WarehouseExports.new(self)
+      @warehouse_exports ||= Pushizo::Resources::WarehouseExports.new(self)
     end
 
     def whatsapp
-      @whatsapp ||= HeroSignal::Resources::Whatsapp.new(self)
+      @whatsapp ||= Pushizo::Resources::Whatsapp.new(self)
     end
   end
 end

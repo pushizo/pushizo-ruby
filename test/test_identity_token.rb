@@ -10,7 +10,7 @@ class TestIdentityToken < Minitest::Test
 
   def test_baslik_talepler_ve_imza
     key = OpenSSL::PKey::EC.generate("prime256v1")
-    token = HeroSignal.identity_token(key.private_to_pem, kid: "main", app_id: "app_1", external_id: "kullanici-1", expires_in: 600, now: Time.at(1_800_000_000))
+    token = Pushizo.identity_token(key.private_to_pem, kid: "main", app_id: "app_1", external_id: "kullanici-1", expires_in: 600, now: Time.at(1_800_000_000))
     header, payload, sig = token.split(".")
     assert_equal({ "alg" => "ES256", "typ" => "JWT", "kid" => "main" }, JSON.parse(decode(header)))
     assert_equal({ "sub" => "kullanici-1", "aud" => "app_1", "iat" => 1_800_000_000, "exp" => 1_800_000_600 }, JSON.parse(decode(payload)))
@@ -22,6 +22,6 @@ class TestIdentityToken < Minitest::Test
 
   def test_omur_siniri
     key = OpenSSL::PKey::EC.generate("prime256v1")
-    assert_raises(ArgumentError) { HeroSignal::IdentityToken.create(key.private_to_pem, kid: "k", app_id: "a", external_id: "e", expires_in: 90_000) }
+    assert_raises(ArgumentError) { Pushizo::IdentityToken.create(key.private_to_pem, kid: "k", app_id: "a", external_id: "e", expires_in: 90_000) }
   end
 end

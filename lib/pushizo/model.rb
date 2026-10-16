@@ -2,7 +2,7 @@
 
 require "json"
 
-module HeroSignal
+module Pushizo
   # Çalışma zamanı tip dönüşümü: API yanıtlarını model sınıflarına, istek gövdelerini JSON uyumlu hash'e çevirir.
   # Tip tanımı: :string, :integer, :number, :boolean, :binary, :any, [:array, T], [:map, T] veya model sınıf adı (String).
   module Types
@@ -13,7 +13,7 @@ module HeroSignal
 
       case type
       when String
-        klass = HeroSignal::Models.const_get(type)
+        klass = Pushizo::Models.const_get(type)
         value.is_a?(Hash) ? klass.new(value) : value
       when Array
         kind, inner = type
@@ -56,8 +56,8 @@ module HeroSignal
 
       def field(json_name, method_name, type)
         fields[json_name] = [method_name, type]
-        define_method(method_name) { HeroSignal::Types.coerce(@attributes[json_name], type) }
-        define_method(:"#{method_name}=") { |v| @attributes[json_name] = HeroSignal::Types.serialize(v) }
+        define_method(method_name) { Pushizo::Types.coerce(@attributes[json_name], type) }
+        define_method(:"#{method_name}=") { |v| @attributes[json_name] = Pushizo::Types.serialize(v) }
       end
 
       # JSON adına veya metot adına göre JSON anahtarı.
@@ -72,18 +72,18 @@ module HeroSignal
 
     def initialize(attributes = {})
       @attributes = {}
-      (attributes || {}).each { |k, v| @attributes[self.class.json_key(k)] = HeroSignal::Types.serialize(v) }
+      (attributes || {}).each { |k, v| @attributes[self.class.json_key(k)] = Pushizo::Types.serialize(v) }
     end
 
     # JSON veya metot adıyla okuma (model alanları model nesnesine çevrilir).
     def [](key)
       json = self.class.json_key(key)
       entry = self.class.fields[json]
-      entry ? HeroSignal::Types.coerce(@attributes[json], entry[1]) : @attributes[json]
+      entry ? Pushizo::Types.coerce(@attributes[json], entry[1]) : @attributes[json]
     end
 
     def []=(key, value)
-      @attributes[self.class.json_key(key)] = HeroSignal::Types.serialize(value)
+      @attributes[self.class.json_key(key)] = Pushizo::Types.serialize(value)
     end
 
     def key?(key)

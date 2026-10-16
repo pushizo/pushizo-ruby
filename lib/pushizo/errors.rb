@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module HeroSignal
+module Pushizo
   # API hata zarfındaki error.code değerleri (HS_ önekli katalog).
   module ErrorCode
     VALIDATION_ERROR = "HS_VALIDATION_ERROR"
@@ -89,7 +89,7 @@ module HeroSignal
     attr_reader :reason
 
     def initialize(reason)
-      super("HeroSignal webhook imzası geçersiz: #{reason}")
+      super("Pushizo webhook imzası geçersiz: #{reason}")
       @reason = reason
     end
   end

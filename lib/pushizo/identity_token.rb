@@ -4,7 +4,7 @@ require "base64"
 require "json"
 require "openssl"
 
-module HeroSignal
+module Pushizo
   # SDK JWT identity verification belirteci (ES256; ADR-0023 §9): sub = external_id, aud = app_id, ömür en çok
   # 24 saat. Uygulamanız belirteci kendi sunucusundan alır ve istemci SDK'sının login(external_id, jwt) çağrısına verir.
   module IdentityToken
@@ -33,7 +33,7 @@ module HeroSignal
     end
   end
 
-  # Kısayol: HeroSignal.identity_token(pem, kid:, app_id:, external_id:).
+  # Kısayol: Pushizo.identity_token(pem, kid:, app_id:, external_id:).
   def self.identity_token(private_key_pem, **kwargs)
     IdentityToken.create(private_key_pem, **kwargs)
   end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 $LOAD_PATH.unshift(File.expand_path("../lib", __dir__))
-require "herosignal"
+require "pushizo"
 require "minitest/autorun"
 
 # Sıralı yanıtlar döndüren ve istekleri kaydeden sahte taşıma; :network gönderim sonrası ağ hatası,
