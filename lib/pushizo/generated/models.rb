@@ -5758,6 +5758,7 @@ module Pushizo
       field "trialing", :trialing, :boolean
       # Zorunlu.
       field "trial_ends_at", :trial_ends_at, :string
+      field "overage", :overage, "UsageReportOverage"
     end
 
     # UsageReportAppsItem şeması.
@@ -5798,6 +5799,44 @@ module Pushizo
       field "percent", :percent, :number
       # Zorunlu.
       field "hard", :hard, :boolean
+    end
+
+    # UsageReportOverage şeması.
+    class UsageReportOverage < Pushizo::BaseModel
+      # Zorunlu.
+      field "lines", :lines, [:array, "UsageReportOverageLinesItem"]
+      # Zorunlu.
+      field "totals", :totals, "UsageReportOverageTotals"
+    end
+
+    # UsageReportOverageLinesItem şeması.
+    class UsageReportOverageLinesItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "metric", :metric, :string
+      # Zorunlu.
+      field "included", :included, :number
+      # Zorunlu.
+      field "used", :used, :number
+      # Zorunlu.
+      field "billable", :billable, :number
+      # Zorunlu.
+      field "amounts", :amounts, "UsageReportOverageLinesItemAmounts"
+    end
+
+    # UsageReportOverageLinesItemAmounts şeması.
+    class UsageReportOverageLinesItemAmounts < Pushizo::BaseModel
+      # Zorunlu.
+      field "USD", :usd, :number
+      # Zorunlu.
+      field "TRY", :try, :number
+    end
+
+    # UsageReportOverageTotals şeması.
+    class UsageReportOverageTotals < Pushizo::BaseModel
+      # Zorunlu.
+      field "USD", :usd, :number
+      # Zorunlu.
+      field "TRY", :try, :number
     end
 
     # UsageReportPeriod şeması.
