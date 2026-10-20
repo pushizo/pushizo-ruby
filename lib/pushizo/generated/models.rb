@@ -48,6 +48,78 @@ module Pushizo
       field "data", :data, [:array, "AdAccount"]
     end
 
+    # AdAttributionReport şeması.
+    class AdAttributionReport < Pushizo::BaseModel
+      # Zorunlu.
+      field "from", :from, :string
+      # Zorunlu.
+      field "to", :to, :string
+      # Zorunlu. Değerler: "last_click", "first_click", "linear", "time_decay".
+      field "model", :model, :string
+      # Zorunlu.
+      field "window_days", :window_days, :integer
+      # Zorunlu.
+      field "half_life_days", :half_life_days, :integer
+      # Zorunlu.
+      field "currency", :currency, :string
+      # Zorunlu.
+      field "group_by", :group_by, :string
+      # Zorunlu.
+      field "conversion_events", :conversion_events, [:array, :string]
+      # Zorunlu.
+      field "rows", :rows, [:array, "AdAttributionReportRowsItem"]
+      # Zorunlu.
+      field "totals", :totals, "AdAttributionReportTotals"
+      # Zorunlu.
+      field "truncated", :truncated, :boolean
+      # Zorunlu.
+      field "fx_missing", :fx_missing, [:array, :string]
+    end
+
+    # AdAttributionReportRowsItem şeması.
+    class AdAttributionReportRowsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "key", :key, :string
+      # Zorunlu. Değerler: "meta", "google", "tiktok", "linkedin", "microsoft", "other_paid", "utm", "push", "email", "sms", "whatsapp", "rcs", "direct".
+      field "channel", :channel, :string
+      # Zorunlu.
+      field "label", :label, :string
+      # Zorunlu.
+      field "paid", :paid, :boolean
+      # Zorunlu.
+      field "conversions", :conversions, :number
+      # Zorunlu.
+      field "revenue", :revenue, :number
+      # Zorunlu.
+      field "new_customers", :new_customers, :number
+      # Zorunlu.
+      field "spend", :spend, :number
+      # Zorunlu.
+      field "roas", :roas, :number
+      # Zorunlu.
+      field "cac", :cac, :number
+    end
+
+    # AdAttributionReportTotals şeması.
+    class AdAttributionReportTotals < Pushizo::BaseModel
+      # Zorunlu.
+      field "conversions", :conversions, :number
+      # Zorunlu.
+      field "revenue", :revenue, :number
+      # Zorunlu.
+      field "spend", :spend, :number
+      # Zorunlu.
+      field "new_customers", :new_customers, :number
+      # Zorunlu.
+      field "roas", :roas, :number
+      # Zorunlu.
+      field "platform_roas", :platform_roas, :number
+      # Zorunlu.
+      field "cac", :cac, :number
+      # Zorunlu.
+      field "paid_cac", :paid_cac, :number
+    end
+
     # AdAudience şeması.
     class AdAudience < Pushizo::BaseModel
       # Zorunlu.
@@ -174,6 +246,208 @@ module Pushizo
       field "mode", :mode, :string
     end
 
+    # AdBudgetAlertList şeması.
+    class AdBudgetAlertList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "AdBudgetAlertListDataItem"]
+    end
+
+    # AdBudgetAlertListDataItem şeması.
+    class AdBudgetAlertListDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "rule_id", :rule_id, :string
+      # Zorunlu.
+      field "rule_name", :rule_name, :string
+      # Zorunlu. Değerler: "daily_spend", "roas_drop", "budget_depletion".
+      field "kind", :kind, :string
+      # Zorunlu.
+      field "day", :day, :string
+      # Zorunlu.
+      field "value", :value, :number
+      # Zorunlu.
+      field "threshold", :threshold, :number
+      # Zorunlu.
+      field "details", :details, [:map, :any]
+      # Zorunlu.
+      field "emailed", :emailed, :integer
+      # Zorunlu.
+      field "created_at", :created_at, :string
+    end
+
+    # AdBudgetAlertRule şeması.
+    class AdBudgetAlertRule < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "daily_spend", "roas_drop", "budget_depletion".
+      field "kind", :kind, :string
+      # Zorunlu.
+      field "ad_account_id", :ad_account_id, :string
+      # Zorunlu.
+      field "campaign_external_id", :campaign_external_id, :string
+      # Zorunlu.
+      field "threshold", :threshold, :number
+      # Zorunlu.
+      field "window_days", :window_days, :integer
+      # Zorunlu.
+      field "recipients", :recipients, [:array, :string]
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "last_value", :last_value, :number
+      # Zorunlu.
+      field "last_evaluated_at", :last_evaluated_at, :string
+      # Zorunlu.
+      field "last_triggered_on", :last_triggered_on, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # AdBudgetAlertRuleList şeması.
+    class AdBudgetAlertRuleList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "AdBudgetAlertRule"]
+    end
+
+    # AdCapiConfig şeması.
+    class AdCapiConfig < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu. Değerler: "meta", "google", "tiktok".
+      field "platform", :platform, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "ad_account_id", :ad_account_id, :string
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "settings", :settings, "AdCapiConfigSettings"
+      # Zorunlu.
+      field "event_mappings", :event_mappings, [:array, "AdCapiConfigEventMappingsItem"]
+      # Zorunlu.
+      field "test_event_code", :test_event_code, :string
+      # Zorunlu.
+      field "test_mode", :test_mode, :boolean
+      # Zorunlu. Değerler: "website", "app".
+      field "action_source", :action_source, :string
+      # Zorunlu.
+      field "default_currency", :default_currency, :string
+      # Zorunlu.
+      field "has_access_token", :has_access_token, :boolean
+      # Zorunlu.
+      field "last_sent_at", :last_sent_at, :string
+      # Zorunlu.
+      field "last_error", :last_error, :string
+      # Zorunlu.
+      field "last_error_at", :last_error_at, :string
+      # Zorunlu.
+      field "stats", :stats, "AdCapiConfigStats"
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # AdCapiConfigEventMappingsItem şeması.
+    class AdCapiConfigEventMappingsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "event_name", :event_name, :string
+      # Zorunlu.
+      field "platform_event", :platform_event, :string
+      # Zorunlu.
+      field "value_property", :value_property, :string
+      # Zorunlu.
+      field "currency_property", :currency_property, :string
+    end
+
+    # AdCapiConfigList şeması.
+    class AdCapiConfigList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "AdCapiConfig"]
+    end
+
+    # AdCapiConfigSettings şeması.
+    class AdCapiConfigSettings < Pushizo::BaseModel
+      # Zorunlu.
+      field "pixel_id", :pixel_id, :string
+      # Zorunlu.
+      field "customer_id", :customer_id, :string
+      # Zorunlu.
+      field "login_customer_id", :login_customer_id, :string
+      # Zorunlu.
+      field "pixel_code", :pixel_code, :string
+    end
+
+    # AdCapiConfigStats şeması.
+    class AdCapiConfigStats < Pushizo::BaseModel
+      # Zorunlu.
+      field "pending", :pending, :integer
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "failed", :failed, :integer
+      # Zorunlu.
+      field "skipped", :skipped, :integer
+    end
+
+    # AdCapiDelivery şeması.
+    class AdCapiDelivery < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "config_id", :config_id, :string
+      # Zorunlu. Değerler: "meta", "google", "tiktok".
+      field "platform", :platform, :string
+      # Zorunlu.
+      field "event_id", :event_id, :string
+      # Zorunlu.
+      field "event_name", :event_name, :string
+      # Zorunlu.
+      field "platform_event", :platform_event, :string
+      # Zorunlu.
+      field "dedup_id", :dedup_id, :string
+      # Zorunlu.
+      field "user_id", :user_id, :string
+      # Zorunlu.
+      field "value", :value, :number
+      # Zorunlu.
+      field "currency", :currency, :string
+      # Zorunlu. Değerler: "pending", "sent", "failed", "skipped".
+      field "status", :status, :string
+      # Zorunlu.
+      field "skip_reason", :skip_reason, :string
+      # Zorunlu.
+      field "attempts", :attempts, :integer
+      # Zorunlu.
+      field "next_attempt_at", :next_attempt_at, :string
+      # Zorunlu.
+      field "last_error", :last_error, :string
+      # Zorunlu.
+      field "test", :test, :boolean
+      # Zorunlu.
+      field "event_occurred_at", :event_occurred_at, :string
+      # Zorunlu.
+      field "sent_at", :sent_at, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+    end
+
+    # AdCapiDeliveryList şeması.
+    class AdCapiDeliveryList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "AdCapiDelivery"]
+    end
+
     # AddAliasDto şeması.
     class AddAliasDto < Pushizo::BaseModel
       # Zorunlu.
@@ -215,10 +489,234 @@ module Pushizo
       field "at", :at, :string
     end
 
+    # AdEntity şeması.
+    class AdEntity < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "ad_account_id", :ad_account_id, :string
+      # Zorunlu. Değerler: "meta", "google", "tiktok".
+      field "platform", :platform, :string
+      # Zorunlu. Değerler: "campaign", "ad_set", "ad".
+      field "level", :level, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu.
+      field "campaign_external_id", :campaign_external_id, :string
+      # Zorunlu.
+      field "ad_set_external_id", :ad_set_external_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "active", "paused", "pending", "rejected", "archived", "deleted", "unknown".
+      field "status", :status, :string
+      # Zorunlu.
+      field "platform_status", :platform_status, :string
+      # Zorunlu.
+      field "objective", :objective, :string
+      # Zorunlu.
+      field "optimization_goal", :optimization_goal, :string
+      # Zorunlu.
+      field "currency", :currency, :string
+      # Zorunlu.
+      field "daily_budget", :daily_budget, :string
+      # Zorunlu.
+      field "lifetime_budget", :lifetime_budget, :string
+      # Zorunlu.
+      field "start_at", :start_at, :string
+      # Zorunlu.
+      field "end_at", :end_at, :string
+      # Zorunlu.
+      field "audience_external_ids", :audience_external_ids, [:array, :string]
+      # Zorunlu.
+      field "creative", :creative, "AdEntityCreative"
+      # Zorunlu.
+      field "budget_editable", :budget_editable, :boolean
+      # Zorunlu.
+      field "created_by_pushizo", :created_by_pushizo, :boolean
+      # Zorunlu.
+      field "last_seen_at", :last_seen_at, :string
+      # Zorunlu.
+      field "platform_url", :platform_url, :string
+      # Zorunlu.
+      field "metrics", :metrics, "AdEntityMetrics"
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # AdEntityCreative şeması.
+    class AdEntityCreative < Pushizo::BaseModel
+      # Zorunlu.
+      field "title", :title, :string
+      # Zorunlu.
+      field "body", :body, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "link_url", :link_url, :string
+      # Zorunlu.
+      field "image_url", :image_url, :string
+      # Zorunlu.
+      field "call_to_action", :call_to_action, :string
+    end
+
+    # AdEntityList şeması.
+    class AdEntityList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "AdEntity"]
+      # Zorunlu.
+      field "from", :from, :string
+      # Zorunlu.
+      field "to", :to, :string
+      # Zorunlu.
+      field "accounts", :accounts, [:array, "AdEntityListAccountsItem"]
+    end
+
+    # AdEntityListAccountsItem şeması.
+    class AdEntityListAccountsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "campaigns_synced_at", :campaigns_synced_at, :string
+      # Zorunlu.
+      field "insights_synced_at", :insights_synced_at, :string
+      # Zorunlu.
+      field "campaigns_sync_error", :campaigns_sync_error, :string
+      # Zorunlu.
+      field "insights_sync_error", :insights_sync_error, :string
+    end
+
+    # AdEntityMetrics şeması.
+    class AdEntityMetrics < Pushizo::BaseModel
+      # Zorunlu.
+      field "impressions", :impressions, :number
+      # Zorunlu.
+      field "clicks", :clicks, :number
+      # Zorunlu.
+      field "spend", :spend, :number
+      # Zorunlu.
+      field "conversions", :conversions, :number
+      # Zorunlu.
+      field "conversion_value", :conversion_value, :number
+      # Zorunlu.
+      field "ctr", :ctr, :number
+      # Zorunlu.
+      field "cpc", :cpc, :number
+      # Zorunlu.
+      field "roas", :roas, :number
+    end
+
+    # AdLtvReport şeması.
+    class AdLtvReport < Pushizo::BaseModel
+      # Zorunlu.
+      field "currency", :currency, :string
+      # Zorunlu.
+      field "months", :months, :integer
+      # Zorunlu.
+      field "conversion_events", :conversion_events, [:array, :string]
+      # Zorunlu.
+      field "cohorts", :cohorts, [:array, "AdLtvReportCohortsItem"]
+      # Zorunlu.
+      field "average", :average, [:array, :number]
+      # Zorunlu.
+      field "fx_missing", :fx_missing, [:array, :string]
+    end
+
+    # AdLtvReportCohortsItem şeması.
+    class AdLtvReportCohortsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "cohort", :cohort, :string
+      # Zorunlu.
+      field "size", :size, :integer
+      # Zorunlu.
+      field "revenue", :revenue, [:array, :number]
+      # Zorunlu.
+      field "ltv", :ltv, [:array, :number]
+    end
+
     # AdOk şeması.
     class AdOk < Pushizo::BaseModel
       # Zorunlu.
       field "ok", :ok, :boolean
+    end
+
+    # AdRefreshQueued şeması.
+    class AdRefreshQueued < Pushizo::BaseModel
+      # Zorunlu.
+      field "queued", :queued, :boolean
+      # Zorunlu.
+      field "next_sync_at", :next_sync_at, :string
+    end
+
+    # AdSpendReport şeması.
+    class AdSpendReport < Pushizo::BaseModel
+      # Zorunlu.
+      field "from", :from, :string
+      # Zorunlu.
+      field "to", :to, :string
+      # Zorunlu.
+      field "currency", :currency, :string
+      # Zorunlu.
+      field "group_by", :group_by, :string
+      # Zorunlu.
+      field "rows", :rows, [:array, "AdSpendReportRowsItem"]
+      # Zorunlu.
+      field "totals", :totals, "AdSpendReportTotals"
+      # Zorunlu.
+      field "fx_missing", :fx_missing, [:array, :string]
+      # Zorunlu. Değerler: "postgres", "clickhouse".
+      field "store", :store, :string
+    end
+
+    # AdSpendReportRowsItem şeması.
+    class AdSpendReportRowsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "key", :key, :string
+      # Zorunlu.
+      field "label", :label, :string
+      # Zorunlu.
+      field "platform", :platform, :string
+      # Zorunlu.
+      field "impressions", :impressions, :number
+      # Zorunlu.
+      field "clicks", :clicks, :number
+      # Zorunlu.
+      field "spend", :spend, :number
+      # Zorunlu.
+      field "conversions", :conversions, :number
+      # Zorunlu.
+      field "conversion_value", :conversion_value, :number
+      # Zorunlu.
+      field "ctr", :ctr, :number
+      # Zorunlu.
+      field "cpc", :cpc, :number
+      # Zorunlu.
+      field "cpa", :cpa, :number
+      # Zorunlu.
+      field "roas", :roas, :number
+    end
+
+    # AdSpendReportTotals şeması.
+    class AdSpendReportTotals < Pushizo::BaseModel
+      # Zorunlu.
+      field "impressions", :impressions, :number
+      # Zorunlu.
+      field "clicks", :clicks, :number
+      # Zorunlu.
+      field "spend", :spend, :number
+      # Zorunlu.
+      field "conversions", :conversions, :number
+      # Zorunlu.
+      field "conversion_value", :conversion_value, :number
+      # Zorunlu.
+      field "ctr", :ctr, :number
+      # Zorunlu.
+      field "cpc", :cpc, :number
+      # Zorunlu.
+      field "cpa", :cpa, :number
+      # Zorunlu.
+      field "roas", :roas, :number
     end
 
     # ApiEventsDto şeması.
@@ -1796,6 +2294,21 @@ module Pushizo
       field "sms", :sms, :boolean
     end
 
+    # CreateBudgetAlertRuleDto şeması.
+    class CreateBudgetAlertRuleDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "daily_spend", "roas_drop", "budget_depletion".
+      field "kind", :kind, :string
+      field "ad_account_id", :ad_account_id, :string
+      field "campaign_external_id", :campaign_external_id, :string
+      # Zorunlu.
+      field "threshold", :threshold, :number
+      field "window_days", :window_days, :integer
+      field "recipients", :recipients, [:array, :string]
+      field "enabled", :enabled, :boolean
+    end
+
     # CreateCategoryDto şeması.
     class CreateCategoryDto < Pushizo::BaseModel
       # Zorunlu.
@@ -2729,7 +3242,7 @@ module Pushizo
       # Zorunlu.
       field "url", :url, :string
       field "description", :description, :string
-      # Zorunlu. Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited", "conversation.created", "conversation.message", "conversation.assigned", "conversation.resolved", "audit.created", "form.submitted", "survey.responded", "ad_audience.synced", "ad_account.revoked".
+      # Zorunlu. Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited", "conversation.created", "conversation.message", "conversation.assigned", "conversation.resolved", "audit.created", "form.submitted", "survey.responded", "ad_audience.synced", "ad_account.revoked", "ad_budget.alert", "ad_insights.imported".
       field "events", :events, [:array, :string]
       field "event_filters", :event_filters, "CreateWebhookDtoEventFilters"
       field "batch", :batch, :boolean
@@ -6549,6 +7062,13 @@ module Pushizo
       field "status", :status, :string
     end
 
+    # UpdateAdCampaignDto şeması.
+    class UpdateAdCampaignDto < Pushizo::BaseModel
+      # Değerler: "active", "paused".
+      field "status", :status, :string
+      field "daily_budget", :daily_budget, :any
+    end
+
     # UpdateApiKeyDto şeması.
     class UpdateApiKeyDto < Pushizo::BaseModel
       field "name", :name, :string
@@ -6797,6 +7317,17 @@ module Pushizo
     class UpdateAppDtoSettingsWebPushWelcomeNotificationTextsValue < Pushizo::BaseModel
       field "title", :title, :string
       field "message", :message, :string
+    end
+
+    # UpdateBudgetAlertRuleDto şeması.
+    class UpdateBudgetAlertRuleDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "ad_account_id", :ad_account_id, :string
+      field "campaign_external_id", :campaign_external_id, :string
+      field "threshold", :threshold, :number
+      field "window_days", :window_days, :integer
+      field "recipients", :recipients, [:array, :string]
+      field "enabled", :enabled, :boolean
     end
 
     # UpdateCategoryDto şeması.
@@ -7356,7 +7887,7 @@ module Pushizo
     class UpdateWebhookDto < Pushizo::BaseModel
       field "url", :url, :string
       field "description", :description, :string
-      # Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited", "conversation.created", "conversation.message", "conversation.assigned", "conversation.resolved", "audit.created", "form.submitted", "survey.responded", "ad_audience.synced", "ad_account.revoked".
+      # Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited", "conversation.created", "conversation.message", "conversation.assigned", "conversation.resolved", "audit.created", "form.submitted", "survey.responded", "ad_audience.synced", "ad_account.revoked", "ad_budget.alert", "ad_insights.imported".
       field "events", :events, [:array, :string]
       field "event_filters", :event_filters, "UpdateWebhookDtoEventFilters"
       field "batch", :batch, :boolean
@@ -8309,7 +8840,7 @@ module Pushizo
 
     # WebhookPreviewDto şeması.
     class WebhookPreviewDto < Pushizo::BaseModel
-      # Zorunlu. Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited", "conversation.created", "conversation.message", "conversation.assigned", "conversation.resolved", "audit.created", "form.submitted", "survey.responded", "ad_audience.synced", "ad_account.revoked", "webhook.test".
+      # Zorunlu. Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited", "conversation.created", "conversation.message", "conversation.assigned", "conversation.resolved", "audit.created", "form.submitted", "survey.responded", "ad_audience.synced", "ad_account.revoked", "ad_budget.alert", "ad_insights.imported", "webhook.test".
       field "event_type", :event_type, :string
       field "data", :data, [:map, :any]
       field "body_template", :body_template, :string
