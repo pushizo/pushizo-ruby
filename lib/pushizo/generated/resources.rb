@@ -2054,6 +2054,207 @@ module Pushizo
           request_options: request_options
         )
       end
+
+      # Kampanya / reklam seti / reklam listesi ve metrikler
+      #
+      # GET /v1/apps/{appId}/ads/campaigns
+      #
+      # @param level Değerler: "campaign", "ad_set", "ad".
+      # @param status Değerler: "active", "paused", "pending", "rejected", "archived", "deleted", "unknown".
+      def list(ad_account_id: nil, level: nil, parent_id: nil, status: nil, q: nil, from: nil, to: nil, limit: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ads/campaigns",
+          path_params: {},
+          query: { "ad_account_id" => ad_account_id, "level" => level, "parent_id" => parent_id, "status" => status, "q" => q, "from" => from, "to" => to, "limit" => limit },
+          app_id: app_id,
+          response: "AdEntityList",
+          request_options: request_options
+        )
+      end
+
+      # Kampanya / reklam seti / reklam ayrıntısı
+      #
+      # GET /v1/apps/{appId}/ads/campaigns/{entityId}
+      def get(entity_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ads/campaigns/{entityId}",
+          path_params: { "entityId" => entity_id },
+          app_id: app_id,
+          response: "AdEntity",
+          request_options: request_options
+        )
+      end
+
+      # Durum ve günlük bütçe değişikliği
+      #
+      # PATCH /v1/apps/{appId}/ads/campaigns/{entityId}
+      def update(entity_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/ads/campaigns/{entityId}",
+          path_params: { "entityId" => entity_id },
+          body: body,
+          app_id: app_id,
+          response: "AdEntity",
+          request_options: request_options
+        )
+      end
+
+      # Kampanyaları ve metrikleri şimdi yenile
+      #
+      # POST /v1/apps/{appId}/ads/accounts/{accountId}/refresh
+      def refresh(account_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/ads/accounts/{accountId}/refresh",
+          path_params: { "accountId" => account_id },
+          app_id: app_id,
+          response: "AdRefreshQueued",
+          request_options: request_options
+        )
+      end
+
+      # Harcama ve performans raporu
+      #
+      # GET /v1/apps/{appId}/ads/reports/spend
+      #
+      # @param group_by Değerler: "day", "platform", "account", "campaign", "ad_set".
+      def spend(from:, to:, currency: nil, group_by: nil, ad_account_id: nil, campaign_id: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ads/reports/spend",
+          path_params: {},
+          query: { "from" => from, "to" => to, "currency" => currency, "group_by" => group_by, "ad_account_id" => ad_account_id, "campaign_id" => campaign_id },
+          app_id: app_id,
+          response: "AdSpendReport",
+          request_options: request_options
+        )
+      end
+
+      # Birleşik atribüsyon raporu (ROAS, CAC)
+      #
+      # GET /v1/apps/{appId}/ads/reports/attribution
+      #
+      # @param model Değerler: "last_click", "first_click", "linear", "time_decay".
+      # @param group_by Değerler: "channel", "campaign", "ad_set".
+      def attribution(from:, to:, model: nil, window_days: nil, half_life_days: nil, currency: nil, group_by: nil, conversion_events: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ads/reports/attribution",
+          path_params: {},
+          query: { "from" => from, "to" => to, "model" => model, "window_days" => window_days, "half_life_days" => half_life_days, "currency" => currency, "group_by" => group_by, "conversion_events" => conversion_events },
+          app_id: app_id,
+          response: "AdAttributionReport",
+          request_options: request_options
+        )
+      end
+
+      # Kohort LTV raporu
+      #
+      # GET /v1/apps/{appId}/ads/reports/ltv
+      def ltv(months: nil, cohorts: nil, currency: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ads/reports/ltv",
+          path_params: {},
+          query: { "months" => months, "cohorts" => cohorts, "currency" => currency },
+          app_id: app_id,
+          response: "AdLtvReport",
+          request_options: request_options
+        )
+      end
+
+      # Conversions API yapılandırmaları
+      #
+      # GET /v1/apps/{appId}/ads/conversions-api/configs
+      def capi_configs(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ads/conversions-api/configs",
+          path_params: {},
+          app_id: app_id,
+          response: "AdCapiConfigList",
+          request_options: request_options
+        )
+      end
+
+      # Conversions API teslim geçmişi
+      #
+      # GET /v1/apps/{appId}/ads/conversions-api/deliveries
+      #
+      # @param status Değerler: "pending", "sent", "failed", "skipped".
+      def capi_deliveries(config_id: nil, status: nil, limit: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ads/conversions-api/deliveries",
+          path_params: {},
+          query: { "config_id" => config_id, "status" => status, "limit" => limit },
+          app_id: app_id,
+          response: "AdCapiDeliveryList",
+          request_options: request_options
+        )
+      end
+
+      # Bütçe uyarı kuralları
+      #
+      # GET /v1/apps/{appId}/ads/alert-rules
+      def rules(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ads/alert-rules",
+          path_params: {},
+          app_id: app_id,
+          response: "AdBudgetAlertRuleList",
+          request_options: request_options
+        )
+      end
+
+      # Bütçe uyarı kuralı oluştur
+      #
+      # POST /v1/apps/{appId}/ads/alert-rules
+      def create_rule(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/ads/alert-rules",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "AdBudgetAlertRule",
+          request_options: request_options
+        )
+      end
+
+      # Bütçe uyarı kuralını güncelle
+      #
+      # PATCH /v1/apps/{appId}/ads/alert-rules/{ruleId}
+      def update_rule(rule_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/ads/alert-rules/{ruleId}",
+          path_params: { "ruleId" => rule_id },
+          body: body,
+          app_id: app_id,
+          response: "AdBudgetAlertRule",
+          request_options: request_options
+        )
+      end
+
+      # Bütçe uyarı kuralını sil
+      #
+      # DELETE /v1/apps/{appId}/ads/alert-rules/{ruleId}
+      def remove_rule(rule_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/ads/alert-rules/{ruleId}",
+          path_params: { "ruleId" => rule_id },
+          app_id: app_id,
+          response: "AdOk",
+          request_options: request_options
+        )
+      end
+
+      # Tetiklenen bütçe uyarıları
+      #
+      # GET /v1/apps/{appId}/ads/alerts
+      def alert_history(rule_id: nil, limit: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ads/alerts",
+          path_params: {},
+          query: { "rule_id" => rule_id, "limit" => limit },
+          app_id: app_id,
+          response: "AdBudgetAlertList",
+          request_options: request_options
+        )
+      end
     end
 
     # cannedResponses kaynağı.
