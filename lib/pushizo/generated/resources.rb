@@ -1109,6 +1109,75 @@ module Pushizo
 
     # Kullanıcı bildirim kutusu (inbox): listeleme, okundu işaretleme ve arşivleme.
     class Inbox < Pushizo::BaseResource
+      # Takımlar
+      #
+      # GET /v1/apps/{appId}/inbox/teams
+      def teams(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/inbox/teams",
+          path_params: {},
+          app_id: app_id,
+          response: "InboxTeamList",
+          request_options: request_options
+        )
+      end
+
+      # Temsilciler ve varlık durumu
+      #
+      # GET /v1/apps/{appId}/inbox/agents
+      def agents(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/inbox/agents",
+          path_params: {},
+          app_id: app_id,
+          response: "InboxAgentList",
+          request_options: request_options
+        )
+      end
+
+      # Gelen kutusu ayarları
+      #
+      # GET /v1/apps/{appId}/inbox/settings
+      def settings(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/inbox/settings",
+          path_params: {},
+          app_id: app_id,
+          response: "InboxSettings",
+          request_options: request_options
+        )
+      end
+
+      # Gelen kutusu ayarlarını güncelle
+      #
+      # PUT /v1/apps/{appId}/inbox/settings
+      def update_settings(body, app_id: nil, request_options: nil)
+        @client.call(
+          :put, "/v1/apps/{appId}/inbox/settings",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "InboxSettings",
+          request_options: request_options
+        )
+      end
+
+      # Gelen kutusu metrikleri (ilk yanıt/çözüm ort. ve p90, SLA, temsilci tablosu)
+      #
+      # GET /v1/apps/{appId}/inbox/metrics
+      #
+      # @param channel Değerler: "sms", "whatsapp", "rcs", "email", "chat".
+      def metrics(from: nil, to: nil, channel: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/inbox/metrics",
+          path_params: {},
+          query: { "from" => from, "to" => to, "channel" => channel },
+          app_id: app_id,
+          response: "InboxMetrics",
+          request_options: request_options
+        )
+      end
+
       # Kullanıcının bildirim kutusu (okunmamış sayısı dahil)
       #
       # GET /v1/apps/{appId}/users/by/{label}/{value}/inbox
@@ -1858,6 +1927,193 @@ module Pushizo
       end
     end
 
+    # ads kaynağı.
+    class Ads < Pushizo::BaseResource
+      # Bağlı reklam hesapları
+      #
+      # GET /v1/apps/{appId}/ads/accounts
+      def list_accounts(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ads/accounts",
+          path_params: {},
+          app_id: app_id,
+          response: "AdAccountList",
+          request_options: request_options
+        )
+      end
+
+      # Reklam kitleleri
+      #
+      # GET /v1/apps/{appId}/ads/audiences
+      def list_audiences(ad_account_id: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ads/audiences",
+          path_params: {},
+          query: { "ad_account_id" => ad_account_id },
+          app_id: app_id,
+          response: "AdAudienceList",
+          request_options: request_options
+        )
+      end
+
+      # Reklam kitlesi oluştur
+      #
+      # POST /v1/apps/{appId}/ads/audiences
+      def create_audience(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/ads/audiences",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "AdAudience",
+          request_options: request_options
+        )
+      end
+
+      # Reklam kitlesi ayrıntısı
+      #
+      # GET /v1/apps/{appId}/ads/audiences/{audienceId}
+      def get_audience(audience_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ads/audiences/{audienceId}",
+          path_params: { "audienceId" => audience_id },
+          app_id: app_id,
+          response: "AdAudience",
+          request_options: request_options
+        )
+      end
+
+      # Reklam kitlesini güncelle
+      #
+      # PATCH /v1/apps/{appId}/ads/audiences/{audienceId}
+      def update_audience(audience_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/ads/audiences/{audienceId}",
+          path_params: { "audienceId" => audience_id },
+          body: body,
+          app_id: app_id,
+          response: "AdAudience",
+          request_options: request_options
+        )
+      end
+
+      # Reklam kitlesini sil
+      #
+      # DELETE /v1/apps/{appId}/ads/audiences/{audienceId}
+      #
+      # @param delete_on_platform Değerler: "true", "false".
+      def remove_audience(audience_id, delete_on_platform: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/ads/audiences/{audienceId}",
+          path_params: { "audienceId" => audience_id },
+          query: { "delete_on_platform" => delete_on_platform },
+          app_id: app_id,
+          response: "AdOk",
+          request_options: request_options
+        )
+      end
+
+      # Senkronu şimdi çalıştır
+      #
+      # POST /v1/apps/{appId}/ads/audiences/{audienceId}/sync
+      def sync(audience_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/ads/audiences/{audienceId}/sync",
+          path_params: { "audienceId" => audience_id },
+          body: body,
+          app_id: app_id,
+          response: "AdAudienceSyncQueued",
+          request_options: request_options
+        )
+      end
+
+      # Senkron geçmişi
+      #
+      # GET /v1/apps/{appId}/ads/audiences/{audienceId}/syncs
+      def syncs(audience_id, limit: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ads/audiences/{audienceId}/syncs",
+          path_params: { "audienceId" => audience_id },
+          query: { "limit" => limit },
+          app_id: app_id,
+          response: "AdAudienceSyncList",
+          request_options: request_options
+        )
+      end
+
+      # Benzer kitle (lookalike) oluştur
+      #
+      # POST /v1/apps/{appId}/ads/audiences/{audienceId}/lookalikes
+      def lookalike(audience_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/ads/audiences/{audienceId}/lookalikes",
+          path_params: { "audienceId" => audience_id },
+          body: body,
+          app_id: app_id,
+          response: "AdAudience",
+          request_options: request_options
+        )
+      end
+    end
+
+    # cannedResponses kaynağı.
+    class CannedResponses < Pushizo::BaseResource
+      # Hazır yanıtlar
+      #
+      # GET /v1/apps/{appId}/canned-responses
+      def canned(q: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/canned-responses",
+          path_params: {},
+          query: { "q" => q },
+          app_id: app_id,
+          response: "CannedResponseList",
+          request_options: request_options
+        )
+      end
+
+      # Hazır yanıt oluştur
+      #
+      # POST /v1/apps/{appId}/canned-responses
+      def create_canned(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/canned-responses",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "CannedResponse",
+          request_options: request_options
+        )
+      end
+
+      # Hazır yanıtı güncelle
+      #
+      # PATCH /v1/apps/{appId}/canned-responses/{cannedId}
+      def update_canned(canned_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/canned-responses/{cannedId}",
+          path_params: { "cannedId" => canned_id },
+          body: body,
+          app_id: app_id,
+          response: "CannedResponse",
+          request_options: request_options
+        )
+      end
+
+      # Hazır yanıtı sil
+      #
+      # DELETE /v1/apps/{appId}/canned-responses/{cannedId}
+      def delete_canned(canned_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/canned-responses/{cannedId}",
+          path_params: { "cannedId" => canned_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+    end
+
     # categories kaynağı.
     class Categories < Pushizo::BaseResource
       # Mesaj kategorileri
@@ -2024,18 +2280,18 @@ module Pushizo
 
     # conversations kaynağı.
     class Conversations < Pushizo::BaseResource
-      # Konuşmalar (SMS, WhatsApp, RCS; son mesaja göre; kanal/durum/okunmamış/kişi filtresi)
+      # Konuşmalar (SMS, WhatsApp, RCS, e-posta, canlı sohbet; son mesaja göre; kanal/durum/okunmamış/atanan/takım/kişi filtresi)
       #
       # GET /v1/apps/{appId}/conversations
       #
-      # @param channel Değerler: "sms", "whatsapp", "rcs".
-      # @param status Değerler: "open", "closed".
+      # @param channel Değerler: "sms", "whatsapp", "rcs", "email", "chat".
+      # @param status Değerler: "open", "pending", "resolved", "closed".
       # @param unread Değerler: "true", "false".
-      def list(limit: nil, cursor: nil, channel: nil, status: nil, unread: nil, q: nil, app_id: nil, request_options: nil)
+      def list(limit: nil, cursor: nil, channel: nil, status: nil, unread: nil, q: nil, assignee: nil, team_id: nil, app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/apps/{appId}/conversations",
           path_params: {},
-          query: { "limit" => limit, "cursor" => cursor, "channel" => channel, "status" => status, "unread" => unread, "q" => q },
+          query: { "limit" => limit, "cursor" => cursor, "channel" => channel, "status" => status, "unread" => unread, "q" => q, "assignee" => assignee, "team_id" => team_id },
           app_id: app_id,
           response: "ConversationPage",
           request_options: request_options
@@ -2043,13 +2299,13 @@ module Pushizo
       end
 
       # list sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
-      def list_all(limit: nil, cursor: nil, channel: nil, status: nil, unread: nil, q: nil, app_id: nil, request_options: nil)
+      def list_all(limit: nil, cursor: nil, channel: nil, status: nil, unread: nil, q: nil, assignee: nil, team_id: nil, app_id: nil, request_options: nil)
         @client.paginate(cursor) do |cursor_value|
-          list(limit: limit, channel: channel, status: status, unread: unread, q: q, app_id: app_id, request_options: request_options, cursor: cursor_value)
+          list(limit: limit, channel: channel, status: status, unread: unread, q: q, assignee: assignee, team_id: team_id, app_id: app_id, request_options: request_options, cursor: cursor_value)
         end
       end
 
-      # Konuşma (WhatsApp oturum penceresi ve açık rıza durumu dahil)
+      # Konuşma (atama, SLA, bot durumu, WhatsApp oturum penceresi ve açık rıza dahil)
       #
       # GET /v1/apps/{appId}/conversations/{conversationId}
       def get(conversation_id, app_id: nil, request_options: nil)
@@ -2062,14 +2318,28 @@ module Pushizo
         )
       end
 
-      # Konuşma mesajları (yeniden eskiye; giden mesaj durumu teslimattan)
+      # Konuşma durumu: open / pending / resolved (closed = resolved)
+      #
+      # PATCH /v1/apps/{appId}/conversations/{conversationId}
+      def set_status(conversation_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/conversations/{conversationId}",
+          path_params: { "conversationId" => conversation_id },
+          body: body,
+          app_id: app_id,
+          response: "Conversation",
+          request_options: request_options
+        )
+      end
+
+      # Konuşma mesajları (yeniden eskiye; `after_seq` ile eskiden yeniye; giden mesaj durumu teslimattan veya okundu işaretçisinden)
       #
       # GET /v1/apps/{appId}/conversations/{conversationId}/messages
-      def messages(conversation_id, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+      def messages(conversation_id, limit: nil, cursor: nil, after_seq: nil, app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/apps/{appId}/conversations/{conversationId}/messages",
           path_params: { "conversationId" => conversation_id },
-          query: { "limit" => limit, "cursor" => cursor },
+          query: { "limit" => limit, "cursor" => cursor, "after_seq" => after_seq },
           app_id: app_id,
           response: "ConversationMessagePage",
           request_options: request_options
@@ -2077,13 +2347,13 @@ module Pushizo
       end
 
       # messages sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
-      def messages_all(conversation_id, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+      def messages_all(conversation_id, limit: nil, cursor: nil, after_seq: nil, app_id: nil, request_options: nil)
         @client.paginate(cursor) do |cursor_value|
-          messages(conversation_id, limit: limit, app_id: app_id, request_options: request_options, cursor: cursor_value)
+          messages(conversation_id, limit: limit, after_seq: after_seq, app_id: app_id, request_options: request_options, cursor: cursor_value)
         end
       end
 
-      # Yanıt gönder. WhatsApp: açık rıza zorunlu; son gelen mesajdan 24 saat içinde metin/medya, pencere dışında yalnızca onaylı şablon (aksi 422 WHATSAPP_WINDOW_CLOSED).
+      # Yanıt gönder (client_message_id ile tekilleşir). Sohbet: doğrudan; e-posta: yanıt adresli işlemsel e-posta; WhatsApp: açık rıza zorunlu, son gelen mesajdan 24 saat içinde metin/medya, pencere dışında yalnızca onaylı şablon (aksi 422 WHATSAPP_WINDOW_CLOSED).
       #
       # POST /v1/apps/{appId}/conversations/{conversationId}/messages
       def reply(conversation_id, body, app_id: nil, request_options: nil)
@@ -2097,7 +2367,7 @@ module Pushizo
         )
       end
 
-      # Gelen mesajları okundu işaretle
+      # Gelen mesajları okundu işaretle (sohbette ziyaretçiye okundu bilgisi gider)
       #
       # POST /v1/apps/{appId}/conversations/{conversationId}/read
       def read(conversation_id, app_id: nil, request_options: nil)
@@ -2106,6 +2376,47 @@ module Pushizo
           path_params: { "conversationId" => conversation_id },
           app_id: app_id,
           response: "Conversation",
+          request_options: request_options
+        )
+      end
+
+      # Konuşmayı temsilciye ve/veya takıma ata (inbox.manage olmadan yalnızca kendine)
+      #
+      # POST /v1/apps/{appId}/conversations/{conversationId}/assign
+      def assign(conversation_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/conversations/{conversationId}/assign",
+          path_params: { "conversationId" => conversation_id },
+          body: body,
+          app_id: app_id,
+          response: "Conversation",
+          request_options: request_options
+        )
+      end
+
+      # Sohbetten kişiye etiket ekle/kaldır
+      #
+      # POST /v1/apps/{appId}/conversations/{conversationId}/tags
+      def tags(conversation_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/conversations/{conversationId}/tags",
+          path_params: { "conversationId" => conversation_id },
+          body: body,
+          app_id: app_id,
+          response: "ConversationTagsResult",
+          request_options: request_options
+        )
+      end
+
+      # Konuşma zaman çizelgesi (atama, durum, ilk yanıt, bot devri)
+      #
+      # GET /v1/apps/{appId}/conversations/{conversationId}/activity
+      def activity(conversation_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/conversations/{conversationId}/activity",
+          path_params: { "conversationId" => conversation_id },
+          app_id: app_id,
+          response: "ConversationActivity",
           request_options: request_options
         )
       end
@@ -2317,6 +2628,96 @@ module Pushizo
           query: { "days" => days },
           app_id: app_id,
           response: "EmailWarmupUsage",
+          request_options: request_options
+        )
+      end
+    end
+
+    # forms kaynağı.
+    class Forms < Pushizo::BaseResource
+      # Formlar
+      #
+      # GET /v1/apps/{appId}/forms
+      #
+      # @param status Değerler: "active", "archived".
+      def list(limit: nil, cursor: nil, status: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/forms",
+          path_params: {},
+          query: { "limit" => limit, "cursor" => cursor, "status" => status },
+          app_id: app_id,
+          response: "FormPage",
+          request_options: request_options
+        )
+      end
+
+      # list sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def list_all(limit: nil, cursor: nil, status: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          list(limit: limit, status: status, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+
+      # Form oluştur
+      #
+      # POST /v1/apps/{appId}/forms
+      def create(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/forms",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "Form",
+          request_options: request_options
+        )
+      end
+
+      # Form detayı
+      #
+      # GET /v1/apps/{appId}/forms/{formId}
+      def get(form_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/forms/{formId}",
+          path_params: { "formId" => form_id },
+          app_id: app_id,
+          response: "Form",
+          request_options: request_options
+        )
+      end
+
+      # Form gönderimleri
+      #
+      # GET /v1/apps/{appId}/forms/{formId}/submissions
+      #
+      # @param status Değerler: "accepted", "pending_confirmation", "confirmed".
+      def submissions(form_id, limit: nil, cursor: nil, status: nil, since: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/forms/{formId}/submissions",
+          path_params: { "formId" => form_id },
+          query: { "limit" => limit, "cursor" => cursor, "status" => status, "since" => since },
+          app_id: app_id,
+          response: "FormSubmissionPage",
+          request_options: request_options
+        )
+      end
+
+      # submissions sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def submissions_all(form_id, limit: nil, cursor: nil, status: nil, since: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          submissions(form_id, limit: limit, status: status, since: since, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+
+      # Sunucu tarafı form gönderimi (`external_id` verilirse o kullanıcının profili güncellenir)
+      #
+      # POST /v1/apps/{appId}/forms/{formId}/submissions
+      def submit(form_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/forms/{formId}/submissions",
+          path_params: { "formId" => form_id },
+          body: body,
+          app_id: app_id,
+          response: "FormSubmitResult",
           request_options: request_options
         )
       end
@@ -2704,6 +3105,71 @@ module Pushizo
       end
     end
 
+    # landingPages kaynağı.
+    class LandingPages < Pushizo::BaseResource
+      # Landing sayfaları
+      #
+      # GET /v1/apps/{appId}/landing-pages
+      #
+      # @param status Değerler: "draft", "published", "archived".
+      def list(limit: nil, cursor: nil, status: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/landing-pages",
+          path_params: {},
+          query: { "limit" => limit, "cursor" => cursor, "status" => status },
+          app_id: app_id,
+          response: "LandingPageList",
+          request_options: request_options
+        )
+      end
+
+      # list sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def list_all(limit: nil, cursor: nil, status: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          list(limit: limit, status: status, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+
+      # Landing sayfası detayı
+      #
+      # GET /v1/apps/{appId}/landing-pages/{pageId}
+      def get(page_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/landing-pages/{pageId}",
+          path_params: { "pageId" => page_id },
+          app_id: app_id,
+          response: "LandingPage",
+          request_options: request_options
+        )
+      end
+
+      # Taslağı yayınla
+      #
+      # POST /v1/apps/{appId}/landing-pages/{pageId}/publish
+      def publish(page_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/landing-pages/{pageId}/publish",
+          path_params: { "pageId" => page_id },
+          app_id: app_id,
+          response: "LandingPage",
+          request_options: request_options
+        )
+      end
+
+      # Yayından kaldır
+      #
+      # POST /v1/apps/{appId}/landing-pages/{pageId}/unpublish
+      def unpublish(page_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/landing-pages/{pageId}/unpublish",
+          path_params: { "pageId" => page_id },
+          app_id: app_id,
+          response: "LandingPage",
+          request_options: request_options
+        )
+      end
+    end
+
     # liveActivities kaynağı.
     class LiveActivities < Pushizo::BaseResource
       # Live Activity türleri
@@ -2925,6 +3391,124 @@ module Pushizo
       end
     end
 
+    # surveys kaynağı.
+    class Surveys < Pushizo::BaseResource
+      # Anketler
+      #
+      # GET /v1/apps/{appId}/surveys
+      #
+      # @param status Değerler: "draft", "active", "closed".
+      def list(limit: nil, cursor: nil, status: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/surveys",
+          path_params: {},
+          query: { "limit" => limit, "cursor" => cursor, "status" => status },
+          app_id: app_id,
+          response: "SurveyPage",
+          request_options: request_options
+        )
+      end
+
+      # list sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def list_all(limit: nil, cursor: nil, status: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          list(limit: limit, status: status, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+
+      # Anket oluştur (taslak)
+      #
+      # POST /v1/apps/{appId}/surveys
+      def create(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/surveys",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "Survey",
+          request_options: request_options
+        )
+      end
+
+      # Anket detayı
+      #
+      # GET /v1/apps/{appId}/surveys/{surveyId}
+      def get(survey_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/surveys/{surveyId}",
+          path_params: { "surveyId" => survey_id },
+          app_id: app_id,
+          response: "Survey",
+          request_options: request_options
+        )
+      end
+
+      # Etkinleştir / kapat
+      #
+      # POST /v1/apps/{appId}/surveys/{surveyId}/status
+      def status(survey_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/surveys/{surveyId}/status",
+          path_params: { "surveyId" => survey_id },
+          body: body,
+          app_id: app_id,
+          response: "Survey",
+          request_options: request_options
+        )
+      end
+
+      # NPS / CSAT raporu
+      #
+      # GET /v1/apps/{appId}/surveys/{surveyId}/report
+      def report(survey_id, days: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/surveys/{surveyId}/report",
+          path_params: { "surveyId" => survey_id },
+          query: { "days" => days },
+          app_id: app_id,
+          response: "SurveyReport",
+          request_options: request_options
+        )
+      end
+
+      # Anket yanıtları
+      #
+      # GET /v1/apps/{appId}/surveys/{surveyId}/responses
+      #
+      # @param nps_category Değerler: "promoter", "passive", "detractor".
+      def responses(survey_id, limit: nil, cursor: nil, text_question: nil, nps_category: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/surveys/{surveyId}/responses",
+          path_params: { "surveyId" => survey_id },
+          query: { "limit" => limit, "cursor" => cursor, "text_question" => text_question, "nps_category" => nps_category },
+          app_id: app_id,
+          response: "SurveyResponsePage",
+          request_options: request_options
+        )
+      end
+
+      # responses sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def responses_all(survey_id, limit: nil, cursor: nil, text_question: nil, nps_category: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          responses(survey_id, limit: limit, text_question: text_question, nps_category: nps_category, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+
+      # Sunucu tarafı anket yanıtı (`external_id` ile kullanıcıya bağlanır)
+      #
+      # POST /v1/apps/{appId}/surveys/{surveyId}/responses
+      def respond(survey_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/surveys/{surveyId}/responses",
+          path_params: { "surveyId" => survey_id },
+          body: body,
+          app_id: app_id,
+          response: "SurveyResponseResult",
+          request_options: request_options
+        )
+      end
+    end
+
     # warehouseExports kaynağı.
     class WarehouseExports < Pushizo::BaseResource
       # Dışa aktarılabilir tablolar, kolonlar ve şema sürümleri
@@ -3069,6 +3653,101 @@ module Pushizo
       end
     end
 
+    # webCampaigns kaynağı.
+    class WebCampaigns < Pushizo::BaseResource
+      # Web kampanyaları
+      #
+      # GET /v1/apps/{appId}/web-campaigns
+      #
+      # @param status Değerler: "draft", "active", "paused", "archived".
+      def list(limit: nil, cursor: nil, status: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/web-campaigns",
+          path_params: {},
+          query: { "limit" => limit, "cursor" => cursor, "status" => status },
+          app_id: app_id,
+          response: "WebCampaignPage",
+          request_options: request_options
+        )
+      end
+
+      # list sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def list_all(limit: nil, cursor: nil, status: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          list(limit: limit, status: status, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+
+      # Web kampanyası oluştur (taslak)
+      #
+      # POST /v1/apps/{appId}/web-campaigns
+      def create(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/web-campaigns",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "WebCampaign",
+          request_options: request_options
+        )
+      end
+
+      # Web kampanyası detayı ve istatistikleri
+      #
+      # GET /v1/apps/{appId}/web-campaigns/{campaignId}
+      def get(campaign_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/web-campaigns/{campaignId}",
+          path_params: { "campaignId" => campaign_id },
+          app_id: app_id,
+          response: "WebCampaign",
+          request_options: request_options
+        )
+      end
+
+      # Web kampanyasını düzenle
+      #
+      # PATCH /v1/apps/{appId}/web-campaigns/{campaignId}
+      def update(campaign_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/web-campaigns/{campaignId}",
+          path_params: { "campaignId" => campaign_id },
+          body: body,
+          app_id: app_id,
+          response: "WebCampaign",
+          request_options: request_options
+        )
+      end
+
+      # Günlük seri
+      #
+      # GET /v1/apps/{appId}/web-campaigns/{campaignId}/report
+      def report(campaign_id, days: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/web-campaigns/{campaignId}/report",
+          path_params: { "campaignId" => campaign_id },
+          query: { "days" => days },
+          app_id: app_id,
+          response: "WebCampaignReport",
+          request_options: request_options
+        )
+      end
+
+      # Yayınla / duraklat / arşivle
+      #
+      # POST /v1/apps/{appId}/web-campaigns/{campaignId}/status
+      def status(campaign_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/web-campaigns/{campaignId}/status",
+          path_params: { "campaignId" => campaign_id },
+          body: body,
+          app_id: app_id,
+          response: "WebCampaign",
+          request_options: request_options
+        )
+      end
+    end
+
     # whatsapp kaynağı.
     class Whatsapp < Pushizo::BaseResource
       # WhatsApp şablonları (Meta onay durumu ile)
@@ -3105,7 +3784,7 @@ module Pushizo
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "1.0.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization categories content_tables conversations data_feeds email_deliverability identity_keys integrations journeys live_activities mcp preferences sms_keywords warehouse_exports whatsapp].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses categories content_tables conversations data_feeds email_deliverability forms identity_keys integrations journeys landing_pages live_activities mcp preferences sms_keywords surveys warehouse_exports web_campaigns whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -3202,6 +3881,14 @@ module Pushizo
       @organization ||= Pushizo::Resources::Organization.new(self)
     end
 
+    def ads
+      @ads ||= Pushizo::Resources::Ads.new(self)
+    end
+
+    def canned_responses
+      @canned_responses ||= Pushizo::Resources::CannedResponses.new(self)
+    end
+
     def categories
       @categories ||= Pushizo::Resources::Categories.new(self)
     end
@@ -3222,6 +3909,10 @@ module Pushizo
       @email_deliverability ||= Pushizo::Resources::EmailDeliverability.new(self)
     end
 
+    def forms
+      @forms ||= Pushizo::Resources::Forms.new(self)
+    end
+
     def identity_keys
       @identity_keys ||= Pushizo::Resources::IdentityKeys.new(self)
     end
@@ -3232,6 +3923,10 @@ module Pushizo
 
     def journeys
       @journeys ||= Pushizo::Resources::Journeys.new(self)
+    end
+
+    def landing_pages
+      @landing_pages ||= Pushizo::Resources::LandingPages.new(self)
     end
 
     def live_activities
@@ -3250,8 +3945,16 @@ module Pushizo
       @sms_keywords ||= Pushizo::Resources::SmsKeywords.new(self)
     end
 
+    def surveys
+      @surveys ||= Pushizo::Resources::Surveys.new(self)
+    end
+
     def warehouse_exports
       @warehouse_exports ||= Pushizo::Resources::WarehouseExports.new(self)
+    end
+
+    def web_campaigns
+      @web_campaigns ||= Pushizo::Resources::WebCampaigns.new(self)
     end
 
     def whatsapp
