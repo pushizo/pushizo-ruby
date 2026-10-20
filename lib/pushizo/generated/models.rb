@@ -35,6 +35,10 @@ module Pushizo
       # Zorunlu.
       field "last_error_at", :last_error_at, :string
       # Zorunlu.
+      field "terms_accepted_at", :terms_accepted_at, :string
+      # Zorunlu.
+      field "terms_version", :terms_version, :string
+      # Zorunlu.
       field "audiences", :audiences, :integer
       # Zorunlu.
       field "created_at", :created_at, :string
