@@ -13,8 +13,17 @@
 
 **Pushizo Ruby SDK** — Server-side SDK for Ruby. Models and resources are generated from the Pushizo OpenAPI schema; retries, idempotency, pagination and webhook verification are built in. Works with Rails.
 
-> **Status:** Publishing to RubyGems is in progress; until then you can build from this repository.<br>
-> **Durum:** RubyGems yayını hazırlanıyor; o zamana kadar bu depodan derleyerek kullanabilirsiniz.
+> **Status:** Publishing to RubyGems is in progress.<br>
+> **Durum:** RubyGems yayını hazırlanıyor.
+
+**Install from GitHub until then · O zamana kadar GitHub'dan kurulum:**
+
+```ruby
+# Gemfile
+gem "pushizo", git: "https://github.com/pushizo/pushizo-ruby", tag: "v0.1.0"
+```
+
+**After publication · Yayından sonra:**
 
 ```bash
 gem install pushizo
