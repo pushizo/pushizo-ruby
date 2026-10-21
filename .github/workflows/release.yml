@@ -1,0 +1,41 @@
+# RubyGems yayını
+#
+# Trusted publishing (OIDC): uzun ömürlü belirteç saklanmaz. Ana depodaki yayın betiği paketi test edip derler, bu
+# deponun GitHub Release'ine ekler ve bu iş akışını sürüm etiketiyle çalıştırır:
+#   npm run sdk:publish -- <hedef> --yalnizca-github --tetikle --yayinla
+# Elle: Actions → Release → Run workflow → tag.
+# Kurulum (bir kez): rubygems.org → Settings → Trusted publishers → pending: gem pushizo, depo pushizo/pushizo-ruby, iş akışı release.yml.
+
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Sürüm etiketi (ör. v0.1.0)
+        required: true
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  rubygems:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+      - name: Paket dosyalarını release'ten al
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+        run: gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern '*.gem' --dir dist
+      - uses: rubygems/configure-rubygems-credentials@v2.1.0
+      - name: Yayımla
+        run: |
+          for f in dist/*.gem; do
+            out=$(gem push "$f" 2>&1) && { echo "$out"; continue; }
+            echo "$out"
+            echo "$out" | grep -qi "repushing of gem versions is not allowed" || exit 1
+          done
