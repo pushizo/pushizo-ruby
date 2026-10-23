@@ -1352,7 +1352,7 @@ module Pushizo
       #
       # POST /v1/apps/{appId}/imports
       #
-      # @param type Değerler: "eski sağlayıcı_players", "csv_users".
+      # @param type Değerler: "legacy_players", "csv_users".
       # @param file CSV dosyası (UTF-8, en fazla 50 MB)
       def create(type:, file:, app_id: nil, request_options: nil)
         @client.call(
@@ -3500,6 +3500,62 @@ module Pushizo
           body: body,
           app_id: app_id,
           response: "Segment",
+          request_options: request_options
+        )
+      end
+
+      # Şablon oluştur (MCP onaylı mod; şablon tek başına gönderim yapmaz)
+      #
+      # POST /v1/apps/{appId}/mcp/template-drafts
+      def create_template_draft(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/mcp/template-drafts",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "Template",
+          request_options: request_options
+        )
+      end
+
+      # Journey taslağı oluştur (MCP onaylı mod; yayımlanmaz)
+      #
+      # POST /v1/apps/{appId}/mcp/journey-drafts
+      def create_journey_draft(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/mcp/journey-drafts",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "JourneyDetail",
+          request_options: request_options
+        )
+      end
+
+      # In-app mesaj taslağı oluştur (MCP onaylı mod; etkinleştirilmez)
+      #
+      # POST /v1/apps/{appId}/mcp/in-app-drafts
+      def create_in_app_draft(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/mcp/in-app-drafts",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "InAppMessage",
+          request_options: request_options
+        )
+      end
+
+      # Test gönderimi (yalnızca app’in test cihazlarına; MCP onaylı mod)
+      #
+      # POST /v1/apps/{appId}/mcp/test-sends
+      def test_send(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/mcp/test-sends",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "CreateNotificationResult",
           request_options: request_options
         )
       end

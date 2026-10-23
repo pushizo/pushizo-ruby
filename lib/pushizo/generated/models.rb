@@ -4118,7 +4118,7 @@ module Pushizo
       field "id", :id, :string
       # Zorunlu.
       field "app_id", :app_id, :string
-      # Zorunlu. Değerler: "eski sağlayıcı_players", "csv_users".
+      # Zorunlu. Değerler: "legacy_players", "csv_users".
       field "type", :type, :string
       # Zorunlu.
       field "file_name", :file_name, :string
@@ -5510,6 +5510,25 @@ module Pushizo
       field "weight_percent", :weight_percent, :integer
       field "content", :content, [:map, :any]
       field "is_control", :is_control, :boolean
+    end
+
+    # McpCreateJourneyDraftBody şeması.
+    class McpCreateJourneyDraftBody < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      # React Flow uyumlu journey grafı: { nodes: [{ id, type, position, data }], edges: [{ id, source, target, sourceHandle }] } (docs/journeys.md)
+      field "graph", :graph, "McpCreateJourneyDraftBodyGraph"
+      # Yeniden giriş, yalnızca yeni girenler, çıkış kuralları, çıkış tag'leri, hedefler, takvim (docs/journeys.md)
+      field "settings", :settings, [:map, :any]
+    end
+
+    # React Flow uyumlu journey grafı: { nodes: [{ id, type, position, data }], edges: [{ id, source, target, sourceHandle }] } (docs/journeys.md)
+    class McpCreateJourneyDraftBodyGraph < Pushizo::BaseModel
+      # Zorunlu.
+      field "nodes", :nodes, [:array, [:map, :any]]
+      # Zorunlu.
+      field "edges", :edges, [:array, [:map, :any]]
     end
 
     # McpCreateSegmentDraftBody şeması.
@@ -7036,6 +7055,16 @@ module Pushizo
     class TestDataFeedDto < Pushizo::BaseModel
       field "external_id", :external_id, :string
       field "user_id", :user_id, :string
+    end
+
+    # TestPushDto şeması.
+    class TestPushDto < Pushizo::BaseModel
+      field "subscription_ids", :subscription_ids, [:array, :string]
+      field "headings", :headings, [:map, :string]
+      # Zorunlu.
+      field "contents", :contents, [:map, :string]
+      field "url", :url, :string
+      field "data", :data, [:map, :string]
     end
 
     # TriggerRunDto şeması.
