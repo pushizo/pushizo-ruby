@@ -592,7 +592,7 @@ module Pushizo
       #
       # GET /v1/apps/{appId}/templates
       #
-      # @param channel Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # @param channel Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       def list(limit: nil, cursor: nil, q: nil, channel: nil, app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/apps/{appId}/templates",
@@ -728,7 +728,7 @@ module Pushizo
       #
       # @param status Değerler: "draft", "scheduled", "running", "paused", "completed", "cancelled", "failed".
       # @param type Değerler: "one_time", "scheduled", "recurring", "automated", "transactional".
-      # @param channel Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # @param channel Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       def list(limit: nil, cursor: nil, q: nil, status: nil, type: nil, channel: nil, label: nil, app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/apps/{appId}/campaigns",
@@ -2832,6 +2832,32 @@ module Pushizo
           request_options: request_options
         )
       end
+
+      # Google Postmaster itibar kayıtları
+      #
+      # GET /v1/apps/{appId}/email-deliverability/postmaster
+      def postmaster(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/email-deliverability/postmaster",
+          path_params: {},
+          app_id: app_id,
+          response: "PostmasterStats",
+          request_options: request_options
+        )
+      end
+
+      # Google Postmaster dünkü itibarını oku
+      #
+      # POST /v1/apps/{appId}/email-deliverability/postmaster/sync
+      def sync_postmaster(app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/email-deliverability/postmaster/sync",
+          path_params: {},
+          app_id: app_id,
+          response: "PostmasterStats",
+          request_options: request_options
+        )
+      end
     end
 
     # forms kaynağı.
@@ -3897,6 +3923,37 @@ module Pushizo
       end
     end
 
+    # verify kaynağı.
+    class Verify < Pushizo::BaseResource
+      # SMS doğrulama kodu gönder
+      #
+      # POST /v1/apps/{appId}/verify/sms
+      def start(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/verify/sms",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "SmsVerification",
+          request_options: request_options
+        )
+      end
+
+      # SMS doğrulama kodunu kontrol et
+      #
+      # POST /v1/apps/{appId}/verify/sms/check
+      def check(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/verify/sms/check",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "SmsVerificationCheck",
+          request_options: request_options
+        )
+      end
+    end
+
     # warehouseExports kaynağı.
     class WarehouseExports < Pushizo::BaseResource
       # Dışa aktarılabilir tablolar, kolonlar ve şema sürümleri
@@ -4172,7 +4229,7 @@ module Pushizo
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "1.0.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses categories content_tables conversations data_feeds email_deliverability forms identity_keys integrations journeys landing_pages live_activities mcp preferences reverse_etl sms_keywords surveys warehouse_exports web_campaigns whatsapp].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses categories content_tables conversations data_feeds email_deliverability forms identity_keys integrations journeys landing_pages live_activities mcp preferences reverse_etl sms_keywords surveys verify warehouse_exports web_campaigns whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -4339,6 +4396,10 @@ module Pushizo
 
     def surveys
       @surveys ||= Pushizo::Resources::Surveys.new(self)
+    end
+
+    def verify
+      @verify ||= Pushizo::Resources::Verify.new(self)
     end
 
     def warehouse_exports

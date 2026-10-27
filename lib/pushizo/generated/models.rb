@@ -460,7 +460,7 @@ module Pushizo
 
     # AddSubscriptionDto şeması.
     class AddSubscriptionDto < Pushizo::BaseModel
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu.
       field "token", :token, :string
@@ -484,6 +484,10 @@ module Pushizo
       field "push_capable", :push_capable, :boolean
       # Değerler: "sandbox", "production".
       field "push_environment", :push_environment, :string
+      # Değerler: "phone", "watch".
+      field "form_factor", :form_factor, :string
+      # Değerler: "alert", "voip", "app_clip".
+      field "push_kind", :push_kind, :string
     end
 
     # AddSubscriptionDtoOptIn şeması.
@@ -880,7 +884,7 @@ module Pushizo
       field "max", :max, :integer
       # Zorunlu.
       field "window", :window, "AppSettingsFrequencyCapsItemWindow"
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
     end
 
@@ -1275,7 +1279,7 @@ module Pushizo
       field "exclude_segments", :exclude_segments, [:array, :string]
       # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
       field "filters", :filters, "CampaignsCreateBodyAudienceFilters"
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
       field "test_devices_only", :test_devices_only, :boolean
     end
@@ -1355,7 +1359,7 @@ module Pushizo
 
     # CampaignStatsChannelsItem şeması.
     class CampaignStatsChannelsItem < Pushizo::BaseModel
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu.
       field "targeted", :targeted, :integer
@@ -1449,7 +1453,7 @@ module Pushizo
       field "exclude_segments", :exclude_segments, [:array, :string]
       # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
       field "filters", :filters, "CampaignsUpdateBodyAudienceFilters"
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
       field "test_devices_only", :test_devices_only, :boolean
     end
@@ -1641,9 +1645,9 @@ module Pushizo
 
     # ChannelConfig şeması.
     class ChannelConfig < Pushizo::BaseModel
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
-      # Zorunlu. Değerler: "apns", "fcm", "hms", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "meta_whatsapp", "google_rbm", "mock".
+      # Zorunlu. Değerler: "apns", "fcm", "hms", "adm", "wns", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "meta_whatsapp", "google_rbm", "mock".
       field "provider", :provider, :string
       # Zorunlu. Değerler: "unconfigured", "active", "invalid", "suspended".
       field "status", :status, :string
@@ -1700,6 +1704,7 @@ module Pushizo
       field "account_sid", :account_sid, :string
       field "from_number", :from_number, :string
       field "messaging_service_sid", :messaging_service_sid, :string
+      field "verify_service_sid", :verify_service_sid, :string
       field "usercode", :usercode, :string
       field "msgheader", :msgheader, :string
       # Değerler: "0", "11", "12".
@@ -1782,6 +1787,14 @@ module Pushizo
       field "details", :details, [:map, :any]
       # Zorunlu.
       field "channel", :channel, "ChannelConfig"
+    end
+
+    # CheckVerifyDto şeması.
+    class CheckVerifyDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "code", :code, :string
     end
 
     # ContentTable şeması.
@@ -2332,7 +2345,7 @@ module Pushizo
       # Zorunlu.
       field "name", :name, [:map, :string]
       field "description", :description, [:map, :string]
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
       field "default_opted_in", :default_opted_in, :boolean
       field "position", :position, :integer
@@ -2402,7 +2415,7 @@ module Pushizo
       field "message_id", :message_id, :string
       field "campaign_id", :campaign_id, :string
       field "status", :status, :string
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       field "segment_id", :segment_id, :string
     end
@@ -2694,6 +2707,10 @@ module Pushizo
       field "android_accent_color", :android_accent_color, :string
       # Değerler: 1, 0, -1.
       field "android_visibility", :android_visibility, :integer
+      field "ios_carousel", :ios_carousel, [:array, "CreateNotificationDtoIosCarouselItem"]
+      field "android_live_update", :android_live_update, "CreateNotificationDtoAndroidLiveUpdate"
+      field "voip", :voip, :boolean
+      field "app_clip", :app_clip, :boolean
       field "chrome_web_icon", :chrome_web_icon, :string
       field "chrome_web_image", :chrome_web_image, :string
       field "chrome_web_badge", :chrome_web_badge, :string
@@ -2741,6 +2758,17 @@ module Pushizo
       field "name", :name, :string
       field "labels", :labels, [:array, :string]
       field "category", :category, :string
+      # Değerler: "sms", "email".
+      field "fallback_channel", :fallback_channel, :string
+      # Değerler: "phone", "watch".
+      field "form_factor", :form_factor, :string
+    end
+
+    # CreateNotificationDtoAndroidLiveUpdate şeması.
+    class CreateNotificationDtoAndroidLiveUpdate < Pushizo::BaseModel
+      # Zorunlu.
+      field "progress", :progress, :integer
+      field "ongoing", :ongoing, :boolean
     end
 
     # CreateNotificationDtoButtonsItem şeması.
@@ -2751,6 +2779,13 @@ module Pushizo
       field "text", :text, :string
       field "icon", :icon, :string
       field "url", :url, :string
+    end
+
+    # CreateNotificationDtoIosCarouselItem şeması.
+    class CreateNotificationDtoIosCarouselItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "url", :url, :string
+      field "title", :title, :string
     end
 
     # CreateNotificationDtoRcsCard şeması.
@@ -2773,7 +2808,7 @@ module Pushizo
       field "included_segments", :included_segments, [:array, :string]
       field "excluded_segments", :excluded_segments, [:array, :string]
       field "filters", :filters, :any
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
       field "test_devices_only", :test_devices_only, :boolean
       field "email_to", :email_to, [:array, :string]
@@ -2931,7 +2966,7 @@ module Pushizo
     class CreateTemplateDto < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       field "tags", :tags, [:array, :string]
       # Zorunlu.
@@ -2997,6 +3032,17 @@ module Pushizo
       field "rcs_content_sid", :rcs_content_sid, :string
       field "rcs_content_variables", :rcs_content_variables, [:map, :string]
       field "rcs_fallback_text", :rcs_fallback_text, [:map, :string]
+      field "ios_carousel", :ios_carousel, [:array, "CreateTemplateDtoContentIosCarouselItem"]
+      field "android_live_update", :android_live_update, "CreateTemplateDtoContentAndroidLiveUpdate"
+      field "voip", :voip, :boolean
+      field "app_clip", :app_clip, :boolean
+    end
+
+    # CreateTemplateDtoContentAndroidLiveUpdate şeması.
+    class CreateTemplateDtoContentAndroidLiveUpdate < Pushizo::BaseModel
+      # Zorunlu.
+      field "progress", :progress, :integer
+      field "ongoing", :ongoing, :boolean
     end
 
     # CreateTemplateDtoContentButtonsItem şeması.
@@ -3007,6 +3053,13 @@ module Pushizo
       field "text", :text, :string
       field "icon", :icon, :string
       field "url", :url, :string
+    end
+
+    # CreateTemplateDtoContentIosCarouselItem şeması.
+    class CreateTemplateDtoContentIosCarouselItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "url", :url, :string
+      field "title", :title, :string
     end
 
     # CreateTemplateDtoContentRcsCard şeması.
@@ -3364,6 +3417,15 @@ module Pushizo
       field "bcc_address", :bcc_address, :string
       field "validation", :validation, "DeliverabilitySettingsDtoValidation"
       field "verifier", :verifier, "DeliverabilitySettingsDtoVerifier"
+      field "volume_spike", :volume_spike, "DeliverabilitySettingsDtoVolumeSpike"
+      field "postmaster", :postmaster, "DeliverabilitySettingsDtoPostmaster"
+    end
+
+    # DeliverabilitySettingsDtoPostmaster şeması.
+    class DeliverabilitySettingsDtoPostmaster < Pushizo::BaseModel
+      # Zorunlu.
+      field "domain", :domain, :string
+      field "access_token", :access_token, :string
     end
 
     # DeliverabilitySettingsDtoValidation şeması.
@@ -3382,6 +3444,14 @@ module Pushizo
       field "api_key", :api_key, :string
     end
 
+    # DeliverabilitySettingsDtoVolumeSpike şeması.
+    class DeliverabilitySettingsDtoVolumeSpike < Pushizo::BaseModel
+      # Zorunlu.
+      field "multiplier", :multiplier, :integer
+      # Zorunlu.
+      field "floor", :floor, :integer
+    end
+
     # Delivery şeması.
     class Delivery < Pushizo::BaseModel
       # Zorunlu.
@@ -3392,7 +3462,7 @@ module Pushizo
       field "subscription_id", :subscription_id, :string
       # Zorunlu.
       field "user_id", :user_id, :string
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu.
       field "provider", :provider, :string
@@ -3456,6 +3526,18 @@ module Pushizo
       field "validation", :validation, "EmailDeliverabilitySettingsValidation"
       # Zorunlu.
       field "verifier", :verifier, "EmailDeliverabilitySettingsVerifier"
+      # Zorunlu.
+      field "volume_spike", :volume_spike, "EmailDeliverabilitySettingsVolumeSpike"
+      # Zorunlu.
+      field "postmaster", :postmaster, "EmailDeliverabilitySettingsPostmaster"
+    end
+
+    # EmailDeliverabilitySettingsPostmaster şeması.
+    class EmailDeliverabilitySettingsPostmaster < Pushizo::BaseModel
+      # Zorunlu.
+      field "domain", :domain, :string
+      # Zorunlu.
+      field "has_token", :has_token, :boolean
     end
 
     # EmailDeliverabilitySettingsValidation şeması.
@@ -3476,6 +3558,14 @@ module Pushizo
       field "provider", :provider, :string
       # Zorunlu.
       field "has_key", :has_key, :boolean
+    end
+
+    # EmailDeliverabilitySettingsVolumeSpike şeması.
+    class EmailDeliverabilitySettingsVolumeSpike < Pushizo::BaseModel
+      # Zorunlu.
+      field "multiplier", :multiplier, :integer
+      # Zorunlu.
+      field "floor", :floor, :integer
     end
 
     # EmailWarmupPlan şeması.
@@ -3648,7 +3738,7 @@ module Pushizo
       field "included_segments", :included_segments, [:array, :string]
       field "excluded_segments", :excluded_segments, [:array, :string]
       field "filters", :filters, :any
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
       field "test_devices_only", :test_devices_only, :boolean
       field "email_to", :email_to, [:array, :string]
@@ -3859,7 +3949,7 @@ module Pushizo
       field "message_id", :message_id, :string
       field "campaign_id", :campaign_id, :string
       field "status", :status, :string
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       field "segment_id", :segment_id, :string
     end
@@ -5479,7 +5569,7 @@ module Pushizo
       field "exclude_segments", :exclude_segments, [:array, :string]
       # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
       field "filters", :filters, "McpCreateCampaignDraftBodyAudienceFilters"
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
       field "test_devices_only", :test_devices_only, :boolean
     end
@@ -5575,11 +5665,21 @@ module Pushizo
       # Zorunlu.
       field "app_scopes", :app_scopes, [:array, :string]
       # Zorunlu.
+      field "app_roles", :app_roles, [:array, "MemberAppRolesItem"]
+      # Zorunlu.
       field "accepted_at", :accepted_at, :string
       # Zorunlu.
       field "created_at", :created_at, :string
       # Zorunlu.
       field "last_login_at", :last_login_at, :string
+    end
+
+    # MemberAppRolesItem şeması.
+    class MemberAppRolesItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu. Değerler: "owner", "admin", "developer", "marketer", "analyst", "billing", "viewer", "composer", "agent".
+      field "role", :role, :string
     end
 
     # MemberList şeması.
@@ -5862,9 +5962,9 @@ module Pushizo
 
     # OverviewStatsChannelsItem şeması.
     class OverviewStatsChannelsItem < Pushizo::BaseModel
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
-      # Zorunlu. Değerler: "apns", "fcm", "hms", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "meta_whatsapp", "google_rbm", "mock".
+      # Zorunlu. Değerler: "apns", "fcm", "hms", "adm", "wns", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "meta_whatsapp", "google_rbm", "mock".
       field "provider", :provider, :string
       # Zorunlu. Değerler: "unconfigured", "active", "invalid", "suspended".
       field "status", :status, :string
@@ -5975,6 +6075,10 @@ module Pushizo
       field "push_capable", :push_capable, :boolean
       # Değerler: "sandbox", "production".
       field "push_environment", :push_environment, :string
+      # Değerler: "phone", "watch".
+      field "form_factor", :form_factor, :string
+      # Değerler: "alert", "voip", "app_clip".
+      field "push_kind", :push_kind, :string
     end
 
     # PatchUserDto şeması.
@@ -5999,6 +6103,24 @@ module Pushizo
       field "amount", :amount, :number
       field "iso", :iso, :string
       field "count", :count, :integer
+    end
+
+    # PostmasterStats şeması.
+    class PostmasterStats < Pushizo::BaseModel
+      # Zorunlu.
+      field "domain", :domain, :string
+      # Zorunlu.
+      field "data", :data, [:array, "PostmasterStatsDataItem"]
+    end
+
+    # PostmasterStatsDataItem şeması.
+    class PostmasterStatsDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "day", :day, :string
+      # Zorunlu.
+      field "domain_reputation", :domain_reputation, :string
+      # Zorunlu.
+      field "spam_rate", :spam_rate, :string
     end
 
     # ProvidersReport şeması.
@@ -6081,7 +6203,7 @@ module Pushizo
 
     # RenderPreview şeması.
     class RenderPreview < Pushizo::BaseModel
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu.
       field "language", :language, :string
@@ -6149,7 +6271,7 @@ module Pushizo
 
     # RenderTemplateDto şeması.
     class RenderTemplateDto < Pushizo::BaseModel
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       field "language", :language, :string
       field "user", :user, "RenderTemplateDtoUser"
@@ -6217,6 +6339,17 @@ module Pushizo
       field "rcs_content_sid", :rcs_content_sid, :string
       field "rcs_content_variables", :rcs_content_variables, [:map, :string]
       field "rcs_fallback_text", :rcs_fallback_text, [:map, :string]
+      field "ios_carousel", :ios_carousel, [:array, "RenderTemplateDtoContentIosCarouselItem"]
+      field "android_live_update", :android_live_update, "RenderTemplateDtoContentAndroidLiveUpdate"
+      field "voip", :voip, :boolean
+      field "app_clip", :app_clip, :boolean
+    end
+
+    # RenderTemplateDtoContentAndroidLiveUpdate şeması.
+    class RenderTemplateDtoContentAndroidLiveUpdate < Pushizo::BaseModel
+      # Zorunlu.
+      field "progress", :progress, :integer
+      field "ongoing", :ongoing, :boolean
     end
 
     # RenderTemplateDtoContentButtonsItem şeması.
@@ -6227,6 +6360,13 @@ module Pushizo
       field "text", :text, :string
       field "icon", :icon, :string
       field "url", :url, :string
+    end
+
+    # RenderTemplateDtoContentIosCarouselItem şeması.
+    class RenderTemplateDtoContentIosCarouselItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "url", :url, :string
+      field "title", :title, :string
     end
 
     # RenderTemplateDtoContentRcsCard şeması.
@@ -6612,7 +6752,7 @@ module Pushizo
     class SetPreferencesDtoPreferencesItem < Pushizo::BaseModel
       # Zorunlu.
       field "category", :category, :string
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu.
       field "opted_in", :opted_in, :boolean
@@ -6650,6 +6790,20 @@ module Pushizo
       field "reserved", :reserved, [:array, :string]
     end
 
+    # SmsVerification şeması.
+    class SmsVerification < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "expires_at", :expires_at, :string
+    end
+
+    # SmsVerificationCheck şeması.
+    class SmsVerificationCheck < Pushizo::BaseModel
+      # Zorunlu.
+      field "verified", :verified, :boolean
+    end
+
     # StartLiveActivityDto şeması.
     class StartLiveActivityDto < Pushizo::BaseModel
       field "activity_id", :activity_id, :string
@@ -6682,6 +6836,13 @@ module Pushizo
       field "all", :all, :boolean
     end
 
+    # StartVerifyDto şeması.
+    class StartVerifyDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "phone", :phone, :string
+      field "locale", :locale, :string
+    end
+
     # Subscription şeması.
     class Subscription < Pushizo::BaseModel
       # Zorunlu.
@@ -6690,7 +6851,7 @@ module Pushizo
       field "app_id", :app_id, :string
       # Zorunlu.
       field "user_id", :user_id, :string
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu.
       field "token", :token, :string
@@ -6736,6 +6897,10 @@ module Pushizo
       field "push_capable", :push_capable, :boolean
       # Değerler: "sandbox", "production".
       field "push_environment", :push_environment, :string
+      # Değerler: "phone", "watch".
+      field "form_factor", :form_factor, :string
+      # Değerler: "alert", "voip", "app_clip".
+      field "push_kind", :push_kind, :string
     end
 
     # SubscriptionLocation şeması.
@@ -7069,7 +7234,7 @@ module Pushizo
       field "app_id", :app_id, :string
       # Zorunlu.
       field "name", :name, :string
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       # Zorunlu.
       field "current_version", :current_version, :integer
@@ -7284,7 +7449,7 @@ module Pushizo
       field "max", :max, :integer
       # Zorunlu.
       field "window", :window, "UpdateAppDtoSettingsFrequencyCapsItemWindow"
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
     end
 
@@ -7473,7 +7638,7 @@ module Pushizo
     class UpdateCategoryDto < Pushizo::BaseModel
       field "name", :name, [:map, :string]
       field "description", :description, [:map, :string]
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
       field "default_opted_in", :default_opted_in, :boolean
       field "position", :position, :integer
@@ -7718,7 +7883,7 @@ module Pushizo
     # UpdateTemplateDto şeması.
     class UpdateTemplateDto < Pushizo::BaseModel
       field "name", :name, :string
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channel", :channel, :string
       field "tags", :tags, [:array, :string]
       field "content", :content, "UpdateTemplateDtoContent"
@@ -7783,6 +7948,17 @@ module Pushizo
       field "rcs_content_sid", :rcs_content_sid, :string
       field "rcs_content_variables", :rcs_content_variables, [:map, :string]
       field "rcs_fallback_text", :rcs_fallback_text, [:map, :string]
+      field "ios_carousel", :ios_carousel, [:array, "UpdateTemplateDtoContentIosCarouselItem"]
+      field "android_live_update", :android_live_update, "UpdateTemplateDtoContentAndroidLiveUpdate"
+      field "voip", :voip, :boolean
+      field "app_clip", :app_clip, :boolean
+    end
+
+    # UpdateTemplateDtoContentAndroidLiveUpdate şeması.
+    class UpdateTemplateDtoContentAndroidLiveUpdate < Pushizo::BaseModel
+      # Zorunlu.
+      field "progress", :progress, :integer
+      field "ongoing", :ongoing, :boolean
     end
 
     # UpdateTemplateDtoContentButtonsItem şeması.
@@ -7793,6 +7969,13 @@ module Pushizo
       field "text", :text, :string
       field "icon", :icon, :string
       field "url", :url, :string
+    end
+
+    # UpdateTemplateDtoContentIosCarouselItem şeması.
+    class UpdateTemplateDtoContentIosCarouselItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "url", :url, :string
+      field "title", :title, :string
     end
 
     # UpdateTemplateDtoContentRcsCard şeması.
@@ -8215,7 +8398,7 @@ module Pushizo
       field "updated_at", :updated_at, :string
       # Zorunlu.
       field "subscription_count", :subscription_count, :integer
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
     end
 
@@ -8247,7 +8430,7 @@ module Pushizo
       field "updated_at", :updated_at, :string
       # Zorunlu.
       field "subscription_count", :subscription_count, :integer
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
       field "channels", :channels, [:array, :string]
       # Zorunlu.
       field "aliases", :aliases, [:array, "UserDetailAliasesItem"]
