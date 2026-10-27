@@ -831,6 +831,7 @@ module Pushizo
       field "androidChannels", :android_channels, [:array, "AppSettingsAndroidChannelsItem"]
       field "sms", :sms, "AppSettingsSms"
       field "preferenceCenter", :preference_center, "AppSettingsPreferenceCenter"
+      field "brandKit", :brand_kit, "AppSettingsBrandKit"
       field "defaultTtlSeconds", :default_ttl_seconds, :integer
       field "identityVerificationRequired", :identity_verification_required, :boolean
       field "allowedOrigins", :allowed_origins, [:array, :string]
@@ -852,6 +853,17 @@ module Pushizo
       field "sound", :sound, :string
       field "vibration", :vibration, :boolean
       field "group", :group, :string
+    end
+
+    # AppSettingsBrandKit şeması.
+    class AppSettingsBrandKit < Pushizo::BaseModel
+      field "website_url", :website_url, :string
+      field "name", :name, :string
+      field "primary_color", :primary_color, :string
+      field "accent_color", :accent_color, :string
+      field "font", :font, :string
+      field "logo_url", :logo_url, :string
+      field "tone", :tone, :string
     end
 
     # AppSettingsFrequencyCap şeması.
@@ -7223,6 +7235,7 @@ module Pushizo
       field "androidChannels", :android_channels, [:array, "UpdateAppDtoSettingsAndroidChannelsItem"]
       field "sms", :sms, "UpdateAppDtoSettingsSms"
       field "preferenceCenter", :preference_center, "UpdateAppDtoSettingsPreferenceCenter"
+      field "brandKit", :brand_kit, "UpdateAppDtoSettingsBrandKit"
       field "defaultTtlSeconds", :default_ttl_seconds, :integer
       field "identityVerificationRequired", :identity_verification_required, :boolean
       field "allowedOrigins", :allowed_origins, [:array, :string]
@@ -7244,6 +7257,17 @@ module Pushizo
       field "sound", :sound, :string
       field "vibration", :vibration, :boolean
       field "group", :group, :string
+    end
+
+    # UpdateAppDtoSettingsBrandKit şeması.
+    class UpdateAppDtoSettingsBrandKit < Pushizo::BaseModel
+      field "website_url", :website_url, :string
+      field "name", :name, :string
+      field "primary_color", :primary_color, :string
+      field "accent_color", :accent_color, :string
+      field "font", :font, :string
+      field "logo_url", :logo_url, :string
+      field "tone", :tone, :string
     end
 
     # UpdateAppDtoSettingsFrequencyCap şeması.
