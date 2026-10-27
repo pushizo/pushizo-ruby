@@ -3591,6 +3591,137 @@ module Pushizo
       end
     end
 
+    # reverseEtl kaynağı.
+    class ReverseEtl < Pushizo::BaseResource
+      # Depodan içeri aktarımlar
+      #
+      # GET /v1/apps/{appId}/reverse-etl
+      def list(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/reverse-etl",
+          path_params: {},
+          app_id: app_id,
+          response: "ReverseEtlSyncList",
+          request_options: request_options
+        )
+      end
+
+      # İçeri aktarım oluştur
+      #
+      # POST /v1/apps/{appId}/reverse-etl
+      def create(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/reverse-etl",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "ReverseEtlSync",
+          request_options: request_options
+        )
+      end
+
+      # Kaydetmeden bağlantı testi
+      #
+      # POST /v1/apps/{appId}/reverse-etl/test-connection
+      def test(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/reverse-etl/test-connection",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "WarehouseConnectionResult",
+          request_options: request_options
+        )
+      end
+
+      # İçeri aktarım detayı
+      #
+      # GET /v1/apps/{appId}/reverse-etl/{syncId}
+      def get(sync_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/reverse-etl/{syncId}",
+          path_params: { "syncId" => sync_id },
+          app_id: app_id,
+          response: "ReverseEtlSync",
+          request_options: request_options
+        )
+      end
+
+      # İçeri aktarımı güncelle
+      #
+      # PATCH /v1/apps/{appId}/reverse-etl/{syncId}
+      def update(sync_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/reverse-etl/{syncId}",
+          path_params: { "syncId" => sync_id },
+          body: body,
+          app_id: app_id,
+          response: "ReverseEtlSync",
+          request_options: request_options
+        )
+      end
+
+      # İçeri aktarımı sil
+      #
+      # DELETE /v1/apps/{appId}/reverse-etl/{syncId}
+      def delete(sync_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/reverse-etl/{syncId}",
+          path_params: { "syncId" => sync_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+
+      # Kayıtlı içeri aktarımın bağlantı testi
+      #
+      # POST /v1/apps/{appId}/reverse-etl/{syncId}/test
+      def test_saved(sync_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/reverse-etl/{syncId}/test",
+          path_params: { "syncId" => sync_id },
+          app_id: app_id,
+          response: "WarehouseConnectionResult",
+          request_options: request_options
+        )
+      end
+
+      # Şimdi içeri aktar
+      #
+      # POST /v1/apps/{appId}/reverse-etl/{syncId}/run
+      def run(sync_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/reverse-etl/{syncId}/run",
+          path_params: { "syncId" => sync_id },
+          app_id: app_id,
+          response: "ReverseEtlRun",
+          request_options: request_options
+        )
+      end
+
+      # İçeri aktarım geçmişi
+      #
+      # GET /v1/apps/{appId}/reverse-etl/{syncId}/runs
+      def runs(sync_id, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/reverse-etl/{syncId}/runs",
+          path_params: { "syncId" => sync_id },
+          query: { "limit" => limit, "cursor" => cursor },
+          app_id: app_id,
+          response: "ReverseEtlRunPage",
+          request_options: request_options
+        )
+      end
+
+      # runs sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def runs_all(sync_id, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          runs(sync_id, limit: limit, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+    end
+
     # smsKeywords kaynağı.
     class SmsKeywords < Pushizo::BaseResource
       # İki yönlü mesaj anahtar sözcükleri (org geneli + bu app) ve yasal (ayrılmış) sözcükler
@@ -4041,7 +4172,7 @@ module Pushizo
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "1.0.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses categories content_tables conversations data_feeds email_deliverability forms identity_keys integrations journeys landing_pages live_activities mcp preferences sms_keywords surveys warehouse_exports web_campaigns whatsapp].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses categories content_tables conversations data_feeds email_deliverability forms identity_keys integrations journeys landing_pages live_activities mcp preferences reverse_etl sms_keywords surveys warehouse_exports web_campaigns whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -4196,6 +4327,10 @@ module Pushizo
 
     def preferences
       @preferences ||= Pushizo::Resources::Preferences.new(self)
+    end
+
+    def reverse_etl
+      @reverse_etl ||= Pushizo::Resources::ReverseEtl.new(self)
     end
 
     def sms_keywords

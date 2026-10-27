@@ -6337,6 +6337,88 @@ module Pushizo
       field "retention", :retention, [:array, :number]
     end
 
+    # ReverseEtlRun şeması.
+    class ReverseEtlRun < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "sync_id", :sync_id, :string
+      # Zorunlu. Değerler: "schedule", "manual".
+      field "trigger", :trigger, :string
+      # Zorunlu. Değerler: "queued", "running", "succeeded", "failed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "row_count", :row_count, :integer
+      # Zorunlu.
+      field "attempt", :attempt, :integer
+      # Zorunlu.
+      field "error", :error, :string
+      # Zorunlu.
+      field "started_at", :started_at, :string
+      # Zorunlu.
+      field "finished_at", :finished_at, :string
+      # Zorunlu.
+      field "duration_ms", :duration_ms, :integer
+      # Zorunlu.
+      field "created_at", :created_at, :string
+    end
+
+    # ReverseEtlRunPage şeması.
+    class ReverseEtlRunPage < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "ReverseEtlRun"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
+    end
+
+    # ReverseEtlSync şeması.
+    class ReverseEtlSync < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "snowflake", "bigquery", "postgres", "mysql", "s3", "google_sheets".
+      field "source", :source, :string
+      # Zorunlu. Değerler: "event", "user".
+      field "target", :target, :string
+      # Zorunlu.
+      field "config", :config, [:map, :any]
+      # Zorunlu.
+      field "credentials_hint", :credentials_hint, :string
+      # Zorunlu. Değerler: "hourly", "daily".
+      field "schedule", :schedule, :string
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu. Değerler: "active", "paused", "failing".
+      field "status", :status, :string
+      # Zorunlu.
+      field "cursor", :cursor, :string
+      # Zorunlu.
+      field "consecutive_failures", :consecutive_failures, :integer
+      # Zorunlu.
+      field "last_error", :last_error, :string
+      # Zorunlu.
+      field "last_run_at", :last_run_at, :string
+      # Zorunlu.
+      field "last_success_at", :last_success_at, :string
+      # Zorunlu.
+      field "next_run_at", :next_run_at, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # ReverseEtlSyncList şeması.
+    class ReverseEtlSyncList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "ReverseEtlSync"]
+    end
+
     # ScheduleCampaignDto şeması.
     class ScheduleCampaignDto < Pushizo::BaseModel
       field "send_at", :send_at, :string
@@ -7599,6 +7681,16 @@ module Pushizo
       field "y", :y, :number
     end
 
+    # UpdateReverseEtlDto şeması.
+    class UpdateReverseEtlDto < Pushizo::BaseModel
+      field "name", :name, :string
+      # Değerler: "hourly", "daily".
+      field "schedule", :schedule, :string
+      field "enabled", :enabled, :boolean
+      field "config", :config, [:map, :any]
+      field "credentials", :credentials, [:map, :any]
+    end
+
     # UpdateTemplateDto şeması.
     class UpdateTemplateDto < Pushizo::BaseModel
       field "name", :name, :string
@@ -8320,7 +8412,7 @@ module Pushizo
       field "app_id", :app_id, :string
       # Zorunlu.
       field "name", :name, :string
-      # Zorunlu. Değerler: "bigquery", "snowflake", "s3_parquet".
+      # Zorunlu. Değerler: "bigquery", "snowflake", "s3_parquet", "redshift", "databricks".
       field "destination", :destination, :string
       # Zorunlu.
       field "config", :config, [:map, :any]
