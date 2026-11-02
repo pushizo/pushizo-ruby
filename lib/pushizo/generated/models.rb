@@ -1217,6 +1217,34 @@ module Pushizo
       field "one_per_user", :one_per_user, :boolean
     end
 
+    # CampaignEmailRisk şeması.
+    class CampaignEmailRisk < Pushizo::BaseModel
+      # Zorunlu.
+      field "applies", :applies, :boolean
+      # Zorunlu.
+      field "recipients", :recipients, :integer
+      # Zorunlu.
+      field "flagged_invalid", :flagged_invalid, :integer
+      # Zorunlu.
+      field "sendable", :sendable, :integer
+      # Zorunlu.
+      field "valid", :valid, :integer
+      # Zorunlu.
+      field "unknown", :unknown, :integer
+      # Zorunlu.
+      field "unchecked", :unchecked, :integer
+      # Zorunlu.
+      field "estimated_invalid_ratio", :estimated_invalid_ratio, :number
+      # Zorunlu.
+      field "max_invalid_ratio", :max_invalid_ratio, :number
+      # Zorunlu.
+      field "blocked", :blocked, :boolean
+      # Zorunlu.
+      field "bounce_rate_7d", :bounce_rate_7d, :number
+      # Zorunlu.
+      field "bounce_rate_30d", :bounce_rate_30d, :number
+    end
+
     # CampaignPage şeması.
     class CampaignPage < Pushizo::BaseModel
       # Zorunlu.
@@ -3418,6 +3446,7 @@ module Pushizo
       field "validation", :validation, "DeliverabilitySettingsDtoValidation"
       field "verifier", :verifier, "DeliverabilitySettingsDtoVerifier"
       field "volume_spike", :volume_spike, "DeliverabilitySettingsDtoVolumeSpike"
+      field "max_invalid_ratio", :max_invalid_ratio, :number
       field "postmaster", :postmaster, "DeliverabilitySettingsDtoPostmaster"
     end
 
@@ -3530,6 +3559,8 @@ module Pushizo
       field "volume_spike", :volume_spike, "EmailDeliverabilitySettingsVolumeSpike"
       # Zorunlu.
       field "postmaster", :postmaster, "EmailDeliverabilitySettingsPostmaster"
+      # Zorunlu.
+      field "max_invalid_ratio", :max_invalid_ratio, :number
     end
 
     # EmailDeliverabilitySettingsPostmaster şeması.
@@ -4258,6 +4289,8 @@ module Pushizo
       field "created_subscriptions", :created_subscriptions, :integer
       field "skipped", :skipped, :integer
       field "errors", :errors, :integer
+      field "rejected_emails", :rejected_emails, :integer
+      field "rejected_email_reasons", :rejected_email_reasons, [:map, :integer]
     end
 
     # InAppMessage şeması.

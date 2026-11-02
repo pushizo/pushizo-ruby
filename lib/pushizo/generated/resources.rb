@@ -801,13 +801,16 @@ module Pushizo
         )
       end
 
-      # Zamanla
+      # Zamanla; e-posta liste koruması 409 → force=true (admin kapsamı)
       #
       # POST /v1/apps/{appId}/campaigns/{campaignId}/schedule
-      def schedule(campaign_id, body, app_id: nil, request_options: nil)
+      #
+      # @param force Değerler: "true", "false".
+      def schedule(campaign_id, body, force: nil, app_id: nil, request_options: nil)
         @client.call(
           :post, "/v1/apps/{appId}/campaigns/{campaignId}/schedule",
           path_params: { "campaignId" => campaign_id },
+          query: { "force" => force },
           body: body,
           app_id: app_id,
           response: "Campaign",
@@ -815,15 +818,31 @@ module Pushizo
         )
       end
 
-      # Hemen gönder
+      # Hemen gönder; e-posta liste koruması 409 → force=true (admin kapsamı)
       #
       # POST /v1/apps/{appId}/campaigns/{campaignId}/send
-      def send_campaign(campaign_id, app_id: nil, request_options: nil)
+      #
+      # @param force Değerler: "true", "false".
+      def send_campaign(campaign_id, force: nil, app_id: nil, request_options: nil)
         @client.call(
           :post, "/v1/apps/{appId}/campaigns/{campaignId}/send",
           path_params: { "campaignId" => campaign_id },
+          query: { "force" => force },
           app_id: app_id,
           response: "Campaign",
+          request_options: request_options
+        )
+      end
+
+      # E-posta liste riski (tahmini geçersiz oranı, 7/30 gün bounce oranı)
+      #
+      # GET /v1/apps/{appId}/campaigns/{campaignId}/email-risk
+      def email_risk(campaign_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/campaigns/{campaignId}/email-risk",
+          path_params: { "campaignId" => campaign_id },
+          app_id: app_id,
+          response: "CampaignEmailRisk",
           request_options: request_options
         )
       end
