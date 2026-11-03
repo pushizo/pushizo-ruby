@@ -2595,6 +2595,20 @@ module Pushizo
       field "sms", :sms, :boolean
     end
 
+    # CreateGeofenceDto şeması.
+    class CreateGeofenceDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "lat", :lat, :number
+      # Zorunlu.
+      field "lng", :lng, :number
+      # Zorunlu.
+      field "radius_m", :radius_m, :integer
+      field "cooldown_minutes", :cooldown_minutes, :integer
+      field "enabled", :enabled, :boolean
+    end
+
     # CreateIdentityKeyDto şeması.
     class CreateIdentityKeyDto < Pushizo::BaseModel
       field "kid", :kid, :string
@@ -4313,6 +4327,42 @@ module Pushizo
       field "conversion_rate", :conversion_rate, :number
       # Zorunlu.
       field "drop_off", :drop_off, :integer
+    end
+
+    # Geofence şeması.
+    class Geofence < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "lat", :lat, :number
+      # Zorunlu.
+      field "lng", :lng, :number
+      # Zorunlu.
+      field "radius_m", :radius_m, :integer
+      # Zorunlu.
+      field "cooldown_minutes", :cooldown_minutes, :integer
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "enter_count", :enter_count, :integer
+      # Zorunlu.
+      field "exit_count", :exit_count, :integer
+      # Zorunlu.
+      field "inside_count", :inside_count, :integer
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # GeofenceList şeması.
+    class GeofenceList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "Geofence"]
     end
 
     # GlobalControl şeması.
@@ -8063,6 +8113,16 @@ module Pushizo
       field "secret_headers", :secret_headers, [:map, :string]
       field "cache_ttl_seconds", :cache_ttl_seconds, :integer
       field "timeout_ms", :timeout_ms, :integer
+      field "enabled", :enabled, :boolean
+    end
+
+    # UpdateGeofenceDto şeması.
+    class UpdateGeofenceDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "lat", :lat, :number
+      field "lng", :lng, :number
+      field "radius_m", :radius_m, :integer
+      field "cooldown_minutes", :cooldown_minutes, :integer
       field "enabled", :enabled, :boolean
     end
 

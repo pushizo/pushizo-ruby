@@ -3175,6 +3175,78 @@ module Pushizo
       end
     end
 
+    # geofences kaynağı.
+    class Geofences < Pushizo::BaseResource
+      # Bölgeler
+      #
+      # GET /v1/apps/{appId}/geofences
+      def list(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/geofences",
+          path_params: {},
+          app_id: app_id,
+          response: "GeofenceList",
+          request_options: request_options
+        )
+      end
+
+      # Bölge oluştur
+      #
+      # POST /v1/apps/{appId}/geofences
+      #
+      # Konum paylaşan abonelik bölgeye girip çıktığında `geofence_enter` ve `geofence_exit` olayları oluşur.
+      def create(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/geofences",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "Geofence",
+          request_options: request_options
+        )
+      end
+
+      # Bölge ayrıntısı
+      #
+      # GET /v1/apps/{appId}/geofences/{geofenceId}
+      def get(geofence_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/geofences/{geofenceId}",
+          path_params: { "geofenceId" => geofence_id },
+          app_id: app_id,
+          response: "Geofence",
+          request_options: request_options
+        )
+      end
+
+      # Bölgeyi güncelle
+      #
+      # PATCH /v1/apps/{appId}/geofences/{geofenceId}
+      def update(geofence_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/geofences/{geofenceId}",
+          path_params: { "geofenceId" => geofence_id },
+          body: body,
+          app_id: app_id,
+          response: "Geofence",
+          request_options: request_options
+        )
+      end
+
+      # Bölgeyi sil
+      #
+      # DELETE /v1/apps/{appId}/geofences/{geofenceId}
+      def delete(geofence_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/geofences/{geofenceId}",
+          path_params: { "geofenceId" => geofence_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+    end
+
     # globalControl kaynağı.
     class GlobalControl < Pushizo::BaseResource
       # Genel kontrol grubu ayarı
@@ -4720,7 +4792,7 @@ module Pushizo
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "1.0.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories content_tables conversations data_feeds email_deliverability forms global_control identity_keys integrations journeys landing_pages live_activities mcp preferences promo_code_lists reverse_etl rfm sms_keywords surveys verify warehouse_exports web_campaigns whatsapp].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories content_tables conversations data_feeds email_deliverability forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp preferences promo_code_lists reverse_etl rfm sms_keywords surveys verify warehouse_exports web_campaigns whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -4851,6 +4923,10 @@ module Pushizo
 
     def forms
       @forms ||= Pushizo::Resources::Forms.new(self)
+    end
+
+    def geofences
+      @geofences ||= Pushizo::Resources::Geofences.new(self)
     end
 
     def global_control
