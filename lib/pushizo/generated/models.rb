@@ -2718,6 +2718,7 @@ module Pushizo
       field "audience", :audience, "CreateInAppDtoAudience"
       field "frequency", :frequency, "CreateInAppDtoFrequency"
       field "journey_only", :journey_only, :boolean
+      field "placement", :placement, :string
       field "priority", :priority, :integer
       field "start_at", :start_at, :string
       field "end_at", :end_at, :string
@@ -4617,6 +4618,8 @@ module Pushizo
       field "frequency", :frequency, "InAppMessageFrequency"
       # Zorunlu.
       field "journey_only", :journey_only, :boolean
+      # Zorunlu.
+      field "placement", :placement, :string
       # Zorunlu.
       field "start_at", :start_at, :string
       # Zorunlu.
@@ -8261,6 +8264,7 @@ module Pushizo
       field "audience", :audience, "UpdateInAppDtoAudience"
       field "frequency", :frequency, "UpdateInAppDtoFrequency"
       field "journey_only", :journey_only, :boolean
+      field "placement", :placement, :string
       field "priority", :priority, :integer
       field "start_at", :start_at, :string
       field "end_at", :end_at, :string
