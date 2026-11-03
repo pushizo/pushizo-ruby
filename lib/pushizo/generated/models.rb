@@ -6566,7 +6566,7 @@ module Pushizo
       field "app_id", :app_id, :string
       # Zorunlu.
       field "name", :name, :string
-      # Zorunlu. Değerler: "snowflake", "bigquery", "postgres", "mysql", "s3", "google_sheets".
+      # Zorunlu. Değerler: "snowflake", "bigquery", "postgres", "mysql", "s3", "google_sheets", "clickhouse", "sqlserver", "trino", "athena", "elasticsearch", "kafka", "pubsub".
       field "source", :source, :string
       # Zorunlu. Değerler: "event", "user".
       field "target", :target, :string
@@ -6574,7 +6574,7 @@ module Pushizo
       field "config", :config, [:map, :any]
       # Zorunlu.
       field "credentials_hint", :credentials_hint, :string
-      # Zorunlu. Değerler: "hourly", "daily".
+      # Zorunlu. Değerler: "every_5_minutes", "hourly", "daily".
       field "schedule", :schedule, :string
       # Zorunlu.
       field "enabled", :enabled, :boolean
@@ -7906,7 +7906,7 @@ module Pushizo
     # UpdateReverseEtlDto şeması.
     class UpdateReverseEtlDto < Pushizo::BaseModel
       field "name", :name, :string
-      # Değerler: "hourly", "daily".
+      # Değerler: "every_5_minutes", "hourly", "daily".
       field "schedule", :schedule, :string
       field "enabled", :enabled, :boolean
       field "config", :config, [:map, :any]
