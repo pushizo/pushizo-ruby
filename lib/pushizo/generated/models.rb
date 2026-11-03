@@ -811,6 +811,68 @@ module Pushizo
       field "updated_at", :updated_at, :string
     end
 
+    # AppFlag şeması.
+    class AppFlag < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "key", :key, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu. Değerler: "boolean", "string", "number", "json".
+      field "value_type", :value_type, :string
+      # Zorunlu.
+      field "on_value", :on_value, :any
+      # Zorunlu.
+      field "off_value", :off_value, :any
+      # Zorunlu.
+      field "rollout_percent", :rollout_percent, :integer
+      # Zorunlu.
+      field "segment_id", :segment_id, :string
+      # Zorunlu.
+      field "rollout_schedule", :rollout_schedule, [:array, "AppFlagRolloutScheduleItem"]
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # AppFlagEvaluation şeması.
+    class AppFlagEvaluation < Pushizo::BaseModel
+      # Zorunlu.
+      field "flags", :flags, [:map, "AppFlagEvaluationFlagsValue"]
+    end
+
+    # AppFlagEvaluationFlagsValue şeması.
+    class AppFlagEvaluationFlagsValue < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "value", :value, :any
+      # Zorunlu. Değerler: "on", "disabled", "segment", "rollout".
+      field "reason", :reason, :string
+    end
+
+    # AppFlagList şeması.
+    class AppFlagList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "AppFlag"]
+    end
+
+    # AppFlagRolloutScheduleItem şeması.
+    class AppFlagRolloutScheduleItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "at", :at, :string
+      # Zorunlu.
+      field "percent", :percent, :integer
+    end
+
     # AppList şeması.
     class AppList < Pushizo::BaseModel
       # Zorunlu.
@@ -2428,6 +2490,31 @@ module Pushizo
       field "sms", :sms, :boolean
     end
 
+    # CreateAppFlagDto şeması.
+    class CreateAppFlagDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "key", :key, :string
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      field "enabled", :enabled, :boolean
+      # Değerler: "boolean", "string", "number", "json".
+      field "value_type", :value_type, :string
+      field "on_value", :on_value, :any
+      field "off_value", :off_value, :any
+      field "rollout_percent", :rollout_percent, :integer
+      field "segment_id", :segment_id, :string
+      field "rollout_schedule", :rollout_schedule, [:array, "CreateAppFlagDtoRolloutScheduleItem"]
+    end
+
+    # CreateAppFlagDtoRolloutScheduleItem şeması.
+    class CreateAppFlagDtoRolloutScheduleItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "at", :at, :string
+      # Zorunlu.
+      field "percent", :percent, :integer
+    end
+
     # CreateBudgetAlertRuleDto şeması.
     class CreateBudgetAlertRuleDto < Pushizo::BaseModel
       # Zorunlu.
@@ -3894,6 +3981,13 @@ module Pushizo
       field "new_contacts", :new_contacts, :integer
       # Zorunlu.
       field "external_id_missing", :external_id_missing, [:array, :string]
+    end
+
+    # EvaluateAppFlagsDto şeması.
+    class EvaluateAppFlagsDto < Pushizo::BaseModel
+      field "external_id", :external_id, :string
+      field "user_id", :user_id, :string
+      field "subject", :subject, :string
     end
 
     # EventDefinition şeması.
@@ -8068,6 +8162,28 @@ module Pushizo
     class UpdateAppDtoSettingsWebPushWelcomeNotificationTextsValue < Pushizo::BaseModel
       field "title", :title, :string
       field "message", :message, :string
+    end
+
+    # UpdateAppFlagDto şeması.
+    class UpdateAppFlagDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "description", :description, :string
+      field "enabled", :enabled, :boolean
+      # Değerler: "boolean", "string", "number", "json".
+      field "value_type", :value_type, :string
+      field "on_value", :on_value, :any
+      field "off_value", :off_value, :any
+      field "rollout_percent", :rollout_percent, :integer
+      field "segment_id", :segment_id, :string
+      field "rollout_schedule", :rollout_schedule, [:array, "UpdateAppFlagDtoRolloutScheduleItem"]
+    end
+
+    # UpdateAppFlagDtoRolloutScheduleItem şeması.
+    class UpdateAppFlagDtoRolloutScheduleItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "at", :at, :string
+      # Zorunlu.
+      field "percent", :percent, :integer
     end
 
     # UpdateBudgetAlertRuleDto şeması.

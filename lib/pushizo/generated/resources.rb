@@ -3085,6 +3085,92 @@ module Pushizo
       end
     end
 
+    # featureFlags kaynağı.
+    class FeatureFlags < Pushizo::BaseResource
+      # Özellik bayrakları
+      #
+      # GET /v1/apps/{appId}/feature-flags
+      def list(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/feature-flags",
+          path_params: {},
+          app_id: app_id,
+          response: "AppFlagList",
+          request_options: request_options
+        )
+      end
+
+      # Bayrak oluştur
+      #
+      # POST /v1/apps/{appId}/feature-flags
+      #
+      # Değerler uygulama kimliğini bilen herkesçe okunabilir; gizli bilgi yazmayın.
+      def create(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/feature-flags",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "AppFlag",
+          request_options: request_options
+        )
+      end
+
+      # Bayrakları bir kullanıcı için değerlendir
+      #
+      # POST /v1/apps/{appId}/feature-flags/evaluate
+      def evaluate(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/feature-flags/evaluate",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "AppFlagEvaluation",
+          request_options: request_options
+        )
+      end
+
+      # Bayrak ayrıntısı
+      #
+      # GET /v1/apps/{appId}/feature-flags/{flagId}
+      def get(flag_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/feature-flags/{flagId}",
+          path_params: { "flagId" => flag_id },
+          app_id: app_id,
+          response: "AppFlag",
+          request_options: request_options
+        )
+      end
+
+      # Bayrağı güncelle
+      #
+      # PATCH /v1/apps/{appId}/feature-flags/{flagId}
+      def update(flag_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/feature-flags/{flagId}",
+          path_params: { "flagId" => flag_id },
+          body: body,
+          app_id: app_id,
+          response: "AppFlag",
+          request_options: request_options
+        )
+      end
+
+      # Bayrağı sil
+      #
+      # DELETE /v1/apps/{appId}/feature-flags/{flagId}
+      def delete(flag_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/feature-flags/{flagId}",
+          path_params: { "flagId" => flag_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+    end
+
     # forms kaynağı.
     class Forms < Pushizo::BaseResource
       # Formlar
@@ -4792,7 +4878,7 @@ module Pushizo
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "1.0.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories content_tables conversations data_feeds email_deliverability forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp preferences promo_code_lists reverse_etl rfm sms_keywords surveys verify warehouse_exports web_campaigns whatsapp].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories content_tables conversations data_feeds email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp preferences promo_code_lists reverse_etl rfm sms_keywords surveys verify warehouse_exports web_campaigns whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -4919,6 +5005,10 @@ module Pushizo
 
     def email_deliverability
       @email_deliverability ||= Pushizo::Resources::EmailDeliverability.new(self)
+    end
+
+    def feature_flags
+      @feature_flags ||= Pushizo::Resources::FeatureFlags.new(self)
     end
 
     def forms
