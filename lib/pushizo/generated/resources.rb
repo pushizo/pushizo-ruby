@@ -4087,6 +4087,96 @@ module Pushizo
       end
     end
 
+    # rfm kaynağı.
+    class Rfm < Pushizo::BaseResource
+      # RFM modeli
+      #
+      # GET /v1/apps/{appId}/rfm/config
+      def config(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/rfm/config",
+          path_params: {},
+          app_id: app_id,
+          response: "RfmConfig",
+          request_options: request_options
+        )
+      end
+
+      # RFM modelini ayarla
+      #
+      # PUT /v1/apps/{appId}/rfm/config
+      #
+      # Model açıksa skorlar kayıttan sonra yeniden hesaplanır.
+      def update(body, app_id: nil, request_options: nil)
+        @client.call(
+          :put, "/v1/apps/{appId}/rfm/config",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "RfmConfig",
+          request_options: request_options
+        )
+      end
+
+      # Skorları yeniden hesapla
+      #
+      # POST /v1/apps/{appId}/rfm/compute
+      #
+      # İş kuyruğa alınır; ilerleme `status` alanından izlenir.
+      def compute(app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/rfm/compute",
+          path_params: {},
+          app_id: app_id,
+          response: "RfmConfig",
+          request_options: request_options
+        )
+      end
+
+      # Segment dağılımı
+      #
+      # GET /v1/apps/{appId}/rfm/overview
+      def overview(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/rfm/overview",
+          path_params: {},
+          app_id: app_id,
+          response: "RfmOverview",
+          request_options: request_options
+        )
+      end
+
+      # İki tarih arası segment geçişleri
+      #
+      # GET /v1/apps/{appId}/rfm/transitions
+      def transitions(from: nil, to: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/rfm/transitions",
+          path_params: {},
+          query: { "from" => from, "to" => to },
+          app_id: app_id,
+          response: "RfmTransitions",
+          request_options: request_options
+        )
+      end
+
+      # Skoru olan kullanıcılar
+      #
+      # GET /v1/apps/{appId}/rfm/users
+      #
+      # @param segment Değerler: "champions", "loyal", "potential", "new", "promising", "need_attention", "about_to_sleep", "at_risk", "cant_lose", "hibernating", "lost".
+      def users(segment: nil, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/rfm/users",
+          path_params: {},
+          query: { "segment" => segment, "limit" => limit, "cursor" => cursor },
+          app_id: app_id,
+          response: "RfmUsersPage",
+          request_options: request_options
+        )
+      end
+    end
+
     # smsKeywords kaynağı.
     class SmsKeywords < Pushizo::BaseResource
       # İki yönlü mesaj anahtar sözcükleri (org geneli + bu app) ve yasal (ayrılmış) sözcükler
@@ -4568,7 +4658,7 @@ module Pushizo
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "1.0.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories content_tables conversations data_feeds email_deliverability forms global_control identity_keys integrations journeys landing_pages live_activities mcp preferences promo_code_lists reverse_etl sms_keywords surveys verify warehouse_exports web_campaigns whatsapp].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories content_tables conversations data_feeds email_deliverability forms global_control identity_keys integrations journeys landing_pages live_activities mcp preferences promo_code_lists reverse_etl rfm sms_keywords surveys verify warehouse_exports web_campaigns whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -4739,6 +4829,10 @@ module Pushizo
 
     def reverse_etl
       @reverse_etl ||= Pushizo::Resources::ReverseEtl.new(self)
+    end
+
+    def rfm
+      @rfm ||= Pushizo::Resources::Rfm.new(self)
     end
 
     def sms_keywords

@@ -6822,6 +6822,116 @@ module Pushizo
       field "data", :data, [:array, "ReverseEtlSync"]
     end
 
+    # RfmConfig şeması.
+    class RfmConfig < Pushizo::BaseModel
+      # Zorunlu.
+      field "configured", :configured, :boolean
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "event_names", :event_names, [:array, :string]
+      # Zorunlu.
+      field "value_property", :value_property, :string
+      # Zorunlu.
+      field "use_monetary", :use_monetary, :boolean
+      # Zorunlu.
+      field "window_days", :window_days, :integer
+      # Zorunlu. Değerler: "idle", "queued", "running", "failed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "last_error", :last_error, :string
+      # Zorunlu.
+      field "first_computed_at", :first_computed_at, :string
+      # Zorunlu.
+      field "last_computed_at", :last_computed_at, :string
+      # Zorunlu.
+      field "scored_users", :scored_users, :integer
+    end
+
+    # RfmOverview şeması.
+    class RfmOverview < Pushizo::BaseModel
+      # Zorunlu.
+      field "total", :total, :integer
+      # Zorunlu.
+      field "low_population", :low_population, :boolean
+      # Zorunlu.
+      field "last_computed_at", :last_computed_at, :string
+      # Zorunlu.
+      field "segments", :segments, [:array, "RfmOverviewSegmentsItem"]
+    end
+
+    # RfmOverviewSegmentsItem şeması.
+    class RfmOverviewSegmentsItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "champions", "loyal", "potential", "new", "promising", "need_attention", "about_to_sleep", "at_risk", "cant_lose", "hibernating", "lost".
+      field "segment", :segment, :string
+      # Zorunlu.
+      field "users", :users, :integer
+      # Zorunlu.
+      field "share", :share, :number
+      # Zorunlu.
+      field "avg_recency_days", :avg_recency_days, :number
+      # Zorunlu.
+      field "avg_frequency", :avg_frequency, :number
+      # Zorunlu.
+      field "avg_monetary", :avg_monetary, :number
+    end
+
+    # RfmTransitions şeması.
+    class RfmTransitions < Pushizo::BaseModel
+      # Zorunlu.
+      field "from", :from, :string
+      # Zorunlu.
+      field "to", :to, :string
+      # Zorunlu.
+      field "first_computed_at", :first_computed_at, :string
+      # Zorunlu.
+      field "transitions", :transitions, [:array, "RfmTransitionsTransitionsItem"]
+    end
+
+    # RfmTransitionsTransitionsItem şeması.
+    class RfmTransitionsTransitionsItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "champions", "loyal", "potential", "new", "promising", "need_attention", "about_to_sleep", "at_risk", "cant_lose", "hibernating", "lost".
+      field "from", :from, :string
+      # Zorunlu. Değerler: "champions", "loyal", "potential", "new", "promising", "need_attention", "about_to_sleep", "at_risk", "cant_lose", "hibernating", "lost".
+      field "to", :to, :string
+      # Zorunlu.
+      field "users", :users, :integer
+    end
+
+    # RfmUsersPage şeması.
+    class RfmUsersPage < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "RfmUsersPageDataItem"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+    end
+
+    # RfmUsersPageDataItem şeması.
+    class RfmUsersPageDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "user_id", :user_id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu. Değerler: "champions", "loyal", "potential", "new", "promising", "need_attention", "about_to_sleep", "at_risk", "cant_lose", "hibernating", "lost".
+      field "segment", :segment, :string
+      # Zorunlu.
+      field "r", :r, :integer
+      # Zorunlu.
+      field "f", :f, :integer
+      # Zorunlu.
+      field "m", :m, :integer
+      # Zorunlu.
+      field "recency_days", :recency_days, :integer
+      # Zorunlu.
+      field "frequency", :frequency, :integer
+      # Zorunlu.
+      field "monetary", :monetary, :number
+      # Zorunlu.
+      field "last_event_at", :last_event_at, :string
+      # Zorunlu.
+      field "segment_since", :segment_since, :string
+    end
+
     # ScheduleCampaignDto şeması.
     class ScheduleCampaignDto < Pushizo::BaseModel
       field "send_at", :send_at, :string
@@ -8150,6 +8260,17 @@ module Pushizo
       field "enabled", :enabled, :boolean
       field "config", :config, [:map, :any]
       field "credentials", :credentials, [:map, :any]
+    end
+
+    # UpdateRfmConfigDto şeması.
+    class UpdateRfmConfigDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "event_names", :event_names, [:array, :string]
+      field "value_property", :value_property, :string
+      field "use_monetary", :use_monetary, :boolean
+      field "window_days", :window_days, :integer
     end
 
     # UpdateTemplateDto şeması.
