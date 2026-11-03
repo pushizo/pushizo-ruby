@@ -1940,6 +1940,88 @@ module Pushizo
       field "data", :data, [:array, "ChannelConfig"]
     end
 
+    # ChannelScoreConfig şeması.
+    class ChannelScoreConfig < Pushizo::BaseModel
+      # Zorunlu.
+      field "configured", :configured, :boolean
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "window_days", :window_days, :integer
+      # Zorunlu.
+      field "min_sends", :min_sends, :integer
+      # Zorunlu.
+      field "count_email_opens", :count_email_opens, :boolean
+      # Zorunlu. Değerler: "idle", "queued", "running", "failed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "last_error", :last_error, :string
+      # Zorunlu.
+      field "last_computed_at", :last_computed_at, :string
+      # Zorunlu.
+      field "scored_users", :scored_users, :integer
+    end
+
+    # ChannelScoreOverview şeması.
+    class ChannelScoreOverview < Pushizo::BaseModel
+      # Zorunlu.
+      field "total", :total, :integer
+      # Zorunlu.
+      field "low_population", :low_population, :boolean
+      # Zorunlu.
+      field "last_computed_at", :last_computed_at, :string
+      # Zorunlu.
+      field "channels", :channels, [:array, "ChannelScoreOverviewChannelsItem"]
+    end
+
+    # ChannelScoreOverviewChannelsItem şeması.
+    class ChannelScoreOverviewChannelsItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "push", "email", "whatsapp", "rcs", "sms".
+      field "channel", :channel, :string
+      # Zorunlu.
+      field "best_users", :best_users, :integer
+      # Zorunlu.
+      field "share", :share, :number
+      # Zorunlu.
+      field "sends", :sends, :integer
+      # Zorunlu.
+      field "engaged", :engaged, :integer
+      # Zorunlu.
+      field "engagement_rate", :engagement_rate, :number
+    end
+
+    # ChannelScoreUser şeması.
+    class ChannelScoreUser < Pushizo::BaseModel
+      # Zorunlu.
+      field "user_id", :user_id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu. Değerler: "push", "email", "whatsapp", "rcs", "sms".
+      field "best_channel", :best_channel, :string
+      # Zorunlu.
+      field "scores", :scores, [:array, "ChannelScoreUserScoresItem"]
+    end
+
+    # ChannelScoreUserScoresItem şeması.
+    class ChannelScoreUserScoresItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "push", "email", "whatsapp", "rcs", "sms".
+      field "channel", :channel, :string
+      # Zorunlu.
+      field "sends", :sends, :integer
+      # Zorunlu.
+      field "engaged", :engaged, :integer
+      # Zorunlu.
+      field "score", :score, :number
+    end
+
+    # ChannelScoreUsersPage şeması.
+    class ChannelScoreUsersPage < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "ChannelScoreUser"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+    end
+
     # ChannelValidation şeması.
     class ChannelValidation < Pushizo::BaseModel
       # Zorunlu.
@@ -8214,6 +8296,15 @@ module Pushizo
       field "channels", :channels, [:array, :string]
       field "default_opted_in", :default_opted_in, :boolean
       field "position", :position, :integer
+    end
+
+    # UpdateChannelScoreConfigDto şeması.
+    class UpdateChannelScoreConfigDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      field "window_days", :window_days, :integer
+      field "min_sends", :min_sends, :integer
+      field "count_email_opens", :count_email_opens, :boolean
     end
 
     # UpdateContentTableDto şeması.

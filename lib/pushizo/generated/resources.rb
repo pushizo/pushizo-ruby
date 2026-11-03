@@ -2597,6 +2597,95 @@ module Pushizo
       end
     end
 
+    # channelScores kaynağı.
+    class ChannelScores < Pushizo::BaseResource
+      # Kanal skoru ayarı
+      #
+      # GET /v1/apps/{appId}/channel-scores/config
+      def config(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/channel-scores/config",
+          path_params: {},
+          app_id: app_id,
+          response: "ChannelScoreConfig",
+          request_options: request_options
+        )
+      end
+
+      # Kanal skorunu ayarla
+      #
+      # PUT /v1/apps/{appId}/channel-scores/config
+      #
+      # Açıkken skorlar kayıttan sonra yeniden hesaplanır; kapatınca silinir.
+      def update(body, app_id: nil, request_options: nil)
+        @client.call(
+          :put, "/v1/apps/{appId}/channel-scores/config",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "ChannelScoreConfig",
+          request_options: request_options
+        )
+      end
+
+      # Kanal skorlarını yeniden hesapla
+      #
+      # POST /v1/apps/{appId}/channel-scores/compute
+      #
+      # İş kuyruğa alınır; ilerleme `status` alanından izlenir.
+      def compute(app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/channel-scores/compute",
+          path_params: {},
+          app_id: app_id,
+          response: "ChannelScoreConfig",
+          request_options: request_options
+        )
+      end
+
+      # En iyi kanal dağılımı
+      #
+      # GET /v1/apps/{appId}/channel-scores/overview
+      def overview(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/channel-scores/overview",
+          path_params: {},
+          app_id: app_id,
+          response: "ChannelScoreOverview",
+          request_options: request_options
+        )
+      end
+
+      # En iyi kanalı belli kullanıcılar
+      #
+      # GET /v1/apps/{appId}/channel-scores/users
+      #
+      # @param channel Değerler: "push", "email", "whatsapp", "rcs", "sms".
+      def users(channel: nil, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/channel-scores/users",
+          path_params: {},
+          query: { "channel" => channel, "limit" => limit, "cursor" => cursor },
+          app_id: app_id,
+          response: "ChannelScoreUsersPage",
+          request_options: request_options
+        )
+      end
+
+      # Kullanıcının kanal skorları
+      #
+      # GET /v1/apps/{appId}/channel-scores/users/{userId}
+      def user(user_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/channel-scores/users/{userId}",
+          path_params: { "userId" => user_id },
+          app_id: app_id,
+          response: "ChannelScoreUser",
+          request_options: request_options
+        )
+      end
+    end
+
     # contentTables kaynağı.
     class ContentTables < Pushizo::BaseResource
       # İçerik tabloları
@@ -4878,7 +4967,7 @@ module Pushizo
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "1.0.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories content_tables conversations data_feeds email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp preferences promo_code_lists reverse_etl rfm sms_keywords surveys verify warehouse_exports web_campaigns whatsapp].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories channel_scores content_tables conversations data_feeds email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp preferences promo_code_lists reverse_etl rfm sms_keywords surveys verify warehouse_exports web_campaigns whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -4989,6 +5078,10 @@ module Pushizo
 
     def categories
       @categories ||= Pushizo::Resources::Categories.new(self)
+    end
+
+    def channel_scores
+      @channel_scores ||= Pushizo::Resources::ChannelScores.new(self)
     end
 
     def content_tables
