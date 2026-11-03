@@ -3215,6 +3215,38 @@ module Pushizo
       field "expires_at", :expires_at, :string
     end
 
+    # CreateSavedReportDto şeması.
+    class CreateSavedReportDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "definition", :definition, "CreateSavedReportDtoDefinition"
+    end
+
+    # CreateSavedReportDtoDefinition şeması.
+    class CreateSavedReportDtoDefinition < Pushizo::BaseModel
+      # Zorunlu. Değerler: "deliveries", "events", "conversions".
+      field "source", :source, :string
+      # Zorunlu. Değerler: "sent", "delivered", "failed", "opened", "clicked", "delivery_rate", "open_rate", "click_rate", "failure_rate", "count", "unique_users", "value_sum", "value_avg", "conversions", "revenue".
+      field "metrics", :metrics, [:array, :string]
+      # Değerler: "day", "week", "month", "channel", "provider", "campaign", "status", "name", "source", "event_name", "kind".
+      field "dimensions", :dimensions, [:array, :string]
+      field "filters", :filters, [:map, [:array, :string]]
+      field "sort", :sort, "CreateSavedReportDtoDefinitionSort"
+      field "limit", :limit, :integer
+      field "days", :days, :integer
+      field "from", :from, :string
+      field "to", :to, :string
+    end
+
+    # CreateSavedReportDtoDefinitionSort şeması.
+    class CreateSavedReportDtoDefinitionSort < Pushizo::BaseModel
+      # Zorunlu.
+      field "by", :by, :string
+      # Değerler: "asc", "desc".
+      field "direction", :direction, :string
+    end
+
     # CreateSuppressionDto şeması.
     class CreateSuppressionDto < Pushizo::BaseModel
       # Zorunlu. Değerler: "email", "sms", "whatsapp", "rcs".
@@ -7067,6 +7099,58 @@ module Pushizo
       field "properties", :properties, [:map, :any]
     end
 
+    # ReportResult şeması.
+    class ReportResult < Pushizo::BaseModel
+      # Zorunlu.
+      field "from", :from, :string
+      # Zorunlu.
+      field "to", :to, :string
+      # Zorunlu.
+      field "columns", :columns, [:array, "ReportResultColumnsItem"]
+      # Zorunlu.
+      field "rows", :rows, [:array, [:map, :any]]
+      # Zorunlu.
+      field "totals", :totals, [:map, :number]
+      # Zorunlu.
+      field "truncated", :truncated, :boolean
+    end
+
+    # ReportResultColumnsItem şeması.
+    class ReportResultColumnsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "key", :key, :string
+      # Zorunlu. Değerler: "dimension", "metric".
+      field "kind", :kind, :string
+      # Zorunlu. Değerler: "text", "date", "number", "percent".
+      field "format", :format_value, :string
+    end
+
+    # ReportRunBodyDto şeması.
+    class ReportRunBodyDto < Pushizo::BaseModel
+      # Zorunlu. Değerler: "deliveries", "events", "conversions".
+      field "source", :source, :string
+      # Zorunlu. Değerler: "sent", "delivered", "failed", "opened", "clicked", "delivery_rate", "open_rate", "click_rate", "failure_rate", "count", "unique_users", "value_sum", "value_avg", "conversions", "revenue".
+      field "metrics", :metrics, [:array, :string]
+      # Değerler: "day", "week", "month", "channel", "provider", "campaign", "status", "name", "source", "event_name", "kind".
+      field "dimensions", :dimensions, [:array, :string]
+      field "filters", :filters, [:map, [:array, :string]]
+      field "sort", :sort, "ReportRunBodyDtoSort"
+      field "limit", :limit, :integer
+      field "days", :days, :integer
+      field "from", :from, :string
+      field "to", :to, :string
+      # Değerler: "json", "csv".
+      field "format", :format_value, :string
+    end
+
+    # ReportRunBodyDtoSort şeması.
+    class ReportRunBodyDtoSort < Pushizo::BaseModel
+      # Zorunlu.
+      field "by", :by, :string
+      # Değerler: "asc", "desc".
+      field "direction", :direction, :string
+    end
+
     # RetentionReport şeması.
     class RetentionReport < Pushizo::BaseModel
       # Zorunlu.
@@ -7277,6 +7361,54 @@ module Pushizo
       field "last_event_at", :last_event_at, :string
       # Zorunlu.
       field "segment_since", :segment_since, :string
+    end
+
+    # SavedReport şeması.
+    class SavedReport < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "definition", :definition, "SavedReportDefinition"
+      # Zorunlu.
+      field "created_by", :created_by, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # SavedReportDefinition şeması.
+    class SavedReportDefinition < Pushizo::BaseModel
+      # Zorunlu. Değerler: "deliveries", "events", "conversions".
+      field "source", :source, :string
+      # Zorunlu. Değerler: "sent", "delivered", "failed", "opened", "clicked", "delivery_rate", "open_rate", "click_rate", "failure_rate", "count", "unique_users", "value_sum", "value_avg", "conversions", "revenue".
+      field "metrics", :metrics, [:array, :string]
+      # Zorunlu. Değerler: "day", "week", "month", "channel", "provider", "campaign", "status", "name", "source", "event_name", "kind".
+      field "dimensions", :dimensions, [:array, :string]
+      # Zorunlu.
+      field "filters", :filters, [:map, [:array, :string]]
+      field "sort", :sort, "SavedReportDefinitionSort"
+      # Zorunlu.
+      field "limit", :limit, :integer
+      field "days", :days, :integer
+      field "from", :from, :string
+      field "to", :to, :string
+    end
+
+    # SavedReportDefinitionSort şeması.
+    class SavedReportDefinitionSort < Pushizo::BaseModel
+      # Zorunlu.
+      field "by", :by, :string
+      # Zorunlu. Değerler: "asc", "desc".
+      field "direction", :direction, :string
+    end
+
+    # SavedReportList şeması.
+    class SavedReportList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "SavedReport"]
     end
 
     # ScheduleCampaignDto şeması.
@@ -8670,6 +8802,36 @@ module Pushizo
       field "value_property", :value_property, :string
       field "use_monetary", :use_monetary, :boolean
       field "window_days", :window_days, :integer
+    end
+
+    # UpdateSavedReportDto şeması.
+    class UpdateSavedReportDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "definition", :definition, "UpdateSavedReportDtoDefinition"
+    end
+
+    # UpdateSavedReportDtoDefinition şeması.
+    class UpdateSavedReportDtoDefinition < Pushizo::BaseModel
+      # Zorunlu. Değerler: "deliveries", "events", "conversions".
+      field "source", :source, :string
+      # Zorunlu. Değerler: "sent", "delivered", "failed", "opened", "clicked", "delivery_rate", "open_rate", "click_rate", "failure_rate", "count", "unique_users", "value_sum", "value_avg", "conversions", "revenue".
+      field "metrics", :metrics, [:array, :string]
+      # Değerler: "day", "week", "month", "channel", "provider", "campaign", "status", "name", "source", "event_name", "kind".
+      field "dimensions", :dimensions, [:array, :string]
+      field "filters", :filters, [:map, [:array, :string]]
+      field "sort", :sort, "UpdateSavedReportDtoDefinitionSort"
+      field "limit", :limit, :integer
+      field "days", :days, :integer
+      field "from", :from, :string
+      field "to", :to, :string
+    end
+
+    # UpdateSavedReportDtoDefinitionSort şeması.
+    class UpdateSavedReportDtoDefinitionSort < Pushizo::BaseModel
+      # Zorunlu.
+      field "by", :by, :string
+      # Değerler: "asc", "desc".
+      field "direction", :direction, :string
     end
 
     # UpdateTemplateDto şeması.

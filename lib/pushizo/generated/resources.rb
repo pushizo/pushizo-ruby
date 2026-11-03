@@ -1696,6 +1696,22 @@ module Pushizo
         )
       end
 
+      # Rapor çalıştır
+      #
+      # POST /v1/apps/{appId}/analytics/reports/run
+      #
+      # Kaynak, metrik, boyut ve filtre seçilerek rapor üretir; alanlar izinli listeyle sınırlıdır.
+      def run_report(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/analytics/reports/run",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "ReportResult",
+          request_options: request_options
+        )
+      end
+
       # Yol analizi
       #
       # POST /v1/apps/{appId}/analytics/paths
@@ -1772,6 +1788,72 @@ module Pushizo
           query: { "from" => from, "to" => to, "compare" => compare, "format" => format },
           app_id: app_id,
           response: "EngagementReport",
+          request_options: request_options
+        )
+      end
+
+      # Kaydedilmiş raporlar
+      #
+      # GET /v1/apps/{appId}/analytics/reports
+      def list(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/analytics/reports",
+          path_params: {},
+          app_id: app_id,
+          response: "SavedReportList",
+          request_options: request_options
+        )
+      end
+
+      # Raporu kaydet
+      #
+      # POST /v1/apps/{appId}/analytics/reports
+      def create(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/analytics/reports",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "SavedReport",
+          request_options: request_options
+        )
+      end
+
+      # Kaydedilmiş rapor
+      #
+      # GET /v1/apps/{appId}/analytics/reports/{id}
+      def get(id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/analytics/reports/{id}",
+          path_params: { "id" => id },
+          app_id: app_id,
+          response: "SavedReport",
+          request_options: request_options
+        )
+      end
+
+      # Raporu güncelle
+      #
+      # PATCH /v1/apps/{appId}/analytics/reports/{id}
+      def update(id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/analytics/reports/{id}",
+          path_params: { "id" => id },
+          body: body,
+          app_id: app_id,
+          response: "SavedReport",
+          request_options: request_options
+        )
+      end
+
+      # Raporu sil
+      #
+      # DELETE /v1/apps/{appId}/analytics/reports/{id}
+      def delete(id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/analytics/reports/{id}",
+          path_params: { "id" => id },
+          app_id: app_id,
           request_options: request_options
         )
       end
