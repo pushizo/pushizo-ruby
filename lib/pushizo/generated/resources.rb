@@ -2476,6 +2476,68 @@ module Pushizo
           request_options: request_options
         )
       end
+
+      # Ürün önerileri
+      #
+      # GET /v1/apps/{appId}/catalogs/{catalogId}/recommendations
+      #
+      # Stokta olmayan ve kullanıcının satın aldığı ürünler çıkmaz. Sonuç yetmezse yedek kaynakla tamamlanır.
+      #
+      # @param strategy Değerler: "personalized", "popular", "trending", "similar", "category", "recently_viewed", "new_arrivals".
+      def list_recommendations(catalog_id, strategy:, limit: nil, user_id: nil, external_id: nil, item_id: nil, category: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/catalogs/{catalogId}/recommendations",
+          path_params: { "catalogId" => catalog_id },
+          query: { "strategy" => strategy, "limit" => limit, "user_id" => user_id, "external_id" => external_id, "item_id" => item_id, "category" => category },
+          app_id: app_id,
+          response: "Recommendations",
+          request_options: request_options
+        )
+      end
+
+      # Öneri modeli
+      #
+      # GET /v1/apps/{appId}/catalogs/{catalogId}/recommendations/config
+      def config(catalog_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/config",
+          path_params: { "catalogId" => catalog_id },
+          app_id: app_id,
+          response: "RecommendationConfig",
+          request_options: request_options
+        )
+      end
+
+      # Öneri modelini ayarla
+      #
+      # PUT /v1/apps/{appId}/catalogs/{catalogId}/recommendations/config
+      #
+      # Model açıksa öneriler kayıttan sonra yeniden hesaplanır.
+      def update_config(catalog_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :put, "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/config",
+          path_params: { "catalogId" => catalog_id },
+          body: body,
+          app_id: app_id,
+          response: "RecommendationConfig",
+          request_options: request_options
+        )
+      end
+
+      # Önerileri yeniden hesapla
+      #
+      # POST /v1/apps/{appId}/catalogs/{catalogId}/recommendations/compute
+      #
+      # İş kuyruğa alınır; ilerleme `status` alanından izlenir.
+      def compute(catalog_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/compute",
+          path_params: { "catalogId" => catalog_id },
+          app_id: app_id,
+          response: "RecommendationConfig",
+          request_options: request_options
+        )
+      end
     end
 
     # categories kaynağı.

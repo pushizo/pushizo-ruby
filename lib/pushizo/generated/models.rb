@@ -6452,6 +6452,42 @@ module Pushizo
       field "external_id", :external_id, :string
     end
 
+    # RecommendationConfig şeması.
+    class RecommendationConfig < Pushizo::BaseModel
+      # Zorunlu.
+      field "configured", :configured, :boolean
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "view_events", :view_events, [:array, :string]
+      # Zorunlu.
+      field "purchase_events", :purchase_events, [:array, :string]
+      # Zorunlu.
+      field "item_property", :item_property, :string
+      # Zorunlu.
+      field "window_days", :window_days, :integer
+      # Zorunlu. Değerler: "idle", "queued", "running", "failed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "last_error", :last_error, :string
+      # Zorunlu.
+      field "last_computed_at", :last_computed_at, :string
+      # Zorunlu.
+      field "scored_items", :scored_items, :integer
+      # Zorunlu.
+      field "scored_users", :scored_users, :integer
+    end
+
+    # Recommendations şeması.
+    class Recommendations < Pushizo::BaseModel
+      # Zorunlu. Değerler: "personalized", "popular", "trending", "similar", "category", "recently_viewed", "new_arrivals".
+      field "strategy", :strategy, :string
+      # Zorunlu. Değerler: "personalized", "popular", "trending", "similar", "category", "recently_viewed", "new_arrivals".
+      field "source", :source, :string
+      # Zorunlu.
+      field "data", :data, [:array, "CatalogItem"]
+    end
+
     # RenderPreview şeması.
     class RenderPreview < Pushizo::BaseModel
       # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
@@ -8250,6 +8286,16 @@ module Pushizo
     class UpdatePromoCodeListDto < Pushizo::BaseModel
       field "description", :description, :string
       field "expires_at", :expires_at, :string
+    end
+
+    # UpdateRecommendationConfigDto şeması.
+    class UpdateRecommendationConfigDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      field "view_events", :view_events, [:array, :string]
+      field "purchase_events", :purchase_events, [:array, :string]
+      field "item_property", :item_property, :string
+      field "window_days", :window_days, :integer
     end
 
     # UpdateReverseEtlDto şeması.
