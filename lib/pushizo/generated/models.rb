@@ -6523,6 +6523,88 @@ module Pushizo
       field "count", :count, :integer
     end
 
+    # PathBodyDto şeması.
+    class PathBodyDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "event", :event, :string
+      # Değerler: "after", "before".
+      field "direction", :direction, :string
+      field "depth", :depth, :integer
+      field "top", :top, :integer
+      field "window_hours", :window_hours, :integer
+      field "exclude", :exclude, [:array, :string]
+      field "from", :from, :string
+      field "to", :to, :string
+      # Değerler: "json", "csv".
+      field "format", :format_value, :string
+    end
+
+    # PathReport şeması.
+    class PathReport < Pushizo::BaseModel
+      # Zorunlu.
+      field "from", :from, :string
+      # Zorunlu.
+      field "to", :to, :string
+      # Zorunlu.
+      field "event", :event, :string
+      # Zorunlu. Değerler: "after", "before".
+      field "direction", :direction, :string
+      # Zorunlu.
+      field "window_hours", :window_hours, :integer
+      # Zorunlu.
+      field "total_users", :total_users, :integer
+      # Zorunlu.
+      field "truncated", :truncated, :boolean
+      # Zorunlu.
+      field "levels", :levels, [:array, "PathReportLevelsItem"]
+      # Zorunlu.
+      field "links", :links, [:array, "PathReportLinksItem"]
+      # Zorunlu.
+      field "top_paths", :top_paths, [:array, "PathReportTopPathsItem"]
+    end
+
+    # PathReportLevelsItem şeması.
+    class PathReportLevelsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "step", :step, :integer
+      # Zorunlu.
+      field "nodes", :nodes, [:array, "PathReportLevelsItemNodesItem"]
+    end
+
+    # PathReportLevelsItemNodesItem şeması.
+    class PathReportLevelsItemNodesItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "event", "other", "end".
+      field "kind", :kind, :string
+      # Zorunlu.
+      field "users", :users, :integer
+      # Zorunlu.
+      field "share", :share, :number
+    end
+
+    # PathReportLinksItem şeması.
+    class PathReportLinksItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "source", :source, :string
+      # Zorunlu.
+      field "target", :target, :string
+      # Zorunlu.
+      field "users", :users, :integer
+    end
+
+    # PathReportTopPathsItem şeması.
+    class PathReportTopPathsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "path", :path, [:array, :string]
+      # Zorunlu.
+      field "users", :users, :integer
+      # Zorunlu.
+      field "share", :share, :number
+    end
+
     # PostmasterStats şeması.
     class PostmasterStats < Pushizo::BaseModel
       # Zorunlu.

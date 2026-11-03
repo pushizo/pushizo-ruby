@@ -1696,6 +1696,22 @@ module Pushizo
         )
       end
 
+      # Yol analizi
+      #
+      # POST /v1/apps/{appId}/analytics/paths
+      #
+      # Başlangıç olayından sonra veya önce kullanıcıların izlediği yollar.
+      def paths(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/analytics/paths",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "PathReport",
+          request_options: request_options
+        )
+      end
+
       # Funnel
       #
       # POST /v1/apps/{appId}/analytics/funnels
