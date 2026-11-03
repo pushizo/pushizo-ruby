@@ -2937,6 +2937,14 @@ module Pushizo
       field "external_id_missing", :external_id_missing, [:array, :string]
     end
 
+    # CreatePromoCodeListDto şeması.
+    class CreatePromoCodeListDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      field "expires_at", :expires_at, :string
+    end
+
     # CreateSuppressionDto şeması.
     class CreateSuppressionDto < Pushizo::BaseModel
       # Zorunlu. Değerler: "email", "sms", "whatsapp", "rcs".
@@ -6156,6 +6164,68 @@ module Pushizo
       field "spam_rate", :spam_rate, :string
     end
 
+    # PromoCodeList şeması.
+    class PromoCodeList < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "expires_at", :expires_at, :string
+      # Zorunlu.
+      field "total_count", :total_count, :integer
+      # Zorunlu.
+      field "assigned_count", :assigned_count, :integer
+      # Zorunlu.
+      field "available_count", :available_count, :integer
+      # Zorunlu.
+      field "liquid", :liquid, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # PromoCodeListList şeması.
+    class PromoCodeListList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "PromoCodeList"]
+    end
+
+    # PromoCodesPage şeması.
+    class PromoCodesPage < Pushizo::BaseModel
+      # Zorunlu.
+      field "total", :total, :integer
+      # Zorunlu.
+      field "data", :data, [:array, "PromoCodesPageDataItem"]
+    end
+
+    # PromoCodesPageDataItem şeması.
+    class PromoCodesPageDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "code", :code, :string
+      # Zorunlu.
+      field "delivery_id", :delivery_id, :string
+      # Zorunlu.
+      field "message_id", :message_id, :string
+      # Zorunlu.
+      field "assigned_at", :assigned_at, :string
+    end
+
+    # PromoCodeUploadResult şeması.
+    class PromoCodeUploadResult < Pushizo::BaseModel
+      # Zorunlu.
+      field "list", :list, "PromoCodeList"
+      # Zorunlu.
+      field "added", :added, :integer
+      # Zorunlu.
+      field "skipped", :skipped, :integer
+    end
+
     # ProvidersReport şeması.
     class ProvidersReport < Pushizo::BaseModel
       # Zorunlu.
@@ -7901,6 +7971,12 @@ module Pushizo
       field "x", :x, :number
       # Zorunlu.
       field "y", :y, :number
+    end
+
+    # UpdatePromoCodeListDto şeması.
+    class UpdatePromoCodeListDto < Pushizo::BaseModel
+      field "description", :description, :string
+      field "expires_at", :expires_at, :string
     end
 
     # UpdateReverseEtlDto şeması.

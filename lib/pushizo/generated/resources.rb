@@ -3649,6 +3649,110 @@ module Pushizo
       end
     end
 
+    # promoCodeLists kaynağı.
+    class PromoCodeLists < Pushizo::BaseResource
+      # Promosyon kodu listeleri
+      #
+      # GET /v1/apps/{appId}/promo-code-lists
+      def list_promo_lists(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/promo-code-lists",
+          path_params: {},
+          app_id: app_id,
+          response: "PromoCodeListList",
+          request_options: request_options
+        )
+      end
+
+      # Promosyon kodu listesi oluştur
+      #
+      # POST /v1/apps/{appId}/promo-code-lists
+      #
+      # Şablonda `{% promo_code '<ad>' %}` teslimat başına tek kullanımlık kod verir. Kod kalmazsa teslimat `PromoCodeUnavailable` hatasıyla düşer.
+      def create_promo_list(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/promo-code-lists",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "PromoCodeList",
+          request_options: request_options
+        )
+      end
+
+      # Promosyon kodu listesi ayrıntısı
+      #
+      # GET /v1/apps/{appId}/promo-code-lists/{listId}
+      def get_promo_list(list_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/promo-code-lists/{listId}",
+          path_params: { "listId" => list_id },
+          app_id: app_id,
+          response: "PromoCodeList",
+          request_options: request_options
+        )
+      end
+
+      # Promosyon kodu listesini güncelle (açıklama, son kullanma)
+      #
+      # PATCH /v1/apps/{appId}/promo-code-lists/{listId}
+      def update_promo_list(list_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/promo-code-lists/{listId}",
+          path_params: { "listId" => list_id },
+          body: body,
+          app_id: app_id,
+          response: "PromoCodeList",
+          request_options: request_options
+        )
+      end
+
+      # Promosyon kodu listesini sil
+      #
+      # DELETE /v1/apps/{appId}/promo-code-lists/{listId}
+      def delete_promo_list(list_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/promo-code-lists/{listId}",
+          path_params: { "listId" => list_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+
+      # CSV ile kod ekle (zaten olanlar atlanır)
+      #
+      # POST /v1/apps/{appId}/promo-code-lists/{listId}/codes
+      #
+      # @param file UTF-8 CSV; kodlar ilk sütunda, başlık isteğe bağlı. En fazla 1.000.000 kod, 20 MB.
+      def upload_promo_list(list_id, file:, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/promo-code-lists/{listId}/codes",
+          path_params: { "listId" => list_id },
+          form: { "file" => file },
+          app_id: app_id,
+          response: "PromoCodeUploadResult",
+          request_options: request_options
+        )
+      end
+
+      # Listedeki kodlar ve atamaları
+      #
+      # GET /v1/apps/{appId}/promo-code-lists/{listId}/codes
+      #
+      # @param status Değerler: "available", "assigned".
+      def promo_codes(list_id, limit: nil, offset: nil, q: nil, status: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/promo-code-lists/{listId}/codes",
+          path_params: { "listId" => list_id },
+          query: { "limit" => limit, "offset" => offset, "q" => q, "status" => status },
+          app_id: app_id,
+          response: "PromoCodesPage",
+          request_options: request_options
+        )
+      end
+    end
+
     # reverseEtl kaynağı.
     class ReverseEtl < Pushizo::BaseResource
       # Depodan içeri aktarımlar
@@ -4261,7 +4365,7 @@ module Pushizo
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "1.0.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses categories content_tables conversations data_feeds email_deliverability forms identity_keys integrations journeys landing_pages live_activities mcp preferences reverse_etl sms_keywords surveys verify warehouse_exports web_campaigns whatsapp].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses categories content_tables conversations data_feeds email_deliverability forms identity_keys integrations journeys landing_pages live_activities mcp preferences promo_code_lists reverse_etl sms_keywords surveys verify warehouse_exports web_campaigns whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -4416,6 +4520,10 @@ module Pushizo
 
     def preferences
       @preferences ||= Pushizo::Resources::Preferences.new(self)
+    end
+
+    def promo_code_lists
+      @promo_code_lists ||= Pushizo::Resources::PromoCodeLists.new(self)
     end
 
     def reverse_etl
