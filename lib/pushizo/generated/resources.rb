@@ -2334,6 +2334,150 @@ module Pushizo
       end
     end
 
+    # catalogs kaynağı.
+    class Catalogs < Pushizo::BaseResource
+      # Ürün katalogları
+      #
+      # GET /v1/apps/{appId}/catalogs
+      def list(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/catalogs",
+          path_params: {},
+          app_id: app_id,
+          response: "CatalogList",
+          request_options: request_options
+        )
+      end
+
+      # Katalog oluştur
+      #
+      # POST /v1/apps/{appId}/catalogs
+      #
+      # Şablonda `{% catalog_item '<ad>' id: custom_data.product_id as urun %}{{ urun.title }}`.
+      def create(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/catalogs",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "Catalog",
+          request_options: request_options
+        )
+      end
+
+      # Katalog ayrıntısı
+      #
+      # GET /v1/apps/{appId}/catalogs/{catalogId}
+      def get(catalog_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/catalogs/{catalogId}",
+          path_params: { "catalogId" => catalog_id },
+          app_id: app_id,
+          response: "Catalog",
+          request_options: request_options
+        )
+      end
+
+      # Kataloğu güncelle
+      #
+      # PATCH /v1/apps/{appId}/catalogs/{catalogId}
+      def update(catalog_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/catalogs/{catalogId}",
+          path_params: { "catalogId" => catalog_id },
+          body: body,
+          app_id: app_id,
+          response: "Catalog",
+          request_options: request_options
+        )
+      end
+
+      # Kataloğu sil
+      #
+      # DELETE /v1/apps/{appId}/catalogs/{catalogId}
+      def delete(catalog_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/catalogs/{catalogId}",
+          path_params: { "catalogId" => catalog_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+
+      # Ürünler
+      #
+      # GET /v1/apps/{appId}/catalogs/{catalogId}/items
+      def items(catalog_id, limit: nil, offset: nil, q: nil, category: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/catalogs/{catalogId}/items",
+          path_params: { "catalogId" => catalog_id },
+          query: { "limit" => limit, "offset" => offset, "q" => q, "category" => category },
+          app_id: app_id,
+          response: "CatalogItemsPage",
+          request_options: request_options
+        )
+      end
+
+      # Ürünleri ekle veya güncelle (en fazla 1000)
+      #
+      # PUT /v1/apps/{appId}/catalogs/{catalogId}/items
+      #
+      # Listede olmayan ürünlere dokunulmaz. Listedeki ürünün verilmeyen alanları temizlenir.
+      def upsert(catalog_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :put, "/v1/apps/{appId}/catalogs/{catalogId}/items",
+          path_params: { "catalogId" => catalog_id },
+          body: body,
+          app_id: app_id,
+          response: "CatalogUpsertResult",
+          request_options: request_options
+        )
+      end
+
+      # CSV ile ürün ekle veya güncelle
+      #
+      # POST /v1/apps/{appId}/catalogs/{catalogId}/items/upload
+      #
+      # @param file UTF-8 CSV. Zorunlu sütunlar: id, title. Bilinen: description, image_url, url, price, sale_price, currency, category, brand, in_stock. Diğerleri özellik olur. En fazla 100.000 satır, 20 MB.
+      def upload(catalog_id, file:, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/catalogs/{catalogId}/items/upload",
+          path_params: { "catalogId" => catalog_id },
+          form: { "file" => file },
+          app_id: app_id,
+          response: "CatalogUpsertResult",
+          request_options: request_options
+        )
+      end
+
+      # Ürün ayrıntısı
+      #
+      # GET /v1/apps/{appId}/catalogs/{catalogId}/items/{itemId}
+      def item(catalog_id, item_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/catalogs/{catalogId}/items/{itemId}",
+          path_params: { "catalogId" => catalog_id, "itemId" => item_id },
+          app_id: app_id,
+          response: "CatalogItem",
+          request_options: request_options
+        )
+      end
+
+      # Ürünü sil
+      #
+      # DELETE /v1/apps/{appId}/catalogs/{catalogId}/items/{itemId}
+      def remove_item(catalog_id, item_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/catalogs/{catalogId}/items/{itemId}",
+          path_params: { "catalogId" => catalog_id, "itemId" => item_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+    end
+
     # categories kaynağı.
     class Categories < Pushizo::BaseResource
       # Mesaj kategorileri
@@ -4424,7 +4568,7 @@ module Pushizo
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "1.0.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses categories content_tables conversations data_feeds email_deliverability forms global_control identity_keys integrations journeys landing_pages live_activities mcp preferences promo_code_lists reverse_etl sms_keywords surveys verify warehouse_exports web_campaigns whatsapp].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories content_tables conversations data_feeds email_deliverability forms global_control identity_keys integrations journeys landing_pages live_activities mcp preferences promo_code_lists reverse_etl sms_keywords surveys verify warehouse_exports web_campaigns whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -4527,6 +4671,10 @@ module Pushizo
 
     def canned_responses
       @canned_responses ||= Pushizo::Resources::CannedResponses.new(self)
+    end
+
+    def catalogs
+      @catalogs ||= Pushizo::Resources::Catalogs.new(self)
     end
 
     def categories

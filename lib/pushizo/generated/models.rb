@@ -1674,6 +1674,80 @@ module Pushizo
       field "language", :language, :string
     end
 
+    # Catalog şeması.
+    class Catalog < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "currency", :currency, :string
+      # Zorunlu.
+      field "item_count", :item_count, :integer
+      # Zorunlu.
+      field "liquid", :liquid, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # CatalogItem şeması.
+    class CatalogItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "title", :title, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "image_url", :image_url, :string
+      # Zorunlu.
+      field "url", :url, :string
+      # Zorunlu.
+      field "price", :price, :number
+      # Zorunlu.
+      field "sale_price", :sale_price, :number
+      # Zorunlu.
+      field "currency", :currency, :string
+      # Zorunlu.
+      field "category", :category, :string
+      # Zorunlu.
+      field "brand", :brand, :string
+      # Zorunlu.
+      field "in_stock", :in_stock, :boolean
+      # Zorunlu.
+      field "attributes", :attributes_value, [:map, :string]
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # CatalogItemsPage şeması.
+    class CatalogItemsPage < Pushizo::BaseModel
+      # Zorunlu.
+      field "total", :total, :integer
+      # Zorunlu.
+      field "data", :data, [:array, "CatalogItem"]
+    end
+
+    # CatalogList şeması.
+    class CatalogList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "Catalog"]
+    end
+
+    # CatalogUpsertResult şeması.
+    class CatalogUpsertResult < Pushizo::BaseModel
+      # Zorunlu.
+      field "catalog", :catalog, "Catalog"
+      # Zorunlu.
+      field "upserted", :upserted, :integer
+    end
+
     # ChannelConfig şeması.
     class ChannelConfig < Pushizo::BaseModel
       # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
@@ -2367,6 +2441,14 @@ module Pushizo
       field "window_days", :window_days, :integer
       field "recipients", :recipients, [:array, :string]
       field "enabled", :enabled, :boolean
+    end
+
+    # CreateCatalogDto şeması.
+    class CreateCatalogDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      field "currency", :currency, :string
     end
 
     # CreateCategoryDto şeması.
@@ -7803,6 +7885,12 @@ module Pushizo
       field "enabled", :enabled, :boolean
     end
 
+    # UpdateCatalogDto şeması.
+    class UpdateCatalogDto < Pushizo::BaseModel
+      field "description", :description, :string
+      field "currency", :currency, :string
+    end
+
     # UpdateCategoryDto şeması.
     class UpdateCategoryDto < Pushizo::BaseModel
       field "name", :name, [:map, :string]
@@ -8436,6 +8524,30 @@ module Pushizo
       # Zorunlu. Değerler: "eq", "neq", "in", "not_in", "starts_with", "contains", "exists", "not_exists".
       field "op", :op, :string
       field "value", :value, :any
+    end
+
+    # UpsertCatalogItemsDto şeması.
+    class UpsertCatalogItemsDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "items", :items, [:array, "UpsertCatalogItemsDtoItemsItem"]
+    end
+
+    # UpsertCatalogItemsDtoItemsItem şeması.
+    class UpsertCatalogItemsDtoItemsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "title", :title, :string
+      field "description", :description, :string
+      field "image_url", :image_url, :string
+      field "url", :url, :string
+      field "price", :price, :number
+      field "sale_price", :sale_price, :number
+      field "currency", :currency, :string
+      field "category", :category, :string
+      field "brand", :brand, :string
+      field "in_stock", :in_stock, :boolean
+      field "attributes", :attributes_value, [:map, :string]
     end
 
     # UpsertUserDto şeması.
