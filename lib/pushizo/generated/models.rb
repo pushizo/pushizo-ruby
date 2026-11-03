@@ -1213,6 +1213,7 @@ module Pushizo
       field "priority", :priority, :integer
       field "collapse_id", :collapse_id, :string
       field "frequency_cap_exempt", :frequency_cap_exempt, :boolean
+      field "global_control_exempt", :global_control_exempt, :boolean
       field "quiet_hours_exempt", :quiet_hours_exempt, :boolean
       field "one_per_user", :one_per_user, :boolean
     end
@@ -1330,6 +1331,7 @@ module Pushizo
       field "priority", :priority, :integer
       field "collapse_id", :collapse_id, :string
       field "frequency_cap_exempt", :frequency_cap_exempt, :boolean
+      field "global_control_exempt", :global_control_exempt, :boolean
       field "quiet_hours_exempt", :quiet_hours_exempt, :boolean
       field "one_per_user", :one_per_user, :boolean
     end
@@ -1504,6 +1506,7 @@ module Pushizo
       field "priority", :priority, :integer
       field "collapse_id", :collapse_id, :string
       field "frequency_cap_exempt", :frequency_cap_exempt, :boolean
+      field "global_control_exempt", :global_control_exempt, :boolean
       field "quiet_hours_exempt", :quiet_hours_exempt, :boolean
       field "one_per_user", :one_per_user, :boolean
     end
@@ -2554,6 +2557,7 @@ module Pushizo
     class CreateInAppDtoAudience < Pushizo::BaseModel
       field "included_segments", :included_segments, [:array, :string]
       field "excluded_segments", :excluded_segments, [:array, :string]
+      field "global_control_exempt", :global_control_exempt, :boolean
     end
 
     # CreateInAppDtoDisplay şeması.
@@ -4229,6 +4233,66 @@ module Pushizo
       field "drop_off", :drop_off, :integer
     end
 
+    # GlobalControl şeması.
+    class GlobalControl < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "percent", :percent, :integer
+      # Zorunlu.
+      field "started_at", :started_at, :string
+    end
+
+    # GlobalControlReport şeması.
+    class GlobalControlReport < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "percent", :percent, :integer
+      # Zorunlu.
+      field "started_at", :started_at, :string
+      # Zorunlu.
+      field "from", :from, :string
+      # Zorunlu.
+      field "to", :to, :string
+      # Zorunlu.
+      field "events", :events, [:array, :string]
+      # Zorunlu.
+      field "control", :control, "GlobalControlReportControl"
+      # Zorunlu.
+      field "treatment", :treatment, "GlobalControlReportTreatment"
+      # Zorunlu.
+      field "lift_percent", :lift_percent, :number
+      # Zorunlu.
+      field "incremental_conversions", :incremental_conversions, :integer
+      # Zorunlu.
+      field "p_value", :p_value, :number
+      # Zorunlu.
+      field "significant", :significant, :boolean
+      # Zorunlu.
+      field "withheld_messages", :withheld_messages, :integer
+    end
+
+    # GlobalControlReportControl şeması.
+    class GlobalControlReportControl < Pushizo::BaseModel
+      # Zorunlu.
+      field "users", :users, :integer
+      # Zorunlu.
+      field "converted", :converted, :integer
+      # Zorunlu.
+      field "conversion_rate", :conversion_rate, :number
+    end
+
+    # GlobalControlReportTreatment şeması.
+    class GlobalControlReportTreatment < Pushizo::BaseModel
+      # Zorunlu.
+      field "users", :users, :integer
+      # Zorunlu.
+      field "converted", :converted, :integer
+      # Zorunlu.
+      field "conversion_rate", :conversion_rate, :number
+    end
+
     # IdentityKey şeması.
     class IdentityKey < Pushizo::BaseModel
       # Zorunlu.
@@ -4368,6 +4432,7 @@ module Pushizo
     class InAppMessageAudience < Pushizo::BaseModel
       field "included_segments", :included_segments, [:array, :string]
       field "excluded_segments", :excluded_segments, [:array, :string]
+      field "global_control_exempt", :global_control_exempt, :boolean
     end
 
     # InAppMessageDisplay şeması.
@@ -5633,6 +5698,7 @@ module Pushizo
       field "priority", :priority, :integer
       field "collapse_id", :collapse_id, :string
       field "frequency_cap_exempt", :frequency_cap_exempt, :boolean
+      field "global_control_exempt", :global_control_exempt, :boolean
       field "quiet_hours_exempt", :quiet_hours_exempt, :boolean
       field "one_per_user", :one_per_user, :boolean
     end
@@ -7766,6 +7832,14 @@ module Pushizo
       field "enabled", :enabled, :boolean
     end
 
+    # UpdateGlobalControlDto şeması.
+    class UpdateGlobalControlDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "percent", :percent, :integer
+    end
+
     # UpdateInAppDto şeması.
     class UpdateInAppDto < Pushizo::BaseModel
       field "name", :name, :string
@@ -7799,6 +7873,7 @@ module Pushizo
     class UpdateInAppDtoAudience < Pushizo::BaseModel
       field "included_segments", :included_segments, [:array, :string]
       field "excluded_segments", :excluded_segments, [:array, :string]
+      field "global_control_exempt", :global_control_exempt, :boolean
     end
 
     # UpdateInAppDtoDisplay şeması.

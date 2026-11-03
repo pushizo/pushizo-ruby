@@ -2969,6 +2969,65 @@ module Pushizo
       end
     end
 
+    # globalControl kaynağı.
+    class GlobalControl < Pushizo::BaseResource
+      # Genel kontrol grubu ayarı
+      #
+      # GET /v1/apps/{appId}/global-control
+      def get(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/global-control",
+          path_params: {},
+          app_id: app_id,
+          response: "GlobalControl",
+          request_options: request_options
+        )
+      end
+
+      # Genel kontrol grubunu ayarla
+      #
+      # PUT /v1/apps/{appId}/global-control
+      #
+      # Gruptaki kullanıcılar kampanya, otomasyon ve uygulama içi mesajları almaz. API ve işlemsel gönderimler etkilenmez.
+      def update(body, app_id: nil, request_options: nil)
+        @client.call(
+          :put, "/v1/apps/{appId}/global-control",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "GlobalControl",
+          request_options: request_options
+        )
+      end
+
+      # Grubu yeniden kur (üyelik değişir, ölçüm baştan başlar)
+      #
+      # POST /v1/apps/{appId}/global-control/reset
+      def reset(app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/global-control/reset",
+          path_params: {},
+          app_id: app_id,
+          response: "GlobalControl",
+          request_options: request_options
+        )
+      end
+
+      # Kontrol ve mesaj alan grubun dönüşüm karşılaştırması
+      #
+      # GET /v1/apps/{appId}/global-control/report
+      def report(days: nil, event: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/global-control/report",
+          path_params: {},
+          query: { "days" => days, "event" => event },
+          app_id: app_id,
+          response: "GlobalControlReport",
+          request_options: request_options
+        )
+      end
+    end
+
     # identityKeys kaynağı.
     class IdentityKeys < Pushizo::BaseResource
       # SDK kimlik doğrulama (JWT) genel anahtarları
@@ -4365,7 +4424,7 @@ module Pushizo
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "1.0.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses categories content_tables conversations data_feeds email_deliverability forms identity_keys integrations journeys landing_pages live_activities mcp preferences promo_code_lists reverse_etl sms_keywords surveys verify warehouse_exports web_campaigns whatsapp].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses categories content_tables conversations data_feeds email_deliverability forms global_control identity_keys integrations journeys landing_pages live_activities mcp preferences promo_code_lists reverse_etl sms_keywords surveys verify warehouse_exports web_campaigns whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -4492,6 +4551,10 @@ module Pushizo
 
     def forms
       @forms ||= Pushizo::Resources::Forms.new(self)
+    end
+
+    def global_control
+      @global_control ||= Pushizo::Resources::GlobalControl.new(self)
     end
 
     def identity_keys
