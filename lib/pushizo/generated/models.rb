@@ -8109,7 +8109,7 @@ module Pushizo
       field "name", :name, :string
       # Değerler: "deliveries", "delivery_events", "events", "conversions", "users", "subscriptions".
       field "tables", :tables, [:array, :string]
-      # Değerler: "hourly", "daily".
+      # Değerler: "every_15_minutes", "hourly", "daily".
       field "schedule", :schedule, :string
       field "enabled", :enabled, :boolean
       field "config", :config, [:map, :any]
@@ -8660,7 +8660,7 @@ module Pushizo
       field "credentials_hint", :credentials_hint, :string
       # Zorunlu. Değerler: "deliveries", "delivery_events", "events", "conversions", "users", "subscriptions".
       field "tables", :tables, [:array, :string]
-      # Zorunlu. Değerler: "hourly", "daily".
+      # Zorunlu. Değerler: "every_15_minutes", "hourly", "daily".
       field "schedule", :schedule, :string
       # Zorunlu.
       field "enabled", :enabled, :boolean

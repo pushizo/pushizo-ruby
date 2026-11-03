@@ -3193,6 +3193,19 @@ module Pushizo
         )
       end
 
+      # Eski sürümü yeni taslak olarak geri yükle (yayındaki sürüm değişmez)
+      #
+      # POST /v1/apps/{appId}/journeys/{journeyId}/versions/{version}/restore
+      def restore_version(journey_id, version, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/journeys/{journeyId}/versions/{version}/restore",
+          path_params: { "journeyId" => journey_id, "version" => version },
+          app_id: app_id,
+          response: "JourneyDetail",
+          request_options: request_options
+        )
+      end
+
       # Yayınla
       #
       # POST /v1/apps/{appId}/journeys/{journeyId}/publish
