@@ -9848,6 +9848,118 @@ module Pushizo
       field "user", :user, "UserDetail"
       # Zorunlu.
       field "events", :events, [:array, "UserExportEventsItem"]
+      # Zorunlu.
+      field "derived", :derived, "UserExportDerived"
+    end
+
+    # UserExportDerived şeması.
+    class UserExportDerived < Pushizo::BaseModel
+      # Zorunlu.
+      field "wallet_passes", :wallet_passes, [:array, "UserExportDerivedWalletPassesItem"]
+      # Zorunlu.
+      field "rfm", :rfm, "UserExportDerivedRfm"
+      # Zorunlu.
+      field "predictions", :predictions, [:array, "UserExportDerivedPredictionsItem"]
+      # Zorunlu.
+      field "channel_scores", :channel_scores, [:array, "UserExportDerivedChannelScoresItem"]
+      # Zorunlu.
+      field "decisions", :decisions, [:array, "UserExportDerivedDecisionsItem"]
+      # Zorunlu.
+      field "recommendations", :recommendations, [:array, "UserExportDerivedRecommendationsItem"]
+    end
+
+    # UserExportDerivedChannelScoresItem şeması.
+    class UserExportDerivedChannelScoresItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "channel", :channel, :string
+      # Zorunlu.
+      field "sends", :sends, :number
+      # Zorunlu.
+      field "engaged", :engaged, :number
+      # Zorunlu.
+      field "score", :score, :number
+      # Zorunlu.
+      field "is_best", :is_best, :boolean
+      # Zorunlu.
+      field "computed_at", :computed_at, :string
+    end
+
+    # UserExportDerivedDecisionsItem şeması.
+    class UserExportDerivedDecisionsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "agent", :agent, :string
+      # Zorunlu.
+      field "arm_id", :arm_id, :string
+      # Zorunlu.
+      field "context", :context, :string
+      # Zorunlu.
+      field "assigned_at", :assigned_at, :string
+      # Zorunlu.
+      field "rewarded_at", :rewarded_at, :string
+    end
+
+    # UserExportDerivedPredictionsItem şeması.
+    class UserExportDerivedPredictionsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "model", :model, :string
+      # Zorunlu.
+      field "score", :score, :number
+      # Zorunlu.
+      field "computed_at", :computed_at, :string
+    end
+
+    # UserExportDerivedRecommendationsItem şeması.
+    class UserExportDerivedRecommendationsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "catalog_id", :catalog_id, :string
+      # Zorunlu.
+      field "personalized", :personalized, [:array, :string]
+      # Zorunlu.
+      field "recent", :recent, [:array, :string]
+      # Zorunlu.
+      field "purchased", :purchased, [:array, :string]
+      # Zorunlu.
+      field "computed_at", :computed_at, :string
+    end
+
+    # UserExportDerivedRfm şeması.
+    class UserExportDerivedRfm < Pushizo::BaseModel
+      # Zorunlu.
+      field "segment", :segment, :string
+      # Zorunlu.
+      field "segment_since", :segment_since, :string
+      # Zorunlu.
+      field "r", :r, :number
+      # Zorunlu.
+      field "f", :f, :number
+      # Zorunlu.
+      field "m", :m, :number
+      # Zorunlu.
+      field "frequency", :frequency, :number
+      # Zorunlu.
+      field "monetary", :monetary, :number
+      # Zorunlu.
+      field "last_event_at", :last_event_at, :string
+      # Zorunlu.
+      field "computed_at", :computed_at, :string
+    end
+
+    # UserExportDerivedWalletPassesItem şeması.
+    class UserExportDerivedWalletPassesItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "template_id", :template_id, :string
+      # Zorunlu.
+      field "status", :status, :string
+      # Zorunlu.
+      field "barcode_value", :barcode_value, :string
+      # Zorunlu.
+      field "values", :values, [:map, :string]
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
     end
 
     # UserExportEventsItem şeması.
