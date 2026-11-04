@@ -3121,6 +3121,108 @@ module Pushizo
       end
     end
 
+    # decisionAgents kaynağı.
+    class DecisionAgents < Pushizo::BaseResource
+      # Karar ajanları
+      #
+      # GET /v1/apps/{appId}/decision-agents
+      def list(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/decision-agents",
+          path_params: {},
+          app_id: app_id,
+          response: "DecisionAgentList",
+          request_options: request_options
+        )
+      end
+
+      # Karar ajanı oluştur
+      #
+      # POST /v1/apps/{appId}/decision-agents
+      def create(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/decision-agents",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "DecisionAgent",
+          request_options: request_options
+        )
+      end
+
+      # Karar ajanı
+      #
+      # GET /v1/apps/{appId}/decision-agents/{id}
+      def get(id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/decision-agents/{id}",
+          path_params: { "id" => id },
+          app_id: app_id,
+          response: "DecisionAgent",
+          request_options: request_options
+        )
+      end
+
+      # Karar ajanını güncelle
+      #
+      # PATCH /v1/apps/{appId}/decision-agents/{id}
+      #
+      # Seçenekler değiştirilemez: geçmiş öğrenme onlara bağlıdır. Yeni seçenekler için yeni ajan oluşturun.
+      def update(id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/decision-agents/{id}",
+          path_params: { "id" => id },
+          body: body,
+          app_id: app_id,
+          response: "DecisionAgent",
+          request_options: request_options
+        )
+      end
+
+      # Karar ajanını sil
+      #
+      # DELETE /v1/apps/{appId}/decision-agents/{id}
+      def delete(id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/decision-agents/{id}",
+          path_params: { "id" => id },
+          app_id: app_id,
+          request_options: request_options
+        )
+      end
+
+      # Kazanç raporu
+      #
+      # GET /v1/apps/{appId}/decision-agents/{id}/report
+      #
+      # Öğrenen politika ve kontrol grubu karşılaştırması.
+      def report(id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/decision-agents/{id}/report",
+          path_params: { "id" => id },
+          app_id: app_id,
+          response: "DecisionReport",
+          request_options: request_options
+        )
+      end
+
+      # Kullanıcı için karar al
+      #
+      # POST /v1/apps/{appId}/decision-agents/{id}/decide
+      #
+      # Karar kaydedilir, ödül olayı geldikçe ajan öğrenir.
+      def decide(id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/decision-agents/{id}/decide",
+          path_params: { "id" => id },
+          body: body,
+          app_id: app_id,
+          response: "DecisionResult",
+          request_options: request_options
+        )
+      end
+    end
+
     # emailDeliverability kaynağı.
     class EmailDeliverability < Pushizo::BaseResource
       # E-posta teslim ayarları (BCC/arşiv, gönderim öncesi adres doğrulama, üçüncü taraf doğrulayıcı)
@@ -5343,7 +5445,7 @@ module Pushizo
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "1.0.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories channel_scores content_tables conversations data_feeds email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp predictions preferences promo_code_lists reverse_etl rfm sms_keywords surveys verify wallet warehouse_exports web_campaigns whatsapp].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories channel_scores content_tables conversations data_feeds decision_agents email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp predictions preferences promo_code_lists reverse_etl rfm sms_keywords surveys verify wallet warehouse_exports web_campaigns whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -5470,6 +5572,10 @@ module Pushizo
 
     def data_feeds
       @data_feeds ||= Pushizo::Resources::DataFeeds.new(self)
+    end
+
+    def decision_agents
+      @decision_agents ||= Pushizo::Resources::DecisionAgents.new(self)
     end
 
     def email_deliverability

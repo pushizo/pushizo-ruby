@@ -2682,6 +2682,30 @@ module Pushizo
       field "enabled", :enabled, :boolean
     end
 
+    # CreateDecisionAgentDto şeması.
+    class CreateDecisionAgentDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "slug", :slug, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "arms", :arms, [:array, "CreateDecisionAgentDtoArmsItem"]
+      # Zorunlu.
+      field "reward_events", :reward_events, [:array, :string]
+      field "reward_window_hours", :reward_window_hours, :integer
+      field "holdout_percent", :holdout_percent, :integer
+      field "context_prediction", :context_prediction, :string
+      field "use_best_channel", :use_best_channel, :boolean
+    end
+
+    # CreateDecisionAgentDtoArmsItem şeması.
+    class CreateDecisionAgentDtoArmsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "label", :label, :string
+    end
+
     # CreateExportDto şeması.
     class CreateExportDto < Pushizo::BaseModel
       # Zorunlu. Değerler: "users", "subscriptions", "events", "deliveries", "message_events".
@@ -3801,6 +3825,142 @@ module Pushizo
       field "id", :id, :string
       # Zorunlu.
       field "external_id", :external_id, :string
+    end
+
+    # DecideDto şeması.
+    class DecideDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "external_id", :external_id, :string
+    end
+
+    # DecisionAgent şeması.
+    class DecisionAgent < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "slug", :slug, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "arms", :arms, [:array, "DecisionAgentArmsItem"]
+      # Zorunlu.
+      field "reward_events", :reward_events, [:array, :string]
+      # Zorunlu.
+      field "reward_window_hours", :reward_window_hours, :integer
+      # Zorunlu.
+      field "holdout_percent", :holdout_percent, :integer
+      # Zorunlu.
+      field "context_prediction", :context_prediction, :string
+      # Zorunlu.
+      field "use_best_channel", :use_best_channel, :boolean
+      # Zorunlu. Değerler: "active", "paused".
+      field "status", :status, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # DecisionAgentArmsItem şeması.
+    class DecisionAgentArmsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "label", :label, :string
+    end
+
+    # DecisionAgentList şeması.
+    class DecisionAgentList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "DecisionAgent"]
+    end
+
+    # DecisionReport şeması.
+    class DecisionReport < Pushizo::BaseModel
+      # Zorunlu.
+      field "agent_id", :agent_id, :string
+      # Zorunlu.
+      field "days", :days, :integer
+      # Zorunlu.
+      field "learned", :learned, "DecisionReportLearned"
+      # Zorunlu.
+      field "holdout", :holdout, "DecisionReportHoldout"
+      # Zorunlu.
+      field "lift", :lift, :number
+      # Zorunlu.
+      field "p_value", :p_value, :number
+      # Zorunlu.
+      field "significant", :significant, :boolean
+      # Zorunlu.
+      field "arms", :arms, [:array, "DecisionReportArmsItem"]
+      # Zorunlu.
+      field "contexts", :contexts, [:array, "DecisionReportContextsItem"]
+    end
+
+    # DecisionReportArmsItem şeması.
+    class DecisionReportArmsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "label", :label, :string
+      # Zorunlu.
+      field "share", :share, :number
+      # Zorunlu.
+      field "assignments", :assignments, :integer
+      # Zorunlu.
+      field "settled", :settled, :integer
+      # Zorunlu.
+      field "rewards", :rewards, :integer
+      # Zorunlu.
+      field "rate", :rate, :number
+    end
+
+    # DecisionReportContextsItem şeması.
+    class DecisionReportContextsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "context", :context, :string
+      # Zorunlu.
+      field "arm_id", :arm_id, :string
+      # Zorunlu.
+      field "settled", :settled, :integer
+      # Zorunlu.
+      field "rate", :rate, :number
+    end
+
+    # DecisionReportHoldout şeması.
+    class DecisionReportHoldout < Pushizo::BaseModel
+      # Zorunlu.
+      field "assignments", :assignments, :integer
+      # Zorunlu.
+      field "settled", :settled, :integer
+      # Zorunlu.
+      field "rewards", :rewards, :integer
+      # Zorunlu.
+      field "rate", :rate, :number
+    end
+
+    # DecisionReportLearned şeması.
+    class DecisionReportLearned < Pushizo::BaseModel
+      # Zorunlu.
+      field "assignments", :assignments, :integer
+      # Zorunlu.
+      field "settled", :settled, :integer
+      # Zorunlu.
+      field "rewards", :rewards, :integer
+      # Zorunlu.
+      field "rate", :rate, :number
+    end
+
+    # DecisionResult şeması.
+    class DecisionResult < Pushizo::BaseModel
+      # Zorunlu.
+      field "arm_id", :arm_id, :string
+      # Zorunlu.
+      field "label", :label, :string
+      # Zorunlu. Değerler: "thompson", "holdout".
+      field "policy", :policy, :string
+      # Zorunlu.
+      field "context", :context, :string
     end
 
     # DeliverabilitySettingsDto şeması.
@@ -8704,6 +8864,16 @@ module Pushizo
       field "cache_ttl_seconds", :cache_ttl_seconds, :integer
       field "timeout_ms", :timeout_ms, :integer
       field "enabled", :enabled, :boolean
+    end
+
+    # UpdateDecisionAgentDto şeması.
+    class UpdateDecisionAgentDto < Pushizo::BaseModel
+      field "name", :name, :string
+      # Değerler: "active", "paused".
+      field "status", :status, :string
+      field "reward_events", :reward_events, [:array, :string]
+      field "reward_window_hours", :reward_window_hours, :integer
+      field "holdout_percent", :holdout_percent, :integer
     end
 
     # UpdateGeofenceDto şeması.
