@@ -3207,6 +3207,18 @@ module Pushizo
       field "external_id_missing", :external_id_missing, [:array, :string]
     end
 
+    # CreatePredictionDto şeması.
+    class CreatePredictionDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "slug", :slug, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "churn", "event".
+      field "kind", :kind, :string
+      field "event_names", :event_names, [:array, :string]
+      field "horizon_days", :horizon_days, :integer
+    end
+
     # CreatePromoCodeListDto şeması.
     class CreatePromoCodeListDto < Pushizo::BaseModel
       # Zorunlu.
@@ -6705,6 +6717,110 @@ module Pushizo
       field "spam_rate", :spam_rate, :string
     end
 
+    # PredictionModel şeması.
+    class PredictionModel < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "slug", :slug, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "churn", "event".
+      field "kind", :kind, :string
+      # Zorunlu.
+      field "event_names", :event_names, [:array, :string]
+      # Zorunlu.
+      field "horizon_days", :horizon_days, :integer
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu. Değerler: "idle", "queued", "running", "failed".
+      field "status", :status, :string
+      # Zorunlu. Değerler: "ready", "insufficient_data", "low_quality".
+      field "outcome", :outcome, :string
+      # Zorunlu.
+      field "last_computed_at", :last_computed_at, :string
+      # Zorunlu.
+      field "scored_users", :scored_users, :integer
+      # Zorunlu.
+      field "metrics", :metrics, "PredictionModelMetrics"
+      # Zorunlu.
+      field "distribution", :distribution, [:array, "PredictionModelDistributionItem"]
+    end
+
+    # PredictionModelDistributionItem şeması.
+    class PredictionModelDistributionItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "low", "medium", "high".
+      field "bucket", :bucket, :string
+      # Zorunlu.
+      field "users", :users, :integer
+    end
+
+    # PredictionModelList şeması.
+    class PredictionModelList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "PredictionModel"]
+    end
+
+    # PredictionModelMetrics şeması.
+    class PredictionModelMetrics < Pushizo::BaseModel
+      # Zorunlu.
+      field "auc", :auc, :number
+      # Zorunlu.
+      field "base_rate", :base_rate, :number
+      # Zorunlu.
+      field "train_users", :train_users, :integer
+      # Zorunlu.
+      field "holdout_users", :holdout_users, :integer
+      # Zorunlu.
+      field "positives", :positives, :integer
+      # Zorunlu.
+      field "negatives", :negatives, :integer
+      # Zorunlu.
+      field "calibration", :calibration, [:array, "PredictionModelMetricsCalibrationItem"]
+      # Zorunlu.
+      field "importance", :importance, [:array, "PredictionModelMetricsImportanceItem"]
+    end
+
+    # PredictionModelMetricsCalibrationItem şeması.
+    class PredictionModelMetricsCalibrationItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "low", "medium", "high".
+      field "bucket", :bucket, :string
+      # Zorunlu.
+      field "users", :users, :integer
+      # Zorunlu.
+      field "predicted", :predicted, :number
+      # Zorunlu.
+      field "actual", :actual, :number
+    end
+
+    # PredictionModelMetricsImportanceItem şeması.
+    class PredictionModelMetricsImportanceItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "recency_days", "events_7", "events_30", "active_days_30", "target_30", "days_since_target", "tenure_days", "sent_30", "engaged_30".
+      field "feature", :feature, :string
+      # Zorunlu.
+      field "weight", :weight, :number
+    end
+
+    # PredictionUsersPage şeması.
+    class PredictionUsersPage < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "PredictionUsersPageDataItem"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+    end
+
+    # PredictionUsersPageDataItem şeması.
+    class PredictionUsersPageDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "user_id", :user_id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu.
+      field "score", :score, :integer
+      # Zorunlu. Değerler: "low", "medium", "high".
+      field "bucket", :bucket, :string
+    end
+
     # PromoCodeList şeması.
     class PromoCodeList < Pushizo::BaseModel
       # Zorunlu.
@@ -8815,6 +8931,14 @@ module Pushizo
       field "x", :x, :number
       # Zorunlu.
       field "y", :y, :number
+    end
+
+    # UpdatePredictionDto şeması.
+    class UpdatePredictionDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "enabled", :enabled, :boolean
+      field "event_names", :event_names, [:array, :string]
+      field "horizon_days", :horizon_days, :integer
     end
 
     # UpdatePromoCodeListDto şeması.

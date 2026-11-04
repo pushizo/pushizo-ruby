@@ -4229,6 +4229,108 @@ module Pushizo
       end
     end
 
+    # predictions kaynağı.
+    class Predictions < Pushizo::BaseResource
+      # Öngörü modelleri
+      #
+      # GET /v1/apps/{appId}/predictions
+      def list(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/predictions",
+          path_params: {},
+          app_id: app_id,
+          response: "PredictionModelList",
+          request_options: request_options
+        )
+      end
+
+      # Öngörü modeli oluştur
+      #
+      # POST /v1/apps/{appId}/predictions
+      #
+      # Eğitim kuyruğa alınır; sonuç `outcome` alanından izlenir.
+      def create(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/predictions",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "PredictionModel",
+          request_options: request_options
+        )
+      end
+
+      # Öngörü modeli
+      #
+      # GET /v1/apps/{appId}/predictions/{id}
+      def get(id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/predictions/{id}",
+          path_params: { "id" => id },
+          app_id: app_id,
+          response: "PredictionModel",
+          request_options: request_options
+        )
+      end
+
+      # Öngörü modelini güncelle
+      #
+      # PATCH /v1/apps/{appId}/predictions/{id}
+      #
+      # Olay veya ufuk değişirse yeniden eğitilir; kapatınca skorlar silinir.
+      def update(id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/predictions/{id}",
+          path_params: { "id" => id },
+          body: body,
+          app_id: app_id,
+          response: "PredictionModel",
+          request_options: request_options
+        )
+      end
+
+      # Öngörü modelini sil
+      #
+      # DELETE /v1/apps/{appId}/predictions/{id}
+      def delete(id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/predictions/{id}",
+          path_params: { "id" => id },
+          app_id: app_id,
+          request_options: request_options
+        )
+      end
+
+      # Modeli yeniden eğit
+      #
+      # POST /v1/apps/{appId}/predictions/{id}/compute
+      def compute(id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/predictions/{id}/compute",
+          path_params: { "id" => id },
+          app_id: app_id,
+          response: "PredictionModel",
+          request_options: request_options
+        )
+      end
+
+      # Skoru olan kullanıcılar
+      #
+      # GET /v1/apps/{appId}/predictions/{id}/users
+      #
+      # @param bucket Değerler: "low", "medium", "high".
+      def users(id, bucket: nil, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/predictions/{id}/users",
+          path_params: { "id" => id },
+          query: { "bucket" => bucket, "limit" => limit, "cursor" => cursor },
+          app_id: app_id,
+          response: "PredictionUsersPage",
+          request_options: request_options
+        )
+      end
+    end
+
     # preferences kaynağı.
     class Preferences < Pushizo::BaseResource
       # Kullanıcının tercihleri (alias ile)
@@ -5241,7 +5343,7 @@ module Pushizo
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "1.0.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories channel_scores content_tables conversations data_feeds email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp preferences promo_code_lists reverse_etl rfm sms_keywords surveys verify wallet warehouse_exports web_campaigns whatsapp].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories channel_scores content_tables conversations data_feeds email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp predictions preferences promo_code_lists reverse_etl rfm sms_keywords surveys verify wallet warehouse_exports web_campaigns whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -5412,6 +5514,10 @@ module Pushizo
 
     def mcp
       @mcp ||= Pushizo::Resources::Mcp.new(self)
+    end
+
+    def predictions
+      @predictions ||= Pushizo::Resources::Predictions.new(self)
     end
 
     def preferences
