@@ -3493,6 +3493,47 @@ module Pushizo
       field "value", :value, :string
     end
 
+    # CreateWalletTemplateDto şeması.
+    class CreateWalletTemplateDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "slug", :slug, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "coupon", "loyalty", "event", "generic".
+      field "kind", :kind, :string
+      # Zorunlu.
+      field "design", :design, "CreateWalletTemplateDtoDesign"
+      field "images", :images, [:map, :string]
+    end
+
+    # CreateWalletTemplateDtoDesign şeması.
+    class CreateWalletTemplateDtoDesign < Pushizo::BaseModel
+      # Zorunlu.
+      field "title", :title, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "organization", :organization, :string
+      field "background_color", :background_color, :string
+      field "foreground_color", :foreground_color, :string
+      field "label_color", :label_color, :string
+      # Değerler: "qr", "pdf417", "aztec", "code128".
+      field "barcode", :barcode, :string
+      field "fields", :fields_value, [:array, "CreateWalletTemplateDtoDesignFieldsItem"]
+      field "expires_at", :expires_at, :string
+      field "relevant_at", :relevant_at, :string
+    end
+
+    # CreateWalletTemplateDtoDesignFieldsItem şeması.
+    class CreateWalletTemplateDtoDesignFieldsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "key", :key, :string
+      field "label", :label, :string
+      field "value", :value, :string
+      # Değerler: "header", "primary", "secondary", "auxiliary", "back".
+      field "section", :section, :string
+    end
+
     # CreateWarmupPlanDto şeması.
     class CreateWarmupPlanDto < Pushizo::BaseModel
       # Zorunlu.
@@ -5248,6 +5289,15 @@ module Pushizo
     class IntegrationOk < Pushizo::BaseModel
       # Zorunlu.
       field "ok", :ok, :boolean
+    end
+
+    # IssueWalletPassDto şeması.
+    class IssueWalletPassDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "template_id", :template_id, :string
+      field "external_id", :external_id, :string
+      field "barcode_value", :barcode_value, :string
+      field "values", :values, [:map, :string]
     end
 
     # Journey şeması.
@@ -9025,6 +9075,78 @@ module Pushizo
       field "value", :value, :string
     end
 
+    # UpdateWalletConfigDto şeması.
+    class UpdateWalletConfigDto < Pushizo::BaseModel
+      field "apple", :apple, "UpdateWalletConfigDtoApple"
+      field "google", :google, "UpdateWalletConfigDtoGoogle"
+    end
+
+    # UpdateWalletConfigDtoApple şeması.
+    class UpdateWalletConfigDtoApple < Pushizo::BaseModel
+      # Zorunlu.
+      field "pass_type_id", :pass_type_id, :string
+      # Zorunlu.
+      field "team_id", :team_id, :string
+      # Zorunlu.
+      field "certificate_pem", :certificate_pem, :string
+      # Zorunlu.
+      field "private_key_pem", :private_key_pem, :string
+      field "key_passphrase", :key_passphrase, :string
+      # Zorunlu.
+      field "wwdr_pem", :wwdr_pem, :string
+    end
+
+    # UpdateWalletConfigDtoGoogle şeması.
+    class UpdateWalletConfigDtoGoogle < Pushizo::BaseModel
+      # Zorunlu.
+      field "issuer_id", :issuer_id, :string
+      # Zorunlu.
+      field "service_account_json", :service_account_json, :string
+    end
+
+    # UpdateWalletPassDto şeması.
+    class UpdateWalletPassDto < Pushizo::BaseModel
+      field "barcode_value", :barcode_value, :string
+      field "values", :values, [:map, :string]
+    end
+
+    # UpdateWalletTemplateDto şeması.
+    class UpdateWalletTemplateDto < Pushizo::BaseModel
+      field "name", :name, :string
+      # Değerler: "active", "archived".
+      field "status", :status, :string
+      field "design", :design, "UpdateWalletTemplateDtoDesign"
+      field "images", :images, [:map, :string]
+    end
+
+    # UpdateWalletTemplateDtoDesign şeması.
+    class UpdateWalletTemplateDtoDesign < Pushizo::BaseModel
+      # Zorunlu.
+      field "title", :title, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "organization", :organization, :string
+      field "background_color", :background_color, :string
+      field "foreground_color", :foreground_color, :string
+      field "label_color", :label_color, :string
+      # Değerler: "qr", "pdf417", "aztec", "code128".
+      field "barcode", :barcode, :string
+      field "fields", :fields_value, [:array, "UpdateWalletTemplateDtoDesignFieldsItem"]
+      field "expires_at", :expires_at, :string
+      field "relevant_at", :relevant_at, :string
+    end
+
+    # UpdateWalletTemplateDtoDesignFieldsItem şeması.
+    class UpdateWalletTemplateDtoDesignFieldsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "key", :key, :string
+      field "label", :label, :string
+      field "value", :value, :string
+      # Değerler: "header", "primary", "secondary", "auxiliary", "back".
+      field "section", :section, :string
+    end
+
     # UpdateWarehouseExportDto şeması.
     class UpdateWarehouseExportDto < Pushizo::BaseModel
       field "name", :name, :string
@@ -9569,6 +9691,138 @@ module Pushizo
     class VerifyAddressDto < Pushizo::BaseModel
       # Zorunlu.
       field "address", :address, :string
+    end
+
+    # WalletConfig şeması.
+    class WalletConfig < Pushizo::BaseModel
+      # Zorunlu.
+      field "apple", :apple, "WalletConfigApple"
+      # Zorunlu.
+      field "google", :google, "WalletConfigGoogle"
+    end
+
+    # WalletConfigApple şeması.
+    class WalletConfigApple < Pushizo::BaseModel
+      # Zorunlu.
+      field "configured", :configured, :boolean
+      # Zorunlu.
+      field "pass_type_id", :pass_type_id, :string
+      # Zorunlu.
+      field "team_id", :team_id, :string
+      # Zorunlu.
+      field "certificate_expires_at", :certificate_expires_at, :string
+    end
+
+    # WalletConfigGoogle şeması.
+    class WalletConfigGoogle < Pushizo::BaseModel
+      # Zorunlu.
+      field "configured", :configured, :boolean
+      # Zorunlu.
+      field "issuer_id", :issuer_id, :string
+    end
+
+    # WalletPass şeması.
+    class WalletPass < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "template_id", :template_id, :string
+      # Zorunlu.
+      field "user_id", :user_id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu.
+      field "barcode_value", :barcode_value, :string
+      # Zorunlu.
+      field "values", :values, [:map, :string]
+      # Zorunlu. Değerler: "active", "voided".
+      field "status", :status, :string
+      # Zorunlu.
+      field "url", :url, :string
+      # Zorunlu.
+      field "apple_url", :apple_url, :string
+      # Zorunlu.
+      field "google_url", :google_url, :string
+      # Zorunlu.
+      field "apple_devices", :apple_devices, :integer
+      # Zorunlu.
+      field "version", :version, :integer
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # WalletPassPage şeması.
+    class WalletPassPage < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "WalletPass"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+    end
+
+    # WalletTemplate şeması.
+    class WalletTemplate < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "slug", :slug, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "coupon", "loyalty", "event", "generic".
+      field "kind", :kind, :string
+      # Zorunlu. Değerler: "active", "archived".
+      field "status", :status, :string
+      # Zorunlu.
+      field "design", :design, "WalletTemplateDesign"
+      # Zorunlu.
+      field "images", :images, [:array, :string]
+      # Zorunlu.
+      field "passes", :passes, :integer
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # WalletTemplateDesign şeması.
+    class WalletTemplateDesign < Pushizo::BaseModel
+      # Zorunlu.
+      field "title", :title, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "organization", :organization, :string
+      # Zorunlu.
+      field "background_color", :background_color, :string
+      # Zorunlu.
+      field "foreground_color", :foreground_color, :string
+      # Zorunlu.
+      field "label_color", :label_color, :string
+      # Zorunlu. Değerler: "qr", "pdf417", "aztec", "code128".
+      field "barcode", :barcode, :string
+      # Zorunlu.
+      field "fields", :fields_value, [:array, "WalletTemplateDesignFieldsItem"]
+      field "expires_at", :expires_at, :string
+      field "relevant_at", :relevant_at, :string
+    end
+
+    # WalletTemplateDesignFieldsItem şeması.
+    class WalletTemplateDesignFieldsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "key", :key, :string
+      # Zorunlu.
+      field "label", :label, :string
+      # Zorunlu.
+      field "value", :value, :string
+      # Zorunlu. Değerler: "header", "primary", "secondary", "auxiliary", "back".
+      field "section", :section, :string
+    end
+
+    # WalletTemplateList şeması.
+    class WalletTemplateList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "WalletTemplate"]
     end
 
     # WarehouseConnectionResult şeması.

@@ -4790,6 +4790,182 @@ module Pushizo
       end
     end
 
+    # wallet kaynağı.
+    class Wallet < Pushizo::BaseResource
+      # Wallet yapılandırması
+      #
+      # GET /v1/apps/{appId}/wallet/config
+      #
+      # Kimlik bilgisi geri okunamaz, yalnızca durum döner.
+      def config(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/wallet/config",
+          path_params: {},
+          app_id: app_id,
+          response: "WalletConfig",
+          request_options: request_options
+        )
+      end
+
+      # Wallet kimlik bilgilerini ayarla
+      #
+      # PUT /v1/apps/{appId}/wallet/config
+      def update_config(body, app_id: nil, request_options: nil)
+        @client.call(
+          :put, "/v1/apps/{appId}/wallet/config",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "WalletConfig",
+          request_options: request_options
+        )
+      end
+
+      # Wallet şablonları
+      #
+      # GET /v1/apps/{appId}/wallet/templates
+      def templates(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/wallet/templates",
+          path_params: {},
+          app_id: app_id,
+          response: "WalletTemplateList",
+          request_options: request_options
+        )
+      end
+
+      # Wallet şablonu oluştur
+      #
+      # POST /v1/apps/{appId}/wallet/templates
+      def create_template(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/wallet/templates",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "WalletTemplate",
+          request_options: request_options
+        )
+      end
+
+      # Wallet şablonu
+      #
+      # GET /v1/apps/{appId}/wallet/templates/{id}
+      def template(id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/wallet/templates/{id}",
+          path_params: { "id" => id },
+          app_id: app_id,
+          response: "WalletTemplate",
+          request_options: request_options
+        )
+      end
+
+      # Wallet şablonunu güncelle
+      #
+      # PATCH /v1/apps/{appId}/wallet/templates/{id}
+      #
+      # Tasarım değişirse verilmiş kartlar da güncellenir.
+      def update_template(id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/wallet/templates/{id}",
+          path_params: { "id" => id },
+          body: body,
+          app_id: app_id,
+          response: "WalletTemplate",
+          request_options: request_options
+        )
+      end
+
+      # Wallet şablonunu sil
+      #
+      # DELETE /v1/apps/{appId}/wallet/templates/{id}
+      #
+      # Verilmiş kartı olan şablon silinemez, arşivlenir.
+      def remove_template(id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/wallet/templates/{id}",
+          path_params: { "id" => id },
+          app_id: app_id,
+          request_options: request_options
+        )
+      end
+
+      # Verilmiş kartlar
+      #
+      # GET /v1/apps/{appId}/wallet/passes
+      def passes(template_id: nil, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/wallet/passes",
+          path_params: {},
+          query: { "template_id" => template_id, "limit" => limit, "cursor" => cursor },
+          app_id: app_id,
+          response: "WalletPassPage",
+          request_options: request_options
+        )
+      end
+
+      # Kart ver
+      #
+      # POST /v1/apps/{appId}/wallet/passes
+      #
+      # Kullanıcılı kart şablon başına tektir; tekrar istek aynı kartı döndürür.
+      def issue(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/wallet/passes",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "WalletPass",
+          request_options: request_options
+        )
+      end
+
+      # Kart
+      #
+      # GET /v1/apps/{appId}/wallet/passes/{id}
+      def pass(id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/wallet/passes/{id}",
+          path_params: { "id" => id },
+          app_id: app_id,
+          response: "WalletPass",
+          request_options: request_options
+        )
+      end
+
+      # Kartı güncelle
+      #
+      # PATCH /v1/apps/{appId}/wallet/passes/{id}
+      #
+      # Cihazdaki kart arka planda yenilenir.
+      def update_pass(id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/wallet/passes/{id}",
+          path_params: { "id" => id },
+          body: body,
+          app_id: app_id,
+          response: "WalletPass",
+          request_options: request_options
+        )
+      end
+
+      # Kartı iptal et
+      #
+      # POST /v1/apps/{appId}/wallet/passes/{id}/void
+      #
+      # Geri alınmaz; cihazdaki kart geçersiz görünür.
+      def void_pass(id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/wallet/passes/{id}/void",
+          path_params: { "id" => id },
+          app_id: app_id,
+          response: "WalletPass",
+          request_options: request_options
+        )
+      end
+    end
+
     # warehouseExports kaynağı.
     class WarehouseExports < Pushizo::BaseResource
       # Dışa aktarılabilir tablolar, kolonlar ve şema sürümleri
@@ -5065,7 +5241,7 @@ module Pushizo
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "1.0.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories channel_scores content_tables conversations data_feeds email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp preferences promo_code_lists reverse_etl rfm sms_keywords surveys verify warehouse_exports web_campaigns whatsapp].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories channel_scores content_tables conversations data_feeds email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp preferences promo_code_lists reverse_etl rfm sms_keywords surveys verify wallet warehouse_exports web_campaigns whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -5264,6 +5440,10 @@ module Pushizo
 
     def verify
       @verify ||= Pushizo::Resources::Verify.new(self)
+    end
+
+    def wallet
+      @wallet ||= Pushizo::Resources::Wallet.new(self)
     end
 
     def warehouse_exports
