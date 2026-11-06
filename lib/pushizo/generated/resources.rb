@@ -5443,7 +5443,7 @@ module Pushizo
   # İstemciye kaynak erişimcilerini ekleyen üretilmiş modül.
   module GeneratedResources
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
-    API_VERSION = "1.0.0"
+    API_VERSION = "1.1.0"
 
     RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories channel_scores content_tables conversations data_feeds decision_agents email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp predictions preferences promo_code_lists reverse_etl rfm sms_keywords surveys verify wallet warehouse_exports web_campaigns whatsapp].freeze
 
