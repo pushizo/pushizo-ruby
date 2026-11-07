@@ -2574,68 +2574,6 @@ module Pushizo
           request_options: request_options
         )
       end
-
-      # Ürün önerileri
-      #
-      # GET /v1/apps/{appId}/catalogs/{catalogId}/recommendations
-      #
-      # Stokta olmayan ve kullanıcının satın aldığı ürünler çıkmaz. Sonuç yetmezse yedek kaynakla tamamlanır.
-      #
-      # @param strategy Değerler: "personalized", "popular", "trending", "similar", "category", "recently_viewed", "new_arrivals".
-      def list_recommendations(catalog_id, strategy:, limit: nil, user_id: nil, external_id: nil, item_id: nil, category: nil, app_id: nil, request_options: nil)
-        @client.call(
-          :get, "/v1/apps/{appId}/catalogs/{catalogId}/recommendations",
-          path_params: { "catalogId" => catalog_id },
-          query: { "strategy" => strategy, "limit" => limit, "user_id" => user_id, "external_id" => external_id, "item_id" => item_id, "category" => category },
-          app_id: app_id,
-          response: "Recommendations",
-          request_options: request_options
-        )
-      end
-
-      # Öneri modeli
-      #
-      # GET /v1/apps/{appId}/catalogs/{catalogId}/recommendations/config
-      def config(catalog_id, app_id: nil, request_options: nil)
-        @client.call(
-          :get, "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/config",
-          path_params: { "catalogId" => catalog_id },
-          app_id: app_id,
-          response: "RecommendationConfig",
-          request_options: request_options
-        )
-      end
-
-      # Öneri modelini ayarla
-      #
-      # PUT /v1/apps/{appId}/catalogs/{catalogId}/recommendations/config
-      #
-      # Model açıksa öneriler kayıttan sonra yeniden hesaplanır.
-      def update_config(catalog_id, body, app_id: nil, request_options: nil)
-        @client.call(
-          :put, "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/config",
-          path_params: { "catalogId" => catalog_id },
-          body: body,
-          app_id: app_id,
-          response: "RecommendationConfig",
-          request_options: request_options
-        )
-      end
-
-      # Önerileri yeniden hesapla
-      #
-      # POST /v1/apps/{appId}/catalogs/{catalogId}/recommendations/compute
-      #
-      # İş kuyruğa alınır; ilerleme `status` alanından izlenir.
-      def compute(catalog_id, app_id: nil, request_options: nil)
-        @client.call(
-          :post, "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/compute",
-          path_params: { "catalogId" => catalog_id },
-          app_id: app_id,
-          response: "RecommendationConfig",
-          request_options: request_options
-        )
-      end
     end
 
     # categories kaynağı.
@@ -4567,6 +4505,71 @@ module Pushizo
       end
     end
 
+    # recommendations kaynağı.
+    class Recommendations < Pushizo::BaseResource
+      # Ürün önerileri
+      #
+      # GET /v1/apps/{appId}/catalogs/{catalogId}/recommendations
+      #
+      # Stokta olmayan ve kullanıcının satın aldığı ürünler çıkmaz. Sonuç yetmezse yedek kaynakla tamamlanır.
+      #
+      # @param strategy Değerler: "personalized", "popular", "trending", "similar", "category", "recently_viewed", "new_arrivals".
+      def list(catalog_id, strategy:, limit: nil, user_id: nil, external_id: nil, item_id: nil, category: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/catalogs/{catalogId}/recommendations",
+          path_params: { "catalogId" => catalog_id },
+          query: { "strategy" => strategy, "limit" => limit, "user_id" => user_id, "external_id" => external_id, "item_id" => item_id, "category" => category },
+          app_id: app_id,
+          response: "Recommendations",
+          request_options: request_options
+        )
+      end
+
+      # Öneri modeli
+      #
+      # GET /v1/apps/{appId}/catalogs/{catalogId}/recommendations/config
+      def get_config(catalog_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/config",
+          path_params: { "catalogId" => catalog_id },
+          app_id: app_id,
+          response: "RecommendationConfig",
+          request_options: request_options
+        )
+      end
+
+      # Öneri modelini ayarla
+      #
+      # PUT /v1/apps/{appId}/catalogs/{catalogId}/recommendations/config
+      #
+      # Model açıksa öneriler kayıttan sonra yeniden hesaplanır.
+      def update_config(catalog_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :put, "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/config",
+          path_params: { "catalogId" => catalog_id },
+          body: body,
+          app_id: app_id,
+          response: "RecommendationConfig",
+          request_options: request_options
+        )
+      end
+
+      # Önerileri yeniden hesapla
+      #
+      # POST /v1/apps/{appId}/catalogs/{catalogId}/recommendations/compute
+      #
+      # İş kuyruğa alınır; ilerleme `status` alanından izlenir.
+      def compute(catalog_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/compute",
+          path_params: { "catalogId" => catalog_id },
+          app_id: app_id,
+          response: "RecommendationConfig",
+          request_options: request_options
+        )
+      end
+    end
+
     # reverseEtl kaynağı.
     class ReverseEtl < Pushizo::BaseResource
       # Depodan içeri aktarımlar
@@ -5001,7 +5004,7 @@ module Pushizo
       # GET /v1/apps/{appId}/wallet/config
       #
       # Kimlik bilgisi geri okunamaz, yalnızca durum döner.
-      def config(app_id: nil, request_options: nil)
+      def get_config(app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/apps/{appId}/wallet/config",
           path_params: {},
@@ -5028,7 +5031,7 @@ module Pushizo
       # Wallet şablonları
       #
       # GET /v1/apps/{appId}/wallet/templates
-      def templates(app_id: nil, request_options: nil)
+      def list_templates(app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/apps/{appId}/wallet/templates",
           path_params: {},
@@ -5055,7 +5058,7 @@ module Pushizo
       # Wallet şablonu
       #
       # GET /v1/apps/{appId}/wallet/templates/{id}
-      def template(id, app_id: nil, request_options: nil)
+      def get_template(id, app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/apps/{appId}/wallet/templates/{id}",
           path_params: { "id" => id },
@@ -5086,7 +5089,7 @@ module Pushizo
       # DELETE /v1/apps/{appId}/wallet/templates/{id}
       #
       # Verilmiş kartı olan şablon silinemez, arşivlenir.
-      def remove_template(id, app_id: nil, request_options: nil)
+      def delete_template(id, app_id: nil, request_options: nil)
         @client.call(
           :delete, "/v1/apps/{appId}/wallet/templates/{id}",
           path_params: { "id" => id },
@@ -5098,7 +5101,7 @@ module Pushizo
       # Verilmiş kartlar
       #
       # GET /v1/apps/{appId}/wallet/passes
-      def passes(template_id: nil, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+      def list_passes(template_id: nil, limit: nil, cursor: nil, app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/apps/{appId}/wallet/passes",
           path_params: {},
@@ -5114,7 +5117,7 @@ module Pushizo
       # POST /v1/apps/{appId}/wallet/passes
       #
       # Kullanıcılı kart şablon başına tektir; tekrar istek aynı kartı döndürür.
-      def issue(body, app_id: nil, request_options: nil)
+      def issue_pass(body, app_id: nil, request_options: nil)
         @client.call(
           :post, "/v1/apps/{appId}/wallet/passes",
           path_params: {},
@@ -5128,7 +5131,7 @@ module Pushizo
       # Kart
       #
       # GET /v1/apps/{appId}/wallet/passes/{id}
-      def pass(id, app_id: nil, request_options: nil)
+      def get_pass(id, app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/apps/{appId}/wallet/passes/{id}",
           path_params: { "id" => id },
@@ -5445,7 +5448,7 @@ module Pushizo
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "1.1.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories channel_scores content_tables conversations data_feeds decision_agents email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp predictions preferences promo_code_lists reverse_etl rfm sms_keywords surveys verify wallet warehouse_exports web_campaigns whatsapp].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories channel_scores content_tables conversations data_feeds decision_agents email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp predictions preferences promo_code_lists recommendations reverse_etl rfm sms_keywords surveys verify wallet warehouse_exports web_campaigns whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -5632,6 +5635,10 @@ module Pushizo
 
     def promo_code_lists
       @promo_code_lists ||= Pushizo::Resources::PromoCodeLists.new(self)
+    end
+
+    def recommendations
+      @recommendations ||= Pushizo::Resources::Recommendations.new(self)
     end
 
     def reverse_etl
