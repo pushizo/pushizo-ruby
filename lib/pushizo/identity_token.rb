@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "base64"
 require "json"
 require "openssl"
 
@@ -29,7 +28,8 @@ module Pushizo
     end
 
     def b64url(data)
-      Base64.urlsafe_encode64(data, padding: false)
+      # base64 gem'i Ruby 3.4'ten beri varsayılan değil; bağımlılık eklememek için çekirdek pack kullanılır.
+      [data].pack("m0").tr("+/", "-_").delete("=")
     end
   end
 

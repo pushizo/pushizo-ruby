@@ -4,7 +4,7 @@ require_relative "test_helper"
 
 # Ortak vektörler: sdk/testdata/webhook-signature-vectors.json (Node, PHP, Python, Go, Java, .NET ile aynı).
 class TestWebhooks < Minitest::Test
-  VECTORS = JSON.parse(File.read(File.expand_path("../../testdata/webhook-signature-vectors.json", __dir__)))
+  VECTORS = JSON.parse(File.read(File.expand_path("../../testdata/webhook-signature-vectors.json", __dir__), encoding: "UTF-8"))
 
   VECTORS["cases"].each_with_index do |c, i|
     define_method("test_vector_#{i}_#{c['name'].gsub(/[^a-z0-9]+/i, '_')}") do

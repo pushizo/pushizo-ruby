@@ -5,7 +5,7 @@ require_relative "test_helper"
 # SDK JWT identity verification belirteci (ES256).
 class TestIdentityToken < Minitest::Test
   def decode(part)
-    Base64.urlsafe_decode64(part + ("=" * ((4 - (part.length % 4)) % 4)))
+    (part.tr("-_", "+/") + ("=" * ((4 - (part.length % 4)) % 4))).unpack1("m0")
   end
 
   def test_baslik_talepler_ve_imza
