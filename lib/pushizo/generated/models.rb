@@ -3144,6 +3144,7 @@ module Pushizo
       field "rcs_fallback_text", :rcs_fallback_text, [:map, :string]
       field "add_to_inbox", :add_to_inbox, :boolean
       field "inbox_ttl", :inbox_ttl, :integer
+      field "content_card", :content_card, "CreateNotificationDtoContentCard"
       field "frequency_cap_exempt", :frequency_cap_exempt, :boolean
       field "quiet_hours_exempt", :quiet_hours_exempt, :boolean
       field "one_per_user", :one_per_user, :boolean
@@ -3173,6 +3174,15 @@ module Pushizo
       field "text", :text, :string
       field "icon", :icon, :string
       field "url", :url, :string
+    end
+
+    # CreateNotificationDtoContentCard şeması.
+    class CreateNotificationDtoContentCard < Pushizo::BaseModel
+      # Zorunlu. Değerler: "classic", "captioned_image", "image_only".
+      field "type", :type, :string
+      field "pinned", :pinned, :boolean
+      field "priority", :priority, :integer
+      field "button_text", :button_text, [:map, :string]
     end
 
     # CreateNotificationDtoIosCarouselItem şeması.
@@ -3459,6 +3469,7 @@ module Pushizo
       field "disable_sms_link_shortening", :disable_sms_link_shortening, :boolean
       field "add_to_inbox", :add_to_inbox, :boolean
       field "inbox_ttl", :inbox_ttl, :integer
+      field "content_card", :content_card, "CreateTemplateDtoContentContentCard"
       field "thread_id", :thread_id, :string
       field "ios_relevance_score", :ios_relevance_score, :number
       field "target_content_identifier", :target_content_identifier, :string
@@ -3499,6 +3510,15 @@ module Pushizo
       field "text", :text, :string
       field "icon", :icon, :string
       field "url", :url, :string
+    end
+
+    # CreateTemplateDtoContentContentCard şeması.
+    class CreateTemplateDtoContentContentCard < Pushizo::BaseModel
+      # Zorunlu. Değerler: "classic", "captioned_image", "image_only".
+      field "type", :type, :string
+      field "pinned", :pinned, :boolean
+      field "priority", :priority, :integer
+      field "button_text", :button_text, [:map, :string]
     end
 
     # CreateTemplateDtoContentIosCarouselItem şeması.
@@ -7358,6 +7378,7 @@ module Pushizo
       field "disable_sms_link_shortening", :disable_sms_link_shortening, :boolean
       field "add_to_inbox", :add_to_inbox, :boolean
       field "inbox_ttl", :inbox_ttl, :integer
+      field "content_card", :content_card, "RenderTemplateDtoContentContentCard"
       field "thread_id", :thread_id, :string
       field "ios_relevance_score", :ios_relevance_score, :number
       field "target_content_identifier", :target_content_identifier, :string
@@ -7398,6 +7419,15 @@ module Pushizo
       field "text", :text, :string
       field "icon", :icon, :string
       field "url", :url, :string
+    end
+
+    # RenderTemplateDtoContentContentCard şeması.
+    class RenderTemplateDtoContentContentCard < Pushizo::BaseModel
+      # Zorunlu. Değerler: "classic", "captioned_image", "image_only".
+      field "type", :type, :string
+      field "pinned", :pinned, :boolean
+      field "priority", :priority, :integer
+      field "button_text", :button_text, [:map, :string]
     end
 
     # RenderTemplateDtoContentIosCarouselItem şeması.
@@ -9391,6 +9421,7 @@ module Pushizo
       field "disable_sms_link_shortening", :disable_sms_link_shortening, :boolean
       field "add_to_inbox", :add_to_inbox, :boolean
       field "inbox_ttl", :inbox_ttl, :integer
+      field "content_card", :content_card, "UpdateTemplateDtoContentContentCard"
       field "thread_id", :thread_id, :string
       field "ios_relevance_score", :ios_relevance_score, :number
       field "target_content_identifier", :target_content_identifier, :string
@@ -9431,6 +9462,15 @@ module Pushizo
       field "text", :text, :string
       field "icon", :icon, :string
       field "url", :url, :string
+    end
+
+    # UpdateTemplateDtoContentContentCard şeması.
+    class UpdateTemplateDtoContentContentCard < Pushizo::BaseModel
+      # Zorunlu. Değerler: "classic", "captioned_image", "image_only".
+      field "type", :type, :string
+      field "pinned", :pinned, :boolean
+      field "priority", :priority, :integer
+      field "button_text", :button_text, [:map, :string]
     end
 
     # UpdateTemplateDtoContentIosCarouselItem şeması.
