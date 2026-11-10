@@ -5431,6 +5431,101 @@ module Pushizo
       end
     end
 
+    # webPersonalizations kaynağı.
+    class WebPersonalizations < Pushizo::BaseResource
+      # Web kişiselleştirme deneyimleri
+      #
+      # GET /v1/apps/{appId}/web-personalizations
+      #
+      # @param status Değerler: "draft", "active", "paused", "archived".
+      def list(limit: nil, cursor: nil, status: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/web-personalizations",
+          path_params: {},
+          query: { "limit" => limit, "cursor" => cursor, "status" => status },
+          app_id: app_id,
+          response: "WebPersonalizationPage",
+          request_options: request_options
+        )
+      end
+
+      # list sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def list_all(limit: nil, cursor: nil, status: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          list(limit: limit, status: status, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+
+      # Kişiselleştirme deneyimi oluştur (taslak)
+      #
+      # POST /v1/apps/{appId}/web-personalizations
+      def create(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/web-personalizations",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "WebPersonalization",
+          request_options: request_options
+        )
+      end
+
+      # Kişiselleştirme deneyimi detayı ve istatistikleri
+      #
+      # GET /v1/apps/{appId}/web-personalizations/{personalizationId}
+      def get(personalization_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/web-personalizations/{personalizationId}",
+          path_params: { "personalizationId" => personalization_id },
+          app_id: app_id,
+          response: "WebPersonalization",
+          request_options: request_options
+        )
+      end
+
+      # Kişiselleştirme deneyimini düzenle
+      #
+      # PATCH /v1/apps/{appId}/web-personalizations/{personalizationId}
+      def update(personalization_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/web-personalizations/{personalizationId}",
+          path_params: { "personalizationId" => personalization_id },
+          body: body,
+          app_id: app_id,
+          response: "WebPersonalization",
+          request_options: request_options
+        )
+      end
+
+      # Günlük seri
+      #
+      # GET /v1/apps/{appId}/web-personalizations/{personalizationId}/report
+      def report(personalization_id, days: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/web-personalizations/{personalizationId}/report",
+          path_params: { "personalizationId" => personalization_id },
+          query: { "days" => days },
+          app_id: app_id,
+          response: "WebPersonalizationReport",
+          request_options: request_options
+        )
+      end
+
+      # Yayınla / duraklat / arşivle
+      #
+      # POST /v1/apps/{appId}/web-personalizations/{personalizationId}/status
+      def status(personalization_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/web-personalizations/{personalizationId}/status",
+          path_params: { "personalizationId" => personalization_id },
+          body: body,
+          app_id: app_id,
+          response: "WebPersonalization",
+          request_options: request_options
+        )
+      end
+    end
+
     # whatsapp kaynağı.
     class Whatsapp < Pushizo::BaseResource
       # WhatsApp şablonları (Meta onay durumu ile)
@@ -5467,7 +5562,7 @@ module Pushizo
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "1.1.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories channel_scores content_tables conversations data_feeds decision_agents email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp predictions preferences promo_code_lists recommendations reverse_etl rfm sms_keywords surveys verify wallet warehouse_exports web_campaigns whatsapp].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories channel_scores content_tables conversations data_feeds decision_agents email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp predictions preferences promo_code_lists recommendations reverse_etl rfm sms_keywords surveys verify wallet warehouse_exports web_campaigns web_personalizations whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -5690,6 +5785,10 @@ module Pushizo
 
     def web_campaigns
       @web_campaigns ||= Pushizo::Resources::WebCampaigns.new(self)
+    end
+
+    def web_personalizations
+      @web_personalizations ||= Pushizo::Resources::WebPersonalizations.new(self)
     end
 
     def whatsapp

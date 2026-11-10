@@ -3869,6 +3869,74 @@ module Pushizo
       field "value", :value, :any
     end
 
+    # CreateWebPersonalizationDto şeması.
+    class CreateWebPersonalizationDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "changes", :changes, [:array, :any]
+      field "variants", :variants, [:array, "CreateWebPersonalizationDtoVariantsItem"]
+      field "conditions", :conditions, "CreateWebPersonalizationDtoConditions"
+      field "targeting", :targeting, "CreateWebPersonalizationDtoTargeting"
+      field "goal", :goal, :any
+      field "priority", :priority, :integer
+      field "start_at", :start_at, :string
+      field "end_at", :end_at, :string
+    end
+
+    # CreateWebPersonalizationDtoConditions şeması.
+    class CreateWebPersonalizationDtoConditions < Pushizo::BaseModel
+      field "url_rules", :url_rules, [:array, "CreateWebPersonalizationDtoConditionsUrlRulesItem"]
+      field "utm_rules", :utm_rules, [:array, "CreateWebPersonalizationDtoConditionsUtmRulesItem"]
+      field "visits", :visits, "CreateWebPersonalizationDtoConditionsVisits"
+    end
+
+    # CreateWebPersonalizationDtoConditionsUrlRulesItem şeması.
+    class CreateWebPersonalizationDtoConditionsUrlRulesItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "equals", "contains", "starts_with", "not_contains", "matches".
+      field "op", :op, :string
+      # Zorunlu.
+      field "value", :value, :string
+    end
+
+    # CreateWebPersonalizationDtoConditionsUtmRulesItem şeması.
+    class CreateWebPersonalizationDtoConditionsUtmRulesItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content".
+      field "param", :param, :string
+      # Zorunlu. Değerler: "equals", "contains", "exists".
+      field "op", :op, :string
+      field "value", :value, :string
+    end
+
+    # CreateWebPersonalizationDtoConditionsVisits şeması.
+    class CreateWebPersonalizationDtoConditionsVisits < Pushizo::BaseModel
+      # Zorunlu. Değerler: "gte", "lte", "eq".
+      field "op", :op, :string
+      # Zorunlu.
+      field "value", :value, :integer
+    end
+
+    # CreateWebPersonalizationDtoTargeting şeması.
+    class CreateWebPersonalizationDtoTargeting < Pushizo::BaseModel
+      field "included_segments", :included_segments, [:array, :string]
+      field "excluded_segments", :excluded_segments, [:array, :string]
+      # Değerler: "all", "new", "returning".
+      field "visitor", :visitor, :string
+      # Değerler: "desktop", "mobile", "tablet".
+      field "devices", :devices, [:array, :string]
+    end
+
+    # CreateWebPersonalizationDtoVariantsItem şeması.
+    class CreateWebPersonalizationDtoVariantsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "weight_percent", :weight_percent, :integer
+      # Zorunlu.
+      field "changes", :changes, [:array, :any]
+    end
+
     # DataFeed şeması.
     class DataFeed < Pushizo::BaseModel
       # Zorunlu.
@@ -9846,6 +9914,73 @@ module Pushizo
       field "value", :value, :any
     end
 
+    # UpdateWebPersonalizationDto şeması.
+    class UpdateWebPersonalizationDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "changes", :changes, [:array, :any]
+      field "variants", :variants, [:array, "UpdateWebPersonalizationDtoVariantsItem"]
+      field "conditions", :conditions, "UpdateWebPersonalizationDtoConditions"
+      field "targeting", :targeting, "UpdateWebPersonalizationDtoTargeting"
+      field "goal", :goal, :any
+      field "priority", :priority, :integer
+      field "start_at", :start_at, :string
+      field "end_at", :end_at, :string
+    end
+
+    # UpdateWebPersonalizationDtoConditions şeması.
+    class UpdateWebPersonalizationDtoConditions < Pushizo::BaseModel
+      field "url_rules", :url_rules, [:array, "UpdateWebPersonalizationDtoConditionsUrlRulesItem"]
+      field "utm_rules", :utm_rules, [:array, "UpdateWebPersonalizationDtoConditionsUtmRulesItem"]
+      field "visits", :visits, "UpdateWebPersonalizationDtoConditionsVisits"
+    end
+
+    # UpdateWebPersonalizationDtoConditionsUrlRulesItem şeması.
+    class UpdateWebPersonalizationDtoConditionsUrlRulesItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "equals", "contains", "starts_with", "not_contains", "matches".
+      field "op", :op, :string
+      # Zorunlu.
+      field "value", :value, :string
+    end
+
+    # UpdateWebPersonalizationDtoConditionsUtmRulesItem şeması.
+    class UpdateWebPersonalizationDtoConditionsUtmRulesItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content".
+      field "param", :param, :string
+      # Zorunlu. Değerler: "equals", "contains", "exists".
+      field "op", :op, :string
+      field "value", :value, :string
+    end
+
+    # UpdateWebPersonalizationDtoConditionsVisits şeması.
+    class UpdateWebPersonalizationDtoConditionsVisits < Pushizo::BaseModel
+      # Zorunlu. Değerler: "gte", "lte", "eq".
+      field "op", :op, :string
+      # Zorunlu.
+      field "value", :value, :integer
+    end
+
+    # UpdateWebPersonalizationDtoTargeting şeması.
+    class UpdateWebPersonalizationDtoTargeting < Pushizo::BaseModel
+      field "included_segments", :included_segments, [:array, :string]
+      field "excluded_segments", :excluded_segments, [:array, :string]
+      # Değerler: "all", "new", "returning".
+      field "visitor", :visitor, :string
+      # Değerler: "desktop", "mobile", "tablet".
+      field "devices", :devices, [:array, :string]
+    end
+
+    # UpdateWebPersonalizationDtoVariantsItem şeması.
+    class UpdateWebPersonalizationDtoVariantsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "weight_percent", :weight_percent, :integer
+      # Zorunlu.
+      field "changes", :changes, [:array, :any]
+    end
+
     # UpsertCatalogItemsDto şeması.
     class UpsertCatalogItemsDto < Pushizo::BaseModel
       # Zorunlu.
@@ -11202,6 +11337,190 @@ module Pushizo
       # Zorunlu. Değerler: "eq", "neq", "in", "not_in", "starts_with", "contains", "exists", "not_exists".
       field "op", :op, :string
       field "value", :value, :any
+    end
+
+    # WebPersonalization şeması.
+    class WebPersonalization < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "draft", "active", "paused", "archived".
+      field "status", :status, :string
+      # Zorunlu.
+      field "priority", :priority, :integer
+      # Zorunlu.
+      field "changes", :changes, [:array, :any]
+      # Zorunlu.
+      field "variants", :variants, [:array, "WebPersonalizationVariantsItem"]
+      # Zorunlu.
+      field "ab_test", :ab_test, "WebPersonalizationAbTest"
+      # Zorunlu.
+      field "conditions", :conditions, "WebPersonalizationConditions"
+      # Zorunlu.
+      field "targeting", :targeting, "WebPersonalizationTargeting"
+      # Zorunlu.
+      field "goal", :goal, :any
+      # Zorunlu.
+      field "start_at", :start_at, :string
+      # Zorunlu.
+      field "end_at", :end_at, :string
+      # Zorunlu.
+      field "stats", :stats, "WebPersonalizationStats"
+      # Zorunlu.
+      field "variant_stats", :variant_stats, [:array, "WebPersonalizationVariantStatsItem"]
+      # Zorunlu.
+      field "variant_significance", :variant_significance, "WebPersonalizationVariantSignificance"
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # WebPersonalizationAbTest şeması.
+    class WebPersonalizationAbTest < Pushizo::BaseModel
+      # Zorunlu.
+      field "winner_variant_id", :winner_variant_id, :string
+      # Zorunlu.
+      field "decided_at", :decided_at, :string
+      # Zorunlu.
+      field "decided_by", :decided_by, :string
+    end
+
+    # WebPersonalizationConditions şeması.
+    class WebPersonalizationConditions < Pushizo::BaseModel
+      field "url_rules", :url_rules, [:array, "WebPersonalizationConditionsUrlRulesItem"]
+      field "utm_rules", :utm_rules, [:array, "WebPersonalizationConditionsUtmRulesItem"]
+      field "visits", :visits, "WebPersonalizationConditionsVisits"
+    end
+
+    # WebPersonalizationConditionsUrlRulesItem şeması.
+    class WebPersonalizationConditionsUrlRulesItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "equals", "contains", "starts_with", "not_contains", "matches".
+      field "op", :op, :string
+      # Zorunlu.
+      field "value", :value, :string
+    end
+
+    # WebPersonalizationConditionsUtmRulesItem şeması.
+    class WebPersonalizationConditionsUtmRulesItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content".
+      field "param", :param, :string
+      # Zorunlu. Değerler: "equals", "contains", "exists".
+      field "op", :op, :string
+      field "value", :value, :string
+    end
+
+    # WebPersonalizationConditionsVisits şeması.
+    class WebPersonalizationConditionsVisits < Pushizo::BaseModel
+      # Zorunlu. Değerler: "gte", "lte", "eq".
+      field "op", :op, :string
+      # Zorunlu.
+      field "value", :value, :integer
+    end
+
+    # WebPersonalizationPage şeması.
+    class WebPersonalizationPage < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "WebPersonalization"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
+    end
+
+    # WebPersonalizationReport şeması.
+    class WebPersonalizationReport < Pushizo::BaseModel
+      # Zorunlu.
+      field "personalization_id", :personalization_id, :string
+      # Zorunlu.
+      field "days", :days, :integer
+      # Zorunlu.
+      field "daily", :daily, [:array, "WebPersonalizationReportDailyItem"]
+      # Zorunlu.
+      field "totals", :totals, "WebPersonalizationReportTotals"
+    end
+
+    # WebPersonalizationReportDailyItem şeması.
+    class WebPersonalizationReportDailyItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "date", :date, :string
+      # Zorunlu.
+      field "visitors", :visitors, :integer
+      # Zorunlu.
+      field "conversions", :conversions, :integer
+    end
+
+    # WebPersonalizationReportTotals şeması.
+    class WebPersonalizationReportTotals < Pushizo::BaseModel
+      # Zorunlu.
+      field "visitors", :visitors, :integer
+      # Zorunlu.
+      field "conversions", :conversions, :integer
+      # Zorunlu.
+      field "conversion_rate", :conversion_rate, :number
+    end
+
+    # WebPersonalizationStats şeması.
+    class WebPersonalizationStats < Pushizo::BaseModel
+      # Zorunlu.
+      field "visitors", :visitors, :integer
+      # Zorunlu.
+      field "conversions", :conversions, :integer
+      # Zorunlu.
+      field "conversion_rate", :conversion_rate, :number
+    end
+
+    # WebPersonalizationStatusDto şeması.
+    class WebPersonalizationStatusDto < Pushizo::BaseModel
+      # Zorunlu. Değerler: "draft", "active", "paused", "archived".
+      field "status", :status, :string
+    end
+
+    # WebPersonalizationTargeting şeması.
+    class WebPersonalizationTargeting < Pushizo::BaseModel
+      field "included_segments", :included_segments, [:array, :string]
+      field "excluded_segments", :excluded_segments, [:array, :string]
+      # Değerler: "all", "new", "returning".
+      field "visitor", :visitor, :string
+      # Değerler: "desktop", "mobile", "tablet".
+      field "devices", :devices, [:array, :string]
+    end
+
+    # WebPersonalizationVariantSignificance şeması.
+    class WebPersonalizationVariantSignificance < Pushizo::BaseModel
+      # Zorunlu.
+      field "leader", :leader, :string
+      # Zorunlu.
+      field "p_value", :p_value, :number
+      # Zorunlu.
+      field "significant", :significant, :boolean
+    end
+
+    # WebPersonalizationVariantsItem şeması.
+    class WebPersonalizationVariantsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "weight_percent", :weight_percent, :integer
+      # Zorunlu.
+      field "changes", :changes, [:array, :any]
+    end
+
+    # WebPersonalizationVariantStatsItem şeması.
+    class WebPersonalizationVariantStatsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "visitors", :visitors, :integer
+      # Zorunlu.
+      field "conversions", :conversions, :integer
+      # Zorunlu.
+      field "conversion_rate", :conversion_rate, :number
+      # Zorunlu.
+      field "variant_id", :variant_id, :string
     end
 
     # WhatsAppTemplateList şeması.
