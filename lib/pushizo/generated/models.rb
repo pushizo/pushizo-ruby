@@ -900,6 +900,9 @@ module Pushizo
       field "brandKit", :brand_kit, "AppSettingsBrandKit"
       field "defaultTtlSeconds", :default_ttl_seconds, :integer
       field "identityVerificationRequired", :identity_verification_required, :boolean
+      # Değerler: "off", "full", "masked".
+      field "ipCapture", :ip_capture, :string
+      field "ipRetentionDays", :ip_retention_days, :integer
       field "allowedOrigins", :allowed_origins, [:array, :string]
       field "campaignApprovalRequired", :campaign_approval_required, :boolean
       field "webPush", :web_push, "AppSettingsWebPush"
@@ -1171,6 +1174,8 @@ module Pushizo
       # Zorunlu.
       field "category", :category, :string
       # Zorunlu.
+      field "goals", :goals, "CampaignGoals"
+      # Zorunlu.
       field "ab_test", :ab_test, "CampaignAbTest"
       # Zorunlu.
       field "variants", :variants, [:array, "CampaignVariantsItem"]
@@ -1275,6 +1280,8 @@ module Pushizo
       field "priority", :priority, :integer
       field "collapse_id", :collapse_id, :string
       field "frequency_cap_exempt", :frequency_cap_exempt, :boolean
+      # Değerler: "low", "normal", "high".
+      field "frequency_priority", :frequency_priority, :string
       field "global_control_exempt", :global_control_exempt, :boolean
       field "quiet_hours_exempt", :quiet_hours_exempt, :boolean
       field "one_per_user", :one_per_user, :boolean
@@ -1308,6 +1315,12 @@ module Pushizo
       field "bounce_rate_30d", :bounce_rate_30d, :number
     end
 
+    # CampaignGoals şeması.
+    class CampaignGoals < Pushizo::BaseModel
+      field "primary", :primary, :string
+      field "secondary", :secondary, [:array, :string]
+    end
+
     # CampaignPage şeması.
     class CampaignPage < Pushizo::BaseModel
       # Zorunlu.
@@ -1337,6 +1350,8 @@ module Pushizo
       field "labels", :labels, [:array, :string]
       # Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır
       field "category", :category, :string
+      # Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı.
+      field "goals", :goals, "CampaignsCreateBodyGoals"
       field "ab_test", :ab_test, "CampaignsCreateBodyAbTest"
       # A/B varyantları (ağırlıklar toplamı 100; en fazla bir is_control)
       field "variants", :variants, [:array, "CampaignsCreateBodyVariantsItem"]
@@ -1393,9 +1408,17 @@ module Pushizo
       field "priority", :priority, :integer
       field "collapse_id", :collapse_id, :string
       field "frequency_cap_exempt", :frequency_cap_exempt, :boolean
+      # Değerler: "low", "normal", "high".
+      field "frequency_priority", :frequency_priority, :string
       field "global_control_exempt", :global_control_exempt, :boolean
       field "quiet_hours_exempt", :quiet_hours_exempt, :boolean
       field "one_per_user", :one_per_user, :boolean
+    end
+
+    # Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı.
+    class CampaignsCreateBodyGoals < Pushizo::BaseModel
+      field "primary", :primary, :string
+      field "secondary", :secondary, [:array, :string]
     end
 
     # CampaignsCreateBodyRecurrence şeması.
@@ -1422,6 +1445,8 @@ module Pushizo
       field "campaign", :campaign, "Campaign"
       # Zorunlu.
       field "rates", :rates, "CampaignStatsRates"
+      # Zorunlu.
+      field "goals", :goals, [:array, "CampaignStatsGoalsItem"]
       # Zorunlu.
       field "channels", :channels, [:array, "CampaignStatsChannelsItem"]
       # Zorunlu.
@@ -1473,6 +1498,18 @@ module Pushizo
       field "count", :count, :integer
     end
 
+    # CampaignStatsGoalsItem şeması.
+    class CampaignStatsGoalsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "event", :event, :string
+      # Zorunlu.
+      field "primary", :primary, :boolean
+      # Zorunlu.
+      field "converted", :converted, :integer
+      # Zorunlu.
+      field "conversion_rate", :conversion_rate, :number
+    end
+
     # CampaignStatsHourlyItem şeması.
     class CampaignStatsHourlyItem < Pushizo::BaseModel
       # Zorunlu.
@@ -1512,6 +1549,8 @@ module Pushizo
       field "labels", :labels, [:array, :string]
       # Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır
       field "category", :category, :string
+      # Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı.
+      field "goals", :goals, "CampaignsUpdateBodyGoals"
       field "ab_test", :ab_test, "CampaignsUpdateBodyAbTest"
       # A/B varyantları (ağırlıklar toplamı 100; en fazla bir is_control)
       field "variants", :variants, [:array, "CampaignsUpdateBodyVariantsItem"]
@@ -1568,9 +1607,17 @@ module Pushizo
       field "priority", :priority, :integer
       field "collapse_id", :collapse_id, :string
       field "frequency_cap_exempt", :frequency_cap_exempt, :boolean
+      # Değerler: "low", "normal", "high".
+      field "frequency_priority", :frequency_priority, :string
       field "global_control_exempt", :global_control_exempt, :boolean
       field "quiet_hours_exempt", :quiet_hours_exempt, :boolean
       field "one_per_user", :one_per_user, :boolean
+    end
+
+    # Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı.
+    class CampaignsUpdateBodyGoals < Pushizo::BaseModel
+      field "primary", :primary, :string
+      field "secondary", :secondary, [:array, :string]
     end
 
     # CampaignsUpdateBodyRecurrence şeması.
@@ -1689,6 +1736,20 @@ module Pushizo
       field "open_rate", :open_rate, :number
       # Zorunlu.
       field "click_rate", :click_rate, :number
+      # Zorunlu.
+      field "conversion_rate", :conversion_rate, :number
+      # Zorunlu.
+      field "goals", :goals, [:array, "CampaignVariantStatsVariantsItemGoalsItem"]
+    end
+
+    # CampaignVariantStatsVariantsItemGoalsItem şeması.
+    class CampaignVariantStatsVariantsItemGoalsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "event", :event, :string
+      # Zorunlu.
+      field "primary", :primary, :boolean
+      # Zorunlu.
+      field "converted", :converted, :integer
       # Zorunlu.
       field "conversion_rate", :conversion_rate, :number
     end
@@ -6207,6 +6268,8 @@ module Pushizo
       field "labels", :labels, [:array, :string]
       # Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır
       field "category", :category, :string
+      # Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı.
+      field "goals", :goals, "McpCreateCampaignDraftBodyGoals"
       field "ab_test", :ab_test, "McpCreateCampaignDraftBodyAbTest"
       # A/B varyantları (ağırlıklar toplamı 100; en fazla bir is_control)
       field "variants", :variants, [:array, "McpCreateCampaignDraftBodyVariantsItem"]
@@ -6263,9 +6326,17 @@ module Pushizo
       field "priority", :priority, :integer
       field "collapse_id", :collapse_id, :string
       field "frequency_cap_exempt", :frequency_cap_exempt, :boolean
+      # Değerler: "low", "normal", "high".
+      field "frequency_priority", :frequency_priority, :string
       field "global_control_exempt", :global_control_exempt, :boolean
       field "quiet_hours_exempt", :quiet_hours_exempt, :boolean
       field "one_per_user", :one_per_user, :boolean
+    end
+
+    # Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı.
+    class McpCreateCampaignDraftBodyGoals < Pushizo::BaseModel
+      field "primary", :primary, :string
+      field "secondary", :secondary, [:array, :string]
     end
 
     # McpCreateCampaignDraftBodyRecurrence şeması.
@@ -8508,6 +8579,74 @@ module Pushizo
       field "value", :value, :string
     end
 
+    # UninstallReport şeması.
+    class UninstallReport < Pushizo::BaseModel
+      # Zorunlu.
+      field "from", :from, :string
+      # Zorunlu.
+      field "to", :to, :string
+      # Zorunlu.
+      field "totals", :totals, "UninstallReportTotals"
+      # Zorunlu.
+      field "previous", :previous, "UninstallReportPrevious"
+      # Zorunlu.
+      field "rows", :rows, [:array, "UninstallReportRowsItem"]
+      # Zorunlu.
+      field "by_channel", :by_channel, [:array, "UninstallReportByChannelItem"]
+      # Zorunlu.
+      field "last_messages", :last_messages, [:array, "UninstallReportLastMessagesItem"]
+    end
+
+    # UninstallReportByChannelItem şeması.
+    class UninstallReportByChannelItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "channel", :channel, :string
+      # Zorunlu.
+      field "uninstalls", :uninstalls, :integer
+      # Zorunlu.
+      field "active", :active, :integer
+    end
+
+    # UninstallReportLastMessagesItem şeması.
+    class UninstallReportLastMessagesItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "campaign_id", :campaign_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "source", :source, :string
+      # Zorunlu.
+      field "uninstalls", :uninstalls, :integer
+    end
+
+    # UninstallReportPrevious şeması.
+    class UninstallReportPrevious < Pushizo::BaseModel
+      # Zorunlu.
+      field "uninstalls", :uninstalls, :integer
+      # Zorunlu.
+      field "active", :active, :integer
+      # Zorunlu.
+      field "rate", :rate, :number
+    end
+
+    # UninstallReportRowsItem şeması.
+    class UninstallReportRowsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "date", :date, :string
+      # Zorunlu.
+      field "uninstalls", :uninstalls, :integer
+    end
+
+    # UninstallReportTotals şeması.
+    class UninstallReportTotals < Pushizo::BaseModel
+      # Zorunlu.
+      field "uninstalls", :uninstalls, :integer
+      # Zorunlu.
+      field "active", :active, :integer
+      # Zorunlu.
+      field "rate", :rate, :number
+    end
+
     # UpdateAdAudienceDto şeması.
     class UpdateAdAudienceDto < Pushizo::BaseModel
       field "name", :name, :string
@@ -8569,6 +8708,9 @@ module Pushizo
       field "brandKit", :brand_kit, "UpdateAppDtoSettingsBrandKit"
       field "defaultTtlSeconds", :default_ttl_seconds, :integer
       field "identityVerificationRequired", :identity_verification_required, :boolean
+      # Değerler: "off", "full", "masked".
+      field "ipCapture", :ip_capture, :string
+      field "ipRetentionDays", :ip_retention_days, :integer
       field "allowedOrigins", :allowed_origins, [:array, :string]
       field "campaignApprovalRequired", :campaign_approval_required, :boolean
       field "webPush", :web_push, "UpdateAppDtoSettingsWebPush"
@@ -9787,6 +9929,10 @@ module Pushizo
       # Zorunlu.
       field "merged_into", :merged_into, :string
       # Zorunlu.
+      field "last_ip", :last_ip, :string
+      # Zorunlu.
+      field "last_ip_at", :last_ip_at, :string
+      # Zorunlu.
       field "created_at", :created_at, :string
       # Zorunlu.
       field "updated_at", :updated_at, :string
@@ -9818,6 +9964,10 @@ module Pushizo
       field "usage_seconds", :usage_seconds, :integer
       # Zorunlu.
       field "merged_into", :merged_into, :string
+      # Zorunlu.
+      field "last_ip", :last_ip, :string
+      # Zorunlu.
+      field "last_ip_at", :last_ip_at, :string
       # Zorunlu.
       field "created_at", :created_at, :string
       # Zorunlu.

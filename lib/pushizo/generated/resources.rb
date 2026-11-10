@@ -155,11 +155,11 @@ module Pushizo
       # GET /v1/apps/{appId}/users
       #
       # @param sort Değerler: "last_active_at", "-last_active_at".
-      def list(limit: nil, cursor: nil, sort: nil, q: nil, tag: nil, last_active_after: nil, last_active_before: nil, app_id: nil, request_options: nil)
+      def list(limit: nil, cursor: nil, sort: nil, q: nil, ip: nil, tag: nil, last_active_after: nil, last_active_before: nil, app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/apps/{appId}/users",
           path_params: {},
-          query: { "limit" => limit, "cursor" => cursor, "sort" => sort, "q" => q, "tag" => tag, "last_active_after" => last_active_after, "last_active_before" => last_active_before },
+          query: { "limit" => limit, "cursor" => cursor, "sort" => sort, "q" => q, "ip" => ip, "tag" => tag, "last_active_after" => last_active_after, "last_active_before" => last_active_before },
           app_id: app_id,
           response: "UserList",
           request_options: request_options
@@ -167,9 +167,9 @@ module Pushizo
       end
 
       # list sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
-      def list_all(limit: nil, cursor: nil, sort: nil, q: nil, tag: nil, last_active_after: nil, last_active_before: nil, app_id: nil, request_options: nil)
+      def list_all(limit: nil, cursor: nil, sort: nil, q: nil, ip: nil, tag: nil, last_active_after: nil, last_active_before: nil, app_id: nil, request_options: nil)
         @client.paginate(cursor) do |cursor_value|
-          list(limit: limit, sort: sort, q: q, tag: tag, last_active_after: last_active_after, last_active_before: last_active_before, app_id: app_id, request_options: request_options, cursor: cursor_value)
+          list(limit: limit, sort: sort, q: q, ip: ip, tag: tag, last_active_after: last_active_after, last_active_before: last_active_before, app_id: app_id, request_options: request_options, cursor: cursor_value)
         end
       end
 
@@ -1657,6 +1657,25 @@ module Pushizo
           query: { "from" => from, "to" => to, "compare" => compare, "format" => format },
           app_id: app_id,
           response: "SubscriptionsReport",
+          request_options: request_options
+        )
+      end
+
+      # Uygulama kaldırma raporu
+      #
+      # GET /v1/apps/{appId}/analytics/uninstalls
+      #
+      # Mobil push sağlayıcısının "cihaz kayıtlı değil" yanıtından sayılır.
+      #
+      # @param compare Değerler: "true", "false".
+      # @param format Değerler: "json", "csv".
+      def uninstall_report(from: nil, to: nil, compare: nil, format: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/analytics/uninstalls",
+          path_params: {},
+          query: { "from" => from, "to" => to, "compare" => compare, "format" => format },
+          app_id: app_id,
+          response: "UninstallReport",
           request_options: request_options
         )
       end
