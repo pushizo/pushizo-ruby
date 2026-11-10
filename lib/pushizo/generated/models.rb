@@ -903,11 +903,22 @@ module Pushizo
       # Değerler: "off", "full", "masked".
       field "ipCapture", :ip_capture, :string
       field "ipRetentionDays", :ip_retention_days, :integer
+      field "adaptiveFrequency", :adaptive_frequency, "AppSettingsAdaptiveFrequency"
       field "allowedOrigins", :allowed_origins, [:array, :string]
       field "campaignApprovalRequired", :campaign_approval_required, :boolean
       field "webPush", :web_push, "AppSettingsWebPush"
       field "onboarding", :onboarding, "AppSettingsOnboarding"
       field "sdkSetup", :sdk_setup, "AppSettingsSdkSetup"
+    end
+
+    # AppSettingsAdaptiveFrequency şeması.
+    class AppSettingsAdaptiveFrequency < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "min", :min, :integer
+      # Zorunlu.
+      field "max", :max, :integer
     end
 
     # AppSettingsAndroidChannelsItem şeması.
@@ -8711,11 +8722,22 @@ module Pushizo
       # Değerler: "off", "full", "masked".
       field "ipCapture", :ip_capture, :string
       field "ipRetentionDays", :ip_retention_days, :integer
+      field "adaptiveFrequency", :adaptive_frequency, "UpdateAppDtoSettingsAdaptiveFrequency"
       field "allowedOrigins", :allowed_origins, [:array, :string]
       field "campaignApprovalRequired", :campaign_approval_required, :boolean
       field "webPush", :web_push, "UpdateAppDtoSettingsWebPush"
       field "onboarding", :onboarding, "UpdateAppDtoSettingsOnboarding"
       field "sdkSetup", :sdk_setup, "UpdateAppDtoSettingsSdkSetup"
+    end
+
+    # UpdateAppDtoSettingsAdaptiveFrequency şeması.
+    class UpdateAppDtoSettingsAdaptiveFrequency < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "min", :min, :integer
+      # Zorunlu.
+      field "max", :max, :integer
     end
 
     # UpdateAppDtoSettingsAndroidChannelsItem şeması.
@@ -9932,6 +9954,10 @@ module Pushizo
       field "last_ip", :last_ip, :string
       # Zorunlu.
       field "last_ip_at", :last_ip_at, :string
+      # Zorunlu. Değerler: "positive", "negative", "neutral".
+      field "last_sentiment", :last_sentiment, :string
+      # Zorunlu.
+      field "last_sentiment_at", :last_sentiment_at, :string
       # Zorunlu.
       field "created_at", :created_at, :string
       # Zorunlu.
@@ -9968,6 +9994,10 @@ module Pushizo
       field "last_ip", :last_ip, :string
       # Zorunlu.
       field "last_ip_at", :last_ip_at, :string
+      # Zorunlu. Değerler: "positive", "negative", "neutral".
+      field "last_sentiment", :last_sentiment, :string
+      # Zorunlu.
+      field "last_sentiment_at", :last_sentiment_at, :string
       # Zorunlu.
       field "created_at", :created_at, :string
       # Zorunlu.
@@ -10016,6 +10046,24 @@ module Pushizo
       field "decisions", :decisions, [:array, "UserExportDerivedDecisionsItem"]
       # Zorunlu.
       field "recommendations", :recommendations, [:array, "UserExportDerivedRecommendationsItem"]
+      # Zorunlu.
+      field "affinities", :affinities, [:array, "UserExportDerivedAffinitiesItem"]
+      # Zorunlu.
+      field "frequency_cap", :frequency_cap, "UserExportDerivedFrequencyCap"
+    end
+
+    # UserExportDerivedAffinitiesItem şeması.
+    class UserExportDerivedAffinitiesItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "attribute", :attribute, :string
+      # Zorunlu.
+      field "value", :value, :string
+      # Zorunlu.
+      field "score", :score, :number
+      # Zorunlu.
+      field "rank", :rank, :number
+      # Zorunlu.
+      field "computed_at", :computed_at, :string
     end
 
     # UserExportDerivedChannelScoresItem şeması.
@@ -10046,6 +10094,16 @@ module Pushizo
       field "assigned_at", :assigned_at, :string
       # Zorunlu.
       field "rewarded_at", :rewarded_at, :string
+    end
+
+    # UserExportDerivedFrequencyCap şeması.
+    class UserExportDerivedFrequencyCap < Pushizo::BaseModel
+      # Zorunlu.
+      field "weekly_cap", :weekly_cap, :number
+      # Zorunlu.
+      field "engagement", :engagement, :number
+      # Zorunlu.
+      field "computed_at", :computed_at, :string
     end
 
     # UserExportDerivedPredictionsItem şeması.
