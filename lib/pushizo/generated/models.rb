@@ -1459,6 +1459,8 @@ module Pushizo
       # Zorunlu.
       field "goals", :goals, [:array, "CampaignStatsGoalsItem"]
       # Zorunlu.
+      field "cards", :cards, "CampaignStatsCards"
+      # Zorunlu.
       field "channels", :channels, [:array, "CampaignStatsChannelsItem"]
       # Zorunlu.
       field "hourly", :hourly, [:array, "CampaignStatsHourlyItem"]
@@ -1483,6 +1485,22 @@ module Pushizo
       field "complained", :complained, :integer
       field "unsubscribed", :unsubscribed, :integer
       field "sms_segments", :sms_segments, :integer
+    end
+
+    # CampaignStatsCards şeması.
+    class CampaignStatsCards < Pushizo::BaseModel
+      # Zorunlu.
+      field "created", :created, :integer
+      # Zorunlu.
+      field "viewed", :viewed, :integer
+      # Zorunlu.
+      field "clicked", :clicked, :integer
+      # Zorunlu.
+      field "dismissed", :dismissed, :integer
+      # Zorunlu.
+      field "view_rate", :view_rate, :number
+      # Zorunlu.
+      field "click_rate", :click_rate, :number
     end
 
     # CampaignStatsChannelsItem şeması.
