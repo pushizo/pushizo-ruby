@@ -984,9 +984,9 @@ module Pushizo
       field "simulation", :simulation, :boolean
       field "completed_at", :completed_at, :string
       field "version", :version, :integer
-      # Değerler: "ios", "android", "huawei", "web".
+      # Değerler: "ios", "android", "huawei", "web", "amazon", "windows", "email", "sms".
       field "platforms", :platforms, [:array, :string]
-      # Değerler: "native", "flutter", "react-native", "unity", "capacitor", "cordova", "maui".
+      # Değerler: "native", "flutter", "react-native", "expo", "kmp", "unity", "capacitor", "cordova", "maui".
       field "framework", :framework, :string
       # Değerler: "code", "wordpress".
       field "web_integration", :web_integration, :string
@@ -8919,9 +8919,9 @@ module Pushizo
       field "simulation", :simulation, :boolean
       field "completed_at", :completed_at, :string
       field "version", :version, :integer
-      # Değerler: "ios", "android", "huawei", "web".
+      # Değerler: "ios", "android", "huawei", "web", "amazon", "windows", "email", "sms".
       field "platforms", :platforms, [:array, :string]
-      # Değerler: "native", "flutter", "react-native", "unity", "capacitor", "cordova", "maui".
+      # Değerler: "native", "flutter", "react-native", "expo", "kmp", "unity", "capacitor", "cordova", "maui".
       field "framework", :framework, :string
       # Değerler: "code", "wordpress".
       field "web_integration", :web_integration, :string
