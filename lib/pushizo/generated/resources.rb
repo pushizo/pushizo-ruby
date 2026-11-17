@@ -806,11 +806,12 @@ module Pushizo
       # POST /v1/apps/{appId}/campaigns/{campaignId}/schedule
       #
       # @param force Değerler: "true", "false".
-      def schedule(campaign_id, body, force: nil, app_id: nil, request_options: nil)
+      # @param preflight_ack Değerler: "true", "false".
+      def schedule(campaign_id, body, force: nil, preflight_ack: nil, app_id: nil, request_options: nil)
         @client.call(
           :post, "/v1/apps/{appId}/campaigns/{campaignId}/schedule",
           path_params: { "campaignId" => campaign_id },
-          query: { "force" => force },
+          query: { "force" => force, "preflight_ack" => preflight_ack },
           body: body,
           app_id: app_id,
           response: "Campaign",
@@ -823,13 +824,30 @@ module Pushizo
       # POST /v1/apps/{appId}/campaigns/{campaignId}/send
       #
       # @param force Değerler: "true", "false".
-      def send_campaign(campaign_id, force: nil, app_id: nil, request_options: nil)
+      # @param preflight_ack Değerler: "true", "false".
+      def send_campaign(campaign_id, force: nil, preflight_ack: nil, app_id: nil, request_options: nil)
         @client.call(
           :post, "/v1/apps/{appId}/campaigns/{campaignId}/send",
           path_params: { "campaignId" => campaign_id },
-          query: { "force" => force },
+          query: { "force" => force, "preflight_ack" => preflight_ack },
           app_id: app_id,
           response: "Campaign",
+          request_options: request_options
+        )
+      end
+
+      # Yayın öncesi denetim raporu (marka, yasaklı ifade, bağlantı, kişiselleştirme, KVKK/İYS)
+      #
+      # POST /v1/apps/{appId}/campaigns/{campaignId}/preflight
+      #
+      # @param check_links Değerler: "true", "false".
+      def preflight(campaign_id, check_links: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/campaigns/{campaignId}/preflight",
+          path_params: { "campaignId" => campaign_id },
+          query: { "check_links" => check_links },
+          app_id: app_id,
+          response: "CampaignPreflightReport",
           request_options: request_options
         )
       end
@@ -902,10 +920,14 @@ module Pushizo
       # Onayla
       #
       # POST /v1/apps/{appId}/campaigns/{campaignId}/approve
-      def approve(campaign_id, app_id: nil, request_options: nil)
+      #
+      # @param force Değerler: "true", "false".
+      # @param preflight_ack Değerler: "true", "false".
+      def approve(campaign_id, force: nil, preflight_ack: nil, app_id: nil, request_options: nil)
         @client.call(
           :post, "/v1/apps/{appId}/campaigns/{campaignId}/approve",
           path_params: { "campaignId" => campaign_id },
+          query: { "force" => force, "preflight_ack" => preflight_ack },
           app_id: app_id,
           response: "Campaign",
           request_options: request_options

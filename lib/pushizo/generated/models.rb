@@ -1232,6 +1232,8 @@ module Pushizo
       field "updated_at", :updated_at, :string
       # Zorunlu.
       field "estimated_recipients", :estimated_recipients, :integer
+      # Zorunlu.
+      field "preflight", :preflight, "CampaignPreflight"
     end
 
     # CampaignAbTest şeması.
@@ -1340,6 +1342,68 @@ module Pushizo
       field "next_cursor", :next_cursor, :string
       # Zorunlu.
       field "has_more", :has_more, :boolean
+    end
+
+    # CampaignPreflight şeması.
+    class CampaignPreflight < Pushizo::BaseModel
+      # Zorunlu.
+      field "checked_at", :checked_at, :string
+      # Zorunlu.
+      field "summary", :summary, "CampaignPreflightSummary"
+      # Zorunlu.
+      field "codes", :codes, [:array, :string]
+      field "acknowledged_by", :acknowledged_by, :string
+      field "acknowledged_at", :acknowledged_at, :string
+    end
+
+    # CampaignPreflightReport şeması.
+    class CampaignPreflightReport < Pushizo::BaseModel
+      # Zorunlu.
+      field "campaign_id", :campaign_id, :string
+      # Zorunlu.
+      field "checked_at", :checked_at, :string
+      # Zorunlu.
+      field "links_checked", :links_checked, :boolean
+      # Zorunlu.
+      field "summary", :summary, "CampaignPreflightReportSummary"
+      # Zorunlu.
+      field "findings", :findings, [:array, "CampaignPreflightReportFindingsItem"]
+    end
+
+    # CampaignPreflightReportFindingsItem şeması.
+    class CampaignPreflightReportFindingsItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "brand_name_casing", "off_brand_color", "off_brand_font", "banned_phrase", "phishing_term", "link_invalid", "link_insecure_http", "link_unsafe_host", "link_shortener", "link_missing_utm", "link_broken", "link_unreachable", "liquid_syntax_error", "liquid_missing_default", "liquid_unknown_variable", "liquid_undefined_property", "commercial_no_category", "iys_sms_filter_informational", "sms_missing_opt_out", "email_missing_postal_address", "send_time_outside_hours".
+      field "code", :code, :string
+      # Zorunlu. Değerler: "brand", "content", "links", "personalization", "compliance".
+      field "category", :category, :string
+      # Zorunlu. Değerler: "critical", "warning", "info".
+      field "severity", :severity, :string
+      field "field", :field, :string
+      field "params", :params, [:map, :any]
+    end
+
+    # CampaignPreflightReportSummary şeması.
+    class CampaignPreflightReportSummary < Pushizo::BaseModel
+      # Zorunlu.
+      field "critical", :critical, :integer
+      # Zorunlu.
+      field "warning", :warning, :integer
+      # Zorunlu.
+      field "info", :info, :integer
+      # Zorunlu.
+      field "blocked", :blocked, :boolean
+    end
+
+    # CampaignPreflightSummary şeması.
+    class CampaignPreflightSummary < Pushizo::BaseModel
+      # Zorunlu.
+      field "critical", :critical, :integer
+      # Zorunlu.
+      field "warning", :warning, :integer
+      # Zorunlu.
+      field "info", :info, :integer
+      # Zorunlu.
+      field "blocked", :blocked, :boolean
     end
 
     # CampaignRecurrence şeması.
