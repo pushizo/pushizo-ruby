@@ -7973,6 +7973,8 @@ module Pushizo
       field "created_at", :created_at, :string
       # Zorunlu.
       field "updated_at", :updated_at, :string
+      # Zorunlu.
+      field "sql", :sql, "SegmentSql"
     end
 
     # SegmentCampaigns şeması.
@@ -8076,6 +8078,20 @@ module Pushizo
       field "all", :all, [:array, [:map, :any]]
       field "any", :any, [:array, [:map, :any]]
       field "none", :none, [:array, [:map, :any]]
+    end
+
+    # SegmentSql şeması.
+    class SegmentSql < Pushizo::BaseModel
+      # Zorunlu.
+      field "query", :query, :string
+      # Zorunlu.
+      field "refresh_interval_minutes", :refresh_interval_minutes, :integer
+      # Zorunlu.
+      field "refreshed_at", :refreshed_at, :string
+      # Zorunlu.
+      field "member_count", :member_count, :integer
+      # Zorunlu.
+      field "last_error", :last_error, :string
     end
 
     # SegmentsUpdateBody şeması.
