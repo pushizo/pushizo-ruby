@@ -150,6 +150,36 @@ module Pushizo
 
     # Kullanıcı oluşturma/güncelleme (tag, özellik), arama ve abonelik ekleme.
     class Users < Pushizo::BaseResource
+      # Kişinin şirketleri
+      #
+      # GET /v1/apps/{appId}/users/{userId}/companies
+      #
+      # En son bağlanan şirket önce (şablonda company bu şirkettir).
+      def for_user(user_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/users/{userId}/companies",
+          path_params: { "userId" => user_id },
+          app_id: app_id,
+          response: "UserCompanyList",
+          request_options: request_options
+        )
+      end
+
+      # Kişinin şirketleri (external_id veya alias ile)
+      #
+      # GET /v1/apps/{appId}/users/by/{label}/{value}/companies
+      #
+      # label: hs_id, external_id veya özel alias etiketi.
+      def for_user_alias(label, value, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/users/by/{label}/{value}/companies",
+          path_params: { "label" => label, "value" => value },
+          app_id: app_id,
+          response: "UserCompanyList",
+          request_options: request_options
+        )
+      end
+
       # Kullanıcı listesi
       #
       # GET /v1/apps/{appId}/users
@@ -569,6 +599,19 @@ module Pushizo
         )
       end
 
+      # Statik segment üyeliklerini yeniden hesapla
+      #
+      # POST /v1/apps/{appId}/segments/{segmentId}/refresh
+      def refresh(segment_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/segments/{segmentId}/refresh",
+          path_params: { "segmentId" => segment_id },
+          app_id: app_id,
+          response: "Segment",
+          request_options: request_options
+        )
+      end
+
       # Tahmini sayım
       #
       # POST /v1/apps/{appId}/segments/{segmentId}/estimate
@@ -701,6 +744,19 @@ module Pushizo
           path_params: { "templateId" => template_id },
           app_id: app_id,
           response: "TemplateVersionList",
+          request_options: request_options
+        )
+      end
+
+      # Eski sürümü geçerli yap
+      #
+      # POST /v1/apps/{appId}/templates/{templateId}/versions/{version}/revert
+      def revert(template_id, version, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/templates/{templateId}/versions/{version}/revert",
+          path_params: { "templateId" => template_id, "version" => version },
+          app_id: app_id,
+          response: "Template",
           request_options: request_options
         )
       end
@@ -2434,6 +2490,195 @@ module Pushizo
       end
     end
 
+    # affinity kaynağı.
+    class Affinity < Pushizo::BaseResource
+      # İlgi modeli
+      #
+      # GET /v1/apps/{appId}/affinity/config
+      def config(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/affinity/config",
+          path_params: {},
+          app_id: app_id,
+          response: "AffinityConfig",
+          request_options: request_options
+        )
+      end
+
+      # İlgi modelini ayarla
+      #
+      # PUT /v1/apps/{appId}/affinity/config
+      #
+      # Model açıksa ilgiler kayıttan sonra yeniden hesaplanır.
+      def update(body, app_id: nil, request_options: nil)
+        @client.call(
+          :put, "/v1/apps/{appId}/affinity/config",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "AffinityConfig",
+          request_options: request_options
+        )
+      end
+
+      # İlgileri yeniden hesapla
+      #
+      # POST /v1/apps/{appId}/affinity/compute
+      def compute(app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/affinity/compute",
+          path_params: {},
+          app_id: app_id,
+          response: "AffinityConfig",
+          request_options: request_options
+        )
+      end
+
+      # Özellik başına en yaygın ilgiler
+      #
+      # GET /v1/apps/{appId}/affinity/overview
+      def overview(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/affinity/overview",
+          path_params: {},
+          app_id: app_id,
+          response: "AffinityOverview",
+          request_options: request_options
+        )
+      end
+
+      # Kişinin ilgileri ve haftalık sıklık sınırı
+      #
+      # GET /v1/apps/{appId}/affinity/users/{userId}
+      def user(user_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/affinity/users/{userId}",
+          path_params: { "userId" => user_id },
+          app_id: app_id,
+          response: "UserAffinity",
+          request_options: request_options
+        )
+      end
+    end
+
+    # aiAgents kaynağı.
+    class AiAgents < Pushizo::BaseResource
+      # AI ajanları
+      #
+      # GET /v1/apps/{appId}/ai-agents
+      def list(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ai-agents",
+          path_params: {},
+          app_id: app_id,
+          response: "AiAgentList",
+          request_options: request_options
+        )
+      end
+
+      # AI ajanı oluştur
+      #
+      # POST /v1/apps/{appId}/ai-agents
+      def create(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/ai-agents",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "AiAgentWithSecret",
+          request_options: request_options
+        )
+      end
+
+      # AI ajanı çalışma kayıtları
+      #
+      # GET /v1/apps/{appId}/ai-agents/runs
+      #
+      # @param status Değerler: "pending", "replied", "handed_off", "skipped_cap", "failed".
+      def runs(agent_id: nil, conversation_id: nil, status: nil, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ai-agents/runs",
+          path_params: {},
+          query: { "agent_id" => agent_id, "conversation_id" => conversation_id, "status" => status, "limit" => limit, "cursor" => cursor },
+          app_id: app_id,
+          response: "AiAgentRunList",
+          request_options: request_options
+        )
+      end
+
+      # runs sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def runs_all(agent_id: nil, conversation_id: nil, status: nil, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          runs(agent_id: agent_id, conversation_id: conversation_id, status: status, limit: limit, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+
+      # AI ajanı
+      #
+      # GET /v1/apps/{appId}/ai-agents/{agentId}
+      def get(agent_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ai-agents/{agentId}",
+          path_params: { "agentId" => agent_id },
+          app_id: app_id,
+          response: "AiAgent",
+          request_options: request_options
+        )
+      end
+
+      # AI ajanını güncelle
+      #
+      # PATCH /v1/apps/{appId}/ai-agents/{agentId}
+      def update(agent_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/ai-agents/{agentId}",
+          path_params: { "agentId" => agent_id },
+          body: body,
+          app_id: app_id,
+          response: "AiAgent",
+          request_options: request_options
+        )
+      end
+
+      # AI ajanını sil
+      #
+      # DELETE /v1/apps/{appId}/ai-agents/{agentId}
+      def delete(agent_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/ai-agents/{agentId}",
+          path_params: { "agentId" => agent_id },
+          app_id: app_id,
+          request_options: request_options
+        )
+      end
+
+      # Araç imza anahtarını yenile
+      #
+      # POST /v1/apps/{appId}/ai-agents/{agentId}/rotate-secret
+      def rotate(agent_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/ai-agents/{agentId}/rotate-secret",
+          path_params: { "agentId" => agent_id },
+          app_id: app_id,
+          response: "AiAgentWithSecret",
+          request_options: request_options
+        )
+      end
+
+      # AI ajanı ölçümleri (son 30 gün)
+      #
+      # GET /v1/apps/{appId}/ai-agents/{agentId}/metrics
+      def metrics(agent_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ai-agents/{agentId}/metrics",
+          path_params: { "agentId" => agent_id },
+          app_id: app_id,
+          response: "AiAgentMetrics",
+          request_options: request_options
+        )
+      end
+    end
+
     # cannedResponses kaynağı.
     class CannedResponses < Pushizo::BaseResource
       # Hazır yanıtlar
@@ -2782,6 +3027,172 @@ module Pushizo
       end
     end
 
+    # companies kaynağı.
+    class Companies < Pushizo::BaseResource
+      # Şirket listesi
+      #
+      # GET /v1/apps/{appId}/companies
+      #
+      # Ad, harici kimlik veya alan adında arama; en yeni önce.
+      def list(limit: nil, cursor: nil, q: nil, external_id: nil, domain: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/companies",
+          path_params: {},
+          query: { "limit" => limit, "cursor" => cursor, "q" => q, "external_id" => external_id, "domain" => domain },
+          app_id: app_id,
+          response: "CompanyList",
+          request_options: request_options
+        )
+      end
+
+      # list sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def list_all(limit: nil, cursor: nil, q: nil, external_id: nil, domain: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          list(limit: limit, q: q, external_id: external_id, domain: domain, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+
+      # Şirket oluştur/güncelle (external_id ile)
+      #
+      # POST /v1/apps/{appId}/companies
+      #
+      # Aynı external_id varsa ad, alan adı ve özellikler güncellenir; özellikler merge-patch (null siler).
+      def upsert(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/companies",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "Company",
+          request_options: request_options
+        )
+      end
+
+      # Şirketleri toplu oluştur/güncelle
+      #
+      # POST /v1/apps/{appId}/companies/batch
+      #
+      # İstek başına en çok 1000 şirket; her biri external_id ile upsert edilir.
+      def batch(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/companies/batch",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "CompanyBatchResult",
+          request_options: request_options
+        )
+      end
+
+      # Şirket detayı
+      #
+      # GET /v1/apps/{appId}/companies/{companyId}
+      def get(company_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/companies/{companyId}",
+          path_params: { "companyId" => company_id },
+          app_id: app_id,
+          response: "Company",
+          request_options: request_options
+        )
+      end
+
+      # Şirketi güncelle
+      #
+      # PATCH /v1/apps/{appId}/companies/{companyId}
+      def update(company_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/companies/{companyId}",
+          path_params: { "companyId" => company_id },
+          body: body,
+          app_id: app_id,
+          response: "Company",
+          request_options: request_options
+        )
+      end
+
+      # Şirketi sil
+      #
+      # DELETE /v1/apps/{appId}/companies/{companyId}
+      #
+      # Üyelikler silinir; kişiler kalır.
+      def delete(company_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/companies/{companyId}",
+          path_params: { "companyId" => company_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+
+      # Şirketin kişileri
+      #
+      # GET /v1/apps/{appId}/companies/{companyId}/members
+      def members(company_id, limit: nil, cursor: nil, role: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/companies/{companyId}/members",
+          path_params: { "companyId" => company_id },
+          query: { "limit" => limit, "cursor" => cursor, "role" => role },
+          app_id: app_id,
+          response: "CompanyMemberList",
+          request_options: request_options
+        )
+      end
+
+      # members sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def members_all(company_id, limit: nil, cursor: nil, role: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          members(company_id, limit: limit, role: role, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+
+      # Şirkete toplu kişi ekle
+      #
+      # POST /v1/apps/{appId}/companies/{companyId}/members/batch
+      #
+      # Kişi user_id veya kişinin external_id değeriyle verilir; bulunamayanlar yanıtta listelenir.
+      def batch_members(company_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/companies/{companyId}/members/batch",
+          path_params: { "companyId" => company_id },
+          body: body,
+          app_id: app_id,
+          response: "CompanyMemberBatchResult",
+          request_options: request_options
+        )
+      end
+
+      # Kişiyi şirkete bağla veya rolünü değiştir
+      #
+      # PUT /v1/apps/{appId}/companies/{companyId}/members/{userId}
+      #
+      # Rol verilmezse yeni üyelik member olur, mevcut üyelik rolünü korur.
+      def set_member(company_id, user_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :put, "/v1/apps/{appId}/companies/{companyId}/members/{userId}",
+          path_params: { "companyId" => company_id, "userId" => user_id },
+          body: body,
+          app_id: app_id,
+          response: "CompanyMember",
+          request_options: request_options
+        )
+      end
+
+      # Kişiyi şirketten çıkar
+      #
+      # DELETE /v1/apps/{appId}/companies/{companyId}/members/{userId}
+      def remove_member(company_id, user_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/companies/{companyId}/members/{userId}",
+          path_params: { "companyId" => company_id, "userId" => user_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+    end
+
     # contentTables kaynağı.
     class ContentTables < Pushizo::BaseResource
       # İçerik tabloları
@@ -3033,6 +3444,134 @@ module Pushizo
       end
     end
 
+    # customAgents kaynağı.
+    class CustomAgents < Pushizo::BaseResource
+      # Özel AI ajanları
+      #
+      # GET /v1/apps/{appId}/custom-agents
+      def list(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/custom-agents",
+          path_params: {},
+          app_id: app_id,
+          response: "CustomAgentList",
+          request_options: request_options
+        )
+      end
+
+      # Özel AI ajanı oluştur
+      #
+      # POST /v1/apps/{appId}/custom-agents
+      def create(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/custom-agents",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "CustomAgent",
+          request_options: request_options
+        )
+      end
+
+      # Özel AI ajanı çalışma kayıtları
+      #
+      # GET /v1/apps/{appId}/custom-agents/runs
+      #
+      # @param status Değerler: "pending", "running", "succeeded", "failed", "skipped".
+      def runs(agent_id: nil, status: nil, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/custom-agents/runs",
+          path_params: {},
+          query: { "agent_id" => agent_id, "status" => status, "limit" => limit, "cursor" => cursor },
+          app_id: app_id,
+          response: "CustomAgentRunList",
+          request_options: request_options
+        )
+      end
+
+      # runs sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def runs_all(agent_id: nil, status: nil, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          runs(agent_id: agent_id, status: status, limit: limit, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+
+      # Özel AI ajanı taslakları
+      #
+      # GET /v1/apps/{appId}/custom-agents/drafts
+      #
+      # @param status Değerler: "pending", "applied", "dismissed".
+      def drafts(agent_id: nil, run_id: nil, status: nil, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/custom-agents/drafts",
+          path_params: {},
+          query: { "agent_id" => agent_id, "run_id" => run_id, "status" => status, "limit" => limit, "cursor" => cursor },
+          app_id: app_id,
+          response: "CustomAgentDraftList",
+          request_options: request_options
+        )
+      end
+
+      # drafts sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def drafts_all(agent_id: nil, run_id: nil, status: nil, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          drafts(agent_id: agent_id, run_id: run_id, status: status, limit: limit, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+
+      # Özel AI ajanı
+      #
+      # GET /v1/apps/{appId}/custom-agents/{agentId}
+      def get(agent_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/custom-agents/{agentId}",
+          path_params: { "agentId" => agent_id },
+          app_id: app_id,
+          response: "CustomAgent",
+          request_options: request_options
+        )
+      end
+
+      # Özel AI ajanını güncelle
+      #
+      # PATCH /v1/apps/{appId}/custom-agents/{agentId}
+      def update(agent_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/custom-agents/{agentId}",
+          path_params: { "agentId" => agent_id },
+          body: body,
+          app_id: app_id,
+          response: "CustomAgent",
+          request_options: request_options
+        )
+      end
+
+      # Özel AI ajanını sil
+      #
+      # DELETE /v1/apps/{appId}/custom-agents/{agentId}
+      def delete(agent_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/custom-agents/{agentId}",
+          path_params: { "agentId" => agent_id },
+          app_id: app_id,
+          request_options: request_options
+        )
+      end
+
+      # Özel AI ajanını şimdi çalıştır
+      #
+      # POST /v1/apps/{appId}/custom-agents/{agentId}/run
+      def run(agent_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/custom-agents/{agentId}/run",
+          path_params: { "agentId" => agent_id },
+          app_id: app_id,
+          response: "CustomAgentRun",
+          request_options: request_options
+        )
+      end
+    end
+
     # dataFeeds kaynağı.
     class DataFeeds < Pushizo::BaseResource
       # Data feed listesi
@@ -3114,6 +3653,240 @@ module Pushizo
           body: body,
           app_id: app_id,
           response: "DataFeedTestResult",
+          request_options: request_options
+        )
+      end
+    end
+
+    # dataPipelines kaynağı.
+    class DataPipelines < Pushizo::BaseResource
+      # Veri dönüştürmeleri
+      #
+      # GET /v1/apps/{appId}/data-pipelines/transforms
+      #
+      # @param target Değerler: "event", "person".
+      def list_transforms(target: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/data-pipelines/transforms",
+          path_params: {},
+          query: { "target" => target },
+          app_id: app_id,
+          response: "DataTransformList",
+          request_options: request_options
+        )
+      end
+
+      # Veri dönüştürmesi oluştur
+      #
+      # POST /v1/apps/{appId}/data-pipelines/transforms
+      def create_transform(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/data-pipelines/transforms",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "DataTransform",
+          request_options: request_options
+        )
+      end
+
+      # Dönüştürme önizlemesi (örnek kayıtla kuru çalıştırma)
+      #
+      # POST /v1/apps/{appId}/data-pipelines/transforms/preview
+      def preview(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/data-pipelines/transforms/preview",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "DataTransformPreview",
+          request_options: request_options
+        )
+      end
+
+      # Veri dönüştürmesi
+      #
+      # GET /v1/apps/{appId}/data-pipelines/transforms/{transformId}
+      def get_transform(transform_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/data-pipelines/transforms/{transformId}",
+          path_params: { "transformId" => transform_id },
+          app_id: app_id,
+          response: "DataTransform",
+          request_options: request_options
+        )
+      end
+
+      # Veri dönüştürmesini güncelle
+      #
+      # PATCH /v1/apps/{appId}/data-pipelines/transforms/{transformId}
+      def update_transform(transform_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/data-pipelines/transforms/{transformId}",
+          path_params: { "transformId" => transform_id },
+          body: body,
+          app_id: app_id,
+          response: "DataTransform",
+          request_options: request_options
+        )
+      end
+
+      # Veri dönüştürmesini sil
+      #
+      # DELETE /v1/apps/{appId}/data-pipelines/transforms/{transformId}
+      def remove_transform(transform_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/data-pipelines/transforms/{transformId}",
+          path_params: { "transformId" => transform_id },
+          app_id: app_id,
+          request_options: request_options
+        )
+      end
+
+      # Veri kaynakları (webhook ve HTTP pull)
+      #
+      # GET /v1/apps/{appId}/data-pipelines/sources
+      def list_sources(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/data-pipelines/sources",
+          path_params: {},
+          app_id: app_id,
+          response: "DataSourceList",
+          request_options: request_options
+        )
+      end
+
+      # Veri kaynağı oluştur
+      #
+      # POST /v1/apps/{appId}/data-pipelines/sources
+      #
+      # Webhook kaynağının imza/erişim anahtarı yalnız bu yanıtta döner.
+      def create_source(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/data-pipelines/sources",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "DataSourceWithSecret",
+          request_options: request_options
+        )
+      end
+
+      # Veri kaynağı
+      #
+      # GET /v1/apps/{appId}/data-pipelines/sources/{sourceId}
+      def get_source(source_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/data-pipelines/sources/{sourceId}",
+          path_params: { "sourceId" => source_id },
+          app_id: app_id,
+          response: "DataSource",
+          request_options: request_options
+        )
+      end
+
+      # Veri kaynağını güncelle
+      #
+      # PATCH /v1/apps/{appId}/data-pipelines/sources/{sourceId}
+      def update_source(source_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/data-pipelines/sources/{sourceId}",
+          path_params: { "sourceId" => source_id },
+          body: body,
+          app_id: app_id,
+          response: "DataSource",
+          request_options: request_options
+        )
+      end
+
+      # Veri kaynağını sil
+      #
+      # DELETE /v1/apps/{appId}/data-pipelines/sources/{sourceId}
+      def remove_source(source_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/data-pipelines/sources/{sourceId}",
+          path_params: { "sourceId" => source_id },
+          app_id: app_id,
+          request_options: request_options
+        )
+      end
+
+      # Webhook kaynağı anahtarını yenile
+      #
+      # POST /v1/apps/{appId}/data-pipelines/sources/{sourceId}/rotate-secret
+      def rotate(source_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/data-pipelines/sources/{sourceId}/rotate-secret",
+          path_params: { "sourceId" => source_id },
+          app_id: app_id,
+          response: "DataSourceWithSecret",
+          request_options: request_options
+        )
+      end
+
+      # HTTP pull kaynağını şimdi çalıştır
+      #
+      # POST /v1/apps/{appId}/data-pipelines/sources/{sourceId}/run
+      def run(source_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/data-pipelines/sources/{sourceId}/run",
+          path_params: { "sourceId" => source_id },
+          app_id: app_id,
+          response: "DataSourceRunResult",
+          request_options: request_options
+        )
+      end
+
+      # Karantinadaki kayıtlar
+      #
+      # GET /v1/apps/{appId}/data-pipelines/quarantine
+      #
+      # @param status Değerler: "pending", "reprocessed", "discarded".
+      # @param target Değerler: "event", "person".
+      def quarantine(status: nil, target: nil, source_id: nil, transform_id: nil, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/data-pipelines/quarantine",
+          path_params: {},
+          query: { "status" => status, "target" => target, "source_id" => source_id, "transform_id" => transform_id, "limit" => limit, "cursor" => cursor },
+          app_id: app_id,
+          response: "DataQuarantineList",
+          request_options: request_options
+        )
+      end
+
+      # quarantine sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def quarantine_all(status: nil, target: nil, source_id: nil, transform_id: nil, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          quarantine(status: status, target: target, source_id: source_id, transform_id: transform_id, limit: limit, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+
+      # Karantinadaki kayıtları yeniden işle
+      #
+      # POST /v1/apps/{appId}/data-pipelines/quarantine/reprocess
+      #
+      # Kimlik verilmezse bekleyen en eski 500 kayıt işlenir.
+      def reprocess(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/data-pipelines/quarantine/reprocess",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "DataQuarantineReprocessResult",
+          request_options: request_options
+        )
+      end
+
+      # Karantinadaki kayıtları yeniden işlemeden kapat
+      #
+      # POST /v1/apps/{appId}/data-pipelines/quarantine/discard
+      def discard(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/data-pipelines/quarantine/discard",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "DataQuarantineDiscardResult",
           request_options: request_options
         )
       end
@@ -3506,6 +4279,33 @@ module Pushizo
           path_params: { "formId" => form_id },
           app_id: app_id,
           response: "Form",
+          request_options: request_options
+        )
+      end
+
+      # Formu düzenle
+      #
+      # PATCH /v1/apps/{appId}/forms/{formId}
+      def update(form_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/forms/{formId}",
+          path_params: { "formId" => form_id },
+          body: body,
+          app_id: app_id,
+          response: "Form",
+          request_options: request_options
+        )
+      end
+
+      # Formu sil (gönderimleriyle birlikte)
+      #
+      # DELETE /v1/apps/{appId}/forms/{formId}
+      def delete(form_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/forms/{formId}",
+          path_params: { "formId" => form_id },
+          app_id: app_id,
+          response: "Ok",
           request_options: request_options
         )
       end
@@ -4099,6 +4899,20 @@ module Pushizo
         end
       end
 
+      # Landing sayfası oluştur (taslak)
+      #
+      # POST /v1/apps/{appId}/landing-pages
+      def create(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/landing-pages",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "LandingPage",
+          request_options: request_options
+        )
+      end
+
       # Landing sayfası detayı
       #
       # GET /v1/apps/{appId}/landing-pages/{pageId}
@@ -4108,6 +4922,33 @@ module Pushizo
           path_params: { "pageId" => page_id },
           app_id: app_id,
           response: "LandingPage",
+          request_options: request_options
+        )
+      end
+
+      # Taslağı düzenle (yayındaki sürüm değişmez)
+      #
+      # PATCH /v1/apps/{appId}/landing-pages/{pageId}
+      def update(page_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/landing-pages/{pageId}",
+          path_params: { "pageId" => page_id },
+          body: body,
+          app_id: app_id,
+          response: "LandingPage",
+          request_options: request_options
+        )
+      end
+
+      # Landing sayfasını sil
+      #
+      # DELETE /v1/apps/{appId}/landing-pages/{pageId}
+      def delete(page_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/landing-pages/{pageId}",
+          path_params: { "pageId" => page_id },
+          app_id: app_id,
+          response: "Ok",
           request_options: request_options
         )
       end
@@ -4132,6 +4973,45 @@ module Pushizo
         @client.call(
           :post, "/v1/apps/{appId}/landing-pages/{pageId}/unpublish",
           path_params: { "pageId" => page_id },
+          app_id: app_id,
+          response: "LandingPage",
+          request_options: request_options
+        )
+      end
+
+      # Arşivle (yayından kalkar, kotadan düşer)
+      #
+      # POST /v1/apps/{appId}/landing-pages/{pageId}/archive
+      def archive(page_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/landing-pages/{pageId}/archive",
+          path_params: { "pageId" => page_id },
+          app_id: app_id,
+          response: "LandingPage",
+          request_options: request_options
+        )
+      end
+
+      # Yayın sürümleri
+      #
+      # GET /v1/apps/{appId}/landing-pages/{pageId}/versions
+      def versions(page_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/landing-pages/{pageId}/versions",
+          path_params: { "pageId" => page_id },
+          app_id: app_id,
+          response: "LandingPageVersions",
+          request_options: request_options
+        )
+      end
+
+      # Sürümü taslağa geri yükle
+      #
+      # POST /v1/apps/{appId}/landing-pages/{pageId}/versions/{version}/restore
+      def restore(page_id, version, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/landing-pages/{pageId}/versions/{version}/restore",
+          path_params: { "pageId" => page_id, "version" => version },
           app_id: app_id,
           response: "LandingPage",
           request_options: request_options
@@ -4310,6 +5190,62 @@ module Pushizo
           body: body,
           app_id: app_id,
           response: "InAppMessage",
+          request_options: request_options
+        )
+      end
+
+      # Web kampanyası taslağı oluştur (MCP onaylı mod; yayımlanmaz)
+      #
+      # POST /v1/apps/{appId}/mcp/web-campaign-drafts
+      def create_web_campaign_draft(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/mcp/web-campaign-drafts",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "WebCampaign",
+          request_options: request_options
+        )
+      end
+
+      # Web kişiselleştirme taslağı oluştur (MCP onaylı mod; yayımlanmaz)
+      #
+      # POST /v1/apps/{appId}/mcp/web-personalization-drafts
+      def create_web_personalization_draft(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/mcp/web-personalization-drafts",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "WebPersonalization",
+          request_options: request_options
+        )
+      end
+
+      # Anket taslağı oluştur (MCP onaylı mod; etkinleştirilmez)
+      #
+      # POST /v1/apps/{appId}/mcp/survey-drafts
+      def create_survey_draft(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/mcp/survey-drafts",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "Survey",
+          request_options: request_options
+        )
+      end
+
+      # Landing sayfası taslağı oluştur (MCP onaylı mod; yayımlanmaz)
+      #
+      # POST /v1/apps/{appId}/mcp/landing-page-drafts
+      def create_landing_page_draft(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/mcp/landing-page-drafts",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "LandingPage",
           request_options: request_options
         )
       end
@@ -5084,6 +6020,113 @@ module Pushizo
       end
     end
 
+    # sql kaynağı.
+    class Sql < Pushizo::BaseResource
+      # SQL görünümleri ve sınırlar
+      #
+      # GET /v1/apps/{appId}/sql/schema
+      def schema(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/sql/schema",
+          path_params: {},
+          app_id: app_id,
+          response: "SqlSchema",
+          request_options: request_options
+        )
+      end
+
+      # Salt okunur SQL sorgusu çalıştır
+      #
+      # POST /v1/apps/{appId}/sql/query
+      def run(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/sql/query",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "SqlQueryResult",
+          request_options: request_options
+        )
+      end
+
+      # SQL sorgu kaydı
+      #
+      # GET /v1/apps/{appId}/sql/runs
+      #
+      # @param status Değerler: "ok", "rejected", "timeout", "failed".
+      def runs(segment_id: nil, status: nil, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/sql/runs",
+          path_params: {},
+          query: { "segment_id" => segment_id, "status" => status, "limit" => limit, "cursor" => cursor },
+          app_id: app_id,
+          response: "SqlRunList",
+          request_options: request_options
+        )
+      end
+
+      # runs sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def runs_all(segment_id: nil, status: nil, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          runs(segment_id: segment_id, status: status, limit: limit, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+
+      # SQL segmentleri
+      #
+      # GET /v1/apps/{appId}/sql/segments
+      def list_segments(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/sql/segments",
+          path_params: {},
+          app_id: app_id,
+          response: "SqlSegmentList",
+          request_options: request_options
+        )
+      end
+
+      # Sorgu sonucunu segment olarak kaydet
+      #
+      # POST /v1/apps/{appId}/sql/segments
+      def create_segment(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/sql/segments",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "Segment",
+          request_options: request_options
+        )
+      end
+
+      # SQL segmentini güncelle
+      #
+      # PATCH /v1/apps/{appId}/sql/segments/{segmentId}
+      def update_segment(segment_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/sql/segments/{segmentId}",
+          path_params: { "segmentId" => segment_id },
+          body: body,
+          app_id: app_id,
+          response: "Segment",
+          request_options: request_options
+        )
+      end
+
+      # SQL segmentini şimdi yenile
+      #
+      # POST /v1/apps/{appId}/sql/segments/{segmentId}/refresh
+      def refresh(segment_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/sql/segments/{segmentId}/refresh",
+          path_params: { "segmentId" => segment_id },
+          app_id: app_id,
+          response: "Segment",
+          request_options: request_options
+        )
+      end
+    end
+
     # surveys kaynağı.
     class Surveys < Pushizo::BaseResource
       # Anketler
@@ -5132,6 +6175,33 @@ module Pushizo
           path_params: { "surveyId" => survey_id },
           app_id: app_id,
           response: "Survey",
+          request_options: request_options
+        )
+      end
+
+      # Anketi düzenle (bağlı in-app mesajı yenilenir)
+      #
+      # PATCH /v1/apps/{appId}/surveys/{surveyId}
+      def update(survey_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/surveys/{surveyId}",
+          path_params: { "surveyId" => survey_id },
+          body: body,
+          app_id: app_id,
+          response: "Survey",
+          request_options: request_options
+        )
+      end
+
+      # Anketi sil (yanıtları ve bağlı in-app mesajıyla birlikte)
+      #
+      # DELETE /v1/apps/{appId}/surveys/{surveyId}
+      def delete(survey_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/surveys/{surveyId}",
+          path_params: { "surveyId" => survey_id },
+          app_id: app_id,
+          response: "Ok",
           request_options: request_options
         )
       end
@@ -5806,6 +6876,19 @@ module Pushizo
         )
       end
 
+      # Web kampanyasını sil (olaylarıyla birlikte)
+      #
+      # DELETE /v1/apps/{appId}/web-campaigns/{campaignId}
+      def delete(campaign_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/web-campaigns/{campaignId}",
+          path_params: { "campaignId" => campaign_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+
       # Günlük seri
       #
       # GET /v1/apps/{appId}/web-campaigns/{campaignId}/report
@@ -5826,6 +6909,20 @@ module Pushizo
       def status(campaign_id, body, app_id: nil, request_options: nil)
         @client.call(
           :post, "/v1/apps/{appId}/web-campaigns/{campaignId}/status",
+          path_params: { "campaignId" => campaign_id },
+          body: body,
+          app_id: app_id,
+          response: "WebCampaign",
+          request_options: request_options
+        )
+      end
+
+      # A/B kazananını seç (SDK yalnızca kazanan görünümü sunar)
+      #
+      # POST /v1/apps/{appId}/web-campaigns/{campaignId}/winner
+      def winner(campaign_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/web-campaigns/{campaignId}/winner",
           path_params: { "campaignId" => campaign_id },
           body: body,
           app_id: app_id,
@@ -5901,6 +6998,19 @@ module Pushizo
         )
       end
 
+      # Kişiselleştirme deneyimini sil (olaylarıyla birlikte)
+      #
+      # DELETE /v1/apps/{appId}/web-personalizations/{personalizationId}
+      def delete(personalization_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/web-personalizations/{personalizationId}",
+          path_params: { "personalizationId" => personalization_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+
       # Günlük seri
       #
       # GET /v1/apps/{appId}/web-personalizations/{personalizationId}/report
@@ -5921,6 +7031,20 @@ module Pushizo
       def status(personalization_id, body, app_id: nil, request_options: nil)
         @client.call(
           :post, "/v1/apps/{appId}/web-personalizations/{personalizationId}/status",
+          path_params: { "personalizationId" => personalization_id },
+          body: body,
+          app_id: app_id,
+          response: "WebPersonalization",
+          request_options: request_options
+        )
+      end
+
+      # A/B kazananını seç (SDK yalnız kazananın değişikliklerini uygular)
+      #
+      # POST /v1/apps/{appId}/web-personalizations/{personalizationId}/winner
+      def winner(personalization_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/web-personalizations/{personalizationId}/winner",
           path_params: { "personalizationId" => personalization_id },
           body: body,
           app_id: app_id,
@@ -5966,7 +7090,7 @@ module Pushizo
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "1.1.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories channel_scores content_tables conversations data_feeds decision_agents email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp messenger_links predictions preferences promo_code_lists recommendations reverse_etl rfm site_search sms_keywords surveys verify wallet warehouse_exports warehouse_segments web_campaigns web_personalizations whatsapp].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads affinity ai_agents canned_responses catalogs categories channel_scores companies content_tables conversations custom_agents data_feeds data_pipelines decision_agents email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp messenger_links predictions preferences promo_code_lists recommendations reverse_etl rfm site_search sms_keywords sql surveys verify wallet warehouse_exports warehouse_segments web_campaigns web_personalizations whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -6067,6 +7191,14 @@ module Pushizo
       @ads ||= Pushizo::Resources::Ads.new(self)
     end
 
+    def affinity
+      @affinity ||= Pushizo::Resources::Affinity.new(self)
+    end
+
+    def ai_agents
+      @ai_agents ||= Pushizo::Resources::AiAgents.new(self)
+    end
+
     def canned_responses
       @canned_responses ||= Pushizo::Resources::CannedResponses.new(self)
     end
@@ -6083,6 +7215,10 @@ module Pushizo
       @channel_scores ||= Pushizo::Resources::ChannelScores.new(self)
     end
 
+    def companies
+      @companies ||= Pushizo::Resources::Companies.new(self)
+    end
+
     def content_tables
       @content_tables ||= Pushizo::Resources::ContentTables.new(self)
     end
@@ -6091,8 +7227,16 @@ module Pushizo
       @conversations ||= Pushizo::Resources::Conversations.new(self)
     end
 
+    def custom_agents
+      @custom_agents ||= Pushizo::Resources::CustomAgents.new(self)
+    end
+
     def data_feeds
       @data_feeds ||= Pushizo::Resources::DataFeeds.new(self)
+    end
+
+    def data_pipelines
+      @data_pipelines ||= Pushizo::Resources::DataPipelines.new(self)
     end
 
     def decision_agents
@@ -6177,6 +7321,10 @@ module Pushizo
 
     def sms_keywords
       @sms_keywords ||= Pushizo::Resources::SmsKeywords.new(self)
+    end
+
+    def sql
+      @sql ||= Pushizo::Resources::Sql.new(self)
     end
 
     def surveys
