@@ -5336,6 +5336,193 @@ module Pushizo
       end
     end
 
+    # warehouseSegments kaynağı.
+    class WarehouseSegments < Pushizo::BaseResource
+      # Ambar segmenti seçenekleri ve sınırlar
+      #
+      # GET /v1/apps/{appId}/warehouse-segments/options
+      def options(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/warehouse-segments/options",
+          path_params: {},
+          app_id: app_id,
+          response: "WarehouseSegmentOptions",
+          request_options: request_options
+        )
+      end
+
+      # Ambar bağlantıları
+      #
+      # GET /v1/apps/{appId}/warehouse-segments/connections
+      def list_connections(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/warehouse-segments/connections",
+          path_params: {},
+          app_id: app_id,
+          response: "WarehouseSegmentConnectionList",
+          request_options: request_options
+        )
+      end
+
+      # Ambar bağlantısı oluştur
+      #
+      # POST /v1/apps/{appId}/warehouse-segments/connections
+      def create_connection(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/warehouse-segments/connections",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "WarehouseSegmentConnection",
+          request_options: request_options
+        )
+      end
+
+      # Ambar bağlantısı detayı
+      #
+      # GET /v1/apps/{appId}/warehouse-segments/connections/{connectionId}
+      def get_connection(connection_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/warehouse-segments/connections/{connectionId}",
+          path_params: { "connectionId" => connection_id },
+          app_id: app_id,
+          response: "WarehouseSegmentConnection",
+          request_options: request_options
+        )
+      end
+
+      # Ambar bağlantısını güncelle
+      #
+      # PATCH /v1/apps/{appId}/warehouse-segments/connections/{connectionId}
+      def update_connection(connection_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/warehouse-segments/connections/{connectionId}",
+          path_params: { "connectionId" => connection_id },
+          body: body,
+          app_id: app_id,
+          response: "WarehouseSegmentConnection",
+          request_options: request_options
+        )
+      end
+
+      # Ambar bağlantısını sil
+      #
+      # DELETE /v1/apps/{appId}/warehouse-segments/connections/{connectionId}
+      def remove_connection(connection_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/warehouse-segments/connections/{connectionId}",
+          path_params: { "connectionId" => connection_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+
+      # Ambar bağlantısını dene
+      #
+      # POST /v1/apps/{appId}/warehouse-segments/connections/{connectionId}/test
+      def test_connection(connection_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/warehouse-segments/connections/{connectionId}/test",
+          path_params: { "connectionId" => connection_id },
+          app_id: app_id,
+          response: "WarehouseSegmentConnectionTest",
+          request_options: request_options
+        )
+      end
+
+      # Ambar sorgusunu önizle (dry-run veya örnek)
+      #
+      # POST /v1/apps/{appId}/warehouse-segments/preview
+      def preview(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/warehouse-segments/preview",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "WarehouseSegmentPreview",
+          request_options: request_options
+        )
+      end
+
+      # Ambar segmentleri
+      #
+      # GET /v1/apps/{appId}/warehouse-segments/segments
+      def list_segments(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/warehouse-segments/segments",
+          path_params: {},
+          app_id: app_id,
+          response: "WarehouseSegmentList",
+          request_options: request_options
+        )
+      end
+
+      # Ambar segmenti oluştur
+      #
+      # POST /v1/apps/{appId}/warehouse-segments/segments
+      def create_segment(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/warehouse-segments/segments",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "Segment",
+          request_options: request_options
+        )
+      end
+
+      # Ambar segmentini güncelle
+      #
+      # PATCH /v1/apps/{appId}/warehouse-segments/segments/{segmentId}
+      def update_segment(segment_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/warehouse-segments/segments/{segmentId}",
+          path_params: { "segmentId" => segment_id },
+          body: body,
+          app_id: app_id,
+          response: "Segment",
+          request_options: request_options
+        )
+      end
+
+      # Ambar segmentini yenileme kuyruğuna al
+      #
+      # POST /v1/apps/{appId}/warehouse-segments/segments/{segmentId}/refresh
+      def refresh(segment_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/warehouse-segments/segments/{segmentId}/refresh",
+          path_params: { "segmentId" => segment_id },
+          app_id: app_id,
+          response: "Segment",
+          request_options: request_options
+        )
+      end
+
+      # Ambar sorgu kaydı
+      #
+      # GET /v1/apps/{appId}/warehouse-segments/runs
+      #
+      # @param status Değerler: "ok", "rejected", "timeout", "failed".
+      def runs(segment_id: nil, connection_id: nil, status: nil, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/warehouse-segments/runs",
+          path_params: {},
+          query: { "segment_id" => segment_id, "connection_id" => connection_id, "status" => status, "limit" => limit, "cursor" => cursor },
+          app_id: app_id,
+          response: "WarehouseSegmentRunList",
+          request_options: request_options
+        )
+      end
+
+      # runs sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def runs_all(segment_id: nil, connection_id: nil, status: nil, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          runs(segment_id: segment_id, connection_id: connection_id, status: status, limit: limit, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+    end
+
     # webCampaigns kaynağı.
     class WebCampaigns < Pushizo::BaseResource
       # Web kampanyaları
@@ -5562,7 +5749,7 @@ module Pushizo
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "1.1.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories channel_scores content_tables conversations data_feeds decision_agents email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp predictions preferences promo_code_lists recommendations reverse_etl rfm sms_keywords surveys verify wallet warehouse_exports web_campaigns web_personalizations whatsapp].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories channel_scores content_tables conversations data_feeds decision_agents email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp predictions preferences promo_code_lists recommendations reverse_etl rfm sms_keywords surveys verify wallet warehouse_exports warehouse_segments web_campaigns web_personalizations whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -5781,6 +5968,10 @@ module Pushizo
 
     def warehouse_exports
       @warehouse_exports ||= Pushizo::Resources::WarehouseExports.new(self)
+    end
+
+    def warehouse_segments
+      @warehouse_segments ||= Pushizo::Resources::WarehouseSegments.new(self)
     end
 
     def web_campaigns

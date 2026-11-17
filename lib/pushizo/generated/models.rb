@@ -3680,6 +3680,44 @@ module Pushizo
       field "section", :section, :string
     end
 
+    # CreateWarehouseConnectionDto şeması.
+    class CreateWarehouseConnectionDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "bigquery", "snowflake", "databricks".
+      field "type", :type, :string
+      # Zorunlu.
+      field "config", :config, [:map, :any]
+      # Zorunlu.
+      field "credentials", :credentials, [:map, :any]
+    end
+
+    # CreateWarehouseSegmentDto şeması.
+    class CreateWarehouseSegmentDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      # Zorunlu.
+      field "connection_id", :connection_id, :string
+      # Zorunlu.
+      field "query", :query, :string
+      # Zorunlu.
+      field "id_column", :id_column, :string
+      # Değerler: "external_id", "user_id".
+      field "id_type", :id_type, :string
+      field "refresh_interval_minutes", :refresh_interval_minutes, :integer
+      field "limits", :limits, "CreateWarehouseSegmentDtoLimits"
+    end
+
+    # CreateWarehouseSegmentDtoLimits şeması.
+    class CreateWarehouseSegmentDtoLimits < Pushizo::BaseModel
+      field "timeout_seconds", :timeout_seconds, :integer
+      field "max_rows", :max_rows, :integer
+      field "max_bytes_billed", :max_bytes_billed, :integer
+      # Değerler: "X-Small", "Small", "Medium", "Large", "X-Large", "2X-Large", "3X-Large", "4X-Large", "5X-Large", "6X-Large".
+      field "max_warehouse_size", :max_warehouse_size, :string
+    end
+
     # CreateWarmupPlanDto şeması.
     class CreateWarmupPlanDto < Pushizo::BaseModel
       # Zorunlu.
@@ -7169,6 +7207,30 @@ module Pushizo
       field "bucket", :bucket, :string
     end
 
+    # PreviewWarehouseQueryDto şeması.
+    class PreviewWarehouseQueryDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "connection_id", :connection_id, :string
+      # Zorunlu.
+      field "query", :query, :string
+      # Zorunlu.
+      field "id_column", :id_column, :string
+      # Değerler: "external_id", "user_id".
+      field "id_type", :id_type, :string
+      field "limits", :limits, "PreviewWarehouseQueryDtoLimits"
+      # Değerler: "dry_run", "sample".
+      field "mode", :mode, :string
+    end
+
+    # PreviewWarehouseQueryDtoLimits şeması.
+    class PreviewWarehouseQueryDtoLimits < Pushizo::BaseModel
+      field "timeout_seconds", :timeout_seconds, :integer
+      field "max_rows", :max_rows, :integer
+      field "max_bytes_billed", :max_bytes_billed, :integer
+      # Değerler: "X-Small", "Small", "Medium", "Large", "X-Large", "2X-Large", "3X-Large", "4X-Large", "5X-Large", "6X-Large".
+      field "max_warehouse_size", :max_warehouse_size, :string
+    end
+
     # PromoCodeList şeması.
     class PromoCodeList < Pushizo::BaseModel
       # Zorunlu.
@@ -7975,6 +8037,8 @@ module Pushizo
       field "updated_at", :updated_at, :string
       # Zorunlu.
       field "sql", :sql, "SegmentSql"
+      # Zorunlu.
+      field "warehouse", :warehouse, "SegmentWarehouse"
     end
 
     # SegmentCampaigns şeması.
@@ -8108,6 +8172,46 @@ module Pushizo
       field "all", :all, [:array, [:map, :any]]
       field "any", :any, [:array, [:map, :any]]
       field "none", :none, [:array, [:map, :any]]
+    end
+
+    # SegmentWarehouse şeması.
+    class SegmentWarehouse < Pushizo::BaseModel
+      # Zorunlu.
+      field "connection_id", :connection_id, :string
+      # Zorunlu.
+      field "query", :query, :string
+      # Zorunlu.
+      field "id_column", :id_column, :string
+      # Zorunlu. Değerler: "external_id", "user_id".
+      field "id_type", :id_type, :string
+      # Zorunlu.
+      field "limits", :limits, "SegmentWarehouseLimits"
+      # Zorunlu.
+      field "refresh_interval_minutes", :refresh_interval_minutes, :integer
+      # Zorunlu. Değerler: "queued", "failed", "ok", "never".
+      field "refresh_state", :refresh_state, :string
+      # Zorunlu.
+      field "refresh_requested_at", :refresh_requested_at, :string
+      # Zorunlu.
+      field "refreshed_at", :refreshed_at, :string
+      # Zorunlu.
+      field "member_count", :member_count, :integer
+      # Zorunlu.
+      field "last_error", :last_error, :string
+      # Zorunlu.
+      field "bytes_processed", :bytes_processed, :number
+    end
+
+    # SegmentWarehouseLimits şeması.
+    class SegmentWarehouseLimits < Pushizo::BaseModel
+      # Zorunlu.
+      field "timeout_seconds", :timeout_seconds, :integer
+      # Zorunlu.
+      field "max_rows", :max_rows, :integer
+      # Zorunlu.
+      field "max_bytes_billed", :max_bytes_billed, :number
+      # Zorunlu. Değerler: "X-Small", "Small", "Medium", "Large", "X-Large", "2X-Large", "3X-Large", "4X-Large", "5X-Large", "6X-Large".
+      field "max_warehouse_size", :max_warehouse_size, :string
     end
 
     # SelectWinnerDto şeması.
@@ -9747,6 +9851,13 @@ module Pushizo
       field "section", :section, :string
     end
 
+    # UpdateWarehouseConnectionDto şeması.
+    class UpdateWarehouseConnectionDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "config", :config, [:map, :any]
+      field "credentials", :credentials, [:map, :any]
+    end
+
     # UpdateWarehouseExportDto şeması.
     class UpdateWarehouseExportDto < Pushizo::BaseModel
       field "name", :name, :string
@@ -9757,6 +9868,28 @@ module Pushizo
       field "enabled", :enabled, :boolean
       field "config", :config, [:map, :any]
       field "credentials", :credentials, [:map, :any]
+    end
+
+    # UpdateWarehouseSegmentDto şeması.
+    class UpdateWarehouseSegmentDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "description", :description, :string
+      field "connection_id", :connection_id, :string
+      field "query", :query, :string
+      field "id_column", :id_column, :string
+      # Değerler: "external_id", "user_id".
+      field "id_type", :id_type, :string
+      field "refresh_interval_minutes", :refresh_interval_minutes, :integer
+      field "limits", :limits, "UpdateWarehouseSegmentDtoLimits"
+    end
+
+    # UpdateWarehouseSegmentDtoLimits şeması.
+    class UpdateWarehouseSegmentDtoLimits < Pushizo::BaseModel
+      field "timeout_seconds", :timeout_seconds, :integer
+      field "max_rows", :max_rows, :integer
+      field "max_bytes_billed", :max_bytes_billed, :integer
+      # Değerler: "X-Small", "Small", "Medium", "Large", "X-Large", "2X-Large", "3X-Large", "4X-Large", "5X-Large", "6X-Large".
+      field "max_warehouse_size", :max_warehouse_size, :string
     end
 
     # UpdateWarmupPlanDto şeması.
@@ -10788,6 +10921,170 @@ module Pushizo
       field "ts", :ts, :string
       # Zorunlu.
       field "id", :id, :string
+    end
+
+    # WarehouseSegmentConnection şeması.
+    class WarehouseSegmentConnection < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "bigquery", "snowflake", "databricks".
+      field "type", :type, :string
+      # Zorunlu.
+      field "config", :config, [:map, :any]
+      # Zorunlu.
+      field "credentials_hint", :credentials_hint, :string
+      # Zorunlu.
+      field "segment_count", :segment_count, :integer
+      # Zorunlu.
+      field "last_tested_at", :last_tested_at, :string
+      # Zorunlu.
+      field "last_test_error", :last_test_error, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # WarehouseSegmentConnectionList şeması.
+    class WarehouseSegmentConnectionList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "WarehouseSegmentConnection"]
+    end
+
+    # WarehouseSegmentConnectionTest şeması.
+    class WarehouseSegmentConnectionTest < Pushizo::BaseModel
+      # Zorunlu.
+      field "ok", :ok, :boolean
+      # Zorunlu.
+      field "error", :error, "WarehouseSegmentConnectionTestError"
+    end
+
+    # WarehouseSegmentConnectionTestError şeması.
+    class WarehouseSegmentConnectionTestError < Pushizo::BaseModel
+      # Zorunlu.
+      field "code", :code, :string
+      # Zorunlu.
+      field "message", :message, :string
+    end
+
+    # WarehouseSegmentList şeması.
+    class WarehouseSegmentList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "Segment"]
+    end
+
+    # WarehouseSegmentOptions şeması.
+    class WarehouseSegmentOptions < Pushizo::BaseModel
+      # Zorunlu. Değerler: "bigquery", "snowflake", "databricks".
+      field "types", :types, [:array, :string]
+      # Zorunlu. Değerler: "external_id", "user_id".
+      field "id_types", :id_types, [:array, :string]
+      # Zorunlu. Değerler: "X-Small", "Small", "Medium", "Large", "X-Large", "2X-Large", "3X-Large", "4X-Large", "5X-Large", "6X-Large".
+      field "snowflake_warehouse_sizes", :snowflake_warehouse_sizes, [:array, :string]
+      # Zorunlu.
+      field "refresh_intervals", :refresh_intervals, [:array, :integer]
+      # Zorunlu.
+      field "limits", :limits, "WarehouseSegmentOptionsLimits"
+    end
+
+    # WarehouseSegmentOptionsLimits şeması.
+    class WarehouseSegmentOptionsLimits < Pushizo::BaseModel
+      # Zorunlu.
+      field "query_max", :query_max, :integer
+      # Zorunlu.
+      field "timeout_default_seconds", :timeout_default_seconds, :integer
+      # Zorunlu.
+      field "timeout_min_seconds", :timeout_min_seconds, :integer
+      # Zorunlu.
+      field "timeout_max_seconds", :timeout_max_seconds, :integer
+      # Zorunlu.
+      field "max_rows_default", :max_rows_default, :integer
+      # Zorunlu.
+      field "max_rows_max", :max_rows_max, :integer
+      # Zorunlu.
+      field "max_bytes_billed_default", :max_bytes_billed_default, :integer
+      # Zorunlu.
+      field "max_bytes_billed_min", :max_bytes_billed_min, :integer
+      # Zorunlu.
+      field "max_bytes_billed_max", :max_bytes_billed_max, :integer
+      # Zorunlu.
+      field "preview_sample", :preview_sample, :integer
+      # Zorunlu.
+      field "connections_per_app", :connections_per_app, :integer
+    end
+
+    # WarehouseSegmentPreview şeması.
+    class WarehouseSegmentPreview < Pushizo::BaseModel
+      # Zorunlu.
+      field "run_id", :run_id, :string
+      # Zorunlu. Değerler: "dry_run", "sample".
+      field "mode", :mode, :string
+      # Zorunlu.
+      field "estimated_bytes", :estimated_bytes, :number
+      # Zorunlu.
+      field "max_bytes_billed", :max_bytes_billed, :number
+      # Zorunlu.
+      field "within_limit", :within_limit, :boolean
+      # Zorunlu.
+      field "sample", :sample, [:array, :string]
+      # Zorunlu.
+      field "sample_truncated", :sample_truncated, :boolean
+      # Zorunlu.
+      field "sample_matched", :sample_matched, :integer
+      # Zorunlu.
+      field "duration_ms", :duration_ms, :integer
+    end
+
+    # WarehouseSegmentRunList şeması.
+    class WarehouseSegmentRunList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "WarehouseSegmentRunListDataItem"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
+    end
+
+    # WarehouseSegmentRunListDataItem şeması.
+    class WarehouseSegmentRunListDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "segment_id", :segment_id, :string
+      # Zorunlu.
+      field "connection_id", :connection_id, :string
+      # Zorunlu. Değerler: "bigquery", "snowflake", "databricks".
+      field "warehouse_type", :warehouse_type, :string
+      # Zorunlu. Değerler: "panel", "api", "schedule".
+      field "source", :source, :string
+      # Zorunlu.
+      field "actor_id", :actor_id, :string
+      # Zorunlu.
+      field "query", :query, :string
+      # Zorunlu.
+      field "query_hash", :query_hash, :string
+      # Zorunlu. Değerler: "ok", "rejected", "timeout", "failed".
+      field "status", :status, :string
+      # Zorunlu. Değerler: "empty", "too_long", "syntax", "multiple_statements", "not_select", "forbidden_relation", "forbidden_function", "forbidden_construct", "forbidden_type".
+      field "reason", :reason, :string
+      # Zorunlu.
+      field "error", :error, :string
+      # Zorunlu.
+      field "row_count", :row_count, :integer
+      # Zorunlu.
+      field "matched_count", :matched_count, :integer
+      # Zorunlu.
+      field "bytes_processed", :bytes_processed, :number
+      # Zorunlu.
+      field "truncated", :truncated, :boolean
+      # Zorunlu.
+      field "duration_ms", :duration_ms, :integer
+      # Zorunlu.
+      field "created_at", :created_at, :string
     end
 
     # WarehouseTables şeması.
