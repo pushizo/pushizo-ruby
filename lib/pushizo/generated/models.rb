@@ -10259,6 +10259,8 @@ module Pushizo
       field "affinities", :affinities, [:array, "UserExportDerivedAffinitiesItem"]
       # Zorunlu.
       field "frequency_cap", :frequency_cap, "UserExportDerivedFrequencyCap"
+      # Zorunlu.
+      field "companies", :companies, [:array, "UserExportDerivedCompaniesItem"]
     end
 
     # UserExportDerivedAffinitiesItem şeması.
@@ -10289,6 +10291,20 @@ module Pushizo
       field "is_best", :is_best, :boolean
       # Zorunlu.
       field "computed_at", :computed_at, :string
+    end
+
+    # UserExportDerivedCompaniesItem şeması.
+    class UserExportDerivedCompaniesItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "company_id", :company_id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "role", :role, :string
+      # Zorunlu.
+      field "joined_at", :joined_at, :string
     end
 
     # UserExportDerivedDecisionsItem şeması.
