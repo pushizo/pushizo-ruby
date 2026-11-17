@@ -1702,6 +1702,25 @@ module Pushizo
         )
       end
 
+      # Android teslimat sağlığı raporu
+      #
+      # GET /v1/apps/{appId}/analytics/android-delivery
+      #
+      # Üretici ve ROM bazında gönderildi, teslim alındı, açıldı sayıları ile gönderimden cihaza ulaşmaya kadar geçen süre. Teslim alındı cihazdaki SDK alındısından, kısıt özeti SDK teşhisinden hesaplanır.
+      #
+      # @param compare Değerler: "true", "false".
+      # @param format Değerler: "json", "csv".
+      def android_delivery_report(from: nil, to: nil, compare: nil, format: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/analytics/android-delivery",
+          path_params: {},
+          query: { "from" => from, "to" => to, "compare" => compare, "format" => format },
+          app_id: app_id,
+          response: "AndroidDeliveryReport",
+          request_options: request_options
+        )
+      end
+
       # Olay hacmi
       #
       # GET /v1/apps/{appId}/analytics/events

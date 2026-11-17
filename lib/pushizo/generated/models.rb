@@ -488,6 +488,22 @@ module Pushizo
       field "form_factor", :form_factor, :string
       # Değerler: "alert", "voip", "app_clip".
       field "push_kind", :push_kind, :string
+      field "manufacturer", :manufacturer, :string
+      field "brand", :brand, :string
+      field "rom", :rom, :string
+      field "rom_version", :rom_version, :string
+      field "delivery", :delivery, "AddSubscriptionDtoDeviceDelivery"
+    end
+
+    # AddSubscriptionDtoDeviceDelivery şeması.
+    class AddSubscriptionDtoDeviceDelivery < Pushizo::BaseModel
+      field "battery_optimization_exempt", :battery_optimization_exempt, :boolean
+      field "background_restricted", :background_restricted, :boolean
+      field "channel_blocked", :channel_blocked, :boolean
+      field "power_save_mode", :power_save_mode, :boolean
+      field "data_saver", :data_saver, :boolean
+      # Değerler: "exempted", "active", "working_set", "frequent", "rare", "restricted".
+      field "standby_bucket", :standby_bucket, :string
     end
 
     # AddSubscriptionDtoOptIn şeması.
@@ -725,6 +741,170 @@ module Pushizo
       field "cpa", :cpa, :number
       # Zorunlu.
       field "roas", :roas, :number
+    end
+
+    # AndroidDeliveryReport şeması.
+    class AndroidDeliveryReport < Pushizo::BaseModel
+      # Zorunlu.
+      field "from", :from, :string
+      # Zorunlu.
+      field "to", :to, :string
+      # Zorunlu.
+      field "devices", :devices, "AndroidDeliveryReportDevices"
+      # Zorunlu.
+      field "totals", :totals, "AndroidDeliveryReportTotals"
+      # Zorunlu.
+      field "previous", :previous, "AndroidDeliveryReportPrevious"
+      # Zorunlu.
+      field "deprioritized", :deprioritized, :integer
+      # Zorunlu.
+      field "aggressive", :aggressive, "AndroidDeliveryReportAggressive"
+      # Zorunlu.
+      field "others", :others, "AndroidDeliveryReportOthers"
+      # Zorunlu.
+      field "vendors", :vendors, [:array, "AndroidDeliveryReportVendorsItem"]
+      # Zorunlu.
+      field "roms", :roms, [:array, "AndroidDeliveryReportRomsItem"]
+      # Zorunlu. Değerler: "upgrade_sdk", "vendor_guidance", "background_restricted", "battery_exemption", "deprioritized", "notifications_blocked".
+      field "recommendations", :recommendations, [:array, :string]
+    end
+
+    # AndroidDeliveryReportAggressive şeması.
+    class AndroidDeliveryReportAggressive < Pushizo::BaseModel
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "delivered", :delivered, :integer
+      # Zorunlu.
+      field "delivery_rate", :delivery_rate, :number
+    end
+
+    # AndroidDeliveryReportDevices şeması.
+    class AndroidDeliveryReportDevices < Pushizo::BaseModel
+      # Zorunlu.
+      field "total", :total, :integer
+      # Zorunlu.
+      field "reporting", :reporting, :integer
+      # Zorunlu.
+      field "reporting_rate", :reporting_rate, :number
+      # Zorunlu.
+      field "restricted", :restricted, :integer
+      # Zorunlu.
+      field "restricted_rate", :restricted_rate, :number
+      # Zorunlu.
+      field "background_restricted", :background_restricted, :integer
+      # Zorunlu.
+      field "battery_optimized", :battery_optimized, :integer
+      # Zorunlu.
+      field "low_standby_bucket", :low_standby_bucket, :integer
+      # Zorunlu.
+      field "power_save", :power_save, :integer
+      # Zorunlu.
+      field "data_saver", :data_saver, :integer
+      # Zorunlu.
+      field "channel_blocked", :channel_blocked, :integer
+      # Zorunlu.
+      field "notifications_blocked", :notifications_blocked, :integer
+      # Zorunlu.
+      field "aggressive_vendor", :aggressive_vendor, :integer
+      # Zorunlu.
+      field "aggressive_vendor_rate", :aggressive_vendor_rate, :number
+    end
+
+    # AndroidDeliveryReportOthers şeması.
+    class AndroidDeliveryReportOthers < Pushizo::BaseModel
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "delivered", :delivered, :integer
+      # Zorunlu.
+      field "delivery_rate", :delivery_rate, :number
+    end
+
+    # AndroidDeliveryReportPrevious şeması.
+    class AndroidDeliveryReportPrevious < Pushizo::BaseModel
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "delivered", :delivered, :integer
+      # Zorunlu.
+      field "opened", :opened, :integer
+      # Zorunlu.
+      field "delivery_rate", :delivery_rate, :number
+      # Zorunlu.
+      field "open_rate", :open_rate, :number
+      # Zorunlu.
+      field "median_delay_seconds", :median_delay_seconds, :integer
+      # Zorunlu.
+      field "p90_delay_seconds", :p90_delay_seconds, :integer
+    end
+
+    # AndroidDeliveryReportRomsItem şeması.
+    class AndroidDeliveryReportRomsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "rom", :rom, :string
+      # Zorunlu.
+      field "devices", :devices, :integer
+      # Zorunlu.
+      field "restricted", :restricted, :integer
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "delivered", :delivered, :integer
+      # Zorunlu.
+      field "delivery_rate", :delivery_rate, :number
+      # Zorunlu.
+      field "median_delay_seconds", :median_delay_seconds, :integer
+    end
+
+    # AndroidDeliveryReportTotals şeması.
+    class AndroidDeliveryReportTotals < Pushizo::BaseModel
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "delivered", :delivered, :integer
+      # Zorunlu.
+      field "opened", :opened, :integer
+      # Zorunlu.
+      field "delivery_rate", :delivery_rate, :number
+      # Zorunlu.
+      field "open_rate", :open_rate, :number
+      # Zorunlu.
+      field "median_delay_seconds", :median_delay_seconds, :integer
+      # Zorunlu.
+      field "p90_delay_seconds", :p90_delay_seconds, :integer
+    end
+
+    # AndroidDeliveryReportVendorsItem şeması.
+    class AndroidDeliveryReportVendorsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "vendor", :vendor, :string
+      # Zorunlu.
+      field "aggressive", :aggressive, :boolean
+      # Zorunlu.
+      field "devices", :devices, :integer
+      # Zorunlu.
+      field "reporting", :reporting, :integer
+      # Zorunlu.
+      field "restricted", :restricted, :integer
+      # Zorunlu.
+      field "battery_optimized", :battery_optimized, :integer
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "delivered", :delivered, :integer
+      # Zorunlu.
+      field "opened", :opened, :integer
+      # Zorunlu.
+      field "delivery_rate", :delivery_rate, :number
+      # Zorunlu.
+      field "open_rate", :open_rate, :number
+      # Zorunlu.
+      field "median_delay_seconds", :median_delay_seconds, :integer
+      # Zorunlu.
+      field "p90_delay_seconds", :p90_delay_seconds, :integer
+      # Zorunlu.
+      field "deprioritized", :deprioritized, :integer
     end
 
     # ApiEventsDto şeması.
@@ -7075,6 +7255,22 @@ module Pushizo
       field "form_factor", :form_factor, :string
       # Değerler: "alert", "voip", "app_clip".
       field "push_kind", :push_kind, :string
+      field "manufacturer", :manufacturer, :string
+      field "brand", :brand, :string
+      field "rom", :rom, :string
+      field "rom_version", :rom_version, :string
+      field "delivery", :delivery, "PatchSubscriptionDtoDeviceDelivery"
+    end
+
+    # PatchSubscriptionDtoDeviceDelivery şeması.
+    class PatchSubscriptionDtoDeviceDelivery < Pushizo::BaseModel
+      field "battery_optimization_exempt", :battery_optimization_exempt, :boolean
+      field "background_restricted", :background_restricted, :boolean
+      field "channel_blocked", :channel_blocked, :boolean
+      field "power_save_mode", :power_save_mode, :boolean
+      field "data_saver", :data_saver, :boolean
+      # Değerler: "exempted", "active", "working_set", "frequent", "rare", "restricted".
+      field "standby_bucket", :standby_bucket, :string
     end
 
     # PatchUserDto şeması.
@@ -8485,6 +8681,22 @@ module Pushizo
       field "form_factor", :form_factor, :string
       # Değerler: "alert", "voip", "app_clip".
       field "push_kind", :push_kind, :string
+      field "manufacturer", :manufacturer, :string
+      field "brand", :brand, :string
+      field "rom", :rom, :string
+      field "rom_version", :rom_version, :string
+      field "delivery", :delivery, "SubscriptionDeviceDelivery"
+    end
+
+    # SubscriptionDeviceDelivery şeması.
+    class SubscriptionDeviceDelivery < Pushizo::BaseModel
+      field "battery_optimization_exempt", :battery_optimization_exempt, :boolean
+      field "background_restricted", :background_restricted, :boolean
+      field "channel_blocked", :channel_blocked, :boolean
+      field "power_save_mode", :power_save_mode, :boolean
+      field "data_saver", :data_saver, :boolean
+      # Değerler: "exempted", "active", "working_set", "frequent", "rare", "restricted".
+      field "standby_bucket", :standby_bucket, :string
     end
 
     # SubscriptionLocation şeması.
