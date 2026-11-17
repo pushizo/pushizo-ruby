@@ -4849,6 +4849,165 @@ module Pushizo
       end
     end
 
+    # siteSearch kaynağı.
+    class SiteSearch < Pushizo::BaseResource
+      # Site araması ayarları, dizin durumu ve AI kullanımı
+      #
+      # GET /v1/apps/{appId}/site-search
+      def overview(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/site-search",
+          path_params: {},
+          app_id: app_id,
+          response: "SiteSearchOverview",
+          request_options: request_options
+        )
+      end
+
+      # Site araması ayarlarını güncelle
+      #
+      # PATCH /v1/apps/{appId}/site-search/settings
+      def update_settings(body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/site-search/settings",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "SiteSearchOverview",
+          request_options: request_options
+        )
+      end
+
+      # Arama kaynakları
+      #
+      # GET /v1/apps/{appId}/site-search/sources
+      def sources(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/site-search/sources",
+          path_params: {},
+          app_id: app_id,
+          response: "SiteSearchSourceList",
+          request_options: request_options
+        )
+      end
+
+      # Arama kaynağı ekle
+      #
+      # POST /v1/apps/{appId}/site-search/sources
+      def create_source(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/site-search/sources",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "SiteSearchSource",
+          request_options: request_options
+        )
+      end
+
+      # Arama kaynağını düzenle
+      #
+      # PATCH /v1/apps/{appId}/site-search/sources/{sourceId}
+      def update_source(source_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/site-search/sources/{sourceId}",
+          path_params: { "sourceId" => source_id },
+          body: body,
+          app_id: app_id,
+          response: "SiteSearchSource",
+          request_options: request_options
+        )
+      end
+
+      # Arama kaynağını ve sayfalarını sil
+      #
+      # DELETE /v1/apps/{appId}/site-search/sources/{sourceId}
+      def remove_source(source_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/site-search/sources/{sourceId}",
+          path_params: { "sourceId" => source_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+
+      # Kaynağı şimdi yeniden tara
+      #
+      # POST /v1/apps/{appId}/site-search/sources/{sourceId}/crawl
+      def crawl(source_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/site-search/sources/{sourceId}/crawl",
+          path_params: { "sourceId" => source_id },
+          app_id: app_id,
+          response: "SiteSearchCrawlRequest",
+          request_options: request_options
+        )
+      end
+
+      # Dizindeki belgeler
+      #
+      # GET /v1/apps/{appId}/site-search/documents
+      def documents(source_id: nil, q: nil, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/site-search/documents",
+          path_params: {},
+          query: { "source_id" => source_id, "q" => q, "limit" => limit, "cursor" => cursor },
+          app_id: app_id,
+          response: "SiteSearchDocumentPage",
+          request_options: request_options
+        )
+      end
+
+      # documents sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def documents_all(source_id: nil, q: nil, limit: nil, cursor: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          documents(source_id: source_id, q: q, limit: limit, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+
+      # Belgeyi dizine yükle veya değiştir (anahtar app içinde tekildir)
+      #
+      # PUT /v1/apps/{appId}/site-search/documents/{documentKey}
+      def put_document(document_key, body, app_id: nil, request_options: nil)
+        @client.call(
+          :put, "/v1/apps/{appId}/site-search/documents/{documentKey}",
+          path_params: { "documentKey" => document_key },
+          body: body,
+          app_id: app_id,
+          response: "SiteSearchDocumentResult",
+          request_options: request_options
+        )
+      end
+
+      # Belgeyi dizinden sil (belge kimliği veya anahtarı)
+      #
+      # DELETE /v1/apps/{appId}/site-search/documents/{documentKey}
+      def remove_document(document_key, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/site-search/documents/{documentKey}",
+          path_params: { "documentKey" => document_key },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+
+      # Arama raporu
+      #
+      # GET /v1/apps/{appId}/site-search/report
+      def report(days: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/site-search/report",
+          path_params: {},
+          query: { "days" => days },
+          app_id: app_id,
+          response: "SiteSearchReport",
+          request_options: request_options
+        )
+      end
+    end
+
     # smsKeywords kaynağı.
     class SmsKeywords < Pushizo::BaseResource
       # İki yönlü mesaj anahtar sözcükleri (org geneli + bu app) ve yasal (ayrılmış) sözcükler
@@ -5788,7 +5947,7 @@ module Pushizo
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "1.1.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories channel_scores content_tables conversations data_feeds decision_agents email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp messenger_links predictions preferences promo_code_lists recommendations reverse_etl rfm sms_keywords surveys verify wallet warehouse_exports warehouse_segments web_campaigns web_personalizations whatsapp].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories channel_scores content_tables conversations data_feeds decision_agents email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp messenger_links predictions preferences promo_code_lists recommendations reverse_etl rfm site_search sms_keywords surveys verify wallet warehouse_exports warehouse_segments web_campaigns web_personalizations whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -5991,6 +6150,10 @@ module Pushizo
 
     def rfm
       @rfm ||= Pushizo::Resources::Rfm.new(self)
+    end
+
+    def site_search
+      @site_search ||= Pushizo::Resources::SiteSearch.new(self)
     end
 
     def sms_keywords

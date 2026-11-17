@@ -3463,6 +3463,19 @@ module Pushizo
       field "direction", :direction, :string
     end
 
+    # CreateSiteSearchSourceDto şeması.
+    class CreateSiteSearchSourceDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "sitemap", "urls".
+      field "kind", :kind, :string
+      field "url", :url, :string
+      field "urls", :urls, [:array, :string]
+      field "max_pages", :max_pages, :integer
+      field "refresh_hours", :refresh_hours, :integer
+      field "enabled", :enabled, :boolean
+    end
+
     # CreateSuppressionDto şeması.
     class CreateSuppressionDto < Pushizo::BaseModel
       # Zorunlu. Değerler: "email", "sms", "whatsapp", "rcs", "telegram", "viber".
@@ -7469,6 +7482,16 @@ module Pushizo
       field "external_id", :external_id, :string
     end
 
+    # PutSiteSearchDocumentDto şeması.
+    class PutSiteSearchDocumentDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "url", :url, :string
+      field "title", :title, :string
+      field "content", :content, :string
+      field "html", :html, :string
+      field "language", :language, :string
+    end
+
     # RecommendationConfig şeması.
     class RecommendationConfig < Pushizo::BaseModel
       # Zorunlu.
@@ -8340,6 +8363,240 @@ module Pushizo
       field "channel", :channel, :string
       # Zorunlu.
       field "opted_in", :opted_in, :boolean
+    end
+
+    # SiteSearchCrawlRequest şeması.
+    class SiteSearchCrawlRequest < Pushizo::BaseModel
+      # Zorunlu.
+      field "queued", :queued, :boolean
+      # Zorunlu.
+      field "source", :source, "SiteSearchSource"
+    end
+
+    # SiteSearchDocument şeması.
+    class SiteSearchDocument < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "key", :key, :string
+      # Zorunlu.
+      field "source_id", :source_id, :string
+      # Zorunlu.
+      field "url", :url, :string
+      # Zorunlu.
+      field "title", :title, :string
+      # Zorunlu.
+      field "language", :language, :string
+      # Zorunlu.
+      field "chunks", :chunks, :integer
+      # Zorunlu.
+      field "chars", :chars, :integer
+      # Zorunlu.
+      field "indexed_at", :indexed_at, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+    end
+
+    # SiteSearchDocumentPage şeması.
+    class SiteSearchDocumentPage < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "SiteSearchDocument"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
+    end
+
+    # SiteSearchDocumentResult şeması.
+    class SiteSearchDocumentResult < Pushizo::BaseModel
+      # Zorunlu. Değerler: "created", "updated", "unchanged".
+      field "outcome", :outcome, :string
+      # Zorunlu.
+      field "document", :document, "SiteSearchDocument"
+    end
+
+    # SiteSearchOverview şeması.
+    class SiteSearchOverview < Pushizo::BaseModel
+      # Zorunlu.
+      field "settings", :settings, "SiteSearchOverviewSettings"
+      # Zorunlu.
+      field "index", :index, "SiteSearchOverviewIndex"
+      # Zorunlu.
+      field "usage", :usage, "SiteSearchOverviewUsage"
+      # Zorunlu.
+      field "ai", :ai, "SiteSearchOverviewAi"
+    end
+
+    # SiteSearchOverviewAi şeması.
+    class SiteSearchOverviewAi < Pushizo::BaseModel
+      # Zorunlu.
+      field "available", :available, :boolean
+      # Zorunlu. Değerler: "disabled", "unavailable", "cap_reached".
+      field "reason", :reason, :string
+    end
+
+    # SiteSearchOverviewIndex şeması.
+    class SiteSearchOverviewIndex < Pushizo::BaseModel
+      # Zorunlu.
+      field "documents", :documents, :integer
+      # Zorunlu.
+      field "chunks", :chunks, :integer
+      # Zorunlu.
+      field "sources", :sources, :integer
+      # Zorunlu.
+      field "last_indexed_at", :last_indexed_at, :string
+    end
+
+    # SiteSearchOverviewSettings şeması.
+    class SiteSearchOverviewSettings < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "ai_answers", :ai_answers, :boolean
+      # Zorunlu.
+      field "allowed_origins", :allowed_origins, [:array, :string]
+      # Zorunlu.
+      field "language", :language, :string
+      # Zorunlu.
+      field "text_search_config", :text_search_config, :string
+      # Zorunlu.
+      field "monthly_token_cap", :monthly_token_cap, :integer
+      # Zorunlu.
+      field "query_retention_days", :query_retention_days, :integer
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # SiteSearchOverviewUsage şeması.
+    class SiteSearchOverviewUsage < Pushizo::BaseModel
+      # Zorunlu.
+      field "tokens_this_month", :tokens_this_month, :integer
+      # Zorunlu.
+      field "monthly_token_cap", :monthly_token_cap, :integer
+      # Zorunlu.
+      field "period_start", :period_start, :string
+    end
+
+    # SiteSearchReport şeması.
+    class SiteSearchReport < Pushizo::BaseModel
+      # Zorunlu.
+      field "period_days", :period_days, :integer
+      # Zorunlu.
+      field "searches", :searches, :integer
+      # Zorunlu.
+      field "zero_results", :zero_results, :integer
+      # Zorunlu.
+      field "click_through_rate", :click_through_rate, :number
+      # Zorunlu.
+      field "answers_requested", :answers_requested, :integer
+      # Zorunlu.
+      field "answered", :answered, :integer
+      # Zorunlu.
+      field "not_found", :not_found, :integer
+      # Zorunlu.
+      field "answer_fallbacks", :answer_fallbacks, :integer
+      # Zorunlu.
+      field "tokens", :tokens, :integer
+      # Zorunlu.
+      field "top_queries", :top_queries, [:array, "SiteSearchReportTopQueriesItem"]
+      # Zorunlu.
+      field "zero_result_queries", :zero_result_queries, [:array, "SiteSearchReportZeroResultQueriesItem"]
+      # Zorunlu.
+      field "daily", :daily, [:array, "SiteSearchReportDailyItem"]
+    end
+
+    # SiteSearchReportDailyItem şeması.
+    class SiteSearchReportDailyItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "date", :date, :string
+      # Zorunlu.
+      field "searches", :searches, :integer
+      # Zorunlu.
+      field "zero_results", :zero_results, :integer
+      # Zorunlu.
+      field "answered", :answered, :integer
+    end
+
+    # SiteSearchReportTopQueriesItem şeması.
+    class SiteSearchReportTopQueriesItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "query", :query, :string
+      # Zorunlu.
+      field "searches", :searches, :integer
+      # Zorunlu.
+      field "clicks", :clicks, :integer
+      # Zorunlu.
+      field "avg_results", :avg_results, :number
+    end
+
+    # SiteSearchReportZeroResultQueriesItem şeması.
+    class SiteSearchReportZeroResultQueriesItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "query", :query, :string
+      # Zorunlu.
+      field "searches", :searches, :integer
+    end
+
+    # SiteSearchSource şeması.
+    class SiteSearchSource < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "sitemap", "urls".
+      field "kind", :kind, :string
+      # Zorunlu.
+      field "url", :url, :string
+      # Zorunlu.
+      field "urls", :urls, [:array, :string]
+      # Zorunlu.
+      field "max_pages", :max_pages, :integer
+      # Zorunlu.
+      field "refresh_hours", :refresh_hours, :integer
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu. Değerler: "idle", "queued", "crawling", "ok", "partial", "failed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "documents", :documents, :integer
+      # Zorunlu.
+      field "crawl_requested_at", :crawl_requested_at, :string
+      # Zorunlu.
+      field "last_crawled_at", :last_crawled_at, :string
+      # Zorunlu.
+      field "next_crawl_at", :next_crawl_at, :string
+      # Zorunlu.
+      field "last_error", :last_error, :string
+      # Zorunlu.
+      field "stats", :stats, "SiteSearchSourceStats"
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # SiteSearchSourceList şeması.
+    class SiteSearchSourceList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "SiteSearchSource"]
+    end
+
+    # SiteSearchSourceStats şeması.
+    class SiteSearchSourceStats < Pushizo::BaseModel
+      # Zorunlu.
+      field "pages_found", :pages_found, :integer
+      # Zorunlu.
+      field "pages_indexed", :pages_indexed, :integer
+      # Zorunlu.
+      field "pages_unchanged", :pages_unchanged, :integer
+      # Zorunlu.
+      field "pages_skipped", :pages_skipped, :integer
+      # Zorunlu.
+      field "pages_failed", :pages_failed, :integer
+      # Zorunlu.
+      field "pages_removed", :pages_removed, :integer
+      # Zorunlu.
+      field "duration_ms", :duration_ms, :integer
     end
 
     # SmsKeyword şeması.
@@ -9676,6 +9933,28 @@ module Pushizo
       field "by", :by, :string
       # Değerler: "asc", "desc".
       field "direction", :direction, :string
+    end
+
+    # UpdateSiteSearchSettingsDto şeması.
+    class UpdateSiteSearchSettingsDto < Pushizo::BaseModel
+      field "enabled", :enabled, :boolean
+      field "ai_answers", :ai_answers, :boolean
+      field "allowed_origins", :allowed_origins, [:array, :string]
+      field "language", :language, :string
+      field "monthly_token_cap", :monthly_token_cap, :integer
+      field "query_retention_days", :query_retention_days, :integer
+    end
+
+    # UpdateSiteSearchSourceDto şeması.
+    class UpdateSiteSearchSourceDto < Pushizo::BaseModel
+      field "name", :name, :string
+      # Değerler: "sitemap", "urls".
+      field "kind", :kind, :string
+      field "url", :url, :string
+      field "urls", :urls, [:array, :string]
+      field "max_pages", :max_pages, :integer
+      field "refresh_hours", :refresh_hours, :integer
+      field "enabled", :enabled, :boolean
     end
 
     # UpdateTemplateDto şeması.
