@@ -301,6 +301,47 @@ module Pushizo
         )
       end
 
+      # Kullanıcının olay ve teslimat zaman çizelgesi (en yeni 40 kayıt)
+      #
+      # GET /v1/apps/{appId}/users/by/{label}/{value}/timeline
+      def timeline(label, value, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/users/by/{label}/{value}/timeline",
+          path_params: { "label" => label, "value" => value },
+          app_id: app_id,
+          response: "UserTimeline",
+          request_options: request_options
+        )
+      end
+
+      # Kullanıcının son olayları
+      #
+      # GET /v1/apps/{appId}/users/by/{label}/{value}/events
+      def user_events(label, value, limit: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/users/by/{label}/{value}/events",
+          path_params: { "label" => label, "value" => value },
+          query: { "limit" => limit },
+          app_id: app_id,
+          response: "EventList",
+          request_options: request_options
+        )
+      end
+
+      # Kullanıcının son mesajları (teslimatlar, en yeni önce)
+      #
+      # GET /v1/apps/{appId}/users/by/{label}/{value}/messages
+      def user_messages(label, value, limit: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/users/by/{label}/{value}/messages",
+          path_params: { "label" => label, "value" => value },
+          query: { "limit" => limit },
+          app_id: app_id,
+          response: "UserMessageList",
+          request_options: request_options
+        )
+      end
+
       # Kullanıcıya abonelik ekle
       #
       # POST /v1/apps/{appId}/users/by/{label}/{value}/subscriptions
@@ -348,6 +389,45 @@ module Pushizo
 
     # Abonelik (cihaz/e-posta/SMS) okuma, güncelleme, silme ve sahip atama.
     class Subscriptions < Pushizo::BaseResource
+      # Abonelik listesi (kanal/durum/test cihazı filtreleri; token yalnızca son 8 karakter)
+      #
+      # GET /v1/apps/{appId}/subscriptions
+      #
+      # @param channel Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
+      # @param status Değerler: "subscribed", "unsubscribed", "invalid", "pending".
+      # @param test_device Değerler: "true", "false".
+      def list_subscriptions(limit: nil, cursor: nil, channel: nil, status: nil, test_device: nil, since: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/subscriptions",
+          path_params: {},
+          query: { "limit" => limit, "cursor" => cursor, "channel" => channel, "status" => status, "test_device" => test_device, "since" => since },
+          app_id: app_id,
+          response: "SubscriptionList",
+          request_options: request_options
+        )
+      end
+
+      # list_subscriptions sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def list_subscriptions_all(limit: nil, cursor: nil, channel: nil, status: nil, test_device: nil, since: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          list_subscriptions(limit: limit, channel: channel, status: status, test_device: test_device, since: since, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+
+      # Toplu temizlik: geçersiz (veya abonelikten çıkmış) kayıtları sil
+      #
+      # POST /v1/apps/{appId}/subscriptions/cleanup
+      def cleanup_subscriptions(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/subscriptions/cleanup",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "CleanupResult",
+          request_options: request_options
+        )
+      end
+
       # Abonelik detayı
       #
       # GET /v1/apps/{appId}/subscriptions/{subscriptionId}
@@ -490,6 +570,20 @@ module Pushizo
           body: body,
           app_id: app_id,
           response: "EventDefinition",
+          request_options: request_options
+        )
+      end
+
+      # Son olaylar (kullanıcı kimliği ve özelliklerle; ad ve zaman filtresi)
+      #
+      # GET /v1/apps/{appId}/events/recent
+      def recent(name: nil, limit: nil, since: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/events/recent",
+          path_params: {},
+          query: { "name" => name, "limit" => limit, "since" => since },
+          app_id: app_id,
+          response: "RecentEvents",
           request_options: request_options
         )
       end
@@ -1219,6 +1313,101 @@ module Pushizo
         )
       end
 
+      # Takım oluştur (üyeler yanıt rolüne sahip org üyeleri)
+      #
+      # POST /v1/apps/{appId}/inbox/teams
+      def create_team(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/inbox/teams",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "InboxTeam",
+          request_options: request_options
+        )
+      end
+
+      # Takımı güncelle
+      #
+      # PATCH /v1/apps/{appId}/inbox/teams/{teamId}
+      def update_team(team_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/inbox/teams/{teamId}",
+          path_params: { "teamId" => team_id },
+          body: body,
+          app_id: app_id,
+          response: "InboxTeam",
+          request_options: request_options
+        )
+      end
+
+      # Takımı sil (konuşmaların takım ataması kalkar)
+      #
+      # DELETE /v1/apps/{appId}/inbox/teams/{teamId}
+      def delete_team(team_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/inbox/teams/{teamId}",
+          path_params: { "teamId" => team_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+
+      # Atama kuralları (sırayla değerlendirilir)
+      #
+      # GET /v1/apps/{appId}/inbox/assignment-rules
+      def rules(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/inbox/assignment-rules",
+          path_params: {},
+          app_id: app_id,
+          response: "AssignmentRuleList",
+          request_options: request_options
+        )
+      end
+
+      # Atama kuralı oluştur (kanal/dil/etiket koşulu; round-robin, en az yük veya yalnızca takım)
+      #
+      # POST /v1/apps/{appId}/inbox/assignment-rules
+      def create_rule(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/inbox/assignment-rules",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "AssignmentRule",
+          request_options: request_options
+        )
+      end
+
+      # Atama kuralını güncelle (sıra dahil)
+      #
+      # PATCH /v1/apps/{appId}/inbox/assignment-rules/{ruleId}
+      def update_rule(rule_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/inbox/assignment-rules/{ruleId}",
+          path_params: { "ruleId" => rule_id },
+          body: body,
+          app_id: app_id,
+          response: "AssignmentRule",
+          request_options: request_options
+        )
+      end
+
+      # Atama kuralını sil
+      #
+      # DELETE /v1/apps/{appId}/inbox/assignment-rules/{ruleId}
+      def delete_rule(rule_id, app_id: nil, request_options: nil)
+        @client.call(
+          :delete, "/v1/apps/{appId}/inbox/assignment-rules/{ruleId}",
+          path_params: { "ruleId" => rule_id },
+          app_id: app_id,
+          response: "Ok",
+          request_options: request_options
+        )
+      end
+
       # Temsilciler ve varlık durumu
       #
       # GET /v1/apps/{appId}/inbox/agents
@@ -1228,6 +1417,20 @@ module Pushizo
           path_params: {},
           app_id: app_id,
           response: "InboxAgentList",
+          request_options: request_options
+        )
+      end
+
+      # Temsilci yönlendirme profili: eşzamanlı konuşma sınırı ve diller
+      #
+      # PATCH /v1/apps/{appId}/inbox/agents/{accountId}
+      def update_agent(account_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :patch, "/v1/apps/{appId}/inbox/agents/{accountId}",
+          path_params: { "accountId" => account_id },
+          body: body,
+          app_id: app_id,
+          response: "InboxAgent",
           request_options: request_options
         )
       end
@@ -1499,6 +1702,19 @@ module Pushizo
 
     # Giden webhook uç noktaları, teslimatlar ve yeniden gönderim.
     class Webhooks < Pushizo::BaseResource
+      # Abone olunabilecek olay türleri
+      #
+      # GET /v1/apps/{appId}/webhooks/event-types
+      def event_types(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/webhooks/event-types",
+          path_params: {},
+          app_id: app_id,
+          response: "WebhookEventTypes",
+          request_options: request_options
+        )
+      end
+
       # Webhook endpoint'leri
       #
       # GET /v1/apps/{appId}/webhooks
@@ -1629,6 +1845,33 @@ module Pushizo
         end
       end
 
+      # Başarısız/ölü teslimleri toplu yeniden gönder (en fazla 1000)
+      #
+      # POST /v1/apps/{appId}/webhooks/{webhookId}/replay
+      def bulk_replay(webhook_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/webhooks/{webhookId}/replay",
+          path_params: { "webhookId" => webhook_id },
+          body: body,
+          app_id: app_id,
+          response: "WebhookBulkReplayResult",
+          request_options: request_options
+        )
+      end
+
+      # Teslim detayı (gövde dahil)
+      #
+      # GET /v1/apps/{appId}/webhooks/deliveries/{deliveryId}
+      def delivery(delivery_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/webhooks/deliveries/{deliveryId}",
+          path_params: { "deliveryId" => delivery_id },
+          app_id: app_id,
+          response: "WebhookDeliveryDetail",
+          request_options: request_options
+        )
+      end
+
       # Teslimi yeniden gönder (aynı olay kimliğiyle)
       #
       # POST /v1/apps/{appId}/webhooks/deliveries/{deliveryId}/replay
@@ -1654,6 +1897,32 @@ module Pushizo
           path_params: {},
           app_id: app_id,
           response: "ChannelList",
+          request_options: request_options
+        )
+      end
+
+      # Kanal özeti (yalnız sağlayıcı ve durum; yapılandırma ayrıntısı dönmez)
+      #
+      # GET /v1/apps/{appId}/channels/status
+      def status(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/channels/status",
+          path_params: {},
+          app_id: app_id,
+          response: "ChannelStatusList",
+          request_options: request_options
+        )
+      end
+
+      # Gönderici alan adı SPF/DKIM/DMARC doğrulaması
+      #
+      # POST /v1/apps/{appId}/channels/email/verify-dns
+      def verify_dns(app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/channels/email/verify-dns",
+          path_params: {},
+          app_id: app_id,
+          response: "ChannelsVerifyDnsResponse",
           request_options: request_options
         )
       end
@@ -1688,6 +1957,19 @@ module Pushizo
 
     # Analitik raporları.
     class Analytics < Pushizo::BaseResource
+      # Son 14 gün oturum hacmi ve tekil kullanıcı (günlük toplamlar)
+      #
+      # GET /v1/apps/{appId}/analytics/sessions
+      def sessions(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/analytics/sessions",
+          path_params: {},
+          app_id: app_id,
+          response: "SessionVolume",
+          request_options: request_options
+        )
+      end
+
       # Genel bakış KPI
       #
       # GET /v1/apps/{appId}/analytics/overview
@@ -2146,6 +2428,29 @@ module Pushizo
         end
       end
 
+      # Public API istek logları (org geneli admin anahtarı; son 7 gün, cursor)
+      #
+      # GET /v1/organization/logs
+      #
+      # @param status_class Değerler: "2xx", "4xx", "5xx".
+      # @param method Değerler: "GET", "POST", "PUT", "PATCH", "DELETE".
+      def request_logs(limit: nil, cursor: nil, app_id_param: nil, status_class: nil, method: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/organization/logs",
+          path_params: {},
+          query: { "limit" => limit, "cursor" => cursor, "app_id" => app_id_param, "status_class" => status_class, "method" => method },
+          response: "RequestLogPage",
+          request_options: request_options
+        )
+      end
+
+      # request_logs sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def request_logs_all(limit: nil, cursor: nil, app_id_param: nil, status_class: nil, method: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          request_logs(limit: limit, app_id_param: app_id_param, status_class: status_class, method: method, request_options: request_options, cursor: cursor_value)
+        end
+      end
+
       # Organizasyon kullanımı ve plan kotaları (org geneli anahtar)
       #
       # GET /v1/organization/usage
@@ -2162,6 +2467,19 @@ module Pushizo
 
     # ads kaynağı.
     class Ads < Pushizo::BaseResource
+      # Reklam platformları (etkin/mock, tanımlayıcılar, lookalike desteği)
+      #
+      # GET /v1/apps/{appId}/ads/platforms
+      def platforms(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ads/platforms",
+          path_params: {},
+          app_id: app_id,
+          response: "AdPlatformList",
+          request_options: request_options
+        )
+      end
+
       # Bağlı reklam hesapları
       #
       # GET /v1/apps/{appId}/ads/accounts
@@ -2305,6 +2623,20 @@ module Pushizo
         )
       end
 
+      # Reklam kampanyası oluştur: kampanya + reklam seti (Pushizo kitlesi) + kreatif/reklam
+      #
+      # POST /v1/apps/{appId}/ads/campaigns
+      def create(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/ads/campaigns",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "AdCampaignCreated",
+          request_options: request_options
+        )
+      end
+
       # Kampanya / reklam seti / reklam ayrıntısı
       #
       # GET /v1/apps/{appId}/ads/campaigns/{entityId}
@@ -2328,6 +2660,111 @@ module Pushizo
           body: body,
           app_id: app_id,
           response: "AdEntity",
+          request_options: request_options
+        )
+      end
+
+      # Kreatif önizlemesi (platform önizleme bağlantısı + kreatif özeti)
+      #
+      # GET /v1/apps/{appId}/ads/campaigns/{entityId}/preview
+      def preview(entity_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ads/campaigns/{entityId}/preview",
+          path_params: { "entityId" => entity_id },
+          app_id: app_id,
+          response: "AdCampaignPreview",
+          request_options: request_options
+        )
+      end
+
+      # Meta: hesabın tanıtabildiği Facebook sayfaları
+      #
+      # GET /v1/apps/{appId}/ads/accounts/{accountId}/pages
+      def pages(account_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ads/accounts/{accountId}/pages",
+          path_params: { "accountId" => account_id },
+          app_id: app_id,
+          response: "AdPageList",
+          request_options: request_options
+        )
+      end
+
+      # Yüklenen kreatif görselleri
+      #
+      # GET /v1/apps/{appId}/ads/creatives
+      def creatives(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ads/creatives",
+          path_params: {},
+          app_id: app_id,
+          response: "AdsCreativesResponse",
+          request_options: request_options
+        )
+      end
+
+      # Kreatif görsel yükle (multipart `file`: PNG/JPEG, en çok 5 MB)
+      #
+      # POST /v1/apps/{appId}/ads/creatives
+      def upload(app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/ads/creatives",
+          path_params: {},
+          app_id: app_id,
+          response: "AdCreative",
+          request_options: request_options
+        )
+      end
+
+      # Raporlama para birimi (org) ve atribüsyon varsayılanları (app)
+      #
+      # GET /v1/apps/{appId}/ads/settings
+      def settings(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/ads/settings",
+          path_params: {},
+          app_id: app_id,
+          response: "AdReportingSettings",
+          request_options: request_options
+        )
+      end
+
+      # Raporlama para birimi ve atribüsyon varsayılanlarını güncelle
+      #
+      # PUT /v1/apps/{appId}/ads/settings
+      def update_settings(body, app_id: nil, request_options: nil)
+        @client.call(
+          :put, "/v1/apps/{appId}/ads/settings",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "AdReportingSettings",
+          request_options: request_options
+        )
+      end
+
+      # Platform test aracına sentetik test olayı gönder
+      #
+      # POST /v1/apps/{appId}/ads/conversions-api/configs/{configId}/test
+      def test_capi(config_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/ads/conversions-api/configs/{configId}/test",
+          path_params: { "configId" => config_id },
+          app_id: app_id,
+          response: "AdCapiTestResult",
+          request_options: request_options
+        )
+      end
+
+      # Başarısız teslimi yeniden dene
+      #
+      # POST /v1/apps/{appId}/ads/conversions-api/deliveries/{deliveryId}/retry
+      def retry_capi(delivery_id, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/ads/conversions-api/deliveries/{deliveryId}/retry",
+          path_params: { "deliveryId" => delivery_id },
+          app_id: app_id,
+          response: "AdCapiDelivery",
           request_options: request_options
         )
       end
@@ -3354,6 +3791,19 @@ module Pushizo
         )
       end
 
+      # Kişi profili: özellikler, etiketler, abonelikler (maskeli), son olaylar, diğer konuşmalar
+      #
+      # GET /v1/apps/{appId}/conversations/{conversationId}/contact
+      def contact(conversation_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/conversations/{conversationId}/contact",
+          path_params: { "conversationId" => conversation_id },
+          app_id: app_id,
+          response: "ConversationContact",
+          request_options: request_options
+        )
+      end
+
       # Konuşma mesajları (yeniden eskiye; `after_seq` ile eskiden yeniye; giden mesaj durumu teslimattan veya okundu işaretçisinden)
       #
       # GET /v1/apps/{appId}/conversations/{conversationId}/messages
@@ -4118,6 +4568,88 @@ module Pushizo
         )
       end
 
+      # Liste temizliği durumu: e-posta aboneliklerinin denetim dağılımı ve son doğrulama çalıştırması
+      #
+      # GET /v1/apps/{appId}/email-deliverability/hygiene
+      def hygiene(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/email-deliverability/hygiene",
+          path_params: {},
+          app_id: app_id,
+          response: "EmailHygieneStatus",
+          request_options: request_options
+        )
+      end
+
+      # Listeyi doğrula: tüm e-posta aboneliklerini toplu, hız sınırlı doğrula (etkin çalıştırma varsa o döner)
+      #
+      # POST /v1/apps/{appId}/email-deliverability/hygiene-runs
+      def start_hygiene(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/email-deliverability/hygiene-runs",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "EmailHygieneStart",
+          request_options: request_options
+        )
+      end
+
+      # Liste doğrulama çalıştırması (ilerleme ve özet)
+      #
+      # GET /v1/apps/{appId}/email-deliverability/hygiene-runs/{runId}
+      def hygiene_run(run_id, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/email-deliverability/hygiene-runs/{runId}",
+          path_params: { "runId" => run_id },
+          app_id: app_id,
+          response: "EmailHygieneRun",
+          request_options: request_options
+        )
+      end
+
+      # Doğrulamada geçersiz bulunan adresleri bastır (abonelik invalid + suppression list)
+      #
+      # POST /v1/apps/{appId}/email-deliverability/hygiene-runs/{runId}/suppress
+      def suppress_hygiene(run_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/email-deliverability/hygiene-runs/{runId}/suppress",
+          path_params: { "runId" => run_id },
+          body: body,
+          app_id: app_id,
+          response: "EmailHygieneSuppress",
+          request_options: request_options
+        )
+      end
+
+      # Posta sağlayıcısı bazında (Gmail, Outlook, Yahoo, diğer) teslim, açılma, tıklama, bounce ve şikâyet sayıları
+      #
+      # GET /v1/apps/{appId}/email-deliverability/insights
+      def insights(days: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/email-deliverability/insights",
+          path_params: {},
+          query: { "days" => days },
+          app_id: app_id,
+          response: "EmailProviderInsights",
+          request_options: request_options
+        )
+      end
+
+      # E-posta bounce eğilimi (%2 hedef), tür/neden dağılımı ve en çok bounce alan alıcı alan adları
+      #
+      # GET /v1/apps/{appId}/email-deliverability/bounces
+      def bounces(days: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/email-deliverability/bounces",
+          path_params: {},
+          query: { "days" => days },
+          app_id: app_id,
+          response: "EmailBounceStats",
+          request_options: request_options
+        )
+      end
+
       # Google Postmaster itibar kayıtları
       #
       # GET /v1/apps/{appId}/email-deliverability/postmaster
@@ -4553,6 +5085,19 @@ module Pushizo
         )
       end
 
+      # Zapier REST Hook abonelikleri
+      #
+      # GET /v1/apps/{appId}/integrations/zapier/hooks
+      def hooks(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/integrations/zapier/hooks",
+          path_params: {},
+          app_id: app_id,
+          response: "ZapierHookList",
+          request_options: request_options
+        )
+      end
+
       # REST Hook aboneliğini sil (Zap kapatıldı)
       #
       # DELETE /v1/apps/{appId}/integrations/zapier/hooks/{hookId}
@@ -4578,6 +5123,72 @@ module Pushizo
           query: { "event" => event, "event_name" => event_name },
           app_id: app_id,
           response: [:array, "ZapierSamplesItem"],
+          request_options: request_options
+        )
+      end
+
+      # Bağlı entegrasyonlar ve katalog
+      #
+      # GET /v1/apps/{appId}/integrations
+      def list(app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/integrations",
+          path_params: {},
+          app_id: app_id,
+          response: "IntegrationList",
+          request_options: request_options
+        )
+      end
+
+      # Entegrasyon ayrıntısı (kimlik bilgisi maskeli)
+      #
+      # GET /v1/apps/{appId}/integrations/{type}
+      def get(type, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/integrations/{type}",
+          path_params: { "type" => type },
+          app_id: app_id,
+          response: "Integration",
+          request_options: request_options
+        )
+      end
+
+      # Son çalışmalar (senkron, olay gönderimi, gelen istekler, test)
+      #
+      # GET /v1/apps/{appId}/integrations/{type}/runs
+      def runs(type, limit: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/integrations/{type}/runs",
+          path_params: { "type" => type },
+          query: { "limit" => limit },
+          app_id: app_id,
+          response: "IntegrationRunList",
+          request_options: request_options
+        )
+      end
+
+      # Bağlantı testi
+      #
+      # POST /v1/apps/{appId}/integrations/{type}/test
+      def test(type, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/integrations/{type}/test",
+          path_params: { "type" => type },
+          app_id: app_id,
+          response: "IntegrationTestResult",
+          request_options: request_options
+        )
+      end
+
+      # Cohort senkronunu şimdi çalıştır (worker en geç 1 dk içinde)
+      #
+      # POST /v1/apps/{appId}/integrations/{type}/sync
+      def sync(type, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/integrations/{type}/sync",
+          path_params: { "type" => type },
+          app_id: app_id,
+          response: "IntegrationSyncResult",
           request_options: request_options
         )
       end
@@ -5804,6 +6415,32 @@ module Pushizo
       end
     end
 
+    # sdkErrors kaynağı.
+    class SdkErrors < Pushizo::BaseResource
+      # SDK hata raporları (son 7 gün, cursor)
+      #
+      # GET /v1/apps/{appId}/sdk-errors
+      #
+      # @param level Değerler: "error", "warning".
+      def list(limit: nil, cursor: nil, platform: nil, level: nil, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/sdk-errors",
+          path_params: {},
+          query: { "limit" => limit, "cursor" => cursor, "platform" => platform, "level" => level },
+          app_id: app_id,
+          response: "SdkErrorPage",
+          request_options: request_options
+        )
+      end
+
+      # list sonuçlarını next_cursor ile tüm sayfalar boyunca tek tek dolaşan Enumerator döndürür (sayfalar tembel yüklenir).
+      def list_all(limit: nil, cursor: nil, platform: nil, level: nil, app_id: nil, request_options: nil)
+        @client.paginate(cursor) do |cursor_value|
+          list(limit: limit, platform: platform, level: level, app_id: app_id, request_options: request_options, cursor: cursor_value)
+        end
+      end
+    end
+
     # siteSearch kaynağı.
     class SiteSearch < Pushizo::BaseResource
       # Site araması ayarları, dizin durumu ve AI kullanımı
@@ -6220,6 +6857,20 @@ module Pushizo
         )
       end
 
+      # In-app dağıtımı: anketi HTML in-app mesajına dönüştür (oluştur/güncelle, isteğe bağlı yayınla)
+      #
+      # POST /v1/apps/{appId}/surveys/{surveyId}/distribute/in-app
+      def distribute(survey_id, body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/surveys/{surveyId}/distribute/in-app",
+          path_params: { "surveyId" => survey_id },
+          body: body,
+          app_id: app_id,
+          response: "Survey",
+          request_options: request_options
+        )
+      end
+
       # NPS / CSAT raporu
       #
       # GET /v1/apps/{appId}/surveys/{surveyId}/report
@@ -6267,6 +6918,23 @@ module Pushizo
           body: body,
           app_id: app_id,
           response: "SurveyResponseResult",
+          request_options: request_options
+        )
+      end
+    end
+
+    # trace kaynağı.
+    class Trace < Pushizo::BaseResource
+      # Mesaj izleme: msg_/dlv_/sub_ ID, external_id veya token son 8 karakteri
+      #
+      # GET /v1/apps/{appId}/trace
+      def trace(q:, app_id: nil, request_options: nil)
+        @client.call(
+          :get, "/v1/apps/{appId}/trace",
+          path_params: {},
+          query: { "q" => q },
+          app_id: app_id,
+          response: "TraceResult",
           request_options: request_options
         )
       end
@@ -7090,7 +7758,7 @@ module Pushizo
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "1.1.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads affinity ai_agents canned_responses catalogs categories channel_scores companies content_tables conversations custom_agents data_feeds data_pipelines decision_agents email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp messenger_links predictions preferences promo_code_lists recommendations reverse_etl rfm site_search sms_keywords sql surveys verify wallet warehouse_exports warehouse_segments web_campaigns web_personalizations whatsapp].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads affinity ai_agents canned_responses catalogs categories channel_scores companies content_tables conversations custom_agents data_feeds data_pipelines decision_agents email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp messenger_links predictions preferences promo_code_lists recommendations reverse_etl rfm sdk_errors site_search sms_keywords sql surveys trace verify wallet warehouse_exports warehouse_segments web_campaigns web_personalizations whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -7315,6 +7983,10 @@ module Pushizo
       @rfm ||= Pushizo::Resources::Rfm.new(self)
     end
 
+    def sdk_errors
+      @sdk_errors ||= Pushizo::Resources::SdkErrors.new(self)
+    end
+
     def site_search
       @site_search ||= Pushizo::Resources::SiteSearch.new(self)
     end
@@ -7329,6 +8001,10 @@ module Pushizo
 
     def surveys
       @surveys ||= Pushizo::Resources::Surveys.new(self)
+    end
+
+    def trace
+      @trace ||= Pushizo::Resources::Trace.new(self)
     end
 
     def verify
