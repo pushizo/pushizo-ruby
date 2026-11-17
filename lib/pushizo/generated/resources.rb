@@ -592,7 +592,7 @@ module Pushizo
       #
       # GET /v1/apps/{appId}/templates
       #
-      # @param channel Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # @param channel Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       def list(limit: nil, cursor: nil, q: nil, channel: nil, app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/apps/{appId}/templates",
@@ -728,7 +728,7 @@ module Pushizo
       #
       # @param status Değerler: "draft", "scheduled", "running", "paused", "completed", "cancelled", "failed".
       # @param type Değerler: "one_time", "scheduled", "recurring", "automated", "transactional".
-      # @param channel Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # @param channel Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       def list(limit: nil, cursor: nil, q: nil, status: nil, type: nil, channel: nil, label: nil, app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/apps/{appId}/campaigns",
@@ -1207,7 +1207,7 @@ module Pushizo
       #
       # GET /v1/apps/{appId}/inbox/metrics
       #
-      # @param channel Değerler: "sms", "whatsapp", "rcs", "email", "chat".
+      # @param channel Değerler: "sms", "whatsapp", "rcs", "telegram", "viber", "email", "chat".
       def metrics(from: nil, to: nil, channel: nil, app_id: nil, request_options: nil)
         @client.call(
           :get, "/v1/apps/{appId}/inbox/metrics",
@@ -1288,7 +1288,7 @@ module Pushizo
       #
       # GET /v1/apps/{appId}/suppressions
       #
-      # @param channel Değerler: "email", "sms", "whatsapp", "rcs".
+      # @param channel Değerler: "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       # @param reason Değerler: "bounce", "complaint", "manual", "unsubscribe_link", "stop".
       def list(limit: nil, cursor: nil, channel: nil, reason: nil, value: nil, app_id: nil, request_options: nil)
         @client.call(
@@ -2876,7 +2876,7 @@ module Pushizo
       #
       # GET /v1/apps/{appId}/conversations
       #
-      # @param channel Değerler: "sms", "whatsapp", "rcs", "email", "chat".
+      # @param channel Değerler: "sms", "whatsapp", "rcs", "telegram", "viber", "email", "chat".
       # @param status Değerler: "open", "pending", "resolved", "closed".
       # @param unread Değerler: "true", "false".
       def list(limit: nil, cursor: nil, channel: nil, status: nil, unread: nil, q: nil, assignee: nil, team_id: nil, app_id: nil, request_options: nil)
@@ -4310,6 +4310,23 @@ module Pushizo
       end
     end
 
+    # messengerLinks kaynağı.
+    class MessengerLinks < Pushizo::BaseResource
+      # Telegram/Viber abonelik bağlama derin bağlantısı (tek kullanımlık belirteç; kullanıcı bota yazınca sohbet kimliği bu kullanıcıya abonelik olarak bağlanır)
+      #
+      # POST /v1/apps/{appId}/messenger-links
+      def create(body, app_id: nil, request_options: nil)
+        @client.call(
+          :post, "/v1/apps/{appId}/messenger-links",
+          path_params: {},
+          body: body,
+          app_id: app_id,
+          response: "MessengerLink",
+          request_options: request_options
+        )
+      end
+    end
+
     # predictions kaynağı.
     class Predictions < Pushizo::BaseResource
       # Öngörü modelleri
@@ -5584,7 +5601,7 @@ module Pushizo
     # SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
     API_VERSION = "1.1.0"
 
-    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories channel_scores content_tables conversations data_feeds decision_agents email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp predictions preferences promo_code_lists recommendations reverse_etl rfm sms_keywords surveys verify wallet warehouse_exports web_campaigns web_personalizations whatsapp].freeze
+    RESOURCE_NAMES = %i[notifications users aliases subscriptions events segments templates campaigns in_app_messages inbox suppressions exports imports webhooks channels analytics apps api_keys organization ads canned_responses catalogs categories channel_scores content_tables conversations data_feeds decision_agents email_deliverability feature_flags forms geofences global_control identity_keys integrations journeys landing_pages live_activities mcp messenger_links predictions preferences promo_code_lists recommendations reverse_etl rfm sms_keywords surveys verify wallet warehouse_exports web_campaigns web_personalizations whatsapp].freeze
 
     # Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
     def notifications
@@ -5759,6 +5776,10 @@ module Pushizo
 
     def mcp
       @mcp ||= Pushizo::Resources::Mcp.new(self)
+    end
+
+    def messenger_links
+      @messenger_links ||= Pushizo::Resources::MessengerLinks.new(self)
     end
 
     def predictions
