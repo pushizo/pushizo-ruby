@@ -320,6 +320,46 @@ module Pushizo
       field "data", :data, [:array, "AdBudgetAlertRule"]
     end
 
+    # AdCampaignCreated şeması.
+    class AdCampaignCreated < Pushizo::BaseModel
+      # Zorunlu.
+      field "campaign", :campaign, "AdEntity"
+      # Zorunlu.
+      field "ad_set_id", :ad_set_id, :string
+      # Zorunlu.
+      field "ad_id", :ad_id, :string
+      # Zorunlu.
+      field "warnings", :warnings, [:array, :string]
+      # Zorunlu.
+      field "platform_url", :platform_url, :string
+    end
+
+    # AdCampaignPreview şeması.
+    class AdCampaignPreview < Pushizo::BaseModel
+      # Zorunlu.
+      field "preview_url", :preview_url, :string
+      # Zorunlu.
+      field "platform_url", :platform_url, :string
+      # Zorunlu.
+      field "creative", :creative, "AdCampaignPreviewCreative"
+    end
+
+    # AdCampaignPreviewCreative şeması.
+    class AdCampaignPreviewCreative < Pushizo::BaseModel
+      # Zorunlu.
+      field "title", :title, :string
+      # Zorunlu.
+      field "body", :body, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "link_url", :link_url, :string
+      # Zorunlu.
+      field "image_url", :image_url, :string
+      # Zorunlu.
+      field "call_to_action", :call_to_action, :string
+    end
+
     # AdCapiConfig şeması.
     class AdCapiConfig < Pushizo::BaseModel
       # Zorunlu.
@@ -452,6 +492,34 @@ module Pushizo
       field "data", :data, [:array, "AdCapiDelivery"]
     end
 
+    # AdCapiTestResult şeması.
+    class AdCapiTestResult < Pushizo::BaseModel
+      # Zorunlu.
+      field "ok", :ok, :boolean
+      # Zorunlu.
+      field "response", :response, [:map, :any]
+    end
+
+    # AdCreative şeması.
+    class AdCreative < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "file_name", :file_name, :string
+      # Zorunlu.
+      field "content_type", :content_type, :string
+      # Zorunlu.
+      field "bytes", :bytes, :integer
+      # Zorunlu.
+      field "width", :width, :integer
+      # Zorunlu.
+      field "height", :height, :integer
+      # Zorunlu.
+      field "preview_url", :preview_url, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+    end
+
     # AddAliasDto şeması.
     class AddAliasDto < Pushizo::BaseModel
       # Zorunlu.
@@ -460,7 +528,7 @@ module Pushizo
 
     # AddSubscriptionDto şeması.
     class AddSubscriptionDto < Pushizo::BaseModel
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channel", :channel, :string
       # Zorunlu.
       field "token", :token, :string
@@ -484,6 +552,26 @@ module Pushizo
       field "push_capable", :push_capable, :boolean
       # Değerler: "sandbox", "production".
       field "push_environment", :push_environment, :string
+      # Değerler: "phone", "watch".
+      field "form_factor", :form_factor, :string
+      # Değerler: "alert", "voip", "app_clip".
+      field "push_kind", :push_kind, :string
+      field "manufacturer", :manufacturer, :string
+      field "brand", :brand, :string
+      field "rom", :rom, :string
+      field "rom_version", :rom_version, :string
+      field "delivery", :delivery, "AddSubscriptionDtoDeviceDelivery"
+    end
+
+    # AddSubscriptionDtoDeviceDelivery şeması.
+    class AddSubscriptionDtoDeviceDelivery < Pushizo::BaseModel
+      field "battery_optimization_exempt", :battery_optimization_exempt, :boolean
+      field "background_restricted", :background_restricted, :boolean
+      field "channel_blocked", :channel_blocked, :boolean
+      field "power_save_mode", :power_save_mode, :boolean
+      field "data_saver", :data_saver, :boolean
+      # Değerler: "exempted", "active", "working_set", "frequent", "rare", "restricted".
+      field "standby_bucket", :standby_bucket, :string
     end
 
     # AddSubscriptionDtoOptIn şeması.
@@ -645,12 +733,89 @@ module Pushizo
       field "ok", :ok, :boolean
     end
 
+    # AdPageList şeması.
+    class AdPageList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "AdPageListDataItem"]
+    end
+
+    # AdPageListDataItem şeması.
+    class AdPageListDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+    end
+
+    # AdPlatformList şeması.
+    class AdPlatformList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "AdPlatformListDataItem"]
+    end
+
+    # AdPlatformListDataItem şeması.
+    class AdPlatformListDataItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "meta", "google", "tiktok", "linkedin".
+      field "platform", :platform, :string
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "mock", :mock, :boolean
+      # Zorunlu. Değerler: "email", "phone", "maid".
+      field "identifiers", :identifiers, [:array, :string]
+      # Zorunlu.
+      field "lookalike", :lookalike, :boolean
+      # Zorunlu.
+      field "batch_size", :batch_size, :integer
+    end
+
     # AdRefreshQueued şeması.
     class AdRefreshQueued < Pushizo::BaseModel
       # Zorunlu.
       field "queued", :queued, :boolean
       # Zorunlu.
       field "next_sync_at", :next_sync_at, :string
+    end
+
+    # AdReportingSettings şeması.
+    class AdReportingSettings < Pushizo::BaseModel
+      # Zorunlu.
+      field "reporting_currency", :reporting_currency, :string
+      # Zorunlu. Değerler: "last_click", "first_click", "linear", "time_decay".
+      field "attribution_model", :attribution_model, :string
+      # Zorunlu.
+      field "window_days", :window_days, :integer
+      # Zorunlu.
+      field "half_life_days", :half_life_days, :integer
+      # Zorunlu.
+      field "conversion_events", :conversion_events, [:array, :string]
+      # Zorunlu.
+      field "effective_conversion_events", :effective_conversion_events, [:array, :string]
+      # Zorunlu.
+      field "fx", :fx, "AdReportingSettingsFx"
+    end
+
+    # AdReportingSettingsFx şeması.
+    class AdReportingSettingsFx < Pushizo::BaseModel
+      # Zorunlu.
+      field "latest_day", :latest_day, :string
+      # Zorunlu.
+      field "source", :source, :string
+    end
+
+    # AdReportingSettingsInputDto şeması.
+    class AdReportingSettingsInputDto < Pushizo::BaseModel
+      field "reporting_currency", :reporting_currency, :string
+      # Değerler: "last_click", "first_click", "linear", "time_decay".
+      field "attribution_model", :attribution_model, :string
+      field "window_days", :window_days, :integer
+      field "half_life_days", :half_life_days, :integer
+      field "conversion_events", :conversion_events, [:array, :string]
+    end
+
+    # AdsCreativesResponse şeması.
+    class AdsCreativesResponse < Pushizo::BaseModel
+      field "data", :data, [:array, "AdCreative"]
     end
 
     # AdSpendReport şeması.
@@ -721,6 +886,496 @@ module Pushizo
       field "cpa", :cpa, :number
       # Zorunlu.
       field "roas", :roas, :number
+    end
+
+    # AffinityConfig şeması.
+    class AffinityConfig < Pushizo::BaseModel
+      # Zorunlu.
+      field "configured", :configured, :boolean
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "attributes", :attributes_value, [:array, :string]
+      # Zorunlu.
+      field "events", :events, [:map, :number]
+      # Zorunlu.
+      field "window_days", :window_days, :integer
+      # Zorunlu.
+      field "half_life_days", :half_life_days, :integer
+      # Zorunlu. Değerler: "idle", "queued", "running", "failed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "last_error", :last_error, :string
+      # Zorunlu.
+      field "last_computed_at", :last_computed_at, :string
+      # Zorunlu.
+      field "scored_users", :scored_users, :integer
+    end
+
+    # AffinityOverview şeması.
+    class AffinityOverview < Pushizo::BaseModel
+      # Zorunlu.
+      field "last_computed_at", :last_computed_at, :string
+      # Zorunlu.
+      field "scored_users", :scored_users, :integer
+      # Zorunlu.
+      field "attributes", :attributes_value, [:array, "AffinityOverviewAttributesItem"]
+    end
+
+    # AffinityOverviewAttributesItem şeması.
+    class AffinityOverviewAttributesItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "attribute", :attribute, :string
+      # Zorunlu.
+      field "values", :values, [:array, "AffinityOverviewAttributesItemValuesItem"]
+    end
+
+    # AffinityOverviewAttributesItemValuesItem şeması.
+    class AffinityOverviewAttributesItemValuesItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "value", :value, :string
+      # Zorunlu.
+      field "users", :users, :integer
+      # Zorunlu.
+      field "top_users", :top_users, :integer
+    end
+
+    # AgentUpdateDto şeması.
+    class AgentUpdateDto < Pushizo::BaseModel
+      field "max_concurrent", :max_concurrent, :integer
+      field "languages", :languages, [:array, :string]
+    end
+
+    # AiAgent şeması.
+    class AiAgent < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu. Değerler: "whatsapp", "sms", "rcs", "telegram", "viber", "chat".
+      field "channels", :channels, [:array, :string]
+      # Zorunlu.
+      field "instructions", :instructions, :string
+      # Zorunlu.
+      field "faq", :faq, [:array, "AiAgentFaqItem"]
+      # Zorunlu.
+      field "tools", :tools, [:array, "AiAgentToolsItem"]
+      # Zorunlu.
+      field "handoff", :handoff, "AiAgentHandoff"
+      # Zorunlu.
+      field "limits", :limits, "AiAgentLimits"
+      # Zorunlu.
+      field "ai_sentiment", :ai_sentiment, :boolean
+      # Zorunlu.
+      field "has_tool_secret", :has_tool_secret, :boolean
+      # Zorunlu.
+      field "usage", :usage, "AiAgentUsage"
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # AiAgentFaqItem şeması.
+    class AiAgentFaqItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "question", :question, :string
+      # Zorunlu.
+      field "answer", :answer, :string
+    end
+
+    # AiAgentHandoff şeması.
+    class AiAgentHandoff < Pushizo::BaseModel
+      # Zorunlu.
+      field "keywords", :keywords, [:array, :string]
+      # Zorunlu.
+      field "max_bot_replies", :max_bot_replies, :integer
+      # Zorunlu.
+      field "on_negative_sentiment", :on_negative_sentiment, :boolean
+      # Zorunlu.
+      field "message", :message, :string
+    end
+
+    # AiAgentLimits şeması.
+    class AiAgentLimits < Pushizo::BaseModel
+      # Zorunlu.
+      field "monthly_token_cap", :monthly_token_cap, :integer
+      # Zorunlu.
+      field "max_steps", :max_steps, :integer
+    end
+
+    # AiAgentList şeması.
+    class AiAgentList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "AiAgent"]
+    end
+
+    # AiAgentMetrics şeması.
+    class AiAgentMetrics < Pushizo::BaseModel
+      # Zorunlu.
+      field "period_days", :period_days, :integer
+      # Zorunlu.
+      field "runs", :runs, :integer
+      # Zorunlu.
+      field "replied", :replied, :integer
+      # Zorunlu.
+      field "handed_off", :handed_off, :integer
+      # Zorunlu.
+      field "skipped_cap", :skipped_cap, :integer
+      # Zorunlu.
+      field "failed", :failed, :integer
+      # Zorunlu.
+      field "conversations", :conversations, :integer
+      # Zorunlu.
+      field "resolution_rate", :resolution_rate, :number
+      # Zorunlu.
+      field "avg_steps", :avg_steps, :number
+      # Zorunlu.
+      field "tool_calls", :tool_calls, :integer
+      # Zorunlu.
+      field "tool_error_rate", :tool_error_rate, :number
+      # Zorunlu.
+      field "tokens", :tokens, :integer
+      # Zorunlu.
+      field "handoff_reasons", :handoff_reasons, [:map, :integer]
+    end
+
+    # AiAgentRunList şeması.
+    class AiAgentRunList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "AiAgentRunListDataItem"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
+    end
+
+    # AiAgentRunListDataItem şeması.
+    class AiAgentRunListDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "agent_id", :agent_id, :string
+      # Zorunlu.
+      field "conversation_id", :conversation_id, :string
+      # Zorunlu. Değerler: "pending", "replied", "handed_off", "skipped_cap", "failed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "steps", :steps, [:array, "AiAgentRunListDataItemStepsItem"]
+      # Zorunlu.
+      field "input_tokens", :input_tokens, :integer
+      # Zorunlu.
+      field "output_tokens", :output_tokens, :integer
+      # Zorunlu.
+      field "handoff_reason", :handoff_reason, :string
+      # Zorunlu.
+      field "error", :error, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "finished_at", :finished_at, :string
+    end
+
+    # AiAgentRunListDataItemStepsItem şeması.
+    class AiAgentRunListDataItemStepsItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "reply", "tool", "handoff".
+      field "kind", :kind, :string
+      field "tool", :tool, :string
+      field "status", :status, :integer
+      field "ok", :ok, :boolean
+      field "duration_ms", :duration_ms, :integer
+    end
+
+    # AiAgentToolsItem şeması.
+    class AiAgentToolsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "url", :url, :string
+      # Zorunlu.
+      field "params", :params, [:array, "AiAgentToolsItemParamsItem"]
+    end
+
+    # AiAgentToolsItemParamsItem şeması.
+    class AiAgentToolsItemParamsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "required", :required, :boolean
+    end
+
+    # AiAgentUsage şeması.
+    class AiAgentUsage < Pushizo::BaseModel
+      # Zorunlu.
+      field "tokens_this_month", :tokens_this_month, :integer
+      # Zorunlu.
+      field "period_start", :period_start, :string
+    end
+
+    # AiAgentWithSecret şeması.
+    class AiAgentWithSecret < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu. Değerler: "whatsapp", "sms", "rcs", "telegram", "viber", "chat".
+      field "channels", :channels, [:array, :string]
+      # Zorunlu.
+      field "instructions", :instructions, :string
+      # Zorunlu.
+      field "faq", :faq, [:array, "AiAgentWithSecretFaqItem"]
+      # Zorunlu.
+      field "tools", :tools, [:array, "AiAgentWithSecretToolsItem"]
+      # Zorunlu.
+      field "handoff", :handoff, "AiAgentWithSecretHandoff"
+      # Zorunlu.
+      field "limits", :limits, "AiAgentWithSecretLimits"
+      # Zorunlu.
+      field "ai_sentiment", :ai_sentiment, :boolean
+      # Zorunlu.
+      field "has_tool_secret", :has_tool_secret, :boolean
+      # Zorunlu.
+      field "usage", :usage, "AiAgentWithSecretUsage"
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+      # Zorunlu.
+      field "tool_secret", :tool_secret, :string
+    end
+
+    # AiAgentWithSecretFaqItem şeması.
+    class AiAgentWithSecretFaqItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "question", :question, :string
+      # Zorunlu.
+      field "answer", :answer, :string
+    end
+
+    # AiAgentWithSecretHandoff şeması.
+    class AiAgentWithSecretHandoff < Pushizo::BaseModel
+      # Zorunlu.
+      field "keywords", :keywords, [:array, :string]
+      # Zorunlu.
+      field "max_bot_replies", :max_bot_replies, :integer
+      # Zorunlu.
+      field "on_negative_sentiment", :on_negative_sentiment, :boolean
+      # Zorunlu.
+      field "message", :message, :string
+    end
+
+    # AiAgentWithSecretLimits şeması.
+    class AiAgentWithSecretLimits < Pushizo::BaseModel
+      # Zorunlu.
+      field "monthly_token_cap", :monthly_token_cap, :integer
+      # Zorunlu.
+      field "max_steps", :max_steps, :integer
+    end
+
+    # AiAgentWithSecretToolsItem şeması.
+    class AiAgentWithSecretToolsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "url", :url, :string
+      # Zorunlu.
+      field "params", :params, [:array, "AiAgentWithSecretToolsItemParamsItem"]
+    end
+
+    # AiAgentWithSecretToolsItemParamsItem şeması.
+    class AiAgentWithSecretToolsItemParamsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "required", :required, :boolean
+    end
+
+    # AiAgentWithSecretUsage şeması.
+    class AiAgentWithSecretUsage < Pushizo::BaseModel
+      # Zorunlu.
+      field "tokens_this_month", :tokens_this_month, :integer
+      # Zorunlu.
+      field "period_start", :period_start, :string
+    end
+
+    # AndroidDeliveryReport şeması.
+    class AndroidDeliveryReport < Pushizo::BaseModel
+      # Zorunlu.
+      field "from", :from, :string
+      # Zorunlu.
+      field "to", :to, :string
+      # Zorunlu.
+      field "devices", :devices, "AndroidDeliveryReportDevices"
+      # Zorunlu.
+      field "totals", :totals, "AndroidDeliveryReportTotals"
+      # Zorunlu.
+      field "previous", :previous, "AndroidDeliveryReportPrevious"
+      # Zorunlu.
+      field "deprioritized", :deprioritized, :integer
+      # Zorunlu.
+      field "aggressive", :aggressive, "AndroidDeliveryReportAggressive"
+      # Zorunlu.
+      field "others", :others, "AndroidDeliveryReportOthers"
+      # Zorunlu.
+      field "vendors", :vendors, [:array, "AndroidDeliveryReportVendorsItem"]
+      # Zorunlu.
+      field "roms", :roms, [:array, "AndroidDeliveryReportRomsItem"]
+      # Zorunlu. Değerler: "upgrade_sdk", "vendor_guidance", "background_restricted", "battery_exemption", "deprioritized", "notifications_blocked".
+      field "recommendations", :recommendations, [:array, :string]
+    end
+
+    # AndroidDeliveryReportAggressive şeması.
+    class AndroidDeliveryReportAggressive < Pushizo::BaseModel
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "delivered", :delivered, :integer
+      # Zorunlu.
+      field "delivery_rate", :delivery_rate, :number
+    end
+
+    # AndroidDeliveryReportDevices şeması.
+    class AndroidDeliveryReportDevices < Pushizo::BaseModel
+      # Zorunlu.
+      field "total", :total, :integer
+      # Zorunlu.
+      field "reporting", :reporting, :integer
+      # Zorunlu.
+      field "reporting_rate", :reporting_rate, :number
+      # Zorunlu.
+      field "restricted", :restricted, :integer
+      # Zorunlu.
+      field "restricted_rate", :restricted_rate, :number
+      # Zorunlu.
+      field "background_restricted", :background_restricted, :integer
+      # Zorunlu.
+      field "battery_optimized", :battery_optimized, :integer
+      # Zorunlu.
+      field "low_standby_bucket", :low_standby_bucket, :integer
+      # Zorunlu.
+      field "power_save", :power_save, :integer
+      # Zorunlu.
+      field "data_saver", :data_saver, :integer
+      # Zorunlu.
+      field "channel_blocked", :channel_blocked, :integer
+      # Zorunlu.
+      field "notifications_blocked", :notifications_blocked, :integer
+      # Zorunlu.
+      field "aggressive_vendor", :aggressive_vendor, :integer
+      # Zorunlu.
+      field "aggressive_vendor_rate", :aggressive_vendor_rate, :number
+    end
+
+    # AndroidDeliveryReportOthers şeması.
+    class AndroidDeliveryReportOthers < Pushizo::BaseModel
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "delivered", :delivered, :integer
+      # Zorunlu.
+      field "delivery_rate", :delivery_rate, :number
+    end
+
+    # AndroidDeliveryReportPrevious şeması.
+    class AndroidDeliveryReportPrevious < Pushizo::BaseModel
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "delivered", :delivered, :integer
+      # Zorunlu.
+      field "opened", :opened, :integer
+      # Zorunlu.
+      field "delivery_rate", :delivery_rate, :number
+      # Zorunlu.
+      field "open_rate", :open_rate, :number
+      # Zorunlu.
+      field "median_delay_seconds", :median_delay_seconds, :integer
+      # Zorunlu.
+      field "p90_delay_seconds", :p90_delay_seconds, :integer
+    end
+
+    # AndroidDeliveryReportRomsItem şeması.
+    class AndroidDeliveryReportRomsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "rom", :rom, :string
+      # Zorunlu.
+      field "devices", :devices, :integer
+      # Zorunlu.
+      field "restricted", :restricted, :integer
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "delivered", :delivered, :integer
+      # Zorunlu.
+      field "delivery_rate", :delivery_rate, :number
+      # Zorunlu.
+      field "median_delay_seconds", :median_delay_seconds, :integer
+    end
+
+    # AndroidDeliveryReportTotals şeması.
+    class AndroidDeliveryReportTotals < Pushizo::BaseModel
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "delivered", :delivered, :integer
+      # Zorunlu.
+      field "opened", :opened, :integer
+      # Zorunlu.
+      field "delivery_rate", :delivery_rate, :number
+      # Zorunlu.
+      field "open_rate", :open_rate, :number
+      # Zorunlu.
+      field "median_delay_seconds", :median_delay_seconds, :integer
+      # Zorunlu.
+      field "p90_delay_seconds", :p90_delay_seconds, :integer
+    end
+
+    # AndroidDeliveryReportVendorsItem şeması.
+    class AndroidDeliveryReportVendorsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "vendor", :vendor, :string
+      # Zorunlu.
+      field "aggressive", :aggressive, :boolean
+      # Zorunlu.
+      field "devices", :devices, :integer
+      # Zorunlu.
+      field "reporting", :reporting, :integer
+      # Zorunlu.
+      field "restricted", :restricted, :integer
+      # Zorunlu.
+      field "battery_optimized", :battery_optimized, :integer
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "delivered", :delivered, :integer
+      # Zorunlu.
+      field "opened", :opened, :integer
+      # Zorunlu.
+      field "delivery_rate", :delivery_rate, :number
+      # Zorunlu.
+      field "open_rate", :open_rate, :number
+      # Zorunlu.
+      field "median_delay_seconds", :median_delay_seconds, :integer
+      # Zorunlu.
+      field "p90_delay_seconds", :p90_delay_seconds, :integer
+      # Zorunlu.
+      field "deprioritized", :deprioritized, :integer
     end
 
     # ApiEventsDto şeması.
@@ -807,6 +1462,68 @@ module Pushizo
       field "updated_at", :updated_at, :string
     end
 
+    # AppFlag şeması.
+    class AppFlag < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "key", :key, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu. Değerler: "boolean", "string", "number", "json".
+      field "value_type", :value_type, :string
+      # Zorunlu.
+      field "on_value", :on_value, :any
+      # Zorunlu.
+      field "off_value", :off_value, :any
+      # Zorunlu.
+      field "rollout_percent", :rollout_percent, :integer
+      # Zorunlu.
+      field "segment_id", :segment_id, :string
+      # Zorunlu.
+      field "rollout_schedule", :rollout_schedule, [:array, "AppFlagRolloutScheduleItem"]
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # AppFlagEvaluation şeması.
+    class AppFlagEvaluation < Pushizo::BaseModel
+      # Zorunlu.
+      field "flags", :flags, [:map, "AppFlagEvaluationFlagsValue"]
+    end
+
+    # AppFlagEvaluationFlagsValue şeması.
+    class AppFlagEvaluationFlagsValue < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "value", :value, :any
+      # Zorunlu. Değerler: "on", "disabled", "segment", "rollout".
+      field "reason", :reason, :string
+    end
+
+    # AppFlagList şeması.
+    class AppFlagList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "AppFlag"]
+    end
+
+    # AppFlagRolloutScheduleItem şeması.
+    class AppFlagRolloutScheduleItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "at", :at, :string
+      # Zorunlu.
+      field "percent", :percent, :integer
+    end
+
     # AppList şeması.
     class AppList < Pushizo::BaseModel
       # Zorunlu.
@@ -831,13 +1548,28 @@ module Pushizo
       field "androidChannels", :android_channels, [:array, "AppSettingsAndroidChannelsItem"]
       field "sms", :sms, "AppSettingsSms"
       field "preferenceCenter", :preference_center, "AppSettingsPreferenceCenter"
+      field "brandKit", :brand_kit, "AppSettingsBrandKit"
       field "defaultTtlSeconds", :default_ttl_seconds, :integer
       field "identityVerificationRequired", :identity_verification_required, :boolean
+      # Değerler: "off", "full", "masked".
+      field "ipCapture", :ip_capture, :string
+      field "ipRetentionDays", :ip_retention_days, :integer
+      field "adaptiveFrequency", :adaptive_frequency, "AppSettingsAdaptiveFrequency"
       field "allowedOrigins", :allowed_origins, [:array, :string]
       field "campaignApprovalRequired", :campaign_approval_required, :boolean
       field "webPush", :web_push, "AppSettingsWebPush"
       field "onboarding", :onboarding, "AppSettingsOnboarding"
       field "sdkSetup", :sdk_setup, "AppSettingsSdkSetup"
+    end
+
+    # AppSettingsAdaptiveFrequency şeması.
+    class AppSettingsAdaptiveFrequency < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "min", :min, :integer
+      # Zorunlu.
+      field "max", :max, :integer
     end
 
     # AppSettingsAndroidChannelsItem şeması.
@@ -854,6 +1586,17 @@ module Pushizo
       field "group", :group, :string
     end
 
+    # AppSettingsBrandKit şeması.
+    class AppSettingsBrandKit < Pushizo::BaseModel
+      field "website_url", :website_url, :string
+      field "name", :name, :string
+      field "primary_color", :primary_color, :string
+      field "accent_color", :accent_color, :string
+      field "font", :font, :string
+      field "logo_url", :logo_url, :string
+      field "tone", :tone, :string
+    end
+
     # AppSettingsFrequencyCap şeması.
     class AppSettingsFrequencyCap < Pushizo::BaseModel
       # Zorunlu.
@@ -868,7 +1611,7 @@ module Pushizo
       field "max", :max, :integer
       # Zorunlu.
       field "window", :window, "AppSettingsFrequencyCapsItemWindow"
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channels", :channels, [:array, :string]
     end
 
@@ -892,9 +1635,9 @@ module Pushizo
       field "simulation", :simulation, :boolean
       field "completed_at", :completed_at, :string
       field "version", :version, :integer
-      # Değerler: "ios", "android", "huawei", "web".
+      # Değerler: "ios", "android", "huawei", "web", "amazon", "windows", "email", "sms".
       field "platforms", :platforms, [:array, :string]
-      # Değerler: "native", "flutter", "react-native", "unity", "capacitor", "cordova", "maui".
+      # Değerler: "native", "flutter", "react-native", "expo", "kmp", "unity", "capacitor", "cordova", "maui".
       field "framework", :framework, :string
       # Değerler: "code", "wordpress".
       field "web_integration", :web_integration, :string
@@ -1042,6 +1785,85 @@ module Pushizo
       field "message", :message, :string
     end
 
+    # AssignmentRule şeması.
+    class AssignmentRule < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "position", :position, :integer
+      # Zorunlu.
+      field "conditions", :conditions, "AssignmentRuleConditions"
+      # Zorunlu. Değerler: "round_robin", "least_busy", "team_only".
+      field "strategy", :strategy, :string
+      # Zorunlu.
+      field "team_id", :team_id, :string
+      # Zorunlu.
+      field "agent_ids", :agent_ids, [:array, :string]
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # AssignmentRuleConditions şeması.
+    class AssignmentRuleConditions < Pushizo::BaseModel
+      # Değerler: "sms", "whatsapp", "rcs", "telegram", "viber", "email", "chat".
+      field "channels", :channels, [:array, :string]
+      field "languages", :languages, [:array, :string]
+      field "tags", :tags, [:map, :string]
+    end
+
+    # AssignmentRuleInputDto şeması.
+    class AssignmentRuleInputDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "enabled", :enabled, :boolean
+      field "position", :position, :integer
+      field "conditions", :conditions, "AssignmentRuleInputDtoConditions"
+      # Değerler: "round_robin", "least_busy", "team_only".
+      field "strategy", :strategy, :string
+      field "team_id", :team_id, :string
+      field "agent_ids", :agent_ids, [:array, :string]
+    end
+
+    # AssignmentRuleInputDtoConditions şeması.
+    class AssignmentRuleInputDtoConditions < Pushizo::BaseModel
+      # Değerler: "sms", "whatsapp", "rcs", "telegram", "viber", "email", "chat".
+      field "channels", :channels, [:array, :string]
+      field "languages", :languages, [:array, :string]
+      field "tags", :tags, [:map, :string]
+    end
+
+    # AssignmentRuleList şeması.
+    class AssignmentRuleList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "AssignmentRule"]
+    end
+
+    # AssignmentRuleUpdateDto şeması.
+    class AssignmentRuleUpdateDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "enabled", :enabled, :boolean
+      field "position", :position, :integer
+      field "conditions", :conditions, "AssignmentRuleUpdateDtoConditions"
+      # Değerler: "round_robin", "least_busy", "team_only".
+      field "strategy", :strategy, :string
+      field "team_id", :team_id, :string
+      field "agent_ids", :agent_ids, [:array, :string]
+    end
+
+    # AssignmentRuleUpdateDtoConditions şeması.
+    class AssignmentRuleUpdateDtoConditions < Pushizo::BaseModel
+      # Değerler: "sms", "whatsapp", "rcs", "telegram", "viber", "email", "chat".
+      field "channels", :channels, [:array, :string]
+      field "languages", :languages, [:array, :string]
+      field "tags", :tags, [:map, :string]
+    end
+
     # AuditEntry şeması.
     class AuditEntry < Pushizo::BaseModel
       # Zorunlu.
@@ -1080,6 +1902,33 @@ module Pushizo
       field "has_more", :has_more, :boolean
     end
 
+    # BatchMembersDto şeması.
+    class BatchMembersDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "members", :members, [:array, "BatchMembersDtoMembersItem"]
+    end
+
+    # BatchMembersDtoMembersItem şeması.
+    class BatchMembersDtoMembersItem < Pushizo::BaseModel
+      field "user_id", :user_id, :string
+      field "external_id", :external_id, :string
+      field "role", :role, :string
+    end
+
+    # BatchUpsertCompaniesDto şeması.
+    class BatchUpsertCompaniesDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "companies", :companies, [:array, "UpsertCompanyDto"]
+    end
+
+    # BulkReplayDto şeması.
+    class BulkReplayDto < Pushizo::BaseModel
+      # Değerler: "failed", "dead", "failed_or_dead".
+      field "status", :status, :string
+      field "from", :from, :string
+      field "to", :to, :string
+    end
+
     # Campaign şeması.
     class Campaign < Pushizo::BaseModel
       # Zorunlu.
@@ -1092,6 +1941,8 @@ module Pushizo
       field "labels", :labels, [:array, :string]
       # Zorunlu.
       field "category", :category, :string
+      # Zorunlu.
+      field "goals", :goals, "CampaignGoals"
       # Zorunlu.
       field "ab_test", :ab_test, "CampaignAbTest"
       # Zorunlu.
@@ -1138,6 +1989,8 @@ module Pushizo
       field "updated_at", :updated_at, :string
       # Zorunlu.
       field "estimated_recipients", :estimated_recipients, :integer
+      # Zorunlu.
+      field "preflight", :preflight, "CampaignPreflight"
     end
 
     # CampaignAbTest şeması.
@@ -1197,8 +2050,45 @@ module Pushizo
       field "priority", :priority, :integer
       field "collapse_id", :collapse_id, :string
       field "frequency_cap_exempt", :frequency_cap_exempt, :boolean
+      # Değerler: "low", "normal", "high".
+      field "frequency_priority", :frequency_priority, :string
+      field "global_control_exempt", :global_control_exempt, :boolean
       field "quiet_hours_exempt", :quiet_hours_exempt, :boolean
       field "one_per_user", :one_per_user, :boolean
+    end
+
+    # CampaignEmailRisk şeması.
+    class CampaignEmailRisk < Pushizo::BaseModel
+      # Zorunlu.
+      field "applies", :applies, :boolean
+      # Zorunlu.
+      field "recipients", :recipients, :integer
+      # Zorunlu.
+      field "flagged_invalid", :flagged_invalid, :integer
+      # Zorunlu.
+      field "sendable", :sendable, :integer
+      # Zorunlu.
+      field "valid", :valid, :integer
+      # Zorunlu.
+      field "unknown", :unknown, :integer
+      # Zorunlu.
+      field "unchecked", :unchecked, :integer
+      # Zorunlu.
+      field "estimated_invalid_ratio", :estimated_invalid_ratio, :number
+      # Zorunlu.
+      field "max_invalid_ratio", :max_invalid_ratio, :number
+      # Zorunlu.
+      field "blocked", :blocked, :boolean
+      # Zorunlu.
+      field "bounce_rate_7d", :bounce_rate_7d, :number
+      # Zorunlu.
+      field "bounce_rate_30d", :bounce_rate_30d, :number
+    end
+
+    # CampaignGoals şeması.
+    class CampaignGoals < Pushizo::BaseModel
+      field "primary", :primary, :string
+      field "secondary", :secondary, [:array, :string]
     end
 
     # CampaignPage şeması.
@@ -1209,6 +2099,68 @@ module Pushizo
       field "next_cursor", :next_cursor, :string
       # Zorunlu.
       field "has_more", :has_more, :boolean
+    end
+
+    # CampaignPreflight şeması.
+    class CampaignPreflight < Pushizo::BaseModel
+      # Zorunlu.
+      field "checked_at", :checked_at, :string
+      # Zorunlu.
+      field "summary", :summary, "CampaignPreflightSummary"
+      # Zorunlu.
+      field "codes", :codes, [:array, :string]
+      field "acknowledged_by", :acknowledged_by, :string
+      field "acknowledged_at", :acknowledged_at, :string
+    end
+
+    # CampaignPreflightReport şeması.
+    class CampaignPreflightReport < Pushizo::BaseModel
+      # Zorunlu.
+      field "campaign_id", :campaign_id, :string
+      # Zorunlu.
+      field "checked_at", :checked_at, :string
+      # Zorunlu.
+      field "links_checked", :links_checked, :boolean
+      # Zorunlu.
+      field "summary", :summary, "CampaignPreflightReportSummary"
+      # Zorunlu.
+      field "findings", :findings, [:array, "CampaignPreflightReportFindingsItem"]
+    end
+
+    # CampaignPreflightReportFindingsItem şeması.
+    class CampaignPreflightReportFindingsItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "brand_name_casing", "off_brand_color", "off_brand_font", "banned_phrase", "phishing_term", "link_invalid", "link_insecure_http", "link_unsafe_host", "link_shortener", "link_missing_utm", "link_broken", "link_unreachable", "liquid_syntax_error", "liquid_missing_default", "liquid_unknown_variable", "liquid_undefined_property", "commercial_no_category", "iys_sms_filter_informational", "sms_missing_opt_out", "email_missing_postal_address", "send_time_outside_hours".
+      field "code", :code, :string
+      # Zorunlu. Değerler: "brand", "content", "links", "personalization", "compliance".
+      field "category", :category, :string
+      # Zorunlu. Değerler: "critical", "warning", "info".
+      field "severity", :severity, :string
+      field "field", :field, :string
+      field "params", :params, [:map, :any]
+    end
+
+    # CampaignPreflightReportSummary şeması.
+    class CampaignPreflightReportSummary < Pushizo::BaseModel
+      # Zorunlu.
+      field "critical", :critical, :integer
+      # Zorunlu.
+      field "warning", :warning, :integer
+      # Zorunlu.
+      field "info", :info, :integer
+      # Zorunlu.
+      field "blocked", :blocked, :boolean
+    end
+
+    # CampaignPreflightSummary şeması.
+    class CampaignPreflightSummary < Pushizo::BaseModel
+      # Zorunlu.
+      field "critical", :critical, :integer
+      # Zorunlu.
+      field "warning", :warning, :integer
+      # Zorunlu.
+      field "info", :info, :integer
+      # Zorunlu.
+      field "blocked", :blocked, :boolean
     end
 
     # CampaignRecurrence şeması.
@@ -1230,6 +2182,8 @@ module Pushizo
       field "labels", :labels, [:array, :string]
       # Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır
       field "category", :category, :string
+      # Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı.
+      field "goals", :goals, "CampaignsCreateBodyGoals"
       field "ab_test", :ab_test, "CampaignsCreateBodyAbTest"
       # A/B varyantları (ağırlıklar toplamı 100; en fazla bir is_control)
       field "variants", :variants, [:array, "CampaignsCreateBodyVariantsItem"]
@@ -1263,7 +2217,7 @@ module Pushizo
       field "exclude_segments", :exclude_segments, [:array, :string]
       # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
       field "filters", :filters, "CampaignsCreateBodyAudienceFilters"
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channels", :channels, [:array, :string]
       field "test_devices_only", :test_devices_only, :boolean
     end
@@ -1286,8 +2240,17 @@ module Pushizo
       field "priority", :priority, :integer
       field "collapse_id", :collapse_id, :string
       field "frequency_cap_exempt", :frequency_cap_exempt, :boolean
+      # Değerler: "low", "normal", "high".
+      field "frequency_priority", :frequency_priority, :string
+      field "global_control_exempt", :global_control_exempt, :boolean
       field "quiet_hours_exempt", :quiet_hours_exempt, :boolean
       field "one_per_user", :one_per_user, :boolean
+    end
+
+    # Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı.
+    class CampaignsCreateBodyGoals < Pushizo::BaseModel
+      field "primary", :primary, :string
+      field "secondary", :secondary, [:array, :string]
     end
 
     # CampaignsCreateBodyRecurrence şeması.
@@ -1315,6 +2278,10 @@ module Pushizo
       # Zorunlu.
       field "rates", :rates, "CampaignStatsRates"
       # Zorunlu.
+      field "goals", :goals, [:array, "CampaignStatsGoalsItem"]
+      # Zorunlu.
+      field "cards", :cards, "CampaignStatsCards"
+      # Zorunlu.
       field "channels", :channels, [:array, "CampaignStatsChannelsItem"]
       # Zorunlu.
       field "hourly", :hourly, [:array, "CampaignStatsHourlyItem"]
@@ -1341,9 +2308,25 @@ module Pushizo
       field "sms_segments", :sms_segments, :integer
     end
 
+    # CampaignStatsCards şeması.
+    class CampaignStatsCards < Pushizo::BaseModel
+      # Zorunlu.
+      field "created", :created, :integer
+      # Zorunlu.
+      field "viewed", :viewed, :integer
+      # Zorunlu.
+      field "clicked", :clicked, :integer
+      # Zorunlu.
+      field "dismissed", :dismissed, :integer
+      # Zorunlu.
+      field "view_rate", :view_rate, :number
+      # Zorunlu.
+      field "click_rate", :click_rate, :number
+    end
+
     # CampaignStatsChannelsItem şeması.
     class CampaignStatsChannelsItem < Pushizo::BaseModel
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channel", :channel, :string
       # Zorunlu.
       field "targeted", :targeted, :integer
@@ -1363,6 +2346,18 @@ module Pushizo
       field "code", :code, :string
       # Zorunlu.
       field "count", :count, :integer
+    end
+
+    # CampaignStatsGoalsItem şeması.
+    class CampaignStatsGoalsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "event", :event, :string
+      # Zorunlu.
+      field "primary", :primary, :boolean
+      # Zorunlu.
+      field "converted", :converted, :integer
+      # Zorunlu.
+      field "conversion_rate", :conversion_rate, :number
     end
 
     # CampaignStatsHourlyItem şeması.
@@ -1404,6 +2399,8 @@ module Pushizo
       field "labels", :labels, [:array, :string]
       # Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır
       field "category", :category, :string
+      # Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı.
+      field "goals", :goals, "CampaignsUpdateBodyGoals"
       field "ab_test", :ab_test, "CampaignsUpdateBodyAbTest"
       # A/B varyantları (ağırlıklar toplamı 100; en fazla bir is_control)
       field "variants", :variants, [:array, "CampaignsUpdateBodyVariantsItem"]
@@ -1437,7 +2434,7 @@ module Pushizo
       field "exclude_segments", :exclude_segments, [:array, :string]
       # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
       field "filters", :filters, "CampaignsUpdateBodyAudienceFilters"
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channels", :channels, [:array, :string]
       field "test_devices_only", :test_devices_only, :boolean
     end
@@ -1460,8 +2457,17 @@ module Pushizo
       field "priority", :priority, :integer
       field "collapse_id", :collapse_id, :string
       field "frequency_cap_exempt", :frequency_cap_exempt, :boolean
+      # Değerler: "low", "normal", "high".
+      field "frequency_priority", :frequency_priority, :string
+      field "global_control_exempt", :global_control_exempt, :boolean
       field "quiet_hours_exempt", :quiet_hours_exempt, :boolean
       field "one_per_user", :one_per_user, :boolean
+    end
+
+    # Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı.
+    class CampaignsUpdateBodyGoals < Pushizo::BaseModel
+      field "primary", :primary, :string
+      field "secondary", :secondary, [:array, :string]
     end
 
     # CampaignsUpdateBodyRecurrence şeması.
@@ -1582,6 +2588,20 @@ module Pushizo
       field "click_rate", :click_rate, :number
       # Zorunlu.
       field "conversion_rate", :conversion_rate, :number
+      # Zorunlu.
+      field "goals", :goals, [:array, "CampaignVariantStatsVariantsItemGoalsItem"]
+    end
+
+    # CampaignVariantStatsVariantsItemGoalsItem şeması.
+    class CampaignVariantStatsVariantsItemGoalsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "event", :event, :string
+      # Zorunlu.
+      field "primary", :primary, :boolean
+      # Zorunlu.
+      field "converted", :converted, :integer
+      # Zorunlu.
+      field "conversion_rate", :conversion_rate, :number
     end
 
     # CannedInputDto şeması.
@@ -1627,11 +2647,85 @@ module Pushizo
       field "language", :language, :string
     end
 
+    # Catalog şeması.
+    class Catalog < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "currency", :currency, :string
+      # Zorunlu.
+      field "item_count", :item_count, :integer
+      # Zorunlu.
+      field "liquid", :liquid, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # CatalogItem şeması.
+    class CatalogItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "title", :title, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "image_url", :image_url, :string
+      # Zorunlu.
+      field "url", :url, :string
+      # Zorunlu.
+      field "price", :price, :number
+      # Zorunlu.
+      field "sale_price", :sale_price, :number
+      # Zorunlu.
+      field "currency", :currency, :string
+      # Zorunlu.
+      field "category", :category, :string
+      # Zorunlu.
+      field "brand", :brand, :string
+      # Zorunlu.
+      field "in_stock", :in_stock, :boolean
+      # Zorunlu.
+      field "attributes", :attributes_value, [:map, :string]
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # CatalogItemsPage şeması.
+    class CatalogItemsPage < Pushizo::BaseModel
+      # Zorunlu.
+      field "total", :total, :integer
+      # Zorunlu.
+      field "data", :data, [:array, "CatalogItem"]
+    end
+
+    # CatalogList şeması.
+    class CatalogList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "Catalog"]
+    end
+
+    # CatalogUpsertResult şeması.
+    class CatalogUpsertResult < Pushizo::BaseModel
+      # Zorunlu.
+      field "catalog", :catalog, "Catalog"
+      # Zorunlu.
+      field "upserted", :upserted, :integer
+    end
+
     # ChannelConfig şeması.
     class ChannelConfig < Pushizo::BaseModel
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channel", :channel, :string
-      # Zorunlu. Değerler: "apns", "fcm", "hms", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "meta_whatsapp", "google_rbm", "mock".
+      # Zorunlu. Değerler: "apns", "fcm", "hms", "adm", "wns", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "meta_whatsapp", "google_rbm", "telegram_bot", "viber_bot", "mock".
       field "provider", :provider, :string
       # Zorunlu. Değerler: "unconfigured", "active", "invalid", "suspended".
       field "status", :status, :string
@@ -1688,6 +2782,7 @@ module Pushizo
       field "account_sid", :account_sid, :string
       field "from_number", :from_number, :string
       field "messaging_service_sid", :messaging_service_sid, :string
+      field "verify_service_sid", :verify_service_sid, :string
       field "usercode", :usercode, :string
       field "msgheader", :msgheader, :string
       # Değerler: "0", "11", "12".
@@ -1700,6 +2795,11 @@ module Pushizo
       field "rbm_agent_id", :rbm_agent_id, :string
       field "content_sid", :content_sid, :string
       field "sms_fallback", :sms_fallback, :boolean
+      field "telegram_bot_username", :telegram_bot_username, :string
+      field "viber_uri", :viber_uri, :string
+      field "viber_sender_name", :viber_sender_name, :string
+      field "viber_sender_avatar", :viber_sender_avatar, :string
+      field "webhook_registered_at", :webhook_registered_at, :string
     end
 
     # ChannelConfigDnsCheck şeması.
@@ -1756,6 +2856,152 @@ module Pushizo
       field "data", :data, [:array, "ChannelConfig"]
     end
 
+    # ChannelScoreConfig şeması.
+    class ChannelScoreConfig < Pushizo::BaseModel
+      # Zorunlu.
+      field "configured", :configured, :boolean
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "window_days", :window_days, :integer
+      # Zorunlu.
+      field "min_sends", :min_sends, :integer
+      # Zorunlu.
+      field "count_email_opens", :count_email_opens, :boolean
+      # Zorunlu. Değerler: "idle", "queued", "running", "failed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "last_error", :last_error, :string
+      # Zorunlu.
+      field "last_computed_at", :last_computed_at, :string
+      # Zorunlu.
+      field "scored_users", :scored_users, :integer
+    end
+
+    # ChannelScoreOverview şeması.
+    class ChannelScoreOverview < Pushizo::BaseModel
+      # Zorunlu.
+      field "total", :total, :integer
+      # Zorunlu.
+      field "low_population", :low_population, :boolean
+      # Zorunlu.
+      field "last_computed_at", :last_computed_at, :string
+      # Zorunlu.
+      field "channels", :channels, [:array, "ChannelScoreOverviewChannelsItem"]
+    end
+
+    # ChannelScoreOverviewChannelsItem şeması.
+    class ChannelScoreOverviewChannelsItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "push", "email", "whatsapp", "rcs", "sms".
+      field "channel", :channel, :string
+      # Zorunlu.
+      field "best_users", :best_users, :integer
+      # Zorunlu.
+      field "share", :share, :number
+      # Zorunlu.
+      field "sends", :sends, :integer
+      # Zorunlu.
+      field "engaged", :engaged, :integer
+      # Zorunlu.
+      field "engagement_rate", :engagement_rate, :number
+    end
+
+    # ChannelScoreUser şeması.
+    class ChannelScoreUser < Pushizo::BaseModel
+      # Zorunlu.
+      field "user_id", :user_id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu. Değerler: "push", "email", "whatsapp", "rcs", "sms".
+      field "best_channel", :best_channel, :string
+      # Zorunlu.
+      field "scores", :scores, [:array, "ChannelScoreUserScoresItem"]
+    end
+
+    # ChannelScoreUserScoresItem şeması.
+    class ChannelScoreUserScoresItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "push", "email", "whatsapp", "rcs", "sms".
+      field "channel", :channel, :string
+      # Zorunlu.
+      field "sends", :sends, :integer
+      # Zorunlu.
+      field "engaged", :engaged, :integer
+      # Zorunlu.
+      field "score", :score, :number
+    end
+
+    # ChannelScoreUsersPage şeması.
+    class ChannelScoreUsersPage < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "ChannelScoreUser"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+    end
+
+    # ChannelStatusList şeması.
+    class ChannelStatusList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "ChannelStatusListDataItem"]
+    end
+
+    # ChannelStatusListDataItem şeması.
+    class ChannelStatusListDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "channel", :channel, :string
+      # Zorunlu.
+      field "provider", :provider, :string
+      # Zorunlu.
+      field "status", :status, :string
+    end
+
+    # ChannelsVerifyDnsResponse şeması.
+    class ChannelsVerifyDnsResponse < Pushizo::BaseModel
+      # Zorunlu.
+      field "domain", :domain, :string
+      # Zorunlu.
+      field "checked_at", :checked_at, :string
+      # Zorunlu.
+      field "spf", :spf, "ChannelsVerifyDnsResponseSpf"
+      # Zorunlu.
+      field "dkim", :dkim, "ChannelsVerifyDnsResponseDkim"
+      # Zorunlu.
+      field "dmarc", :dmarc, "ChannelsVerifyDnsResponseDmarc"
+      # Zorunlu.
+      field "issues", :issues, [:array, :string]
+    end
+
+    # ChannelsVerifyDnsResponseDkim şeması.
+    class ChannelsVerifyDnsResponseDkim < Pushizo::BaseModel
+      # Zorunlu.
+      field "ok", :ok, :boolean
+      # Zorunlu.
+      field "selector", :selector, :string
+      # Zorunlu.
+      field "record", :record, :string
+      # Zorunlu.
+      field "expected", :expected, :string
+    end
+
+    # ChannelsVerifyDnsResponseDmarc şeması.
+    class ChannelsVerifyDnsResponseDmarc < Pushizo::BaseModel
+      # Zorunlu.
+      field "ok", :ok, :boolean
+      # Zorunlu.
+      field "record", :record, :string
+      # Zorunlu.
+      field "expected", :expected, :string
+    end
+
+    # ChannelsVerifyDnsResponseSpf şeması.
+    class ChannelsVerifyDnsResponseSpf < Pushizo::BaseModel
+      # Zorunlu.
+      field "ok", :ok, :boolean
+      # Zorunlu.
+      field "record", :record, :string
+      # Zorunlu.
+      field "expected", :expected, :string
+    end
+
     # ChannelValidation şeması.
     class ChannelValidation < Pushizo::BaseModel
       # Zorunlu.
@@ -1770,6 +3016,116 @@ module Pushizo
       field "details", :details, [:map, :any]
       # Zorunlu.
       field "channel", :channel, "ChannelConfig"
+    end
+
+    # CheckVerifyDto şeması.
+    class CheckVerifyDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "code", :code, :string
+    end
+
+    # CleanupResult şeması.
+    class CleanupResult < Pushizo::BaseModel
+      # Zorunlu.
+      field "deleted", :deleted, :integer
+    end
+
+    # Company şeması.
+    class Company < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "domain", :domain, :string
+      # Zorunlu.
+      field "properties", :properties, [:map, :any]
+      # Zorunlu.
+      field "member_count", :member_count, :integer
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # CompanyBatchResult şeması.
+    class CompanyBatchResult < Pushizo::BaseModel
+      # Zorunlu.
+      field "created", :created, :integer
+      # Zorunlu.
+      field "updated", :updated, :integer
+      # Zorunlu.
+      field "data", :data, [:array, "CompanyBatchResultDataItem"]
+    end
+
+    # CompanyBatchResultDataItem şeması.
+    class CompanyBatchResultDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu.
+      field "created", :created, :boolean
+    end
+
+    # CompanyList şeması.
+    class CompanyList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "Company"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
+    end
+
+    # CompanyMember şeması.
+    class CompanyMember < Pushizo::BaseModel
+      # Zorunlu.
+      field "company_id", :company_id, :string
+      # Zorunlu.
+      field "user_id", :user_id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu.
+      field "role", :role, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # CompanyMemberBatchResult şeması.
+    class CompanyMemberBatchResult < Pushizo::BaseModel
+      # Zorunlu.
+      field "added", :added, :integer
+      # Zorunlu.
+      field "updated", :updated, :integer
+      # Zorunlu.
+      field "not_found", :not_found, [:array, "CompanyMemberBatchResultNotFoundItem"]
+    end
+
+    # CompanyMemberBatchResultNotFoundItem şeması.
+    class CompanyMemberBatchResultNotFoundItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "index", :index, :integer
+      # Zorunlu.
+      field "user_id", :user_id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+    end
+
+    # CompanyMemberList şeması.
+    class CompanyMemberList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "CompanyMember"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
     end
 
     # ContentTable şeması.
@@ -1822,7 +3178,7 @@ module Pushizo
     class Conversation < Pushizo::BaseModel
       # Zorunlu.
       field "id", :id, :string
-      # Zorunlu. Değerler: "sms", "whatsapp", "rcs", "email", "chat".
+      # Zorunlu. Değerler: "sms", "whatsapp", "rcs", "telegram", "viber", "email", "chat".
       field "channel", :channel, :string
       # Zorunlu. Değerler: "open", "pending", "resolved", "closed".
       field "status", :status, :string
@@ -1908,6 +3264,76 @@ module Pushizo
     class ConversationAssignDto < Pushizo::BaseModel
       field "assignee_id", :assignee_id, :string
       field "team_id", :team_id, :string
+    end
+
+    # ConversationContact şeması.
+    class ConversationContact < Pushizo::BaseModel
+      # Zorunlu.
+      field "user", :user, "ConversationContactUser"
+      # Zorunlu.
+      field "subscriptions", :subscriptions, [:array, "ConversationContactSubscriptionsItem"]
+      # Zorunlu.
+      field "recent_events", :recent_events, [:array, "ConversationContactRecentEventsItem"]
+      # Zorunlu.
+      field "other_conversations", :other_conversations, [:array, "ConversationContactOtherConversationsItem"]
+    end
+
+    # ConversationContactOtherConversationsItem şeması.
+    class ConversationContactOtherConversationsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu. Değerler: "sms", "whatsapp", "rcs", "telegram", "viber", "email", "chat".
+      field "channel", :channel, :string
+      # Zorunlu. Değerler: "open", "pending", "resolved", "closed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "last_message_at", :last_message_at, :string
+    end
+
+    # ConversationContactRecentEventsItem şeması.
+    class ConversationContactRecentEventsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "occurred_at", :occurred_at, :string
+      # Zorunlu.
+      field "properties", :properties, [:map, :any]
+    end
+
+    # ConversationContactSubscriptionsItem şeması.
+    class ConversationContactSubscriptionsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "channel", :channel, :string
+      # Zorunlu.
+      field "status", :status, :string
+      # Zorunlu.
+      field "token_masked", :token_masked, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+    end
+
+    # ConversationContactUser şeması.
+    class ConversationContactUser < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu.
+      field "tags", :tags, [:map, :any]
+      # Zorunlu.
+      field "properties", :properties, [:map, :any]
+      # Zorunlu.
+      field "language", :language, :string
+      # Zorunlu.
+      field "timezone", :timezone, :string
+      # Zorunlu.
+      field "country", :country, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "last_seen_at", :last_seen_at, :string
     end
 
     # ConversationMessagePage şeması.
@@ -2267,6 +3693,104 @@ module Pushizo
       field "sync_interval_minutes", :sync_interval_minutes, :integer
     end
 
+    # CreateAdCampaignDto şeması.
+    class CreateAdCampaignDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "ad_account_id", :ad_account_id, :string
+      # Zorunlu.
+      field "audience_id", :audience_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "traffic", "conversions", "leads", "awareness".
+      field "objective", :objective, :string
+      # Değerler: "clicks", "landing_page_views", "conversions", "reach", "impressions".
+      field "optimization_goal", :optimization_goal, :string
+      # Zorunlu.
+      field "daily_budget", :daily_budget, :any
+      field "start_at", :start_at, :string
+      field "end_at", :end_at, :string
+      # Zorunlu.
+      field "countries", :countries, [:array, :string]
+      # Değerler: "active", "paused".
+      field "status", :status, :string
+      field "pixel_id", :pixel_id, :string
+      field "creative", :creative, "CreateAdCampaignDtoCreative"
+    end
+
+    # CreateAdCampaignDtoCreative şeması.
+    class CreateAdCampaignDtoCreative < Pushizo::BaseModel
+      # Zorunlu.
+      field "headline", :headline, :string
+      field "long_headline", :long_headline, :string
+      # Zorunlu.
+      field "primary_text", :primary_text, :string
+      field "description", :description, :string
+      # Zorunlu.
+      field "link_url", :link_url, :string
+      # Zorunlu. Değerler: "LEARN_MORE", "SHOP_NOW", "SIGN_UP", "SUBSCRIBE", "DOWNLOAD", "CONTACT_US", "BOOK_NOW", "GET_OFFER".
+      field "call_to_action", :call_to_action, :string
+      field "image_id", :image_id, :string
+      field "square_image_id", :square_image_id, :string
+      field "page_id", :page_id, :string
+      field "business_name", :business_name, :string
+    end
+
+    # CreateAiAgentDto şeması.
+    class CreateAiAgentDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "enabled", :enabled, :boolean
+      # Değerler: "whatsapp", "sms", "rcs", "telegram", "viber", "chat".
+      field "channels", :channels, [:array, :string]
+      field "instructions", :instructions, :string
+      field "faq", :faq, [:array, "CreateAiAgentDtoFaqItem"]
+      field "tools", :tools, [:array, "CreateAiAgentDtoToolsItem"]
+      field "handoff", :handoff, "CreateAiAgentDtoHandoff"
+      field "limits", :limits, "CreateAiAgentDtoLimits"
+      field "ai_sentiment", :ai_sentiment, :boolean
+    end
+
+    # CreateAiAgentDtoFaqItem şeması.
+    class CreateAiAgentDtoFaqItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "question", :question, :string
+      # Zorunlu.
+      field "answer", :answer, :string
+    end
+
+    # CreateAiAgentDtoHandoff şeması.
+    class CreateAiAgentDtoHandoff < Pushizo::BaseModel
+      field "keywords", :keywords, [:array, :string]
+      field "max_bot_replies", :max_bot_replies, :integer
+      field "on_negative_sentiment", :on_negative_sentiment, :boolean
+      field "message", :message, :string
+    end
+
+    # CreateAiAgentDtoLimits şeması.
+    class CreateAiAgentDtoLimits < Pushizo::BaseModel
+      field "monthly_token_cap", :monthly_token_cap, :integer
+      field "max_steps", :max_steps, :integer
+    end
+
+    # CreateAiAgentDtoToolsItem şeması.
+    class CreateAiAgentDtoToolsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "url", :url, :string
+      field "params", :params, [:array, "CreateAiAgentDtoToolsItemParamsItem"]
+    end
+
+    # CreateAiAgentDtoToolsItemParamsItem şeması.
+    class CreateAiAgentDtoToolsItemParamsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      field "required", :required, :boolean
+    end
+
     # CreateAppApiKeyDto şeması.
     class CreateAppApiKeyDto < Pushizo::BaseModel
       # Zorunlu.
@@ -2298,6 +3822,31 @@ module Pushizo
       field "sms", :sms, :boolean
     end
 
+    # CreateAppFlagDto şeması.
+    class CreateAppFlagDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "key", :key, :string
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      field "enabled", :enabled, :boolean
+      # Değerler: "boolean", "string", "number", "json".
+      field "value_type", :value_type, :string
+      field "on_value", :on_value, :any
+      field "off_value", :off_value, :any
+      field "rollout_percent", :rollout_percent, :integer
+      field "segment_id", :segment_id, :string
+      field "rollout_schedule", :rollout_schedule, [:array, "CreateAppFlagDtoRolloutScheduleItem"]
+    end
+
+    # CreateAppFlagDtoRolloutScheduleItem şeması.
+    class CreateAppFlagDtoRolloutScheduleItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "at", :at, :string
+      # Zorunlu.
+      field "percent", :percent, :integer
+    end
+
     # CreateBudgetAlertRuleDto şeması.
     class CreateBudgetAlertRuleDto < Pushizo::BaseModel
       # Zorunlu.
@@ -2313,6 +3862,14 @@ module Pushizo
       field "enabled", :enabled, :boolean
     end
 
+    # CreateCatalogDto şeması.
+    class CreateCatalogDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      field "currency", :currency, :string
+    end
+
     # CreateCategoryDto şeması.
     class CreateCategoryDto < Pushizo::BaseModel
       # Zorunlu.
@@ -2320,10 +3877,36 @@ module Pushizo
       # Zorunlu.
       field "name", :name, [:map, :string]
       field "description", :description, [:map, :string]
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channels", :channels, [:array, :string]
       field "default_opted_in", :default_opted_in, :boolean
       field "position", :position, :integer
+    end
+
+    # CreateCustomAgentDto şeması.
+    class CreateCustomAgentDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      field "enabled", :enabled, :boolean
+      field "instructions", :instructions, :string
+      # Değerler: "list_segments", "campaign_performance", "delivery_summary", "create_segment_draft", "create_campaign_draft".
+      field "tools", :tools, [:array, :string]
+      field "schedule", :schedule, "CreateCustomAgentDtoSchedule"
+      field "limits", :limits, "CreateCustomAgentDtoLimits"
+    end
+
+    # CreateCustomAgentDtoLimits şeması.
+    class CreateCustomAgentDtoLimits < Pushizo::BaseModel
+      field "max_steps", :max_steps, :integer
+      field "monthly_token_cap", :monthly_token_cap, :integer
+    end
+
+    # CreateCustomAgentDtoSchedule şeması.
+    class CreateCustomAgentDtoSchedule < Pushizo::BaseModel
+      # Zorunlu.
+      field "cron", :cron, :string
+      field "timezone", :timezone, :string
     end
 
     # CreatedApiKey şeması.
@@ -2375,6 +3958,91 @@ module Pushizo
       field "enabled", :enabled, :boolean
     end
 
+    # CreateDataSourceDto şeması.
+    class CreateDataSourceDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "enabled", :enabled, :boolean
+      # Değerler: "signature", "token".
+      field "auth_mode", :auth_mode, :string
+      field "mapping", :mapping, "CreateDataSourceDtoMapping"
+      field "config", :config, "CreateDataSourceDtoConfig"
+      field "auth_value", :auth_value, :string
+      # Zorunlu. Değerler: "webhook", "http_pull".
+      field "kind", :kind, :string
+      # Zorunlu. Değerler: "event", "person".
+      field "target", :target, :string
+    end
+
+    # CreateDataSourceDtoConfig şeması.
+    class CreateDataSourceDtoConfig < Pushizo::BaseModel
+      field "url", :url, :string
+      # Değerler: "GET", "POST".
+      field "method", :method_value, :string
+      field "headers", :headers, [:map, :string]
+      field "body", :body, :string
+      field "interval_minutes", :interval_minutes, :integer
+      field "auth_header", :auth_header, :string
+      field "next_cursor_path", :next_cursor_path, :string
+      field "cursor_param", :cursor_param, :string
+      field "resume_cursor", :resume_cursor, :boolean
+    end
+
+    # CreateDataSourceDtoMapping şeması.
+    class CreateDataSourceDtoMapping < Pushizo::BaseModel
+      field "records_path", :records_path, :string
+      field "event_name", :event_name, :string
+      field "event_name_path", :event_name_path, :string
+      field "external_id_path", :external_id_path, :string
+      field "occurred_at_path", :occurred_at_path, :string
+      field "value_path", :value_path, :string
+      field "event_id_path", :event_id_path, :string
+      field "properties_path", :properties_path, :string
+      field "tags_path", :tags_path, :string
+    end
+
+    # CreateDataTransformDto şeması.
+    class CreateDataTransformDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      field "enabled", :enabled, :boolean
+      # Zorunlu. Değerler: "event", "person".
+      field "target", :target, :string
+      # Zorunlu. Değerler: "rules", "javascript".
+      field "kind", :kind, :string
+      field "position", :position, :integer
+      field "rules", :rules, [:array, :any]
+      field "code", :code, :string
+      # Değerler: "sdk", "api", "import", "system", "webhook_source", "pull_source".
+      field "sources", :sources, [:array, :string]
+      field "event_names", :event_names, [:array, :string]
+    end
+
+    # CreateDecisionAgentDto şeması.
+    class CreateDecisionAgentDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "slug", :slug, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "arms", :arms, [:array, "CreateDecisionAgentDtoArmsItem"]
+      # Zorunlu.
+      field "reward_events", :reward_events, [:array, :string]
+      field "reward_window_hours", :reward_window_hours, :integer
+      field "holdout_percent", :holdout_percent, :integer
+      field "context_prediction", :context_prediction, :string
+      field "use_best_channel", :use_best_channel, :boolean
+    end
+
+    # CreateDecisionAgentDtoArmsItem şeması.
+    class CreateDecisionAgentDtoArmsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "label", :label, :string
+    end
+
     # CreateExportDto şeması.
     class CreateExportDto < Pushizo::BaseModel
       # Zorunlu. Değerler: "users", "subscriptions", "events", "deliveries", "message_events".
@@ -2390,7 +4058,7 @@ module Pushizo
       field "message_id", :message_id, :string
       field "campaign_id", :campaign_id, :string
       field "status", :status, :string
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channel", :channel, :string
       field "segment_id", :segment_id, :string
     end
@@ -2457,6 +4125,20 @@ module Pushizo
       field "sms", :sms, :boolean
     end
 
+    # CreateGeofenceDto şeması.
+    class CreateGeofenceDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "lat", :lat, :number
+      # Zorunlu.
+      field "lng", :lng, :number
+      # Zorunlu.
+      field "radius_m", :radius_m, :integer
+      field "cooldown_minutes", :cooldown_minutes, :integer
+      field "enabled", :enabled, :boolean
+    end
+
     # CreateIdentityKeyDto şeması.
     class CreateIdentityKeyDto < Pushizo::BaseModel
       field "kid", :kid, :string
@@ -2479,6 +4161,7 @@ module Pushizo
       field "audience", :audience, "CreateInAppDtoAudience"
       field "frequency", :frequency, "CreateInAppDtoFrequency"
       field "journey_only", :journey_only, :boolean
+      field "placement", :placement, :string
       field "priority", :priority, :integer
       field "start_at", :start_at, :string
       field "end_at", :end_at, :string
@@ -2501,6 +4184,7 @@ module Pushizo
     class CreateInAppDtoAudience < Pushizo::BaseModel
       field "included_segments", :included_segments, [:array, :string]
       field "excluded_segments", :excluded_segments, [:array, :string]
+      field "global_control_exempt", :global_control_exempt, :boolean
     end
 
     # CreateInAppDtoDisplay şeması.
@@ -2560,7 +4244,7 @@ module Pushizo
       field "keyword", :keyword, :string
       # Değerler: "org", "app".
       field "scope", :scope, :string
-      # Değerler: "sms", "whatsapp", "rcs".
+      # Değerler: "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channels", :channels, [:array, :string]
       # Zorunlu.
       field "actions", :actions, "CreateKeywordDtoActions"
@@ -2588,6 +4272,129 @@ module Pushizo
     class CreateKeywordDtoActionsReply < Pushizo::BaseModel
       # Zorunlu.
       field "text", :text, :string
+    end
+
+    # CreateLandingPageDto şeması.
+    class CreateLandingPageDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "slug", :slug, :string
+      # Zorunlu.
+      field "document", :document, "CreateLandingPageDtoDocument"
+      field "seo", :seo, "CreateLandingPageDtoSeo"
+      field "settings", :settings, "CreateLandingPageDtoSettings"
+      field "custom_domain_id", :custom_domain_id, :string
+    end
+
+    # CreateLandingPageDtoDocument şeması.
+    class CreateLandingPageDtoDocument < Pushizo::BaseModel
+      # Zorunlu. Değerler: 1.
+      field "version", :version, :number
+      # Zorunlu.
+      field "settings", :settings, "CreateLandingPageDtoDocumentSettings"
+      # Zorunlu.
+      field "sections", :sections, [:array, "CreateLandingPageDtoDocumentSectionsItem"]
+    end
+
+    # CreateLandingPageDtoDocumentSectionsItem şeması.
+    class CreateLandingPageDtoDocumentSectionsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu. Değerler: "section".
+      field "type", :type, :string
+      field "background_color", :background_color, :string
+      field "background_image", :background_image, :string
+      field "padding", :padding, "CreateLandingPageDtoDocumentSectionsItemPadding"
+      field "stack_on_mobile", :stack_on_mobile, :boolean
+      # Zorunlu.
+      field "columns", :columns, [:array, "CreateLandingPageDtoDocumentSectionsItemColumnsItem"]
+    end
+
+    # CreateLandingPageDtoDocumentSectionsItemColumnsItem şeması.
+    class CreateLandingPageDtoDocumentSectionsItemColumnsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      field "width_percent", :width_percent, :integer
+      field "background_color", :background_color, :string
+      # Değerler: "top", "middle", "bottom".
+      field "vertical_align", :vertical_align, :string
+      field "padding", :padding, "CreateLandingPageDtoDocumentSectionsItemColumnsItemPadding"
+      # Zorunlu.
+      field "blocks", :blocks, [:array, :any]
+    end
+
+    # CreateLandingPageDtoDocumentSectionsItemColumnsItemPadding şeması.
+    class CreateLandingPageDtoDocumentSectionsItemColumnsItemPadding < Pushizo::BaseModel
+      # Zorunlu.
+      field "top", :top, :integer
+      # Zorunlu.
+      field "right", :right, :integer
+      # Zorunlu.
+      field "bottom", :bottom, :integer
+      # Zorunlu.
+      field "left", :left, :integer
+    end
+
+    # CreateLandingPageDtoDocumentSectionsItemPadding şeması.
+    class CreateLandingPageDtoDocumentSectionsItemPadding < Pushizo::BaseModel
+      # Zorunlu.
+      field "top", :top, :integer
+      # Zorunlu.
+      field "right", :right, :integer
+      # Zorunlu.
+      field "bottom", :bottom, :integer
+      # Zorunlu.
+      field "left", :left, :integer
+    end
+
+    # CreateLandingPageDtoDocumentSettings şeması.
+    class CreateLandingPageDtoDocumentSettings < Pushizo::BaseModel
+      field "width", :width, :integer
+      field "background_color", :background_color, :string
+      field "content_background_color", :content_background_color, :string
+      field "text_color", :text_color, :string
+      field "link_color", :link_color, :string
+      # Değerler: "system", "arial", "georgia", "verdana", "trebuchet", "courier".
+      field "font_family", :font_family, :string
+      field "dark_mode", :dark_mode, "CreateLandingPageDtoDocumentSettingsDarkMode"
+    end
+
+    # CreateLandingPageDtoDocumentSettingsDarkMode şeması.
+    class CreateLandingPageDtoDocumentSettingsDarkMode < Pushizo::BaseModel
+      field "background_color", :background_color, :string
+      field "content_background_color", :content_background_color, :string
+      field "text_color", :text_color, :string
+      field "link_color", :link_color, :string
+    end
+
+    # CreateLandingPageDtoSeo şeması.
+    class CreateLandingPageDtoSeo < Pushizo::BaseModel
+      field "title", :title, :string
+      field "description", :description, :string
+      field "og_image", :og_image, :string
+      field "canonical_url", :canonical_url, :string
+      field "noindex", :noindex, :boolean
+    end
+
+    # CreateLandingPageDtoSettings şeması.
+    class CreateLandingPageDtoSettings < Pushizo::BaseModel
+      field "language", :language, :string
+      field "form_id", :form_id, :string
+      field "form_section_id", :form_section_id, :string
+      field "cookie_consent", :cookie_consent, "CreateLandingPageDtoSettingsCookieConsent"
+      field "web_sdk", :web_sdk, :boolean
+      field "favicon_url", :favicon_url, :string
+    end
+
+    # CreateLandingPageDtoSettingsCookieConsent şeması.
+    class CreateLandingPageDtoSettingsCookieConsent < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      field "text", :text, :string
+      field "accept_label", :accept_label, :string
+      field "reject_label", :reject_label, :string
+      field "policy_url", :policy_url, :string
     end
 
     # CreateLiveActivityTypeDto şeması.
@@ -2649,6 +4456,15 @@ module Pushizo
       field "ratio", :ratio, :number
     end
 
+    # CreateMessengerLinkDto şeması.
+    class CreateMessengerLinkDto < Pushizo::BaseModel
+      # Zorunlu. Değerler: "telegram", "viber".
+      field "channel", :channel, :string
+      field "user_id", :user_id, :string
+      field "external_id", :external_id, :string
+      field "ttl_seconds", :ttl_seconds, :integer
+    end
+
     # CreateNotificationDto şeması.
     class CreateNotificationDto < Pushizo::BaseModel
       field "app_id", :app_id, :string
@@ -2682,6 +4498,10 @@ module Pushizo
       field "android_accent_color", :android_accent_color, :string
       # Değerler: 1, 0, -1.
       field "android_visibility", :android_visibility, :integer
+      field "ios_carousel", :ios_carousel, [:array, "CreateNotificationDtoIosCarouselItem"]
+      field "android_live_update", :android_live_update, "CreateNotificationDtoAndroidLiveUpdate"
+      field "voip", :voip, :boolean
+      field "app_clip", :app_clip, :boolean
       field "chrome_web_icon", :chrome_web_icon, :string
       field "chrome_web_image", :chrome_web_image, :string
       field "chrome_web_badge", :chrome_web_badge, :string
@@ -2719,8 +4539,11 @@ module Pushizo
       field "rcs_content_sid", :rcs_content_sid, :string
       field "rcs_content_variables", :rcs_content_variables, [:map, :string]
       field "rcs_fallback_text", :rcs_fallback_text, [:map, :string]
+      field "messenger_image_url", :messenger_image_url, :string
+      field "messenger_buttons", :messenger_buttons, [:array, :any]
       field "add_to_inbox", :add_to_inbox, :boolean
       field "inbox_ttl", :inbox_ttl, :integer
+      field "content_card", :content_card, "CreateNotificationDtoContentCard"
       field "frequency_cap_exempt", :frequency_cap_exempt, :boolean
       field "quiet_hours_exempt", :quiet_hours_exempt, :boolean
       field "one_per_user", :one_per_user, :boolean
@@ -2729,6 +4552,17 @@ module Pushizo
       field "name", :name, :string
       field "labels", :labels, [:array, :string]
       field "category", :category, :string
+      # Değerler: "sms", "email".
+      field "fallback_channel", :fallback_channel, :string
+      # Değerler: "phone", "watch".
+      field "form_factor", :form_factor, :string
+    end
+
+    # CreateNotificationDtoAndroidLiveUpdate şeması.
+    class CreateNotificationDtoAndroidLiveUpdate < Pushizo::BaseModel
+      # Zorunlu.
+      field "progress", :progress, :integer
+      field "ongoing", :ongoing, :boolean
     end
 
     # CreateNotificationDtoButtonsItem şeması.
@@ -2739,6 +4573,22 @@ module Pushizo
       field "text", :text, :string
       field "icon", :icon, :string
       field "url", :url, :string
+    end
+
+    # CreateNotificationDtoContentCard şeması.
+    class CreateNotificationDtoContentCard < Pushizo::BaseModel
+      # Zorunlu. Değerler: "classic", "captioned_image", "image_only".
+      field "type", :type, :string
+      field "pinned", :pinned, :boolean
+      field "priority", :priority, :integer
+      field "button_text", :button_text, [:map, :string]
+    end
+
+    # CreateNotificationDtoIosCarouselItem şeması.
+    class CreateNotificationDtoIosCarouselItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "url", :url, :string
+      field "title", :title, :string
     end
 
     # CreateNotificationDtoRcsCard şeması.
@@ -2761,7 +4611,7 @@ module Pushizo
       field "included_segments", :included_segments, [:array, :string]
       field "excluded_segments", :excluded_segments, [:array, :string]
       field "filters", :filters, :any
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channels", :channels, [:array, :string]
       field "test_devices_only", :test_devices_only, :boolean
       field "email_to", :email_to, [:array, :string]
@@ -2862,9 +4712,84 @@ module Pushizo
       field "external_id_missing", :external_id_missing, [:array, :string]
     end
 
+    # CreatePredictionDto şeması.
+    class CreatePredictionDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "slug", :slug, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "churn", "event".
+      field "kind", :kind, :string
+      field "event_names", :event_names, [:array, :string]
+      field "horizon_days", :horizon_days, :integer
+    end
+
+    # CreatePromoCodeListDto şeması.
+    class CreatePromoCodeListDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      field "expires_at", :expires_at, :string
+    end
+
+    # CreateSavedReportDto şeması.
+    class CreateSavedReportDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "definition", :definition, "CreateSavedReportDtoDefinition"
+    end
+
+    # CreateSavedReportDtoDefinition şeması.
+    class CreateSavedReportDtoDefinition < Pushizo::BaseModel
+      # Zorunlu. Değerler: "deliveries", "events", "conversions".
+      field "source", :source, :string
+      # Zorunlu. Değerler: "sent", "delivered", "failed", "opened", "clicked", "delivery_rate", "open_rate", "click_rate", "failure_rate", "count", "unique_users", "value_sum", "value_avg", "conversions", "revenue".
+      field "metrics", :metrics, [:array, :string]
+      # Değerler: "day", "week", "month", "channel", "provider", "campaign", "status", "name", "source", "event_name", "kind".
+      field "dimensions", :dimensions, [:array, :string]
+      field "filters", :filters, [:map, [:array, :string]]
+      field "sort", :sort, "CreateSavedReportDtoDefinitionSort"
+      field "limit", :limit, :integer
+      field "days", :days, :integer
+      field "from", :from, :string
+      field "to", :to, :string
+    end
+
+    # CreateSavedReportDtoDefinitionSort şeması.
+    class CreateSavedReportDtoDefinitionSort < Pushizo::BaseModel
+      # Zorunlu.
+      field "by", :by, :string
+      # Değerler: "asc", "desc".
+      field "direction", :direction, :string
+    end
+
+    # CreateSiteSearchSourceDto şeması.
+    class CreateSiteSearchSourceDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "sitemap", "urls".
+      field "kind", :kind, :string
+      field "url", :url, :string
+      field "urls", :urls, [:array, :string]
+      field "max_pages", :max_pages, :integer
+      field "refresh_hours", :refresh_hours, :integer
+      field "enabled", :enabled, :boolean
+    end
+
+    # CreateSqlSegmentDto şeması.
+    class CreateSqlSegmentDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      # Zorunlu.
+      field "query", :query, :string
+      field "refresh_interval_minutes", :refresh_interval_minutes, :integer
+    end
+
     # CreateSuppressionDto şeması.
     class CreateSuppressionDto < Pushizo::BaseModel
-      # Zorunlu. Değerler: "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channel", :channel, :string
       # Zorunlu.
       field "value", :value, :string
@@ -2919,7 +4844,7 @@ module Pushizo
     class CreateTemplateDto < Pushizo::BaseModel
       # Zorunlu.
       field "name", :name, :string
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channel", :channel, :string
       field "tags", :tags, [:array, :string]
       # Zorunlu.
@@ -2966,6 +4891,7 @@ module Pushizo
       field "disable_sms_link_shortening", :disable_sms_link_shortening, :boolean
       field "add_to_inbox", :add_to_inbox, :boolean
       field "inbox_ttl", :inbox_ttl, :integer
+      field "content_card", :content_card, "CreateTemplateDtoContentContentCard"
       field "thread_id", :thread_id, :string
       field "ios_relevance_score", :ios_relevance_score, :number
       field "target_content_identifier", :target_content_identifier, :string
@@ -2985,6 +4911,19 @@ module Pushizo
       field "rcs_content_sid", :rcs_content_sid, :string
       field "rcs_content_variables", :rcs_content_variables, [:map, :string]
       field "rcs_fallback_text", :rcs_fallback_text, [:map, :string]
+      field "messenger_image_url", :messenger_image_url, :string
+      field "messenger_buttons", :messenger_buttons, [:array, :any]
+      field "ios_carousel", :ios_carousel, [:array, "CreateTemplateDtoContentIosCarouselItem"]
+      field "android_live_update", :android_live_update, "CreateTemplateDtoContentAndroidLiveUpdate"
+      field "voip", :voip, :boolean
+      field "app_clip", :app_clip, :boolean
+    end
+
+    # CreateTemplateDtoContentAndroidLiveUpdate şeması.
+    class CreateTemplateDtoContentAndroidLiveUpdate < Pushizo::BaseModel
+      # Zorunlu.
+      field "progress", :progress, :integer
+      field "ongoing", :ongoing, :boolean
     end
 
     # CreateTemplateDtoContentButtonsItem şeması.
@@ -2995,6 +4934,22 @@ module Pushizo
       field "text", :text, :string
       field "icon", :icon, :string
       field "url", :url, :string
+    end
+
+    # CreateTemplateDtoContentContentCard şeması.
+    class CreateTemplateDtoContentContentCard < Pushizo::BaseModel
+      # Zorunlu. Değerler: "classic", "captioned_image", "image_only".
+      field "type", :type, :string
+      field "pinned", :pinned, :boolean
+      field "priority", :priority, :integer
+      field "button_text", :button_text, [:map, :string]
+    end
+
+    # CreateTemplateDtoContentIosCarouselItem şeması.
+    class CreateTemplateDtoContentIosCarouselItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "url", :url, :string
+      field "title", :title, :string
     end
 
     # CreateTemplateDtoContentRcsCard şeması.
@@ -3088,6 +5043,85 @@ module Pushizo
       field "sub_type", :sub_type, :string
       # Zorunlu.
       field "value", :value, :string
+    end
+
+    # CreateWalletTemplateDto şeması.
+    class CreateWalletTemplateDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "slug", :slug, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "coupon", "loyalty", "event", "generic".
+      field "kind", :kind, :string
+      # Zorunlu.
+      field "design", :design, "CreateWalletTemplateDtoDesign"
+      field "images", :images, [:map, :string]
+    end
+
+    # CreateWalletTemplateDtoDesign şeması.
+    class CreateWalletTemplateDtoDesign < Pushizo::BaseModel
+      # Zorunlu.
+      field "title", :title, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "organization", :organization, :string
+      field "background_color", :background_color, :string
+      field "foreground_color", :foreground_color, :string
+      field "label_color", :label_color, :string
+      # Değerler: "qr", "pdf417", "aztec", "code128".
+      field "barcode", :barcode, :string
+      field "fields", :fields_value, [:array, "CreateWalletTemplateDtoDesignFieldsItem"]
+      field "expires_at", :expires_at, :string
+      field "relevant_at", :relevant_at, :string
+    end
+
+    # CreateWalletTemplateDtoDesignFieldsItem şeması.
+    class CreateWalletTemplateDtoDesignFieldsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "key", :key, :string
+      field "label", :label, :string
+      field "value", :value, :string
+      # Değerler: "header", "primary", "secondary", "auxiliary", "back".
+      field "section", :section, :string
+    end
+
+    # CreateWarehouseConnectionDto şeması.
+    class CreateWarehouseConnectionDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "bigquery", "snowflake", "databricks".
+      field "type", :type, :string
+      # Zorunlu.
+      field "config", :config, [:map, :any]
+      # Zorunlu.
+      field "credentials", :credentials, [:map, :any]
+    end
+
+    # CreateWarehouseSegmentDto şeması.
+    class CreateWarehouseSegmentDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      # Zorunlu.
+      field "connection_id", :connection_id, :string
+      # Zorunlu.
+      field "query", :query, :string
+      # Zorunlu.
+      field "id_column", :id_column, :string
+      # Değerler: "external_id", "user_id".
+      field "id_type", :id_type, :string
+      field "refresh_interval_minutes", :refresh_interval_minutes, :integer
+      field "limits", :limits, "CreateWarehouseSegmentDtoLimits"
+    end
+
+    # CreateWarehouseSegmentDtoLimits şeması.
+    class CreateWarehouseSegmentDtoLimits < Pushizo::BaseModel
+      field "timeout_seconds", :timeout_seconds, :integer
+      field "max_rows", :max_rows, :integer
+      field "max_bytes_billed", :max_bytes_billed, :integer
+      # Değerler: "X-Small", "Small", "Medium", "Large", "X-Large", "2X-Large", "3X-Large", "4X-Large", "5X-Large", "6X-Large".
+      field "max_warehouse_size", :max_warehouse_size, :string
     end
 
     # CreateWarmupPlanDto şeması.
@@ -3279,6 +5313,218 @@ module Pushizo
       field "value", :value, :any
     end
 
+    # CreateWebPersonalizationDto şeması.
+    class CreateWebPersonalizationDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "changes", :changes, [:array, :any]
+      field "variants", :variants, [:array, "CreateWebPersonalizationDtoVariantsItem"]
+      field "conditions", :conditions, "CreateWebPersonalizationDtoConditions"
+      field "targeting", :targeting, "CreateWebPersonalizationDtoTargeting"
+      field "goal", :goal, :any
+      field "priority", :priority, :integer
+      field "start_at", :start_at, :string
+      field "end_at", :end_at, :string
+    end
+
+    # CreateWebPersonalizationDtoConditions şeması.
+    class CreateWebPersonalizationDtoConditions < Pushizo::BaseModel
+      field "url_rules", :url_rules, [:array, "CreateWebPersonalizationDtoConditionsUrlRulesItem"]
+      field "utm_rules", :utm_rules, [:array, "CreateWebPersonalizationDtoConditionsUtmRulesItem"]
+      field "visits", :visits, "CreateWebPersonalizationDtoConditionsVisits"
+    end
+
+    # CreateWebPersonalizationDtoConditionsUrlRulesItem şeması.
+    class CreateWebPersonalizationDtoConditionsUrlRulesItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "equals", "contains", "starts_with", "not_contains", "matches".
+      field "op", :op, :string
+      # Zorunlu.
+      field "value", :value, :string
+    end
+
+    # CreateWebPersonalizationDtoConditionsUtmRulesItem şeması.
+    class CreateWebPersonalizationDtoConditionsUtmRulesItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content".
+      field "param", :param, :string
+      # Zorunlu. Değerler: "equals", "contains", "exists".
+      field "op", :op, :string
+      field "value", :value, :string
+    end
+
+    # CreateWebPersonalizationDtoConditionsVisits şeması.
+    class CreateWebPersonalizationDtoConditionsVisits < Pushizo::BaseModel
+      # Zorunlu. Değerler: "gte", "lte", "eq".
+      field "op", :op, :string
+      # Zorunlu.
+      field "value", :value, :integer
+    end
+
+    # CreateWebPersonalizationDtoTargeting şeması.
+    class CreateWebPersonalizationDtoTargeting < Pushizo::BaseModel
+      field "included_segments", :included_segments, [:array, :string]
+      field "excluded_segments", :excluded_segments, [:array, :string]
+      # Değerler: "all", "new", "returning".
+      field "visitor", :visitor, :string
+      # Değerler: "desktop", "mobile", "tablet".
+      field "devices", :devices, [:array, :string]
+    end
+
+    # CreateWebPersonalizationDtoVariantsItem şeması.
+    class CreateWebPersonalizationDtoVariantsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "weight_percent", :weight_percent, :integer
+      # Zorunlu.
+      field "changes", :changes, [:array, :any]
+    end
+
+    # CustomAgent şeması.
+    class CustomAgent < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "instructions", :instructions, :string
+      # Zorunlu. Değerler: "list_segments", "campaign_performance", "delivery_summary", "create_segment_draft", "create_campaign_draft".
+      field "tools", :tools, [:array, :string]
+      # Zorunlu.
+      field "schedule", :schedule, "CustomAgentSchedule"
+      # Zorunlu.
+      field "limits", :limits, "CustomAgentLimits"
+      # Zorunlu.
+      field "next_run_at", :next_run_at, :string
+      # Zorunlu.
+      field "last_run_at", :last_run_at, :string
+      # Zorunlu.
+      field "usage", :usage, "CustomAgentUsage"
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # CustomAgentDraft şeması.
+    class CustomAgentDraft < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "agent_id", :agent_id, :string
+      # Zorunlu.
+      field "run_id", :run_id, :string
+      # Zorunlu. Değerler: "segment", "campaign".
+      field "kind", :kind, :string
+      # Zorunlu. Değerler: "pending", "applied", "dismissed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "payload", :payload, [:map, :any]
+      # Zorunlu.
+      field "result_id", :result_id, :string
+      # Zorunlu.
+      field "decided_at", :decided_at, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+    end
+
+    # CustomAgentDraftList şeması.
+    class CustomAgentDraftList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "CustomAgentDraft"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
+    end
+
+    # CustomAgentLimits şeması.
+    class CustomAgentLimits < Pushizo::BaseModel
+      # Zorunlu.
+      field "max_steps", :max_steps, :integer
+      # Zorunlu.
+      field "monthly_token_cap", :monthly_token_cap, :integer
+    end
+
+    # CustomAgentList şeması.
+    class CustomAgentList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "CustomAgent"]
+    end
+
+    # CustomAgentRun şeması.
+    class CustomAgentRun < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "agent_id", :agent_id, :string
+      # Zorunlu. Değerler: "schedule", "manual".
+      field "trigger", :trigger, :string
+      # Zorunlu. Değerler: "pending", "running", "succeeded", "failed", "skipped".
+      field "status", :status, :string
+      # Zorunlu.
+      field "steps", :steps, [:array, "CustomAgentRunStepsItem"]
+      # Zorunlu.
+      field "summary", :summary, :string
+      # Zorunlu.
+      field "input_tokens", :input_tokens, :integer
+      # Zorunlu.
+      field "output_tokens", :output_tokens, :integer
+      # Zorunlu.
+      field "error", :error, :string
+      # Zorunlu.
+      field "drafts", :drafts, :integer
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "started_at", :started_at, :string
+      # Zorunlu.
+      field "finished_at", :finished_at, :string
+    end
+
+    # CustomAgentRunList şeması.
+    class CustomAgentRunList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "CustomAgentRun"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
+    end
+
+    # CustomAgentRunStepsItem şeması.
+    class CustomAgentRunStepsItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "tool", "finish".
+      field "kind", :kind, :string
+      field "tool", :tool, :string
+      field "ok", :ok, :boolean
+      field "error", :error, :string
+      field "duration_ms", :duration_ms, :integer
+    end
+
+    # CustomAgentSchedule şeması.
+    class CustomAgentSchedule < Pushizo::BaseModel
+      # Zorunlu.
+      field "cron", :cron, :string
+      # Zorunlu.
+      field "timezone", :timezone, :string
+    end
+
+    # CustomAgentUsage şeması.
+    class CustomAgentUsage < Pushizo::BaseModel
+      # Zorunlu.
+      field "tokens_this_month", :tokens_this_month, :integer
+      # Zorunlu.
+      field "period_start", :period_start, :string
+    end
+
     # DataFeed şeması.
     class DataFeed < Pushizo::BaseModel
       # Zorunlu.
@@ -3347,11 +5593,451 @@ module Pushizo
       field "external_id", :external_id, :string
     end
 
+    # DataQuarantineDiscardResult şeması.
+    class DataQuarantineDiscardResult < Pushizo::BaseModel
+      # Zorunlu.
+      field "discarded", :discarded, :integer
+    end
+
+    # DataQuarantineList şeması.
+    class DataQuarantineList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "DataQuarantineListDataItem"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
+      # Zorunlu.
+      field "pending_total", :pending_total, :integer
+    end
+
+    # DataQuarantineListDataItem şeması.
+    class DataQuarantineListDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu. Değerler: "event", "person".
+      field "target", :target, :string
+      # Zorunlu.
+      field "source", :source, :string
+      # Zorunlu.
+      field "source_id", :source_id, :string
+      # Zorunlu.
+      field "transform_id", :transform_id, :string
+      # Zorunlu.
+      field "payload", :payload, [:map, :any]
+      # Zorunlu. Değerler: "mapping_failed", "invalid_path", "cast_failed", "rule_failed", "invalid_output", "js_error", "js_timeout", "js_memory", "js_invalid_return", "sandbox_unavailable", "write_failed".
+      field "error_code", :error_code, :string
+      # Zorunlu.
+      field "error_path", :error_path, :string
+      # Zorunlu.
+      field "error_message", :error_message, :string
+      # Zorunlu. Değerler: "pending", "reprocessed", "discarded".
+      field "status", :status, :string
+      # Zorunlu.
+      field "attempts", :attempts, :integer
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+      # Zorunlu.
+      field "resolved_at", :resolved_at, :string
+    end
+
+    # DataQuarantineReprocessResult şeması.
+    class DataQuarantineReprocessResult < Pushizo::BaseModel
+      # Zorunlu.
+      field "reprocessed", :reprocessed, :integer
+      # Zorunlu.
+      field "dropped", :dropped, :integer
+      # Zorunlu.
+      field "failed", :failed, :integer
+    end
+
+    # DataSource şeması.
+    class DataSource < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "webhook", "http_pull".
+      field "kind", :kind, :string
+      # Zorunlu. Değerler: "event", "person".
+      field "target", :target, :string
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu. Değerler: "signature", "token".
+      field "auth_mode", :auth_mode, :string
+      # Zorunlu.
+      field "mapping", :mapping, "DataSourceMapping"
+      # Zorunlu.
+      field "config", :config, "DataSourceConfig"
+      # Zorunlu.
+      field "has_secret", :has_secret, :boolean
+      # Zorunlu.
+      field "webhook_url", :webhook_url, :string
+      # Zorunlu.
+      field "next_run_at", :next_run_at, :string
+      # Zorunlu.
+      field "last_run_at", :last_run_at, :string
+      # Zorunlu.
+      field "last_status", :last_status, :string
+      # Zorunlu.
+      field "last_error", :last_error, :string
+      # Zorunlu.
+      field "last_stats", :last_stats, [:map, :number]
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # DataSourceConfig şeması.
+    class DataSourceConfig < Pushizo::BaseModel
+      field "url", :url, :string
+      # Değerler: "GET", "POST".
+      field "method", :method_value, :string
+      field "headers", :headers, [:map, :string]
+      field "body", :body, :string
+      field "interval_minutes", :interval_minutes, :integer
+      field "auth_header", :auth_header, :string
+      field "next_cursor_path", :next_cursor_path, :string
+      field "cursor_param", :cursor_param, :string
+      field "resume_cursor", :resume_cursor, :boolean
+    end
+
+    # DataSourceList şeması.
+    class DataSourceList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "DataSource"]
+    end
+
+    # DataSourceMapping şeması.
+    class DataSourceMapping < Pushizo::BaseModel
+      field "records_path", :records_path, :string
+      field "event_name", :event_name, :string
+      field "event_name_path", :event_name_path, :string
+      field "external_id_path", :external_id_path, :string
+      field "occurred_at_path", :occurred_at_path, :string
+      field "value_path", :value_path, :string
+      field "event_id_path", :event_id_path, :string
+      field "properties_path", :properties_path, :string
+      field "tags_path", :tags_path, :string
+    end
+
+    # DataSourceRunResult şeması.
+    class DataSourceRunResult < Pushizo::BaseModel
+      # Zorunlu. Değerler: "succeeded", "partial", "failed", "skipped".
+      field "status", :status, :string
+      # Zorunlu.
+      field "stats", :stats, "DataSourceRunResultStats"
+      # Zorunlu.
+      field "error", :error, :string
+    end
+
+    # DataSourceRunResultStats şeması.
+    class DataSourceRunResultStats < Pushizo::BaseModel
+      # Zorunlu.
+      field "received", :received, :integer
+      # Zorunlu.
+      field "processed", :processed, :integer
+      # Zorunlu.
+      field "dropped", :dropped, :integer
+      # Zorunlu.
+      field "quarantined", :quarantined, :integer
+    end
+
+    # DataSourceWithSecret şeması.
+    class DataSourceWithSecret < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "webhook", "http_pull".
+      field "kind", :kind, :string
+      # Zorunlu. Değerler: "event", "person".
+      field "target", :target, :string
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu. Değerler: "signature", "token".
+      field "auth_mode", :auth_mode, :string
+      # Zorunlu.
+      field "mapping", :mapping, "DataSourceWithSecretMapping"
+      # Zorunlu.
+      field "config", :config, "DataSourceWithSecretConfig"
+      # Zorunlu.
+      field "has_secret", :has_secret, :boolean
+      # Zorunlu.
+      field "webhook_url", :webhook_url, :string
+      # Zorunlu.
+      field "next_run_at", :next_run_at, :string
+      # Zorunlu.
+      field "last_run_at", :last_run_at, :string
+      # Zorunlu.
+      field "last_status", :last_status, :string
+      # Zorunlu.
+      field "last_error", :last_error, :string
+      # Zorunlu.
+      field "last_stats", :last_stats, [:map, :number]
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+      # Zorunlu.
+      field "secret", :secret, :string
+    end
+
+    # DataSourceWithSecretConfig şeması.
+    class DataSourceWithSecretConfig < Pushizo::BaseModel
+      field "url", :url, :string
+      # Değerler: "GET", "POST".
+      field "method", :method_value, :string
+      field "headers", :headers, [:map, :string]
+      field "body", :body, :string
+      field "interval_minutes", :interval_minutes, :integer
+      field "auth_header", :auth_header, :string
+      field "next_cursor_path", :next_cursor_path, :string
+      field "cursor_param", :cursor_param, :string
+      field "resume_cursor", :resume_cursor, :boolean
+    end
+
+    # DataSourceWithSecretMapping şeması.
+    class DataSourceWithSecretMapping < Pushizo::BaseModel
+      field "records_path", :records_path, :string
+      field "event_name", :event_name, :string
+      field "event_name_path", :event_name_path, :string
+      field "external_id_path", :external_id_path, :string
+      field "occurred_at_path", :occurred_at_path, :string
+      field "value_path", :value_path, :string
+      field "event_id_path", :event_id_path, :string
+      field "properties_path", :properties_path, :string
+      field "tags_path", :tags_path, :string
+    end
+
+    # DataTransform şeması.
+    class DataTransform < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu. Değerler: "event", "person".
+      field "target", :target, :string
+      # Zorunlu. Değerler: "rules", "javascript".
+      field "kind", :kind, :string
+      # Zorunlu.
+      field "position", :position, :integer
+      # Zorunlu. Değerler: "sdk", "api", "import", "system", "webhook_source", "pull_source".
+      field "sources", :sources, [:array, :string]
+      # Zorunlu.
+      field "event_names", :event_names, [:array, :string]
+      # Zorunlu.
+      field "rules", :rules, [:array, [:map, :any]]
+      # Zorunlu.
+      field "code", :code, :string
+      # Zorunlu.
+      field "error_count", :error_count, :integer
+      # Zorunlu. Değerler: "mapping_failed", "invalid_path", "cast_failed", "rule_failed", "invalid_output", "js_error", "js_timeout", "js_memory", "js_invalid_return", "sandbox_unavailable", "write_failed".
+      field "last_error_code", :last_error_code, :string
+      # Zorunlu.
+      field "last_error_at", :last_error_at, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # DataTransformList şeması.
+    class DataTransformList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "DataTransform"]
+    end
+
+    # DataTransformPreview şeması.
+    class DataTransformPreview < Pushizo::BaseModel
+      # Zorunlu.
+      field "results", :results, [:array, "DataTransformPreviewResultsItem"]
+      # Zorunlu.
+      field "duration_ms", :duration_ms, :integer
+    end
+
+    # DataTransformPreviewResultsItem şeması.
+    class DataTransformPreviewResultsItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "kept", "dropped", "failed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "record", :record, [:map, :any]
+      # Zorunlu.
+      field "transform_id", :transform_id, :string
+      # Zorunlu. Değerler: "mapping_failed", "invalid_path", "cast_failed", "rule_failed", "invalid_output", "js_error", "js_timeout", "js_memory", "js_invalid_return", "sandbox_unavailable", "write_failed".
+      field "error_code", :error_code, :string
+      # Zorunlu.
+      field "error_path", :error_path, :string
+      # Zorunlu.
+      field "error_message", :error_message, :string
+      # Zorunlu.
+      field "logs", :logs, [:array, :string]
+    end
+
+    # DecideDto şeması.
+    class DecideDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "external_id", :external_id, :string
+    end
+
+    # DecisionAgent şeması.
+    class DecisionAgent < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "slug", :slug, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "arms", :arms, [:array, "DecisionAgentArmsItem"]
+      # Zorunlu.
+      field "reward_events", :reward_events, [:array, :string]
+      # Zorunlu.
+      field "reward_window_hours", :reward_window_hours, :integer
+      # Zorunlu.
+      field "holdout_percent", :holdout_percent, :integer
+      # Zorunlu.
+      field "context_prediction", :context_prediction, :string
+      # Zorunlu.
+      field "use_best_channel", :use_best_channel, :boolean
+      # Zorunlu. Değerler: "active", "paused".
+      field "status", :status, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # DecisionAgentArmsItem şeması.
+    class DecisionAgentArmsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "label", :label, :string
+    end
+
+    # DecisionAgentList şeması.
+    class DecisionAgentList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "DecisionAgent"]
+    end
+
+    # DecisionReport şeması.
+    class DecisionReport < Pushizo::BaseModel
+      # Zorunlu.
+      field "agent_id", :agent_id, :string
+      # Zorunlu.
+      field "days", :days, :integer
+      # Zorunlu.
+      field "learned", :learned, "DecisionReportLearned"
+      # Zorunlu.
+      field "holdout", :holdout, "DecisionReportHoldout"
+      # Zorunlu.
+      field "lift", :lift, :number
+      # Zorunlu.
+      field "p_value", :p_value, :number
+      # Zorunlu.
+      field "significant", :significant, :boolean
+      # Zorunlu.
+      field "arms", :arms, [:array, "DecisionReportArmsItem"]
+      # Zorunlu.
+      field "contexts", :contexts, [:array, "DecisionReportContextsItem"]
+    end
+
+    # DecisionReportArmsItem şeması.
+    class DecisionReportArmsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "label", :label, :string
+      # Zorunlu.
+      field "share", :share, :number
+      # Zorunlu.
+      field "assignments", :assignments, :integer
+      # Zorunlu.
+      field "settled", :settled, :integer
+      # Zorunlu.
+      field "rewards", :rewards, :integer
+      # Zorunlu.
+      field "rate", :rate, :number
+    end
+
+    # DecisionReportContextsItem şeması.
+    class DecisionReportContextsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "context", :context, :string
+      # Zorunlu.
+      field "arm_id", :arm_id, :string
+      # Zorunlu.
+      field "settled", :settled, :integer
+      # Zorunlu.
+      field "rate", :rate, :number
+    end
+
+    # DecisionReportHoldout şeması.
+    class DecisionReportHoldout < Pushizo::BaseModel
+      # Zorunlu.
+      field "assignments", :assignments, :integer
+      # Zorunlu.
+      field "settled", :settled, :integer
+      # Zorunlu.
+      field "rewards", :rewards, :integer
+      # Zorunlu.
+      field "rate", :rate, :number
+    end
+
+    # DecisionReportLearned şeması.
+    class DecisionReportLearned < Pushizo::BaseModel
+      # Zorunlu.
+      field "assignments", :assignments, :integer
+      # Zorunlu.
+      field "settled", :settled, :integer
+      # Zorunlu.
+      field "rewards", :rewards, :integer
+      # Zorunlu.
+      field "rate", :rate, :number
+    end
+
+    # DecisionResult şeması.
+    class DecisionResult < Pushizo::BaseModel
+      # Zorunlu.
+      field "arm_id", :arm_id, :string
+      # Zorunlu.
+      field "label", :label, :string
+      # Zorunlu. Değerler: "thompson", "holdout".
+      field "policy", :policy, :string
+      # Zorunlu.
+      field "context", :context, :string
+    end
+
     # DeliverabilitySettingsDto şeması.
     class DeliverabilitySettingsDto < Pushizo::BaseModel
       field "bcc_address", :bcc_address, :string
       field "validation", :validation, "DeliverabilitySettingsDtoValidation"
       field "verifier", :verifier, "DeliverabilitySettingsDtoVerifier"
+      field "volume_spike", :volume_spike, "DeliverabilitySettingsDtoVolumeSpike"
+      field "max_invalid_ratio", :max_invalid_ratio, :number
+      field "postmaster", :postmaster, "DeliverabilitySettingsDtoPostmaster"
+    end
+
+    # DeliverabilitySettingsDtoPostmaster şeması.
+    class DeliverabilitySettingsDtoPostmaster < Pushizo::BaseModel
+      # Zorunlu.
+      field "domain", :domain, :string
+      field "access_token", :access_token, :string
     end
 
     # DeliverabilitySettingsDtoValidation şeması.
@@ -3370,6 +6056,14 @@ module Pushizo
       field "api_key", :api_key, :string
     end
 
+    # DeliverabilitySettingsDtoVolumeSpike şeması.
+    class DeliverabilitySettingsDtoVolumeSpike < Pushizo::BaseModel
+      # Zorunlu.
+      field "multiplier", :multiplier, :integer
+      # Zorunlu.
+      field "floor", :floor, :integer
+    end
+
     # Delivery şeması.
     class Delivery < Pushizo::BaseModel
       # Zorunlu.
@@ -3380,7 +6074,7 @@ module Pushizo
       field "subscription_id", :subscription_id, :string
       # Zorunlu.
       field "user_id", :user_id, :string
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channel", :channel, :string
       # Zorunlu.
       field "provider", :provider, :string
@@ -3422,6 +6116,12 @@ module Pushizo
       field "has_more", :has_more, :boolean
     end
 
+    # DiscardQuarantineDto şeması.
+    class DiscardQuarantineDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "ids", :ids, [:array, :string]
+    end
+
     # EmailAddressCheck şeması.
     class EmailAddressCheck < Pushizo::BaseModel
       # Zorunlu.
@@ -3436,6 +6136,94 @@ module Pushizo
       field "unknown", :unknown, [:array, :string]
     end
 
+    # EmailBounceStats şeması.
+    class EmailBounceStats < Pushizo::BaseModel
+      # Zorunlu.
+      field "days", :days, :integer
+      # Zorunlu.
+      field "target_rate", :target_rate, :number
+      # Zorunlu.
+      field "suspend_rate", :suspend_rate, :number
+      # Zorunlu.
+      field "rate_7d", :rate_7d, "EmailBounceStatsRate7d"
+      # Zorunlu.
+      field "rate_30d", :rate_30d, "EmailBounceStatsRate30d"
+      # Zorunlu.
+      field "trend", :trend, [:array, "EmailBounceStatsTrendItem"]
+      # Zorunlu.
+      field "by_type", :by_type, "EmailBounceStatsByType"
+      # Zorunlu.
+      field "by_reason", :by_reason, [:array, "EmailBounceStatsByReasonItem"]
+      # Zorunlu.
+      field "top_domains", :top_domains, [:array, "EmailBounceStatsTopDomainsItem"]
+    end
+
+    # EmailBounceStatsByReasonItem şeması.
+    class EmailBounceStatsByReasonItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "code", :code, :string
+      # Zorunlu.
+      field "count", :count, :integer
+    end
+
+    # EmailBounceStatsByType şeması.
+    class EmailBounceStatsByType < Pushizo::BaseModel
+      # Zorunlu.
+      field "hard", :hard, :integer
+      # Zorunlu.
+      field "soft", :soft, :integer
+      # Zorunlu.
+      field "complaint", :complaint, :integer
+      # Zorunlu.
+      field "blocked_before_send", :blocked_before_send, :integer
+    end
+
+    # EmailBounceStatsRate30d şeması.
+    class EmailBounceStatsRate30d < Pushizo::BaseModel
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "bounced", :bounced, :integer
+      # Zorunlu.
+      field "rate", :rate, :number
+    end
+
+    # EmailBounceStatsRate7d şeması.
+    class EmailBounceStatsRate7d < Pushizo::BaseModel
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "bounced", :bounced, :integer
+      # Zorunlu.
+      field "rate", :rate, :number
+    end
+
+    # EmailBounceStatsTopDomainsItem şeması.
+    class EmailBounceStatsTopDomainsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "domain", :domain, :string
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "bounced", :bounced, :integer
+      # Zorunlu.
+      field "rate", :rate, :number
+    end
+
+    # EmailBounceStatsTrendItem şeması.
+    class EmailBounceStatsTrendItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "day", :day, :string
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "bounced", :bounced, :integer
+      # Zorunlu.
+      field "soft_bounced", :soft_bounced, :integer
+      # Zorunlu.
+      field "rate", :rate, :number
+    end
+
     # EmailDeliverabilitySettings şeması.
     class EmailDeliverabilitySettings < Pushizo::BaseModel
       # Zorunlu.
@@ -3444,6 +6232,20 @@ module Pushizo
       field "validation", :validation, "EmailDeliverabilitySettingsValidation"
       # Zorunlu.
       field "verifier", :verifier, "EmailDeliverabilitySettingsVerifier"
+      # Zorunlu.
+      field "volume_spike", :volume_spike, "EmailDeliverabilitySettingsVolumeSpike"
+      # Zorunlu.
+      field "postmaster", :postmaster, "EmailDeliverabilitySettingsPostmaster"
+      # Zorunlu.
+      field "max_invalid_ratio", :max_invalid_ratio, :number
+    end
+
+    # EmailDeliverabilitySettingsPostmaster şeması.
+    class EmailDeliverabilitySettingsPostmaster < Pushizo::BaseModel
+      # Zorunlu.
+      field "domain", :domain, :string
+      # Zorunlu.
+      field "has_token", :has_token, :boolean
     end
 
     # EmailDeliverabilitySettingsValidation şeması.
@@ -3464,6 +6266,136 @@ module Pushizo
       field "provider", :provider, :string
       # Zorunlu.
       field "has_key", :has_key, :boolean
+    end
+
+    # EmailDeliverabilitySettingsVolumeSpike şeması.
+    class EmailDeliverabilitySettingsVolumeSpike < Pushizo::BaseModel
+      # Zorunlu.
+      field "multiplier", :multiplier, :integer
+      # Zorunlu.
+      field "floor", :floor, :integer
+    end
+
+    # EmailHygieneRun şeması.
+    class EmailHygieneRun < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu. Değerler: "queued", "running", "completed", "failed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "total", :total, :integer
+      # Zorunlu.
+      field "processed", :processed, :integer
+      # Zorunlu.
+      field "valid", :valid, :integer
+      # Zorunlu.
+      field "invalid", :invalid, :integer
+      # Zorunlu.
+      field "unknown", :unknown, :integer
+      # Zorunlu.
+      field "reasons", :reasons, [:map, :integer]
+      # Zorunlu.
+      field "error", :error, :string
+      # Zorunlu.
+      field "suppressed_count", :suppressed_count, :integer
+      # Zorunlu.
+      field "suppressed_at", :suppressed_at, :string
+      # Zorunlu.
+      field "started_at", :started_at, :string
+      # Zorunlu.
+      field "completed_at", :completed_at, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # EmailHygieneStart şeması.
+    class EmailHygieneStart < Pushizo::BaseModel
+      # Zorunlu.
+      field "run", :run, "EmailHygieneRun"
+      # Zorunlu.
+      field "created", :created, :boolean
+    end
+
+    # EmailHygieneStatus şeması.
+    class EmailHygieneStatus < Pushizo::BaseModel
+      # Zorunlu.
+      field "status", :status, "EmailHygieneStatusStatus"
+      # Zorunlu.
+      field "latest_run", :latest_run, "EmailHygieneRun"
+    end
+
+    # EmailHygieneStatusStatus şeması.
+    class EmailHygieneStatusStatus < Pushizo::BaseModel
+      # Zorunlu.
+      field "total", :total, :integer
+      # Zorunlu.
+      field "valid", :valid, :integer
+      # Zorunlu.
+      field "invalid", :invalid, :integer
+      # Zorunlu.
+      field "unknown", :unknown, :integer
+      # Zorunlu.
+      field "pending", :pending, :integer
+      # Zorunlu.
+      field "unchecked", :unchecked, :integer
+      # Zorunlu.
+      field "invalid_by_reason", :invalid_by_reason, [:map, :integer]
+      # Zorunlu.
+      field "unsendable", :unsendable, :integer
+    end
+
+    # EmailHygieneSuppress şeması.
+    class EmailHygieneSuppress < Pushizo::BaseModel
+      # Zorunlu.
+      field "suppressed", :suppressed, :integer
+      # Zorunlu.
+      field "run", :run, "EmailHygieneRun"
+    end
+
+    # EmailProviderInsights şeması.
+    class EmailProviderInsights < Pushizo::BaseModel
+      # Zorunlu.
+      field "days", :days, :integer
+      # Zorunlu.
+      field "providers", :providers, [:array, "EmailProviderInsightsProvidersItem"]
+      # Zorunlu.
+      field "trend", :trend, [:array, "EmailProviderInsightsTrendItem"]
+    end
+
+    # EmailProviderInsightsProvidersItem şeması.
+    class EmailProviderInsightsProvidersItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "gmail", "outlook", "yahoo", "other".
+      field "provider", :provider, :string
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "delivered", :delivered, :integer
+      # Zorunlu.
+      field "opened", :opened, :integer
+      # Zorunlu.
+      field "clicked", :clicked, :integer
+      # Zorunlu.
+      field "bounced", :bounced, :integer
+      # Zorunlu.
+      field "complained", :complained, :integer
+    end
+
+    # EmailProviderInsightsTrendItem şeması.
+    class EmailProviderInsightsTrendItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "day", :day, :string
+      # Zorunlu. Değerler: "gmail", "outlook", "yahoo", "other".
+      field "provider", :provider, :string
+      # Zorunlu.
+      field "sent", :sent, :integer
+      # Zorunlu.
+      field "delivered", :delivered, :integer
+      # Zorunlu.
+      field "bounced", :bounced, :integer
     end
 
     # EmailWarmupPlan şeması.
@@ -3636,7 +6568,7 @@ module Pushizo
       field "included_segments", :included_segments, [:array, :string]
       field "excluded_segments", :excluded_segments, [:array, :string]
       field "filters", :filters, :any
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channels", :channels, [:array, :string]
       field "test_devices_only", :test_devices_only, :boolean
       field "email_to", :email_to, [:array, :string]
@@ -3653,6 +6585,13 @@ module Pushizo
       field "new_contacts", :new_contacts, :integer
       # Zorunlu.
       field "external_id_missing", :external_id_missing, [:array, :string]
+    end
+
+    # EvaluateAppFlagsDto şeması.
+    class EvaluateAppFlagsDto < Pushizo::BaseModel
+      field "external_id", :external_id, :string
+      field "user_id", :user_id, :string
+      field "subject", :subject, :string
     end
 
     # EventDefinition şeması.
@@ -3761,6 +6700,32 @@ module Pushizo
       field "has_more", :has_more, :boolean
     end
 
+    # EventList şeması.
+    class EventList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "EventListDataItem"]
+    end
+
+    # EventListDataItem şeması.
+    class EventListDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "user_id", :user_id, :string
+      # Zorunlu.
+      field "subscription_id", :subscription_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "properties", :properties, [:map, :any]
+      # Zorunlu.
+      field "value", :value, :number
+      # Zorunlu. Değerler: "sdk", "api", "system", "import".
+      field "source", :source, :string
+      # Zorunlu.
+      field "occurred_at", :occurred_at, :string
+    end
+
     # EventsAccepted şeması.
     class EventsAccepted < Pushizo::BaseModel
       # Zorunlu.
@@ -3847,7 +6812,7 @@ module Pushizo
       field "message_id", :message_id, :string
       field "campaign_id", :campaign_id, :string
       field "status", :status, :string
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channel", :channel, :string
       field "segment_id", :segment_id, :string
     end
@@ -4088,6 +7053,102 @@ module Pushizo
       field "drop_off", :drop_off, :integer
     end
 
+    # Geofence şeması.
+    class Geofence < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "lat", :lat, :number
+      # Zorunlu.
+      field "lng", :lng, :number
+      # Zorunlu.
+      field "radius_m", :radius_m, :integer
+      # Zorunlu.
+      field "cooldown_minutes", :cooldown_minutes, :integer
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "enter_count", :enter_count, :integer
+      # Zorunlu.
+      field "exit_count", :exit_count, :integer
+      # Zorunlu.
+      field "inside_count", :inside_count, :integer
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # GeofenceList şeması.
+    class GeofenceList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "Geofence"]
+    end
+
+    # GlobalControl şeması.
+    class GlobalControl < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "percent", :percent, :integer
+      # Zorunlu.
+      field "started_at", :started_at, :string
+    end
+
+    # GlobalControlReport şeması.
+    class GlobalControlReport < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "percent", :percent, :integer
+      # Zorunlu.
+      field "started_at", :started_at, :string
+      # Zorunlu.
+      field "from", :from, :string
+      # Zorunlu.
+      field "to", :to, :string
+      # Zorunlu.
+      field "events", :events, [:array, :string]
+      # Zorunlu.
+      field "control", :control, "GlobalControlReportControl"
+      # Zorunlu.
+      field "treatment", :treatment, "GlobalControlReportTreatment"
+      # Zorunlu.
+      field "lift_percent", :lift_percent, :number
+      # Zorunlu.
+      field "incremental_conversions", :incremental_conversions, :integer
+      # Zorunlu.
+      field "p_value", :p_value, :number
+      # Zorunlu.
+      field "significant", :significant, :boolean
+      # Zorunlu.
+      field "withheld_messages", :withheld_messages, :integer
+    end
+
+    # GlobalControlReportControl şeması.
+    class GlobalControlReportControl < Pushizo::BaseModel
+      # Zorunlu.
+      field "users", :users, :integer
+      # Zorunlu.
+      field "converted", :converted, :integer
+      # Zorunlu.
+      field "conversion_rate", :conversion_rate, :number
+    end
+
+    # GlobalControlReportTreatment şeması.
+    class GlobalControlReportTreatment < Pushizo::BaseModel
+      # Zorunlu.
+      field "users", :users, :integer
+      # Zorunlu.
+      field "converted", :converted, :integer
+      # Zorunlu.
+      field "conversion_rate", :conversion_rate, :number
+    end
+
     # IdentityKey şeması.
     class IdentityKey < Pushizo::BaseModel
       # Zorunlu.
@@ -4118,7 +7179,7 @@ module Pushizo
       field "id", :id, :string
       # Zorunlu.
       field "app_id", :app_id, :string
-      # Zorunlu. Değerler: "eski sağlayıcı_players", "csv_users".
+      # Zorunlu. Değerler: "legacy_players", "csv_users".
       field "type", :type, :string
       # Zorunlu.
       field "file_name", :file_name, :string
@@ -4156,6 +7217,8 @@ module Pushizo
       field "created_subscriptions", :created_subscriptions, :integer
       field "skipped", :skipped, :integer
       field "errors", :errors, :integer
+      field "rejected_emails", :rejected_emails, :integer
+      field "rejected_email_reasons", :rejected_email_reasons, [:map, :integer]
     end
 
     # InAppMessage şeması.
@@ -4184,6 +7247,8 @@ module Pushizo
       field "frequency", :frequency, "InAppMessageFrequency"
       # Zorunlu.
       field "journey_only", :journey_only, :boolean
+      # Zorunlu.
+      field "placement", :placement, :string
       # Zorunlu.
       field "start_at", :start_at, :string
       # Zorunlu.
@@ -4225,6 +7290,7 @@ module Pushizo
     class InAppMessageAudience < Pushizo::BaseModel
       field "included_segments", :included_segments, [:array, :string]
       field "excluded_segments", :excluded_segments, [:array, :string]
+      field "global_control_exempt", :global_control_exempt, :boolean
     end
 
     # InAppMessageDisplay şeması.
@@ -4693,10 +7759,133 @@ module Pushizo
       field "data", :data, [:array, "InboxTeam"]
     end
 
+    # Integration şeması.
+    class Integration < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu. Değerler: "segment", "amplitude", "mixpanel", "ga4", "posthog", "rudderstack", "hubspot", "appsflyer", "adjust", "revenuecat", "zapier", "slack", "activecampaign", "adobe_audience_manager", "salesforce".
+      field "type", :type, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "active", "paused", "error".
+      field "status", :status, :string
+      # Zorunlu.
+      field "settings", :settings, [:map, :any]
+      # Zorunlu.
+      field "events", :events, [:array, :string]
+      # Zorunlu.
+      field "credentials", :credentials, [:map, :string]
+      # Zorunlu.
+      field "state", :state, [:map, :any]
+      # Zorunlu.
+      field "inbound_url", :inbound_url, :string
+      # Zorunlu.
+      field "interactions_url", :interactions_url, :string
+      # Zorunlu.
+      field "pending_events", :pending_events, :integer
+      # Zorunlu.
+      field "dead_events", :dead_events, :integer
+      # Zorunlu.
+      field "hooks", :hooks, :integer
+      # Zorunlu.
+      field "consecutive_failures", :consecutive_failures, :integer
+      # Zorunlu.
+      field "last_error", :last_error, :string
+      # Zorunlu.
+      field "last_error_at", :last_error_at, :string
+      # Zorunlu.
+      field "last_success_at", :last_success_at, :string
+      # Zorunlu.
+      field "last_run_at", :last_run_at, :string
+      # Zorunlu.
+      field "next_sync_at", :next_sync_at, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # IntegrationList şeması.
+    class IntegrationList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "Integration"]
+      # Zorunlu.
+      field "catalog", :catalog, [:array, "IntegrationListCatalogItem"]
+    end
+
+    # IntegrationListCatalogItem şeması.
+    class IntegrationListCatalogItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "segment", "amplitude", "mixpanel", "ga4", "posthog", "rudderstack", "hubspot", "appsflyer", "adjust", "revenuecat", "zapier", "slack", "activecampaign", "adobe_audience_manager", "salesforce".
+      field "type", :type, :string
+      # Zorunlu.
+      field "events", :events, [:array, :string]
+      # Zorunlu.
+      field "cohorts", :cohorts, :boolean
+      # Zorunlu.
+      field "inbound", :inbound, :boolean
+    end
+
     # IntegrationOk şeması.
     class IntegrationOk < Pushizo::BaseModel
       # Zorunlu.
       field "ok", :ok, :boolean
+    end
+
+    # IntegrationRunList şeması.
+    class IntegrationRunList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "IntegrationRunListDataItem"]
+    end
+
+    # IntegrationRunListDataItem şeması.
+    class IntegrationRunListDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu. Değerler: "cohort_sync", "event_export", "hook_delivery", "inbound", "notification", "test".
+      field "kind", :kind, :string
+      # Zorunlu. Değerler: "schedule", "manual", "event", "inbound".
+      field "trigger", :trigger, :string
+      # Zorunlu. Değerler: "running", "succeeded", "partial", "failed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "stats", :stats, [:map, :number]
+      # Zorunlu.
+      field "error", :error, :string
+      # Zorunlu.
+      field "started_at", :started_at, :string
+      # Zorunlu.
+      field "finished_at", :finished_at, :string
+      # Zorunlu.
+      field "duration_ms", :duration_ms, :integer
+    end
+
+    # IntegrationSyncResult şeması.
+    class IntegrationSyncResult < Pushizo::BaseModel
+      # Zorunlu.
+      field "queued", :queued, :boolean
+      # Zorunlu.
+      field "next_sync_at", :next_sync_at, :string
+    end
+
+    # IntegrationTestResult şeması.
+    class IntegrationTestResult < Pushizo::BaseModel
+      # Zorunlu.
+      field "ok", :ok, :boolean
+      # Zorunlu.
+      field "error", :error, :string
+      # Zorunlu.
+      field "run_id", :run_id, :string
+    end
+
+    # IssueWalletPassDto şeması.
+    class IssueWalletPassDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "template_id", :template_id, :string
+      field "external_id", :external_id, :string
+      field "barcode_value", :barcode_value, :string
+      field "values", :values, [:map, :string]
     end
 
     # Journey şeması.
@@ -5339,6 +8528,22 @@ module Pushizo
       field "submissions", :submissions, :integer
     end
 
+    # LandingPageVersions şeması.
+    class LandingPageVersions < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "LandingPageVersionsDataItem"]
+    end
+
+    # LandingPageVersionsDataItem şeması.
+    class LandingPageVersionsDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "version", :version, :integer
+      # Zorunlu.
+      field "published_at", :published_at, :string
+      # Zorunlu.
+      field "published_by", :published_by, :string
+    end
+
     # LiveActivitySendResult şeması.
     class LiveActivitySendResult < Pushizo::BaseModel
       # Zorunlu.
@@ -5434,6 +8639,8 @@ module Pushizo
       field "labels", :labels, [:array, :string]
       # Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır
       field "category", :category, :string
+      # Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı.
+      field "goals", :goals, "McpCreateCampaignDraftBodyGoals"
       field "ab_test", :ab_test, "McpCreateCampaignDraftBodyAbTest"
       # A/B varyantları (ağırlıklar toplamı 100; en fazla bir is_control)
       field "variants", :variants, [:array, "McpCreateCampaignDraftBodyVariantsItem"]
@@ -5467,7 +8674,7 @@ module Pushizo
       field "exclude_segments", :exclude_segments, [:array, :string]
       # Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
       field "filters", :filters, "McpCreateCampaignDraftBodyAudienceFilters"
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channels", :channels, [:array, :string]
       field "test_devices_only", :test_devices_only, :boolean
     end
@@ -5490,8 +8697,17 @@ module Pushizo
       field "priority", :priority, :integer
       field "collapse_id", :collapse_id, :string
       field "frequency_cap_exempt", :frequency_cap_exempt, :boolean
+      # Değerler: "low", "normal", "high".
+      field "frequency_priority", :frequency_priority, :string
+      field "global_control_exempt", :global_control_exempt, :boolean
       field "quiet_hours_exempt", :quiet_hours_exempt, :boolean
       field "one_per_user", :one_per_user, :boolean
+    end
+
+    # Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı.
+    class McpCreateCampaignDraftBodyGoals < Pushizo::BaseModel
+      field "primary", :primary, :string
+      field "secondary", :secondary, [:array, :string]
     end
 
     # McpCreateCampaignDraftBodyRecurrence şeması.
@@ -5510,6 +8726,25 @@ module Pushizo
       field "weight_percent", :weight_percent, :integer
       field "content", :content, [:map, :any]
       field "is_control", :is_control, :boolean
+    end
+
+    # McpCreateJourneyDraftBody şeması.
+    class McpCreateJourneyDraftBody < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      # React Flow uyumlu journey grafı: { nodes: [{ id, type, position, data }], edges: [{ id, source, target, sourceHandle }] } (docs/journeys.md)
+      field "graph", :graph, "McpCreateJourneyDraftBodyGraph"
+      # Yeniden giriş, yalnızca yeni girenler, çıkış kuralları, çıkış tag'leri, hedefler, takvim (docs/journeys.md)
+      field "settings", :settings, [:map, :any]
+    end
+
+    # React Flow uyumlu journey grafı: { nodes: [{ id, type, position, data }], edges: [{ id, source, target, sourceHandle }] } (docs/journeys.md)
+    class McpCreateJourneyDraftBodyGraph < Pushizo::BaseModel
+      # Zorunlu.
+      field "nodes", :nodes, [:array, [:map, :any]]
+      # Zorunlu.
+      field "edges", :edges, [:array, [:map, :any]]
     end
 
     # McpCreateSegmentDraftBody şeması.
@@ -5544,11 +8779,21 @@ module Pushizo
       # Zorunlu.
       field "app_scopes", :app_scopes, [:array, :string]
       # Zorunlu.
+      field "app_roles", :app_roles, [:array, "MemberAppRolesItem"]
+      # Zorunlu.
       field "accepted_at", :accepted_at, :string
       # Zorunlu.
       field "created_at", :created_at, :string
       # Zorunlu.
       field "last_login_at", :last_login_at, :string
+    end
+
+    # MemberAppRolesItem şeması.
+    class MemberAppRolesItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu. Değerler: "owner", "admin", "developer", "marketer", "analyst", "billing", "viewer", "composer", "agent".
+      field "role", :role, :string
     end
 
     # MemberList şeması.
@@ -5764,6 +9009,22 @@ module Pushizo
       field "is_control", :is_control, :boolean
     end
 
+    # MessengerLink şeması.
+    class MessengerLink < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu. Değerler: "telegram", "viber".
+      field "channel", :channel, :string
+      # Zorunlu.
+      field "user_id", :user_id, :string
+      # Zorunlu.
+      field "url", :url, :string
+      # Zorunlu.
+      field "token", :token, :string
+      # Zorunlu.
+      field "expires_at", :expires_at, :string
+    end
+
     # Ok şeması.
     class Ok < Pushizo::BaseModel
       # Zorunlu.
@@ -5831,9 +9092,9 @@ module Pushizo
 
     # OverviewStatsChannelsItem şeması.
     class OverviewStatsChannelsItem < Pushizo::BaseModel
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channel", :channel, :string
-      # Zorunlu. Değerler: "apns", "fcm", "hms", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "meta_whatsapp", "google_rbm", "mock".
+      # Zorunlu. Değerler: "apns", "fcm", "hms", "adm", "wns", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "meta_whatsapp", "google_rbm", "telegram_bot", "viber_bot", "mock".
       field "provider", :provider, :string
       # Zorunlu. Değerler: "unconfigured", "active", "invalid", "suspended".
       field "status", :status, :string
@@ -5944,6 +9205,26 @@ module Pushizo
       field "push_capable", :push_capable, :boolean
       # Değerler: "sandbox", "production".
       field "push_environment", :push_environment, :string
+      # Değerler: "phone", "watch".
+      field "form_factor", :form_factor, :string
+      # Değerler: "alert", "voip", "app_clip".
+      field "push_kind", :push_kind, :string
+      field "manufacturer", :manufacturer, :string
+      field "brand", :brand, :string
+      field "rom", :rom, :string
+      field "rom_version", :rom_version, :string
+      field "delivery", :delivery, "PatchSubscriptionDtoDeviceDelivery"
+    end
+
+    # PatchSubscriptionDtoDeviceDelivery şeması.
+    class PatchSubscriptionDtoDeviceDelivery < Pushizo::BaseModel
+      field "battery_optimization_exempt", :battery_optimization_exempt, :boolean
+      field "background_restricted", :background_restricted, :boolean
+      field "channel_blocked", :channel_blocked, :boolean
+      field "power_save_mode", :power_save_mode, :boolean
+      field "data_saver", :data_saver, :boolean
+      # Değerler: "exempted", "active", "working_set", "frequent", "rare", "restricted".
+      field "standby_bucket", :standby_bucket, :string
     end
 
     # PatchUserDto şeması.
@@ -5968,6 +9249,319 @@ module Pushizo
       field "amount", :amount, :number
       field "iso", :iso, :string
       field "count", :count, :integer
+    end
+
+    # PathBodyDto şeması.
+    class PathBodyDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "event", :event, :string
+      # Değerler: "after", "before".
+      field "direction", :direction, :string
+      field "depth", :depth, :integer
+      field "top", :top, :integer
+      field "window_hours", :window_hours, :integer
+      field "exclude", :exclude, [:array, :string]
+      field "from", :from, :string
+      field "to", :to, :string
+      # Değerler: "json", "csv".
+      field "format", :format_value, :string
+    end
+
+    # PathReport şeması.
+    class PathReport < Pushizo::BaseModel
+      # Zorunlu.
+      field "from", :from, :string
+      # Zorunlu.
+      field "to", :to, :string
+      # Zorunlu.
+      field "event", :event, :string
+      # Zorunlu. Değerler: "after", "before".
+      field "direction", :direction, :string
+      # Zorunlu.
+      field "window_hours", :window_hours, :integer
+      # Zorunlu.
+      field "total_users", :total_users, :integer
+      # Zorunlu.
+      field "truncated", :truncated, :boolean
+      # Zorunlu.
+      field "levels", :levels, [:array, "PathReportLevelsItem"]
+      # Zorunlu.
+      field "links", :links, [:array, "PathReportLinksItem"]
+      # Zorunlu.
+      field "top_paths", :top_paths, [:array, "PathReportTopPathsItem"]
+    end
+
+    # PathReportLevelsItem şeması.
+    class PathReportLevelsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "step", :step, :integer
+      # Zorunlu.
+      field "nodes", :nodes, [:array, "PathReportLevelsItemNodesItem"]
+    end
+
+    # PathReportLevelsItemNodesItem şeması.
+    class PathReportLevelsItemNodesItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "event", "other", "end".
+      field "kind", :kind, :string
+      # Zorunlu.
+      field "users", :users, :integer
+      # Zorunlu.
+      field "share", :share, :number
+    end
+
+    # PathReportLinksItem şeması.
+    class PathReportLinksItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "source", :source, :string
+      # Zorunlu.
+      field "target", :target, :string
+      # Zorunlu.
+      field "users", :users, :integer
+    end
+
+    # PathReportTopPathsItem şeması.
+    class PathReportTopPathsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "path", :path, [:array, :string]
+      # Zorunlu.
+      field "users", :users, :integer
+      # Zorunlu.
+      field "share", :share, :number
+    end
+
+    # PostmasterStats şeması.
+    class PostmasterStats < Pushizo::BaseModel
+      # Zorunlu.
+      field "domain", :domain, :string
+      # Zorunlu.
+      field "data", :data, [:array, "PostmasterStatsDataItem"]
+    end
+
+    # PostmasterStatsDataItem şeması.
+    class PostmasterStatsDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "day", :day, :string
+      # Zorunlu.
+      field "domain_reputation", :domain_reputation, :string
+      # Zorunlu.
+      field "spam_rate", :spam_rate, :string
+    end
+
+    # PredictionModel şeması.
+    class PredictionModel < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "slug", :slug, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "churn", "event".
+      field "kind", :kind, :string
+      # Zorunlu.
+      field "event_names", :event_names, [:array, :string]
+      # Zorunlu.
+      field "horizon_days", :horizon_days, :integer
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu. Değerler: "idle", "queued", "running", "failed".
+      field "status", :status, :string
+      # Zorunlu. Değerler: "ready", "insufficient_data", "low_quality".
+      field "outcome", :outcome, :string
+      # Zorunlu.
+      field "last_computed_at", :last_computed_at, :string
+      # Zorunlu.
+      field "scored_users", :scored_users, :integer
+      # Zorunlu.
+      field "metrics", :metrics, "PredictionModelMetrics"
+      # Zorunlu.
+      field "distribution", :distribution, [:array, "PredictionModelDistributionItem"]
+    end
+
+    # PredictionModelDistributionItem şeması.
+    class PredictionModelDistributionItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "low", "medium", "high".
+      field "bucket", :bucket, :string
+      # Zorunlu.
+      field "users", :users, :integer
+    end
+
+    # PredictionModelList şeması.
+    class PredictionModelList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "PredictionModel"]
+    end
+
+    # PredictionModelMetrics şeması.
+    class PredictionModelMetrics < Pushizo::BaseModel
+      # Zorunlu.
+      field "auc", :auc, :number
+      # Zorunlu.
+      field "base_rate", :base_rate, :number
+      # Zorunlu.
+      field "train_users", :train_users, :integer
+      # Zorunlu.
+      field "holdout_users", :holdout_users, :integer
+      # Zorunlu.
+      field "positives", :positives, :integer
+      # Zorunlu.
+      field "negatives", :negatives, :integer
+      # Zorunlu.
+      field "calibration", :calibration, [:array, "PredictionModelMetricsCalibrationItem"]
+      # Zorunlu.
+      field "importance", :importance, [:array, "PredictionModelMetricsImportanceItem"]
+    end
+
+    # PredictionModelMetricsCalibrationItem şeması.
+    class PredictionModelMetricsCalibrationItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "low", "medium", "high".
+      field "bucket", :bucket, :string
+      # Zorunlu.
+      field "users", :users, :integer
+      # Zorunlu.
+      field "predicted", :predicted, :number
+      # Zorunlu.
+      field "actual", :actual, :number
+    end
+
+    # PredictionModelMetricsImportanceItem şeması.
+    class PredictionModelMetricsImportanceItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "recency_days", "events_7", "events_30", "active_days_30", "target_30", "days_since_target", "tenure_days", "sent_30", "engaged_30".
+      field "feature", :feature, :string
+      # Zorunlu.
+      field "weight", :weight, :number
+    end
+
+    # PredictionUsersPage şeması.
+    class PredictionUsersPage < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "PredictionUsersPageDataItem"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+    end
+
+    # PredictionUsersPageDataItem şeması.
+    class PredictionUsersPageDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "user_id", :user_id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu.
+      field "score", :score, :integer
+      # Zorunlu. Değerler: "low", "medium", "high".
+      field "bucket", :bucket, :string
+    end
+
+    # PreviewDataTransformDto şeması.
+    class PreviewDataTransformDto < Pushizo::BaseModel
+      # Zorunlu. Değerler: "event", "person".
+      field "target", :target, :string
+      # Değerler: "sdk", "api", "import", "system", "webhook_source", "pull_source".
+      field "source", :source, :string
+      # Zorunlu.
+      field "records", :records, [:array, [:map, :any]]
+      field "transform", :transform, "PreviewDataTransformDtoTransform"
+      field "transform_id", :transform_id, :string
+    end
+
+    # PreviewDataTransformDtoTransform şeması.
+    class PreviewDataTransformDtoTransform < Pushizo::BaseModel
+      # Zorunlu. Değerler: "rules", "javascript".
+      field "kind", :kind, :string
+      field "rules", :rules, [:array, :any]
+      field "code", :code, :string
+      # Değerler: "sdk", "api", "import", "system", "webhook_source", "pull_source".
+      field "sources", :sources, [:array, :string]
+      field "event_names", :event_names, [:array, :string]
+    end
+
+    # PreviewWarehouseQueryDto şeması.
+    class PreviewWarehouseQueryDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "connection_id", :connection_id, :string
+      # Zorunlu.
+      field "query", :query, :string
+      # Zorunlu.
+      field "id_column", :id_column, :string
+      # Değerler: "external_id", "user_id".
+      field "id_type", :id_type, :string
+      field "limits", :limits, "PreviewWarehouseQueryDtoLimits"
+      # Değerler: "dry_run", "sample".
+      field "mode", :mode, :string
+    end
+
+    # PreviewWarehouseQueryDtoLimits şeması.
+    class PreviewWarehouseQueryDtoLimits < Pushizo::BaseModel
+      field "timeout_seconds", :timeout_seconds, :integer
+      field "max_rows", :max_rows, :integer
+      field "max_bytes_billed", :max_bytes_billed, :integer
+      # Değerler: "X-Small", "Small", "Medium", "Large", "X-Large", "2X-Large", "3X-Large", "4X-Large", "5X-Large", "6X-Large".
+      field "max_warehouse_size", :max_warehouse_size, :string
+    end
+
+    # PromoCodeList şeması.
+    class PromoCodeList < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "expires_at", :expires_at, :string
+      # Zorunlu.
+      field "total_count", :total_count, :integer
+      # Zorunlu.
+      field "assigned_count", :assigned_count, :integer
+      # Zorunlu.
+      field "available_count", :available_count, :integer
+      # Zorunlu.
+      field "liquid", :liquid, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # PromoCodeListList şeması.
+    class PromoCodeListList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "PromoCodeList"]
+    end
+
+    # PromoCodesPage şeması.
+    class PromoCodesPage < Pushizo::BaseModel
+      # Zorunlu.
+      field "total", :total, :integer
+      # Zorunlu.
+      field "data", :data, [:array, "PromoCodesPageDataItem"]
+    end
+
+    # PromoCodesPageDataItem şeması.
+    class PromoCodesPageDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "code", :code, :string
+      # Zorunlu.
+      field "delivery_id", :delivery_id, :string
+      # Zorunlu.
+      field "message_id", :message_id, :string
+      # Zorunlu.
+      field "assigned_at", :assigned_at, :string
+    end
+
+    # PromoCodeUploadResult şeması.
+    class PromoCodeUploadResult < Pushizo::BaseModel
+      # Zorunlu.
+      field "list", :list, "PromoCodeList"
+      # Zorunlu.
+      field "added", :added, :integer
+      # Zorunlu.
+      field "skipped", :skipped, :integer
     end
 
     # ProvidersReport şeması.
@@ -6032,6 +9626,12 @@ module Pushizo
       field "failure_rate", :failure_rate, :number
     end
 
+    # PublicCleanupSubscriptionsDto şeması.
+    class PublicCleanupSubscriptionsDto < Pushizo::BaseModel
+      # Değerler: "invalid", "unsubscribed".
+      field "status", :status, :string
+    end
+
     # PublicFormSubmitDto şeması.
     class PublicFormSubmitDto < Pushizo::BaseModel
       # Zorunlu.
@@ -6048,9 +9648,81 @@ module Pushizo
       field "external_id", :external_id, :string
     end
 
+    # PutSiteSearchDocumentDto şeması.
+    class PutSiteSearchDocumentDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "url", :url, :string
+      field "title", :title, :string
+      field "content", :content, :string
+      field "html", :html, :string
+      field "language", :language, :string
+    end
+
+    # RecentEvents şeması.
+    class RecentEvents < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "RecentEventsDataItem"]
+    end
+
+    # RecentEventsDataItem şeması.
+    class RecentEventsDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "user_id", :user_id, :string
+      # Zorunlu.
+      field "subscription_id", :subscription_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "properties", :properties, [:map, :any]
+      # Zorunlu.
+      field "value", :value, :number
+      # Zorunlu. Değerler: "sdk", "api", "system", "import".
+      field "source", :source, :string
+      # Zorunlu.
+      field "occurred_at", :occurred_at, :string
+    end
+
+    # RecommendationConfig şeması.
+    class RecommendationConfig < Pushizo::BaseModel
+      # Zorunlu.
+      field "configured", :configured, :boolean
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "view_events", :view_events, [:array, :string]
+      # Zorunlu.
+      field "purchase_events", :purchase_events, [:array, :string]
+      # Zorunlu.
+      field "item_property", :item_property, :string
+      # Zorunlu.
+      field "window_days", :window_days, :integer
+      # Zorunlu. Değerler: "idle", "queued", "running", "failed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "last_error", :last_error, :string
+      # Zorunlu.
+      field "last_computed_at", :last_computed_at, :string
+      # Zorunlu.
+      field "scored_items", :scored_items, :integer
+      # Zorunlu.
+      field "scored_users", :scored_users, :integer
+    end
+
+    # Recommendations şeması.
+    class Recommendations < Pushizo::BaseModel
+      # Zorunlu. Değerler: "personalized", "popular", "trending", "similar", "category", "recently_viewed", "new_arrivals".
+      field "strategy", :strategy, :string
+      # Zorunlu. Değerler: "personalized", "popular", "trending", "similar", "category", "recently_viewed", "new_arrivals".
+      field "source", :source, :string
+      # Zorunlu.
+      field "data", :data, [:array, "CatalogItem"]
+    end
+
     # RenderPreview şeması.
     class RenderPreview < Pushizo::BaseModel
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channel", :channel, :string
       # Zorunlu.
       field "language", :language, :string
@@ -6118,7 +9790,7 @@ module Pushizo
 
     # RenderTemplateDto şeması.
     class RenderTemplateDto < Pushizo::BaseModel
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channel", :channel, :string
       field "language", :language, :string
       field "user", :user, "RenderTemplateDtoUser"
@@ -6167,6 +9839,7 @@ module Pushizo
       field "disable_sms_link_shortening", :disable_sms_link_shortening, :boolean
       field "add_to_inbox", :add_to_inbox, :boolean
       field "inbox_ttl", :inbox_ttl, :integer
+      field "content_card", :content_card, "RenderTemplateDtoContentContentCard"
       field "thread_id", :thread_id, :string
       field "ios_relevance_score", :ios_relevance_score, :number
       field "target_content_identifier", :target_content_identifier, :string
@@ -6186,6 +9859,19 @@ module Pushizo
       field "rcs_content_sid", :rcs_content_sid, :string
       field "rcs_content_variables", :rcs_content_variables, [:map, :string]
       field "rcs_fallback_text", :rcs_fallback_text, [:map, :string]
+      field "messenger_image_url", :messenger_image_url, :string
+      field "messenger_buttons", :messenger_buttons, [:array, :any]
+      field "ios_carousel", :ios_carousel, [:array, "RenderTemplateDtoContentIosCarouselItem"]
+      field "android_live_update", :android_live_update, "RenderTemplateDtoContentAndroidLiveUpdate"
+      field "voip", :voip, :boolean
+      field "app_clip", :app_clip, :boolean
+    end
+
+    # RenderTemplateDtoContentAndroidLiveUpdate şeması.
+    class RenderTemplateDtoContentAndroidLiveUpdate < Pushizo::BaseModel
+      # Zorunlu.
+      field "progress", :progress, :integer
+      field "ongoing", :ongoing, :boolean
     end
 
     # RenderTemplateDtoContentButtonsItem şeması.
@@ -6196,6 +9882,22 @@ module Pushizo
       field "text", :text, :string
       field "icon", :icon, :string
       field "url", :url, :string
+    end
+
+    # RenderTemplateDtoContentContentCard şeması.
+    class RenderTemplateDtoContentContentCard < Pushizo::BaseModel
+      # Zorunlu. Değerler: "classic", "captioned_image", "image_only".
+      field "type", :type, :string
+      field "pinned", :pinned, :boolean
+      field "priority", :priority, :integer
+      field "button_text", :button_text, [:map, :string]
+    end
+
+    # RenderTemplateDtoContentIosCarouselItem şeması.
+    class RenderTemplateDtoContentIosCarouselItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "url", :url, :string
+      field "title", :title, :string
     end
 
     # RenderTemplateDtoContentRcsCard şeması.
@@ -6298,6 +10000,103 @@ module Pushizo
       field "properties", :properties, [:map, :any]
     end
 
+    # ReportResult şeması.
+    class ReportResult < Pushizo::BaseModel
+      # Zorunlu.
+      field "from", :from, :string
+      # Zorunlu.
+      field "to", :to, :string
+      # Zorunlu.
+      field "columns", :columns, [:array, "ReportResultColumnsItem"]
+      # Zorunlu.
+      field "rows", :rows, [:array, [:map, :any]]
+      # Zorunlu.
+      field "totals", :totals, [:map, :number]
+      # Zorunlu.
+      field "truncated", :truncated, :boolean
+    end
+
+    # ReportResultColumnsItem şeması.
+    class ReportResultColumnsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "key", :key, :string
+      # Zorunlu. Değerler: "dimension", "metric".
+      field "kind", :kind, :string
+      # Zorunlu. Değerler: "text", "date", "number", "percent".
+      field "format", :format_value, :string
+    end
+
+    # ReportRunBodyDto şeması.
+    class ReportRunBodyDto < Pushizo::BaseModel
+      # Zorunlu. Değerler: "deliveries", "events", "conversions".
+      field "source", :source, :string
+      # Zorunlu. Değerler: "sent", "delivered", "failed", "opened", "clicked", "delivery_rate", "open_rate", "click_rate", "failure_rate", "count", "unique_users", "value_sum", "value_avg", "conversions", "revenue".
+      field "metrics", :metrics, [:array, :string]
+      # Değerler: "day", "week", "month", "channel", "provider", "campaign", "status", "name", "source", "event_name", "kind".
+      field "dimensions", :dimensions, [:array, :string]
+      field "filters", :filters, [:map, [:array, :string]]
+      field "sort", :sort, "ReportRunBodyDtoSort"
+      field "limit", :limit, :integer
+      field "days", :days, :integer
+      field "from", :from, :string
+      field "to", :to, :string
+      # Değerler: "json", "csv".
+      field "format", :format_value, :string
+    end
+
+    # ReportRunBodyDtoSort şeması.
+    class ReportRunBodyDtoSort < Pushizo::BaseModel
+      # Zorunlu.
+      field "by", :by, :string
+      # Değerler: "asc", "desc".
+      field "direction", :direction, :string
+    end
+
+    # ReprocessQuarantineDto şeması.
+    class ReprocessQuarantineDto < Pushizo::BaseModel
+      field "ids", :ids, [:array, :string]
+    end
+
+    # RequestLog şeması.
+    class RequestLog < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "org_id", :org_id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "api_key_id", :api_key_id, :string
+      # Zorunlu.
+      field "method", :method_value, :string
+      # Zorunlu.
+      field "path", :path, :string
+      # Zorunlu.
+      field "route", :route, :string
+      # Zorunlu.
+      field "status", :status, :integer
+      # Zorunlu.
+      field "duration_ms", :duration_ms, :integer
+      # Zorunlu.
+      field "request_id", :request_id, :string
+      # Zorunlu.
+      field "ip", :ip, :string
+      # Zorunlu.
+      field "error_code", :error_code, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+    end
+
+    # RequestLogPage şeması.
+    class RequestLogPage < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "RequestLog"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
+    end
+
     # RetentionReport şeması.
     class RetentionReport < Pushizo::BaseModel
       # Zorunlu.
@@ -6318,6 +10117,254 @@ module Pushizo
       field "retention", :retention, [:array, :number]
     end
 
+    # ReverseEtlRun şeması.
+    class ReverseEtlRun < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "sync_id", :sync_id, :string
+      # Zorunlu. Değerler: "schedule", "manual".
+      field "trigger", :trigger, :string
+      # Zorunlu. Değerler: "queued", "running", "succeeded", "failed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "row_count", :row_count, :integer
+      # Zorunlu.
+      field "attempt", :attempt, :integer
+      # Zorunlu.
+      field "error", :error, :string
+      # Zorunlu.
+      field "started_at", :started_at, :string
+      # Zorunlu.
+      field "finished_at", :finished_at, :string
+      # Zorunlu.
+      field "duration_ms", :duration_ms, :integer
+      # Zorunlu.
+      field "created_at", :created_at, :string
+    end
+
+    # ReverseEtlRunPage şeması.
+    class ReverseEtlRunPage < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "ReverseEtlRun"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
+    end
+
+    # ReverseEtlSync şeması.
+    class ReverseEtlSync < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "snowflake", "bigquery", "postgres", "mysql", "s3", "google_sheets", "clickhouse", "sqlserver", "trino", "athena", "elasticsearch", "kafka", "pubsub".
+      field "source", :source, :string
+      # Zorunlu. Değerler: "event", "user".
+      field "target", :target, :string
+      # Zorunlu.
+      field "config", :config, [:map, :any]
+      # Zorunlu.
+      field "credentials_hint", :credentials_hint, :string
+      # Zorunlu. Değerler: "every_5_minutes", "hourly", "daily".
+      field "schedule", :schedule, :string
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu. Değerler: "active", "paused", "failing".
+      field "status", :status, :string
+      # Zorunlu.
+      field "cursor", :cursor, :string
+      # Zorunlu.
+      field "consecutive_failures", :consecutive_failures, :integer
+      # Zorunlu.
+      field "last_error", :last_error, :string
+      # Zorunlu.
+      field "last_run_at", :last_run_at, :string
+      # Zorunlu.
+      field "last_success_at", :last_success_at, :string
+      # Zorunlu.
+      field "next_run_at", :next_run_at, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # ReverseEtlSyncList şeması.
+    class ReverseEtlSyncList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "ReverseEtlSync"]
+    end
+
+    # RfmConfig şeması.
+    class RfmConfig < Pushizo::BaseModel
+      # Zorunlu.
+      field "configured", :configured, :boolean
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "event_names", :event_names, [:array, :string]
+      # Zorunlu.
+      field "value_property", :value_property, :string
+      # Zorunlu.
+      field "use_monetary", :use_monetary, :boolean
+      # Zorunlu.
+      field "window_days", :window_days, :integer
+      # Zorunlu. Değerler: "idle", "queued", "running", "failed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "last_error", :last_error, :string
+      # Zorunlu.
+      field "first_computed_at", :first_computed_at, :string
+      # Zorunlu.
+      field "last_computed_at", :last_computed_at, :string
+      # Zorunlu.
+      field "scored_users", :scored_users, :integer
+    end
+
+    # RfmOverview şeması.
+    class RfmOverview < Pushizo::BaseModel
+      # Zorunlu.
+      field "total", :total, :integer
+      # Zorunlu.
+      field "low_population", :low_population, :boolean
+      # Zorunlu.
+      field "last_computed_at", :last_computed_at, :string
+      # Zorunlu.
+      field "segments", :segments, [:array, "RfmOverviewSegmentsItem"]
+    end
+
+    # RfmOverviewSegmentsItem şeması.
+    class RfmOverviewSegmentsItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "champions", "loyal", "potential", "new", "promising", "need_attention", "about_to_sleep", "at_risk", "cant_lose", "hibernating", "lost".
+      field "segment", :segment, :string
+      # Zorunlu.
+      field "users", :users, :integer
+      # Zorunlu.
+      field "share", :share, :number
+      # Zorunlu.
+      field "avg_recency_days", :avg_recency_days, :number
+      # Zorunlu.
+      field "avg_frequency", :avg_frequency, :number
+      # Zorunlu.
+      field "avg_monetary", :avg_monetary, :number
+    end
+
+    # RfmTransitions şeması.
+    class RfmTransitions < Pushizo::BaseModel
+      # Zorunlu.
+      field "from", :from, :string
+      # Zorunlu.
+      field "to", :to, :string
+      # Zorunlu.
+      field "first_computed_at", :first_computed_at, :string
+      # Zorunlu.
+      field "transitions", :transitions, [:array, "RfmTransitionsTransitionsItem"]
+    end
+
+    # RfmTransitionsTransitionsItem şeması.
+    class RfmTransitionsTransitionsItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "champions", "loyal", "potential", "new", "promising", "need_attention", "about_to_sleep", "at_risk", "cant_lose", "hibernating", "lost".
+      field "from", :from, :string
+      # Zorunlu. Değerler: "champions", "loyal", "potential", "new", "promising", "need_attention", "about_to_sleep", "at_risk", "cant_lose", "hibernating", "lost".
+      field "to", :to, :string
+      # Zorunlu.
+      field "users", :users, :integer
+    end
+
+    # RfmUsersPage şeması.
+    class RfmUsersPage < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "RfmUsersPageDataItem"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+    end
+
+    # RfmUsersPageDataItem şeması.
+    class RfmUsersPageDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "user_id", :user_id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu. Değerler: "champions", "loyal", "potential", "new", "promising", "need_attention", "about_to_sleep", "at_risk", "cant_lose", "hibernating", "lost".
+      field "segment", :segment, :string
+      # Zorunlu.
+      field "r", :r, :integer
+      # Zorunlu.
+      field "f", :f, :integer
+      # Zorunlu.
+      field "m", :m, :integer
+      # Zorunlu.
+      field "recency_days", :recency_days, :integer
+      # Zorunlu.
+      field "frequency", :frequency, :integer
+      # Zorunlu.
+      field "monetary", :monetary, :number
+      # Zorunlu.
+      field "last_event_at", :last_event_at, :string
+      # Zorunlu.
+      field "segment_since", :segment_since, :string
+    end
+
+    # RunSqlQueryDto şeması.
+    class RunSqlQueryDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "query", :query, :string
+      field "row_limit", :row_limit, :integer
+      field "timeout_ms", :timeout_ms, :integer
+    end
+
+    # SavedReport şeması.
+    class SavedReport < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "definition", :definition, "SavedReportDefinition"
+      # Zorunlu.
+      field "created_by", :created_by, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # SavedReportDefinition şeması.
+    class SavedReportDefinition < Pushizo::BaseModel
+      # Zorunlu. Değerler: "deliveries", "events", "conversions".
+      field "source", :source, :string
+      # Zorunlu. Değerler: "sent", "delivered", "failed", "opened", "clicked", "delivery_rate", "open_rate", "click_rate", "failure_rate", "count", "unique_users", "value_sum", "value_avg", "conversions", "revenue".
+      field "metrics", :metrics, [:array, :string]
+      # Zorunlu. Değerler: "day", "week", "month", "channel", "provider", "campaign", "status", "name", "source", "event_name", "kind".
+      field "dimensions", :dimensions, [:array, :string]
+      # Zorunlu.
+      field "filters", :filters, [:map, [:array, :string]]
+      field "sort", :sort, "SavedReportDefinitionSort"
+      # Zorunlu.
+      field "limit", :limit, :integer
+      field "days", :days, :integer
+      field "from", :from, :string
+      field "to", :to, :string
+    end
+
+    # SavedReportDefinitionSort şeması.
+    class SavedReportDefinitionSort < Pushizo::BaseModel
+      # Zorunlu.
+      field "by", :by, :string
+      # Zorunlu. Değerler: "asc", "desc".
+      field "direction", :direction, :string
+    end
+
+    # SavedReportList şeması.
+    class SavedReportList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "SavedReport"]
+    end
+
     # ScheduleCampaignDto şeması.
     class ScheduleCampaignDto < Pushizo::BaseModel
       field "send_at", :send_at, :string
@@ -6330,6 +10377,42 @@ module Pushizo
       field "cron", :cron, :string
       field "until", :until_, :string
       field "timezone", :timezone, :string
+    end
+
+    # SdkErrorPage şeması.
+    class SdkErrorPage < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "SdkErrorPageDataItem"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
+    end
+
+    # SdkErrorPageDataItem şeması.
+    class SdkErrorPageDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "subscription_id", :subscription_id, :string
+      # Zorunlu.
+      field "platform", :platform, :string
+      # Zorunlu.
+      field "sdk_version", :sdk_version, :string
+      # Zorunlu.
+      field "level", :level, :string
+      # Zorunlu.
+      field "code", :code, :string
+      # Zorunlu.
+      field "message", :message, :string
+      # Zorunlu.
+      field "context", :context, [:map, :any]
+      # Zorunlu.
+      field "occurred_at", :occurred_at, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
     end
 
     # Segment şeması.
@@ -6356,6 +10439,10 @@ module Pushizo
       field "created_at", :created_at, :string
       # Zorunlu.
       field "updated_at", :updated_at, :string
+      # Zorunlu.
+      field "sql", :sql, "SegmentSql"
+      # Zorunlu.
+      field "warehouse", :warehouse, "SegmentWarehouse"
     end
 
     # SegmentCampaigns şeması.
@@ -6461,6 +10548,20 @@ module Pushizo
       field "none", :none, [:array, [:map, :any]]
     end
 
+    # SegmentSql şeması.
+    class SegmentSql < Pushizo::BaseModel
+      # Zorunlu.
+      field "query", :query, :string
+      # Zorunlu.
+      field "refresh_interval_minutes", :refresh_interval_minutes, :integer
+      # Zorunlu.
+      field "refreshed_at", :refreshed_at, :string
+      # Zorunlu.
+      field "member_count", :member_count, :integer
+      # Zorunlu.
+      field "last_error", :last_error, :string
+    end
+
     # SegmentsUpdateBody şeması.
     class SegmentsUpdateBody < Pushizo::BaseModel
       field "name", :name, :string
@@ -6477,10 +10578,71 @@ module Pushizo
       field "none", :none, [:array, [:map, :any]]
     end
 
+    # SegmentWarehouse şeması.
+    class SegmentWarehouse < Pushizo::BaseModel
+      # Zorunlu.
+      field "connection_id", :connection_id, :string
+      # Zorunlu.
+      field "query", :query, :string
+      # Zorunlu.
+      field "id_column", :id_column, :string
+      # Zorunlu. Değerler: "external_id", "user_id".
+      field "id_type", :id_type, :string
+      # Zorunlu.
+      field "limits", :limits, "SegmentWarehouseLimits"
+      # Zorunlu.
+      field "refresh_interval_minutes", :refresh_interval_minutes, :integer
+      # Zorunlu. Değerler: "queued", "failed", "ok", "never".
+      field "refresh_state", :refresh_state, :string
+      # Zorunlu.
+      field "refresh_requested_at", :refresh_requested_at, :string
+      # Zorunlu.
+      field "refreshed_at", :refreshed_at, :string
+      # Zorunlu.
+      field "member_count", :member_count, :integer
+      # Zorunlu.
+      field "last_error", :last_error, :string
+      # Zorunlu.
+      field "bytes_processed", :bytes_processed, :number
+    end
+
+    # SegmentWarehouseLimits şeması.
+    class SegmentWarehouseLimits < Pushizo::BaseModel
+      # Zorunlu.
+      field "timeout_seconds", :timeout_seconds, :integer
+      # Zorunlu.
+      field "max_rows", :max_rows, :integer
+      # Zorunlu.
+      field "max_bytes_billed", :max_bytes_billed, :number
+      # Zorunlu. Değerler: "X-Small", "Small", "Medium", "Large", "X-Large", "2X-Large", "3X-Large", "4X-Large", "5X-Large", "6X-Large".
+      field "max_warehouse_size", :max_warehouse_size, :string
+    end
+
     # SelectWinnerDto şeması.
     class SelectWinnerDto < Pushizo::BaseModel
       # Zorunlu.
       field "variant_id", :variant_id, :string
+    end
+
+    # SessionVolume şeması.
+    class SessionVolume < Pushizo::BaseModel
+      # Zorunlu.
+      field "days", :days, [:array, "SessionVolumeDaysItem"]
+    end
+
+    # SessionVolumeDaysItem şeması.
+    class SessionVolumeDaysItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "day", :day, :string
+      # Zorunlu.
+      field "sessions", :sessions, :integer
+      # Zorunlu.
+      field "users", :users, :integer
+    end
+
+    # SetMemberDto şeması.
+    class SetMemberDto < Pushizo::BaseModel
+      field "role", :role, :string
     end
 
     # SetOwnerDto şeması.
@@ -6499,10 +10661,244 @@ module Pushizo
     class SetPreferencesDtoPreferencesItem < Pushizo::BaseModel
       # Zorunlu.
       field "category", :category, :string
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channel", :channel, :string
       # Zorunlu.
       field "opted_in", :opted_in, :boolean
+    end
+
+    # SiteSearchCrawlRequest şeması.
+    class SiteSearchCrawlRequest < Pushizo::BaseModel
+      # Zorunlu.
+      field "queued", :queued, :boolean
+      # Zorunlu.
+      field "source", :source, "SiteSearchSource"
+    end
+
+    # SiteSearchDocument şeması.
+    class SiteSearchDocument < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "key", :key, :string
+      # Zorunlu.
+      field "source_id", :source_id, :string
+      # Zorunlu.
+      field "url", :url, :string
+      # Zorunlu.
+      field "title", :title, :string
+      # Zorunlu.
+      field "language", :language, :string
+      # Zorunlu.
+      field "chunks", :chunks, :integer
+      # Zorunlu.
+      field "chars", :chars, :integer
+      # Zorunlu.
+      field "indexed_at", :indexed_at, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+    end
+
+    # SiteSearchDocumentPage şeması.
+    class SiteSearchDocumentPage < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "SiteSearchDocument"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
+    end
+
+    # SiteSearchDocumentResult şeması.
+    class SiteSearchDocumentResult < Pushizo::BaseModel
+      # Zorunlu. Değerler: "created", "updated", "unchanged".
+      field "outcome", :outcome, :string
+      # Zorunlu.
+      field "document", :document, "SiteSearchDocument"
+    end
+
+    # SiteSearchOverview şeması.
+    class SiteSearchOverview < Pushizo::BaseModel
+      # Zorunlu.
+      field "settings", :settings, "SiteSearchOverviewSettings"
+      # Zorunlu.
+      field "index", :index, "SiteSearchOverviewIndex"
+      # Zorunlu.
+      field "usage", :usage, "SiteSearchOverviewUsage"
+      # Zorunlu.
+      field "ai", :ai, "SiteSearchOverviewAi"
+    end
+
+    # SiteSearchOverviewAi şeması.
+    class SiteSearchOverviewAi < Pushizo::BaseModel
+      # Zorunlu.
+      field "available", :available, :boolean
+      # Zorunlu. Değerler: "disabled", "unavailable", "cap_reached".
+      field "reason", :reason, :string
+    end
+
+    # SiteSearchOverviewIndex şeması.
+    class SiteSearchOverviewIndex < Pushizo::BaseModel
+      # Zorunlu.
+      field "documents", :documents, :integer
+      # Zorunlu.
+      field "chunks", :chunks, :integer
+      # Zorunlu.
+      field "sources", :sources, :integer
+      # Zorunlu.
+      field "last_indexed_at", :last_indexed_at, :string
+    end
+
+    # SiteSearchOverviewSettings şeması.
+    class SiteSearchOverviewSettings < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "ai_answers", :ai_answers, :boolean
+      # Zorunlu.
+      field "allowed_origins", :allowed_origins, [:array, :string]
+      # Zorunlu.
+      field "language", :language, :string
+      # Zorunlu.
+      field "text_search_config", :text_search_config, :string
+      # Zorunlu.
+      field "monthly_token_cap", :monthly_token_cap, :integer
+      # Zorunlu.
+      field "query_retention_days", :query_retention_days, :integer
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # SiteSearchOverviewUsage şeması.
+    class SiteSearchOverviewUsage < Pushizo::BaseModel
+      # Zorunlu.
+      field "tokens_this_month", :tokens_this_month, :integer
+      # Zorunlu.
+      field "monthly_token_cap", :monthly_token_cap, :integer
+      # Zorunlu.
+      field "period_start", :period_start, :string
+    end
+
+    # SiteSearchReport şeması.
+    class SiteSearchReport < Pushizo::BaseModel
+      # Zorunlu.
+      field "period_days", :period_days, :integer
+      # Zorunlu.
+      field "searches", :searches, :integer
+      # Zorunlu.
+      field "zero_results", :zero_results, :integer
+      # Zorunlu.
+      field "click_through_rate", :click_through_rate, :number
+      # Zorunlu.
+      field "answers_requested", :answers_requested, :integer
+      # Zorunlu.
+      field "answered", :answered, :integer
+      # Zorunlu.
+      field "not_found", :not_found, :integer
+      # Zorunlu.
+      field "answer_fallbacks", :answer_fallbacks, :integer
+      # Zorunlu.
+      field "tokens", :tokens, :integer
+      # Zorunlu.
+      field "top_queries", :top_queries, [:array, "SiteSearchReportTopQueriesItem"]
+      # Zorunlu.
+      field "zero_result_queries", :zero_result_queries, [:array, "SiteSearchReportZeroResultQueriesItem"]
+      # Zorunlu.
+      field "daily", :daily, [:array, "SiteSearchReportDailyItem"]
+    end
+
+    # SiteSearchReportDailyItem şeması.
+    class SiteSearchReportDailyItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "date", :date, :string
+      # Zorunlu.
+      field "searches", :searches, :integer
+      # Zorunlu.
+      field "zero_results", :zero_results, :integer
+      # Zorunlu.
+      field "answered", :answered, :integer
+    end
+
+    # SiteSearchReportTopQueriesItem şeması.
+    class SiteSearchReportTopQueriesItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "query", :query, :string
+      # Zorunlu.
+      field "searches", :searches, :integer
+      # Zorunlu.
+      field "clicks", :clicks, :integer
+      # Zorunlu.
+      field "avg_results", :avg_results, :number
+    end
+
+    # SiteSearchReportZeroResultQueriesItem şeması.
+    class SiteSearchReportZeroResultQueriesItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "query", :query, :string
+      # Zorunlu.
+      field "searches", :searches, :integer
+    end
+
+    # SiteSearchSource şeması.
+    class SiteSearchSource < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "sitemap", "urls".
+      field "kind", :kind, :string
+      # Zorunlu.
+      field "url", :url, :string
+      # Zorunlu.
+      field "urls", :urls, [:array, :string]
+      # Zorunlu.
+      field "max_pages", :max_pages, :integer
+      # Zorunlu.
+      field "refresh_hours", :refresh_hours, :integer
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu. Değerler: "idle", "queued", "crawling", "ok", "partial", "failed".
+      field "status", :status, :string
+      # Zorunlu.
+      field "documents", :documents, :integer
+      # Zorunlu.
+      field "crawl_requested_at", :crawl_requested_at, :string
+      # Zorunlu.
+      field "last_crawled_at", :last_crawled_at, :string
+      # Zorunlu.
+      field "next_crawl_at", :next_crawl_at, :string
+      # Zorunlu.
+      field "last_error", :last_error, :string
+      # Zorunlu.
+      field "stats", :stats, "SiteSearchSourceStats"
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # SiteSearchSourceList şeması.
+    class SiteSearchSourceList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "SiteSearchSource"]
+    end
+
+    # SiteSearchSourceStats şeması.
+    class SiteSearchSourceStats < Pushizo::BaseModel
+      # Zorunlu.
+      field "pages_found", :pages_found, :integer
+      # Zorunlu.
+      field "pages_indexed", :pages_indexed, :integer
+      # Zorunlu.
+      field "pages_unchanged", :pages_unchanged, :integer
+      # Zorunlu.
+      field "pages_skipped", :pages_skipped, :integer
+      # Zorunlu.
+      field "pages_failed", :pages_failed, :integer
+      # Zorunlu.
+      field "pages_removed", :pages_removed, :integer
+      # Zorunlu.
+      field "duration_ms", :duration_ms, :integer
     end
 
     # SmsKeyword şeması.
@@ -6515,7 +10911,7 @@ module Pushizo
       field "scope", :scope, :string
       # Zorunlu.
       field "app_id", :app_id, :string
-      # Zorunlu. Değerler: "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channels", :channels, [:array, :string]
       # Zorunlu.
       field "actions", :actions, [:map, :any]
@@ -6535,6 +10931,132 @@ module Pushizo
       field "data", :data, [:array, "SmsKeyword"]
       # Zorunlu.
       field "reserved", :reserved, [:array, :string]
+    end
+
+    # SmsVerification şeması.
+    class SmsVerification < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "expires_at", :expires_at, :string
+    end
+
+    # SmsVerificationCheck şeması.
+    class SmsVerificationCheck < Pushizo::BaseModel
+      # Zorunlu.
+      field "verified", :verified, :boolean
+    end
+
+    # SqlQueryResult şeması.
+    class SqlQueryResult < Pushizo::BaseModel
+      # Zorunlu.
+      field "run_id", :run_id, :string
+      # Zorunlu.
+      field "columns", :columns, [:array, "SqlQueryResultColumnsItem"]
+      # Zorunlu.
+      field "rows", :rows, [:array, [:array, :any]]
+      # Zorunlu.
+      field "row_count", :row_count, :integer
+      # Zorunlu.
+      field "truncated", :truncated, :boolean
+      # Zorunlu.
+      field "duration_ms", :duration_ms, :integer
+    end
+
+    # SqlQueryResultColumnsItem şeması.
+    class SqlQueryResultColumnsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "text", "integer", "number", "boolean", "timestamp", "json", "unknown".
+      field "type", :type, :string
+    end
+
+    # SqlRunList şeması.
+    class SqlRunList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "SqlRunListDataItem"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
+    end
+
+    # SqlRunListDataItem şeması.
+    class SqlRunListDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "segment_id", :segment_id, :string
+      # Zorunlu. Değerler: "panel", "api", "schedule".
+      field "source", :source, :string
+      # Zorunlu.
+      field "actor_id", :actor_id, :string
+      # Zorunlu.
+      field "query", :query, :string
+      # Zorunlu.
+      field "query_hash", :query_hash, :string
+      # Zorunlu. Değerler: "ok", "rejected", "timeout", "failed".
+      field "status", :status, :string
+      # Zorunlu. Değerler: "empty", "too_long", "syntax", "multiple_statements", "not_select", "forbidden_relation", "forbidden_function", "forbidden_construct", "forbidden_type".
+      field "reason", :reason, :string
+      # Zorunlu.
+      field "error", :error, :string
+      # Zorunlu.
+      field "row_count", :row_count, :integer
+      # Zorunlu.
+      field "truncated", :truncated, :boolean
+      # Zorunlu.
+      field "duration_ms", :duration_ms, :integer
+      # Zorunlu.
+      field "created_at", :created_at, :string
+    end
+
+    # SqlSchema şeması.
+    class SqlSchema < Pushizo::BaseModel
+      # Zorunlu.
+      field "views", :views, [:array, "SqlSchemaViewsItem"]
+      # Zorunlu.
+      field "limits", :limits, "SqlSchemaLimits"
+      # Zorunlu.
+      field "refresh_intervals", :refresh_intervals, [:array, :integer]
+    end
+
+    # SqlSchemaLimits şeması.
+    class SqlSchemaLimits < Pushizo::BaseModel
+      # Zorunlu.
+      field "query_max", :query_max, :integer
+      # Zorunlu.
+      field "row_limit_default", :row_limit_default, :integer
+      # Zorunlu.
+      field "row_limit_max", :row_limit_max, :integer
+      # Zorunlu.
+      field "timeout_default_ms", :timeout_default_ms, :integer
+      # Zorunlu.
+      field "timeout_max_ms", :timeout_max_ms, :integer
+      # Zorunlu.
+      field "segment_max_members", :segment_max_members, :integer
+    end
+
+    # SqlSchemaViewsItem şeması.
+    class SqlSchemaViewsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "columns", :columns, [:array, "SqlSchemaViewsItemColumnsItem"]
+    end
+
+    # SqlSchemaViewsItemColumnsItem şeması.
+    class SqlSchemaViewsItemColumnsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "text", "integer", "number", "boolean", "timestamp", "json".
+      field "type", :type, :string
+    end
+
+    # SqlSegmentList şeması.
+    class SqlSegmentList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "Segment"]
     end
 
     # StartLiveActivityDto şeması.
@@ -6569,6 +11091,13 @@ module Pushizo
       field "all", :all, :boolean
     end
 
+    # StartVerifyDto şeması.
+    class StartVerifyDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "phone", :phone, :string
+      field "locale", :locale, :string
+    end
+
     # Subscription şeması.
     class Subscription < Pushizo::BaseModel
       # Zorunlu.
@@ -6577,7 +11106,7 @@ module Pushizo
       field "app_id", :app_id, :string
       # Zorunlu.
       field "user_id", :user_id, :string
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channel", :channel, :string
       # Zorunlu.
       field "token", :token, :string
@@ -6623,6 +11152,36 @@ module Pushizo
       field "push_capable", :push_capable, :boolean
       # Değerler: "sandbox", "production".
       field "push_environment", :push_environment, :string
+      # Değerler: "phone", "watch".
+      field "form_factor", :form_factor, :string
+      # Değerler: "alert", "voip", "app_clip".
+      field "push_kind", :push_kind, :string
+      field "manufacturer", :manufacturer, :string
+      field "brand", :brand, :string
+      field "rom", :rom, :string
+      field "rom_version", :rom_version, :string
+      field "delivery", :delivery, "SubscriptionDeviceDelivery"
+    end
+
+    # SubscriptionDeviceDelivery şeması.
+    class SubscriptionDeviceDelivery < Pushizo::BaseModel
+      field "battery_optimization_exempt", :battery_optimization_exempt, :boolean
+      field "background_restricted", :background_restricted, :boolean
+      field "channel_blocked", :channel_blocked, :boolean
+      field "power_save_mode", :power_save_mode, :boolean
+      field "data_saver", :data_saver, :boolean
+      # Değerler: "exempted", "active", "working_set", "frequent", "rare", "restricted".
+      field "standby_bucket", :standby_bucket, :string
+    end
+
+    # SubscriptionList şeması.
+    class SubscriptionList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "Subscription"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
     end
 
     # SubscriptionLocation şeması.
@@ -6717,7 +11276,7 @@ module Pushizo
       field "id", :id, :string
       # Zorunlu.
       field "app_id", :app_id, :string
-      # Zorunlu. Değerler: "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channel", :channel, :string
       # Zorunlu.
       field "value_masked", :value_masked, :string
@@ -6767,6 +11326,30 @@ module Pushizo
       field "created_at", :created_at, :string
       # Zorunlu.
       field "updated_at", :updated_at, :string
+    end
+
+    # SurveyInAppDto şeması.
+    class SurveyInAppDto < Pushizo::BaseModel
+      field "triggers", :triggers, [:array, :any]
+      field "audience", :audience, "SurveyInAppDtoAudience"
+      field "frequency", :frequency, "SurveyInAppDtoFrequency"
+      # Değerler: "modal", "banner_bottom", "fullscreen".
+      field "layout", :layout, :string
+      field "publish", :publish, :boolean
+    end
+
+    # SurveyInAppDtoAudience şeması.
+    class SurveyInAppDtoAudience < Pushizo::BaseModel
+      field "included_segments", :included_segments, [:array, :string]
+      field "excluded_segments", :excluded_segments, [:array, :string]
+      field "global_control_exempt", :global_control_exempt, :boolean
+    end
+
+    # SurveyInAppDtoFrequency şeması.
+    class SurveyInAppDtoFrequency < Pushizo::BaseModel
+      field "max_impressions", :max_impressions, :integer
+      field "min_interval_seconds", :min_interval_seconds, :integer
+      field "stop_after_interaction", :stop_after_interaction, :boolean
     end
 
     # SurveyPage şeması.
@@ -6948,6 +11531,21 @@ module Pushizo
       field "full", :full, :boolean
     end
 
+    # TeamInputDto şeması.
+    class TeamInputDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      field "member_ids", :member_ids, [:array, :string]
+    end
+
+    # TeamUpdateDto şeması.
+    class TeamUpdateDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "description", :description, :string
+      field "member_ids", :member_ids, [:array, :string]
+    end
+
     # Template şeması.
     class Template < Pushizo::BaseModel
       # Zorunlu.
@@ -6956,7 +11554,7 @@ module Pushizo
       field "app_id", :app_id, :string
       # Zorunlu.
       field "name", :name, :string
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channel", :channel, :string
       # Zorunlu.
       field "current_version", :current_version, :integer
@@ -7038,6 +11636,132 @@ module Pushizo
       field "user_id", :user_id, :string
     end
 
+    # TestPushDto şeması.
+    class TestPushDto < Pushizo::BaseModel
+      field "subscription_ids", :subscription_ids, [:array, :string]
+      field "headings", :headings, [:map, :string]
+      # Zorunlu.
+      field "contents", :contents, [:map, :string]
+      field "url", :url, :string
+      field "data", :data, [:map, :string]
+    end
+
+    # TraceResult şeması.
+    class TraceResult < Pushizo::BaseModel
+      # Zorunlu.
+      field "query", :query, :string
+      # Zorunlu.
+      field "kind", :kind, :string
+      # Zorunlu.
+      field "items", :items, [:array, "TraceResultItemsItem"]
+    end
+
+    # TraceResultItemsItem şeması.
+    class TraceResultItemsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "delivery", :delivery, "Delivery"
+      # Zorunlu.
+      field "events", :events, [:array, "TraceResultItemsItemEventsItem"]
+      # Zorunlu.
+      field "subscription", :subscription, "TraceResultItemsItemSubscription"
+      # Zorunlu.
+      field "user", :user, "TraceResultItemsItemUser"
+      # Zorunlu.
+      field "render", :render, "TraceResultItemsItemRender"
+      # Zorunlu.
+      field "webhooks", :webhooks, [:array, "TraceResultItemsItemWebhooksItem"]
+      # Zorunlu.
+      field "message", :message, "TraceResultItemsItemMessage"
+    end
+
+    # TraceResultItemsItemEventsItem şeması.
+    class TraceResultItemsItemEventsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "type", :type, :string
+      # Zorunlu.
+      field "detail", :detail, [:map, :any]
+      # Zorunlu.
+      field "occurred_at", :occurred_at, :string
+    end
+
+    # TraceResultItemsItemMessage şeması.
+    class TraceResultItemsItemMessage < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "source", :source, :string
+      # Zorunlu.
+      field "status", :status, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+    end
+
+    # TraceResultItemsItemRender şeması.
+    class TraceResultItemsItemRender < Pushizo::BaseModel
+      # Zorunlu.
+      field "language", :language, :string
+      # Zorunlu.
+      field "title", :title, :string
+      # Zorunlu.
+      field "body", :body, :string
+      # Zorunlu.
+      field "url", :url, :string
+      # Zorunlu.
+      field "image_url", :image_url, :string
+      # Zorunlu.
+      field "buttons", :buttons, [:array, :string]
+      # Zorunlu.
+      field "hash", :hash_value, :string
+      # Zorunlu.
+      field "matches_sent", :matches_sent, :boolean
+      # Zorunlu.
+      field "error", :error, :string
+    end
+
+    # TraceResultItemsItemSubscription şeması.
+    class TraceResultItemsItemSubscription < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
+      field "channel", :channel, :string
+      # Zorunlu.
+      field "status", :status, :string
+      # Zorunlu.
+      field "token_suffix", :token_suffix, :string
+      # Zorunlu.
+      field "device", :device, [:map, :any]
+      # Zorunlu.
+      field "test_device", :test_device, :boolean
+    end
+
+    # TraceResultItemsItemUser şeması.
+    class TraceResultItemsItemUser < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+    end
+
+    # TraceResultItemsItemWebhooksItem şeması.
+    class TraceResultItemsItemWebhooksItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "endpoint_id", :endpoint_id, :string
+      # Zorunlu.
+      field "event_type", :event_type, :string
+      # Zorunlu.
+      field "status", :status, :string
+      # Zorunlu.
+      field "attempt", :attempt, :integer
+      # Zorunlu.
+      field "response_status", :response_status, :integer
+      # Zorunlu.
+      field "created_at", :created_at, :string
+    end
+
     # TriggerRunDto şeması.
     class TriggerRunDto < Pushizo::BaseModel
       field "external_id", :external_id, :string
@@ -7052,6 +11776,74 @@ module Pushizo
       field "label", :label, :string
       # Zorunlu.
       field "value", :value, :string
+    end
+
+    # UninstallReport şeması.
+    class UninstallReport < Pushizo::BaseModel
+      # Zorunlu.
+      field "from", :from, :string
+      # Zorunlu.
+      field "to", :to, :string
+      # Zorunlu.
+      field "totals", :totals, "UninstallReportTotals"
+      # Zorunlu.
+      field "previous", :previous, "UninstallReportPrevious"
+      # Zorunlu.
+      field "rows", :rows, [:array, "UninstallReportRowsItem"]
+      # Zorunlu.
+      field "by_channel", :by_channel, [:array, "UninstallReportByChannelItem"]
+      # Zorunlu.
+      field "last_messages", :last_messages, [:array, "UninstallReportLastMessagesItem"]
+    end
+
+    # UninstallReportByChannelItem şeması.
+    class UninstallReportByChannelItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "channel", :channel, :string
+      # Zorunlu.
+      field "uninstalls", :uninstalls, :integer
+      # Zorunlu.
+      field "active", :active, :integer
+    end
+
+    # UninstallReportLastMessagesItem şeması.
+    class UninstallReportLastMessagesItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "campaign_id", :campaign_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "source", :source, :string
+      # Zorunlu.
+      field "uninstalls", :uninstalls, :integer
+    end
+
+    # UninstallReportPrevious şeması.
+    class UninstallReportPrevious < Pushizo::BaseModel
+      # Zorunlu.
+      field "uninstalls", :uninstalls, :integer
+      # Zorunlu.
+      field "active", :active, :integer
+      # Zorunlu.
+      field "rate", :rate, :number
+    end
+
+    # UninstallReportRowsItem şeması.
+    class UninstallReportRowsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "date", :date, :string
+      # Zorunlu.
+      field "uninstalls", :uninstalls, :integer
+    end
+
+    # UninstallReportTotals şeması.
+    class UninstallReportTotals < Pushizo::BaseModel
+      # Zorunlu.
+      field "uninstalls", :uninstalls, :integer
+      # Zorunlu.
+      field "active", :active, :integer
+      # Zorunlu.
+      field "rate", :rate, :number
     end
 
     # UpdateAdAudienceDto şeması.
@@ -7071,6 +11863,73 @@ module Pushizo
       # Değerler: "active", "paused".
       field "status", :status, :string
       field "daily_budget", :daily_budget, :any
+    end
+
+    # UpdateAffinityConfigDto şeması.
+    class UpdateAffinityConfigDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "attributes", :attributes_value, [:array, :string]
+      # Zorunlu.
+      field "events", :events, [:map, :number]
+      field "window_days", :window_days, :integer
+      field "half_life_days", :half_life_days, :integer
+    end
+
+    # UpdateAiAgentDto şeması.
+    class UpdateAiAgentDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "enabled", :enabled, :boolean
+      # Değerler: "whatsapp", "sms", "rcs", "telegram", "viber", "chat".
+      field "channels", :channels, [:array, :string]
+      field "instructions", :instructions, :string
+      field "faq", :faq, [:array, "UpdateAiAgentDtoFaqItem"]
+      field "tools", :tools, [:array, "UpdateAiAgentDtoToolsItem"]
+      field "handoff", :handoff, "UpdateAiAgentDtoHandoff"
+      field "limits", :limits, "UpdateAiAgentDtoLimits"
+      field "ai_sentiment", :ai_sentiment, :boolean
+    end
+
+    # UpdateAiAgentDtoFaqItem şeması.
+    class UpdateAiAgentDtoFaqItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "question", :question, :string
+      # Zorunlu.
+      field "answer", :answer, :string
+    end
+
+    # UpdateAiAgentDtoHandoff şeması.
+    class UpdateAiAgentDtoHandoff < Pushizo::BaseModel
+      field "keywords", :keywords, [:array, :string]
+      field "max_bot_replies", :max_bot_replies, :integer
+      field "on_negative_sentiment", :on_negative_sentiment, :boolean
+      field "message", :message, :string
+    end
+
+    # UpdateAiAgentDtoLimits şeması.
+    class UpdateAiAgentDtoLimits < Pushizo::BaseModel
+      field "monthly_token_cap", :monthly_token_cap, :integer
+      field "max_steps", :max_steps, :integer
+    end
+
+    # UpdateAiAgentDtoToolsItem şeması.
+    class UpdateAiAgentDtoToolsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "url", :url, :string
+      field "params", :params, [:array, "UpdateAiAgentDtoToolsItemParamsItem"]
+    end
+
+    # UpdateAiAgentDtoToolsItemParamsItem şeması.
+    class UpdateAiAgentDtoToolsItemParamsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "name", :name, :string
+      field "description", :description, :string
+      field "required", :required, :boolean
     end
 
     # UpdateApiKeyDto şeması.
@@ -7112,13 +11971,28 @@ module Pushizo
       field "androidChannels", :android_channels, [:array, "UpdateAppDtoSettingsAndroidChannelsItem"]
       field "sms", :sms, "UpdateAppDtoSettingsSms"
       field "preferenceCenter", :preference_center, "UpdateAppDtoSettingsPreferenceCenter"
+      field "brandKit", :brand_kit, "UpdateAppDtoSettingsBrandKit"
       field "defaultTtlSeconds", :default_ttl_seconds, :integer
       field "identityVerificationRequired", :identity_verification_required, :boolean
+      # Değerler: "off", "full", "masked".
+      field "ipCapture", :ip_capture, :string
+      field "ipRetentionDays", :ip_retention_days, :integer
+      field "adaptiveFrequency", :adaptive_frequency, "UpdateAppDtoSettingsAdaptiveFrequency"
       field "allowedOrigins", :allowed_origins, [:array, :string]
       field "campaignApprovalRequired", :campaign_approval_required, :boolean
       field "webPush", :web_push, "UpdateAppDtoSettingsWebPush"
       field "onboarding", :onboarding, "UpdateAppDtoSettingsOnboarding"
       field "sdkSetup", :sdk_setup, "UpdateAppDtoSettingsSdkSetup"
+    end
+
+    # UpdateAppDtoSettingsAdaptiveFrequency şeması.
+    class UpdateAppDtoSettingsAdaptiveFrequency < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "min", :min, :integer
+      # Zorunlu.
+      field "max", :max, :integer
     end
 
     # UpdateAppDtoSettingsAndroidChannelsItem şeması.
@@ -7135,6 +12009,17 @@ module Pushizo
       field "group", :group, :string
     end
 
+    # UpdateAppDtoSettingsBrandKit şeması.
+    class UpdateAppDtoSettingsBrandKit < Pushizo::BaseModel
+      field "website_url", :website_url, :string
+      field "name", :name, :string
+      field "primary_color", :primary_color, :string
+      field "accent_color", :accent_color, :string
+      field "font", :font, :string
+      field "logo_url", :logo_url, :string
+      field "tone", :tone, :string
+    end
+
     # UpdateAppDtoSettingsFrequencyCap şeması.
     class UpdateAppDtoSettingsFrequencyCap < Pushizo::BaseModel
       # Zorunlu.
@@ -7149,7 +12034,7 @@ module Pushizo
       field "max", :max, :integer
       # Zorunlu.
       field "window", :window, "UpdateAppDtoSettingsFrequencyCapsItemWindow"
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channels", :channels, [:array, :string]
     end
 
@@ -7173,9 +12058,9 @@ module Pushizo
       field "simulation", :simulation, :boolean
       field "completed_at", :completed_at, :string
       field "version", :version, :integer
-      # Değerler: "ios", "android", "huawei", "web".
+      # Değerler: "ios", "android", "huawei", "web", "amazon", "windows", "email", "sms".
       field "platforms", :platforms, [:array, :string]
-      # Değerler: "native", "flutter", "react-native", "unity", "capacitor", "cordova", "maui".
+      # Değerler: "native", "flutter", "react-native", "expo", "kmp", "unity", "capacitor", "cordova", "maui".
       field "framework", :framework, :string
       # Değerler: "code", "wordpress".
       field "web_integration", :web_integration, :string
@@ -7323,6 +12208,28 @@ module Pushizo
       field "message", :message, :string
     end
 
+    # UpdateAppFlagDto şeması.
+    class UpdateAppFlagDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "description", :description, :string
+      field "enabled", :enabled, :boolean
+      # Değerler: "boolean", "string", "number", "json".
+      field "value_type", :value_type, :string
+      field "on_value", :on_value, :any
+      field "off_value", :off_value, :any
+      field "rollout_percent", :rollout_percent, :integer
+      field "segment_id", :segment_id, :string
+      field "rollout_schedule", :rollout_schedule, [:array, "UpdateAppFlagDtoRolloutScheduleItem"]
+    end
+
+    # UpdateAppFlagDtoRolloutScheduleItem şeması.
+    class UpdateAppFlagDtoRolloutScheduleItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "at", :at, :string
+      # Zorunlu.
+      field "percent", :percent, :integer
+    end
+
     # UpdateBudgetAlertRuleDto şeması.
     class UpdateBudgetAlertRuleDto < Pushizo::BaseModel
       field "name", :name, :string
@@ -7334,19 +12241,67 @@ module Pushizo
       field "enabled", :enabled, :boolean
     end
 
+    # UpdateCatalogDto şeması.
+    class UpdateCatalogDto < Pushizo::BaseModel
+      field "description", :description, :string
+      field "currency", :currency, :string
+    end
+
     # UpdateCategoryDto şeması.
     class UpdateCategoryDto < Pushizo::BaseModel
       field "name", :name, [:map, :string]
       field "description", :description, [:map, :string]
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channels", :channels, [:array, :string]
       field "default_opted_in", :default_opted_in, :boolean
       field "position", :position, :integer
     end
 
+    # UpdateChannelScoreConfigDto şeması.
+    class UpdateChannelScoreConfigDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      field "window_days", :window_days, :integer
+      field "min_sends", :min_sends, :integer
+      field "count_email_opens", :count_email_opens, :boolean
+    end
+
+    # UpdateCompanyDto şeması.
+    class UpdateCompanyDto < Pushizo::BaseModel
+      field "external_id", :external_id, :string
+      field "name", :name, :string
+      field "domain", :domain, :string
+      field "properties", :properties, [:map, :any]
+    end
+
     # UpdateContentTableDto şeması.
     class UpdateContentTableDto < Pushizo::BaseModel
       field "description", :description, :string
+    end
+
+    # UpdateCustomAgentDto şeması.
+    class UpdateCustomAgentDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "description", :description, :string
+      field "enabled", :enabled, :boolean
+      field "instructions", :instructions, :string
+      # Değerler: "list_segments", "campaign_performance", "delivery_summary", "create_segment_draft", "create_campaign_draft".
+      field "tools", :tools, [:array, :string]
+      field "schedule", :schedule, "UpdateCustomAgentDtoSchedule"
+      field "limits", :limits, "UpdateCustomAgentDtoLimits"
+    end
+
+    # UpdateCustomAgentDtoLimits şeması.
+    class UpdateCustomAgentDtoLimits < Pushizo::BaseModel
+      field "max_steps", :max_steps, :integer
+      field "monthly_token_cap", :monthly_token_cap, :integer
+    end
+
+    # UpdateCustomAgentDtoSchedule şeması.
+    class UpdateCustomAgentDtoSchedule < Pushizo::BaseModel
+      # Zorunlu.
+      field "cron", :cron, :string
+      field "timezone", :timezone, :string
     end
 
     # UpdateDataFeedDto şeması.
@@ -7363,6 +12318,145 @@ module Pushizo
       field "enabled", :enabled, :boolean
     end
 
+    # UpdateDataSourceDto şeması.
+    class UpdateDataSourceDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "enabled", :enabled, :boolean
+      # Değerler: "signature", "token".
+      field "auth_mode", :auth_mode, :string
+      field "mapping", :mapping, "UpdateDataSourceDtoMapping"
+      field "config", :config, "UpdateDataSourceDtoConfig"
+      field "auth_value", :auth_value, :string
+    end
+
+    # UpdateDataSourceDtoConfig şeması.
+    class UpdateDataSourceDtoConfig < Pushizo::BaseModel
+      field "url", :url, :string
+      # Değerler: "GET", "POST".
+      field "method", :method_value, :string
+      field "headers", :headers, [:map, :string]
+      field "body", :body, :string
+      field "interval_minutes", :interval_minutes, :integer
+      field "auth_header", :auth_header, :string
+      field "next_cursor_path", :next_cursor_path, :string
+      field "cursor_param", :cursor_param, :string
+      field "resume_cursor", :resume_cursor, :boolean
+    end
+
+    # UpdateDataSourceDtoMapping şeması.
+    class UpdateDataSourceDtoMapping < Pushizo::BaseModel
+      field "records_path", :records_path, :string
+      field "event_name", :event_name, :string
+      field "event_name_path", :event_name_path, :string
+      field "external_id_path", :external_id_path, :string
+      field "occurred_at_path", :occurred_at_path, :string
+      field "value_path", :value_path, :string
+      field "event_id_path", :event_id_path, :string
+      field "properties_path", :properties_path, :string
+      field "tags_path", :tags_path, :string
+    end
+
+    # UpdateDataTransformDto şeması.
+    class UpdateDataTransformDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "description", :description, :string
+      field "enabled", :enabled, :boolean
+      field "position", :position, :integer
+      field "rules", :rules, [:array, :any]
+      field "code", :code, :string
+      # Değerler: "sdk", "api", "import", "system", "webhook_source", "pull_source".
+      field "sources", :sources, [:array, :string]
+      field "event_names", :event_names, [:array, :string]
+    end
+
+    # UpdateDecisionAgentDto şeması.
+    class UpdateDecisionAgentDto < Pushizo::BaseModel
+      field "name", :name, :string
+      # Değerler: "active", "paused".
+      field "status", :status, :string
+      field "reward_events", :reward_events, [:array, :string]
+      field "reward_window_hours", :reward_window_hours, :integer
+      field "holdout_percent", :holdout_percent, :integer
+    end
+
+    # UpdateFormDto şeması.
+    class UpdateFormDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "fields", :fields_value, [:array, "UpdateFormDtoFieldsItem"]
+      field "settings", :settings, "UpdateFormDtoSettings"
+      # Değerler: "active", "archived".
+      field "status", :status, :string
+    end
+
+    # UpdateFormDtoFieldsItem şeması.
+    class UpdateFormDtoFieldsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu. Değerler: "email", "phone", "first_name", "last_name", "full_name", "text", "textarea", "select", "radio", "checkbox", "consent".
+      field "type", :type, :string
+      # Zorunlu.
+      field "label", :label, [:map, :string]
+      field "placeholder", :placeholder, [:map, :string]
+      field "required", :required, :boolean
+      field "options", :options, [:array, "UpdateFormDtoFieldsItemOptionsItem"]
+      field "maps_to", :maps_to, :string
+      field "max_length", :max_length, :integer
+      field "policy_url", :policy_url, :string
+    end
+
+    # UpdateFormDtoFieldsItemOptionsItem şeması.
+    class UpdateFormDtoFieldsItemOptionsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "value", :value, :string
+      # Zorunlu.
+      field "label", :label, [:map, :string]
+    end
+
+    # UpdateFormDtoSettings şeması.
+    class UpdateFormDtoSettings < Pushizo::BaseModel
+      field "submit_label", :submit_label, [:map, :string]
+      field "success_message", :success_message, [:map, :string]
+      field "redirect_url", :redirect_url, :string
+      field "tags", :tags, [:map, :string]
+      field "subscribe", :subscribe, "UpdateFormDtoSettingsSubscribe"
+      field "double_opt_in", :double_opt_in, "UpdateFormDtoSettingsDoubleOptIn"
+      field "event_name", :event_name, :string
+      field "captcha", :captcha, :boolean
+      field "default_language", :default_language, :string
+    end
+
+    # UpdateFormDtoSettingsDoubleOptIn şeması.
+    class UpdateFormDtoSettingsDoubleOptIn < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      field "subject", :subject, [:map, :string]
+      field "body", :body, [:map, :string]
+    end
+
+    # UpdateFormDtoSettingsSubscribe şeması.
+    class UpdateFormDtoSettingsSubscribe < Pushizo::BaseModel
+      field "email", :email, :boolean
+      field "sms", :sms, :boolean
+    end
+
+    # UpdateGeofenceDto şeması.
+    class UpdateGeofenceDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "lat", :lat, :number
+      field "lng", :lng, :number
+      field "radius_m", :radius_m, :integer
+      field "cooldown_minutes", :cooldown_minutes, :integer
+      field "enabled", :enabled, :boolean
+    end
+
+    # UpdateGlobalControlDto şeması.
+    class UpdateGlobalControlDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "percent", :percent, :integer
+    end
+
     # UpdateInAppDto şeması.
     class UpdateInAppDto < Pushizo::BaseModel
       field "name", :name, :string
@@ -7374,6 +12468,7 @@ module Pushizo
       field "audience", :audience, "UpdateInAppDtoAudience"
       field "frequency", :frequency, "UpdateInAppDtoFrequency"
       field "journey_only", :journey_only, :boolean
+      field "placement", :placement, :string
       field "priority", :priority, :integer
       field "start_at", :start_at, :string
       field "end_at", :end_at, :string
@@ -7396,6 +12491,7 @@ module Pushizo
     class UpdateInAppDtoAudience < Pushizo::BaseModel
       field "included_segments", :included_segments, [:array, :string]
       field "excluded_segments", :excluded_segments, [:array, :string]
+      field "global_control_exempt", :global_control_exempt, :boolean
     end
 
     # UpdateInAppDtoDisplay şeması.
@@ -7458,7 +12554,7 @@ module Pushizo
     # UpdateKeywordDto şeması.
     class UpdateKeywordDto < Pushizo::BaseModel
       field "keyword", :keyword, :string
-      # Değerler: "sms", "whatsapp", "rcs".
+      # Değerler: "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channels", :channels, [:array, :string]
       field "actions", :actions, "UpdateKeywordDtoActions"
       field "enabled", :enabled, :boolean
@@ -7485,6 +12581,126 @@ module Pushizo
     class UpdateKeywordDtoActionsReply < Pushizo::BaseModel
       # Zorunlu.
       field "text", :text, :string
+    end
+
+    # UpdateLandingPageDto şeması.
+    class UpdateLandingPageDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "slug", :slug, :string
+      field "document", :document, "UpdateLandingPageDtoDocument"
+      field "seo", :seo, "UpdateLandingPageDtoSeo"
+      field "settings", :settings, "UpdateLandingPageDtoSettings"
+      field "custom_domain_id", :custom_domain_id, :string
+    end
+
+    # UpdateLandingPageDtoDocument şeması.
+    class UpdateLandingPageDtoDocument < Pushizo::BaseModel
+      # Zorunlu. Değerler: 1.
+      field "version", :version, :number
+      # Zorunlu.
+      field "settings", :settings, "UpdateLandingPageDtoDocumentSettings"
+      # Zorunlu.
+      field "sections", :sections, [:array, "UpdateLandingPageDtoDocumentSectionsItem"]
+    end
+
+    # UpdateLandingPageDtoDocumentSectionsItem şeması.
+    class UpdateLandingPageDtoDocumentSectionsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu. Değerler: "section".
+      field "type", :type, :string
+      field "background_color", :background_color, :string
+      field "background_image", :background_image, :string
+      field "padding", :padding, "UpdateLandingPageDtoDocumentSectionsItemPadding"
+      field "stack_on_mobile", :stack_on_mobile, :boolean
+      # Zorunlu.
+      field "columns", :columns, [:array, "UpdateLandingPageDtoDocumentSectionsItemColumnsItem"]
+    end
+
+    # UpdateLandingPageDtoDocumentSectionsItemColumnsItem şeması.
+    class UpdateLandingPageDtoDocumentSectionsItemColumnsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      field "width_percent", :width_percent, :integer
+      field "background_color", :background_color, :string
+      # Değerler: "top", "middle", "bottom".
+      field "vertical_align", :vertical_align, :string
+      field "padding", :padding, "UpdateLandingPageDtoDocumentSectionsItemColumnsItemPadding"
+      # Zorunlu.
+      field "blocks", :blocks, [:array, :any]
+    end
+
+    # UpdateLandingPageDtoDocumentSectionsItemColumnsItemPadding şeması.
+    class UpdateLandingPageDtoDocumentSectionsItemColumnsItemPadding < Pushizo::BaseModel
+      # Zorunlu.
+      field "top", :top, :integer
+      # Zorunlu.
+      field "right", :right, :integer
+      # Zorunlu.
+      field "bottom", :bottom, :integer
+      # Zorunlu.
+      field "left", :left, :integer
+    end
+
+    # UpdateLandingPageDtoDocumentSectionsItemPadding şeması.
+    class UpdateLandingPageDtoDocumentSectionsItemPadding < Pushizo::BaseModel
+      # Zorunlu.
+      field "top", :top, :integer
+      # Zorunlu.
+      field "right", :right, :integer
+      # Zorunlu.
+      field "bottom", :bottom, :integer
+      # Zorunlu.
+      field "left", :left, :integer
+    end
+
+    # UpdateLandingPageDtoDocumentSettings şeması.
+    class UpdateLandingPageDtoDocumentSettings < Pushizo::BaseModel
+      field "width", :width, :integer
+      field "background_color", :background_color, :string
+      field "content_background_color", :content_background_color, :string
+      field "text_color", :text_color, :string
+      field "link_color", :link_color, :string
+      # Değerler: "system", "arial", "georgia", "verdana", "trebuchet", "courier".
+      field "font_family", :font_family, :string
+      field "dark_mode", :dark_mode, "UpdateLandingPageDtoDocumentSettingsDarkMode"
+    end
+
+    # UpdateLandingPageDtoDocumentSettingsDarkMode şeması.
+    class UpdateLandingPageDtoDocumentSettingsDarkMode < Pushizo::BaseModel
+      field "background_color", :background_color, :string
+      field "content_background_color", :content_background_color, :string
+      field "text_color", :text_color, :string
+      field "link_color", :link_color, :string
+    end
+
+    # UpdateLandingPageDtoSeo şeması.
+    class UpdateLandingPageDtoSeo < Pushizo::BaseModel
+      field "title", :title, :string
+      field "description", :description, :string
+      field "og_image", :og_image, :string
+      field "canonical_url", :canonical_url, :string
+      field "noindex", :noindex, :boolean
+    end
+
+    # UpdateLandingPageDtoSettings şeması.
+    class UpdateLandingPageDtoSettings < Pushizo::BaseModel
+      field "language", :language, :string
+      field "form_id", :form_id, :string
+      field "form_section_id", :form_section_id, :string
+      field "cookie_consent", :cookie_consent, "UpdateLandingPageDtoSettingsCookieConsent"
+      field "web_sdk", :web_sdk, :boolean
+      field "favicon_url", :favicon_url, :string
+    end
+
+    # UpdateLandingPageDtoSettingsCookieConsent şeması.
+    class UpdateLandingPageDtoSettingsCookieConsent < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      field "text", :text, :string
+      field "accept_label", :accept_label, :string
+      field "reject_label", :reject_label, :string
+      field "policy_url", :policy_url, :string
     end
 
     # UpdateLiveActivityDto şeması.
@@ -7570,10 +12786,154 @@ module Pushizo
       field "y", :y, :number
     end
 
+    # UpdatePredictionDto şeması.
+    class UpdatePredictionDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "enabled", :enabled, :boolean
+      field "event_names", :event_names, [:array, :string]
+      field "horizon_days", :horizon_days, :integer
+    end
+
+    # UpdatePromoCodeListDto şeması.
+    class UpdatePromoCodeListDto < Pushizo::BaseModel
+      field "description", :description, :string
+      field "expires_at", :expires_at, :string
+    end
+
+    # UpdateRecommendationConfigDto şeması.
+    class UpdateRecommendationConfigDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      field "view_events", :view_events, [:array, :string]
+      field "purchase_events", :purchase_events, [:array, :string]
+      field "item_property", :item_property, :string
+      field "window_days", :window_days, :integer
+    end
+
+    # UpdateReverseEtlDto şeması.
+    class UpdateReverseEtlDto < Pushizo::BaseModel
+      field "name", :name, :string
+      # Değerler: "every_5_minutes", "hourly", "daily".
+      field "schedule", :schedule, :string
+      field "enabled", :enabled, :boolean
+      field "config", :config, [:map, :any]
+      field "credentials", :credentials, [:map, :any]
+    end
+
+    # UpdateRfmConfigDto şeması.
+    class UpdateRfmConfigDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "enabled", :enabled, :boolean
+      # Zorunlu.
+      field "event_names", :event_names, [:array, :string]
+      field "value_property", :value_property, :string
+      field "use_monetary", :use_monetary, :boolean
+      field "window_days", :window_days, :integer
+    end
+
+    # UpdateSavedReportDto şeması.
+    class UpdateSavedReportDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "definition", :definition, "UpdateSavedReportDtoDefinition"
+    end
+
+    # UpdateSavedReportDtoDefinition şeması.
+    class UpdateSavedReportDtoDefinition < Pushizo::BaseModel
+      # Zorunlu. Değerler: "deliveries", "events", "conversions".
+      field "source", :source, :string
+      # Zorunlu. Değerler: "sent", "delivered", "failed", "opened", "clicked", "delivery_rate", "open_rate", "click_rate", "failure_rate", "count", "unique_users", "value_sum", "value_avg", "conversions", "revenue".
+      field "metrics", :metrics, [:array, :string]
+      # Değerler: "day", "week", "month", "channel", "provider", "campaign", "status", "name", "source", "event_name", "kind".
+      field "dimensions", :dimensions, [:array, :string]
+      field "filters", :filters, [:map, [:array, :string]]
+      field "sort", :sort, "UpdateSavedReportDtoDefinitionSort"
+      field "limit", :limit, :integer
+      field "days", :days, :integer
+      field "from", :from, :string
+      field "to", :to, :string
+    end
+
+    # UpdateSavedReportDtoDefinitionSort şeması.
+    class UpdateSavedReportDtoDefinitionSort < Pushizo::BaseModel
+      # Zorunlu.
+      field "by", :by, :string
+      # Değerler: "asc", "desc".
+      field "direction", :direction, :string
+    end
+
+    # UpdateSiteSearchSettingsDto şeması.
+    class UpdateSiteSearchSettingsDto < Pushizo::BaseModel
+      field "enabled", :enabled, :boolean
+      field "ai_answers", :ai_answers, :boolean
+      field "allowed_origins", :allowed_origins, [:array, :string]
+      field "language", :language, :string
+      field "monthly_token_cap", :monthly_token_cap, :integer
+      field "query_retention_days", :query_retention_days, :integer
+    end
+
+    # UpdateSiteSearchSourceDto şeması.
+    class UpdateSiteSearchSourceDto < Pushizo::BaseModel
+      field "name", :name, :string
+      # Değerler: "sitemap", "urls".
+      field "kind", :kind, :string
+      field "url", :url, :string
+      field "urls", :urls, [:array, :string]
+      field "max_pages", :max_pages, :integer
+      field "refresh_hours", :refresh_hours, :integer
+      field "enabled", :enabled, :boolean
+    end
+
+    # UpdateSqlSegmentDto şeması.
+    class UpdateSqlSegmentDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "description", :description, :string
+      field "query", :query, :string
+      field "refresh_interval_minutes", :refresh_interval_minutes, :integer
+    end
+
+    # UpdateSurveyDto şeması.
+    class UpdateSurveyDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "questions", :questions, [:array, "UpdateSurveyDtoQuestionsItem"]
+      field "settings", :settings, "UpdateSurveyDtoSettings"
+    end
+
+    # UpdateSurveyDtoQuestionsItem şeması.
+    class UpdateSurveyDtoQuestionsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu. Değerler: "nps", "csat", "single_choice", "multiple_choice", "text".
+      field "type", :type, :string
+      # Zorunlu.
+      field "text", :text, [:map, :string]
+      field "required", :required, :boolean
+      field "options", :options, [:array, "UpdateSurveyDtoQuestionsItemOptionsItem"]
+      field "low_label", :low_label, [:map, :string]
+      field "high_label", :high_label, [:map, :string]
+      field "placeholder", :placeholder, [:map, :string]
+    end
+
+    # UpdateSurveyDtoQuestionsItemOptionsItem şeması.
+    class UpdateSurveyDtoQuestionsItemOptionsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "value", :value, :string
+      # Zorunlu.
+      field "label", :label, [:map, :string]
+    end
+
+    # UpdateSurveyDtoSettings şeması.
+    class UpdateSurveyDtoSettings < Pushizo::BaseModel
+      field "thank_you", :thank_you, [:map, :string]
+      field "submit_label", :submit_label, [:map, :string]
+      field "write_properties", :write_properties, :boolean
+      field "allow_multiple", :allow_multiple, :boolean
+      field "default_language", :default_language, :string
+    end
+
     # UpdateTemplateDto şeması.
     class UpdateTemplateDto < Pushizo::BaseModel
       field "name", :name, :string
-      # Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channel", :channel, :string
       field "tags", :tags, [:array, :string]
       field "content", :content, "UpdateTemplateDtoContent"
@@ -7619,6 +12979,7 @@ module Pushizo
       field "disable_sms_link_shortening", :disable_sms_link_shortening, :boolean
       field "add_to_inbox", :add_to_inbox, :boolean
       field "inbox_ttl", :inbox_ttl, :integer
+      field "content_card", :content_card, "UpdateTemplateDtoContentContentCard"
       field "thread_id", :thread_id, :string
       field "ios_relevance_score", :ios_relevance_score, :number
       field "target_content_identifier", :target_content_identifier, :string
@@ -7638,6 +12999,19 @@ module Pushizo
       field "rcs_content_sid", :rcs_content_sid, :string
       field "rcs_content_variables", :rcs_content_variables, [:map, :string]
       field "rcs_fallback_text", :rcs_fallback_text, [:map, :string]
+      field "messenger_image_url", :messenger_image_url, :string
+      field "messenger_buttons", :messenger_buttons, [:array, :any]
+      field "ios_carousel", :ios_carousel, [:array, "UpdateTemplateDtoContentIosCarouselItem"]
+      field "android_live_update", :android_live_update, "UpdateTemplateDtoContentAndroidLiveUpdate"
+      field "voip", :voip, :boolean
+      field "app_clip", :app_clip, :boolean
+    end
+
+    # UpdateTemplateDtoContentAndroidLiveUpdate şeması.
+    class UpdateTemplateDtoContentAndroidLiveUpdate < Pushizo::BaseModel
+      # Zorunlu.
+      field "progress", :progress, :integer
+      field "ongoing", :ongoing, :boolean
     end
 
     # UpdateTemplateDtoContentButtonsItem şeması.
@@ -7648,6 +13022,22 @@ module Pushizo
       field "text", :text, :string
       field "icon", :icon, :string
       field "url", :url, :string
+    end
+
+    # UpdateTemplateDtoContentContentCard şeması.
+    class UpdateTemplateDtoContentContentCard < Pushizo::BaseModel
+      # Zorunlu. Değerler: "classic", "captioned_image", "image_only".
+      field "type", :type, :string
+      field "pinned", :pinned, :boolean
+      field "priority", :priority, :integer
+      field "button_text", :button_text, [:map, :string]
+    end
+
+    # UpdateTemplateDtoContentIosCarouselItem şeması.
+    class UpdateTemplateDtoContentIosCarouselItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "url", :url, :string
+      field "title", :title, :string
     end
 
     # UpdateTemplateDtoContentRcsCard şeması.
@@ -7743,16 +13133,117 @@ module Pushizo
       field "value", :value, :string
     end
 
+    # UpdateWalletConfigDto şeması.
+    class UpdateWalletConfigDto < Pushizo::BaseModel
+      field "apple", :apple, "UpdateWalletConfigDtoApple"
+      field "google", :google, "UpdateWalletConfigDtoGoogle"
+    end
+
+    # UpdateWalletConfigDtoApple şeması.
+    class UpdateWalletConfigDtoApple < Pushizo::BaseModel
+      # Zorunlu.
+      field "pass_type_id", :pass_type_id, :string
+      # Zorunlu.
+      field "team_id", :team_id, :string
+      # Zorunlu.
+      field "certificate_pem", :certificate_pem, :string
+      # Zorunlu.
+      field "private_key_pem", :private_key_pem, :string
+      field "key_passphrase", :key_passphrase, :string
+      # Zorunlu.
+      field "wwdr_pem", :wwdr_pem, :string
+    end
+
+    # UpdateWalletConfigDtoGoogle şeması.
+    class UpdateWalletConfigDtoGoogle < Pushizo::BaseModel
+      # Zorunlu.
+      field "issuer_id", :issuer_id, :string
+      # Zorunlu.
+      field "service_account_json", :service_account_json, :string
+    end
+
+    # UpdateWalletPassDto şeması.
+    class UpdateWalletPassDto < Pushizo::BaseModel
+      field "barcode_value", :barcode_value, :string
+      field "values", :values, [:map, :string]
+    end
+
+    # UpdateWalletTemplateDto şeması.
+    class UpdateWalletTemplateDto < Pushizo::BaseModel
+      field "name", :name, :string
+      # Değerler: "active", "archived".
+      field "status", :status, :string
+      field "design", :design, "UpdateWalletTemplateDtoDesign"
+      field "images", :images, [:map, :string]
+    end
+
+    # UpdateWalletTemplateDtoDesign şeması.
+    class UpdateWalletTemplateDtoDesign < Pushizo::BaseModel
+      # Zorunlu.
+      field "title", :title, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "organization", :organization, :string
+      field "background_color", :background_color, :string
+      field "foreground_color", :foreground_color, :string
+      field "label_color", :label_color, :string
+      # Değerler: "qr", "pdf417", "aztec", "code128".
+      field "barcode", :barcode, :string
+      field "fields", :fields_value, [:array, "UpdateWalletTemplateDtoDesignFieldsItem"]
+      field "expires_at", :expires_at, :string
+      field "relevant_at", :relevant_at, :string
+    end
+
+    # UpdateWalletTemplateDtoDesignFieldsItem şeması.
+    class UpdateWalletTemplateDtoDesignFieldsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "key", :key, :string
+      field "label", :label, :string
+      field "value", :value, :string
+      # Değerler: "header", "primary", "secondary", "auxiliary", "back".
+      field "section", :section, :string
+    end
+
+    # UpdateWarehouseConnectionDto şeması.
+    class UpdateWarehouseConnectionDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "config", :config, [:map, :any]
+      field "credentials", :credentials, [:map, :any]
+    end
+
     # UpdateWarehouseExportDto şeması.
     class UpdateWarehouseExportDto < Pushizo::BaseModel
       field "name", :name, :string
       # Değerler: "deliveries", "delivery_events", "events", "conversions", "users", "subscriptions".
       field "tables", :tables, [:array, :string]
-      # Değerler: "hourly", "daily".
+      # Değerler: "every_15_minutes", "hourly", "daily".
       field "schedule", :schedule, :string
       field "enabled", :enabled, :boolean
       field "config", :config, [:map, :any]
       field "credentials", :credentials, [:map, :any]
+    end
+
+    # UpdateWarehouseSegmentDto şeması.
+    class UpdateWarehouseSegmentDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "description", :description, :string
+      field "connection_id", :connection_id, :string
+      field "query", :query, :string
+      field "id_column", :id_column, :string
+      # Değerler: "external_id", "user_id".
+      field "id_type", :id_type, :string
+      field "refresh_interval_minutes", :refresh_interval_minutes, :integer
+      field "limits", :limits, "UpdateWarehouseSegmentDtoLimits"
+    end
+
+    # UpdateWarehouseSegmentDtoLimits şeması.
+    class UpdateWarehouseSegmentDtoLimits < Pushizo::BaseModel
+      field "timeout_seconds", :timeout_seconds, :integer
+      field "max_rows", :max_rows, :integer
+      field "max_bytes_billed", :max_bytes_billed, :integer
+      # Değerler: "X-Small", "Small", "Medium", "Large", "X-Large", "2X-Large", "3X-Large", "4X-Large", "5X-Large", "6X-Large".
+      field "max_warehouse_size", :max_warehouse_size, :string
     end
 
     # UpdateWarmupPlanDto şeması.
@@ -7926,6 +13417,106 @@ module Pushizo
       field "value", :value, :any
     end
 
+    # UpdateWebPersonalizationDto şeması.
+    class UpdateWebPersonalizationDto < Pushizo::BaseModel
+      field "name", :name, :string
+      field "changes", :changes, [:array, :any]
+      field "variants", :variants, [:array, "UpdateWebPersonalizationDtoVariantsItem"]
+      field "conditions", :conditions, "UpdateWebPersonalizationDtoConditions"
+      field "targeting", :targeting, "UpdateWebPersonalizationDtoTargeting"
+      field "goal", :goal, :any
+      field "priority", :priority, :integer
+      field "start_at", :start_at, :string
+      field "end_at", :end_at, :string
+    end
+
+    # UpdateWebPersonalizationDtoConditions şeması.
+    class UpdateWebPersonalizationDtoConditions < Pushizo::BaseModel
+      field "url_rules", :url_rules, [:array, "UpdateWebPersonalizationDtoConditionsUrlRulesItem"]
+      field "utm_rules", :utm_rules, [:array, "UpdateWebPersonalizationDtoConditionsUtmRulesItem"]
+      field "visits", :visits, "UpdateWebPersonalizationDtoConditionsVisits"
+    end
+
+    # UpdateWebPersonalizationDtoConditionsUrlRulesItem şeması.
+    class UpdateWebPersonalizationDtoConditionsUrlRulesItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "equals", "contains", "starts_with", "not_contains", "matches".
+      field "op", :op, :string
+      # Zorunlu.
+      field "value", :value, :string
+    end
+
+    # UpdateWebPersonalizationDtoConditionsUtmRulesItem şeması.
+    class UpdateWebPersonalizationDtoConditionsUtmRulesItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content".
+      field "param", :param, :string
+      # Zorunlu. Değerler: "equals", "contains", "exists".
+      field "op", :op, :string
+      field "value", :value, :string
+    end
+
+    # UpdateWebPersonalizationDtoConditionsVisits şeması.
+    class UpdateWebPersonalizationDtoConditionsVisits < Pushizo::BaseModel
+      # Zorunlu. Değerler: "gte", "lte", "eq".
+      field "op", :op, :string
+      # Zorunlu.
+      field "value", :value, :integer
+    end
+
+    # UpdateWebPersonalizationDtoTargeting şeması.
+    class UpdateWebPersonalizationDtoTargeting < Pushizo::BaseModel
+      field "included_segments", :included_segments, [:array, :string]
+      field "excluded_segments", :excluded_segments, [:array, :string]
+      # Değerler: "all", "new", "returning".
+      field "visitor", :visitor, :string
+      # Değerler: "desktop", "mobile", "tablet".
+      field "devices", :devices, [:array, :string]
+    end
+
+    # UpdateWebPersonalizationDtoVariantsItem şeması.
+    class UpdateWebPersonalizationDtoVariantsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "weight_percent", :weight_percent, :integer
+      # Zorunlu.
+      field "changes", :changes, [:array, :any]
+    end
+
+    # UpsertCatalogItemsDto şeması.
+    class UpsertCatalogItemsDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "items", :items, [:array, "UpsertCatalogItemsDtoItemsItem"]
+    end
+
+    # UpsertCatalogItemsDtoItemsItem şeması.
+    class UpsertCatalogItemsDtoItemsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "title", :title, :string
+      field "description", :description, :string
+      field "image_url", :image_url, :string
+      field "url", :url, :string
+      field "price", :price, :number
+      field "sale_price", :sale_price, :number
+      field "currency", :currency, :string
+      field "category", :category, :string
+      field "brand", :brand, :string
+      field "in_stock", :in_stock, :boolean
+      field "attributes", :attributes_value, [:map, :string]
+    end
+
+    # UpsertCompanyDto şeması.
+    class UpsertCompanyDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      field "name", :name, :string
+      field "domain", :domain, :string
+      field "properties", :properties, [:map, :any]
+    end
+
     # UpsertUserDto şeması.
     class UpsertUserDto < Pushizo::BaseModel
       field "identity", :identity, :any
@@ -8065,13 +13656,79 @@ module Pushizo
       # Zorunlu.
       field "merged_into", :merged_into, :string
       # Zorunlu.
+      field "last_ip", :last_ip, :string
+      # Zorunlu.
+      field "last_ip_at", :last_ip_at, :string
+      # Zorunlu. Değerler: "positive", "negative", "neutral".
+      field "last_sentiment", :last_sentiment, :string
+      # Zorunlu.
+      field "last_sentiment_at", :last_sentiment_at, :string
+      # Zorunlu.
       field "created_at", :created_at, :string
       # Zorunlu.
       field "updated_at", :updated_at, :string
       # Zorunlu.
       field "subscription_count", :subscription_count, :integer
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channels", :channels, [:array, :string]
+    end
+
+    # UserAffinity şeması.
+    class UserAffinity < Pushizo::BaseModel
+      # Zorunlu.
+      field "user_id", :user_id, :string
+      # Zorunlu.
+      field "affinities", :affinities, [:array, "UserAffinityAffinitiesItem"]
+      # Zorunlu.
+      field "weekly_cap", :weekly_cap, :integer
+      # Zorunlu.
+      field "engagement", :engagement, :number
+      # Zorunlu.
+      field "computed_at", :computed_at, :string
+    end
+
+    # UserAffinityAffinitiesItem şeması.
+    class UserAffinityAffinitiesItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "attribute", :attribute, :string
+      # Zorunlu.
+      field "value", :value, :string
+      # Zorunlu.
+      field "score", :score, :number
+      # Zorunlu.
+      field "rank", :rank, :integer
+    end
+
+    # UserCompanyList şeması.
+    class UserCompanyList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "UserCompanyListDataItem"]
+    end
+
+    # UserCompanyListDataItem şeması.
+    class UserCompanyListDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "company", :company, "UserCompanyListDataItemCompany"
+      # Zorunlu.
+      field "role", :role, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # UserCompanyListDataItemCompany şeması.
+    class UserCompanyListDataItemCompany < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "domain", :domain, :string
+      # Zorunlu.
+      field "properties", :properties, [:map, :any]
     end
 
     # UserDetail şeması.
@@ -8097,12 +13754,20 @@ module Pushizo
       # Zorunlu.
       field "merged_into", :merged_into, :string
       # Zorunlu.
+      field "last_ip", :last_ip, :string
+      # Zorunlu.
+      field "last_ip_at", :last_ip_at, :string
+      # Zorunlu. Değerler: "positive", "negative", "neutral".
+      field "last_sentiment", :last_sentiment, :string
+      # Zorunlu.
+      field "last_sentiment_at", :last_sentiment_at, :string
+      # Zorunlu.
       field "created_at", :created_at, :string
       # Zorunlu.
       field "updated_at", :updated_at, :string
       # Zorunlu.
       field "subscription_count", :subscription_count, :integer
-      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+      # Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
       field "channels", :channels, [:array, :string]
       # Zorunlu.
       field "aliases", :aliases, [:array, "UserDetailAliasesItem"]
@@ -8126,6 +13791,162 @@ module Pushizo
       field "user", :user, "UserDetail"
       # Zorunlu.
       field "events", :events, [:array, "UserExportEventsItem"]
+      # Zorunlu.
+      field "derived", :derived, "UserExportDerived"
+    end
+
+    # UserExportDerived şeması.
+    class UserExportDerived < Pushizo::BaseModel
+      # Zorunlu.
+      field "wallet_passes", :wallet_passes, [:array, "UserExportDerivedWalletPassesItem"]
+      # Zorunlu.
+      field "rfm", :rfm, "UserExportDerivedRfm"
+      # Zorunlu.
+      field "predictions", :predictions, [:array, "UserExportDerivedPredictionsItem"]
+      # Zorunlu.
+      field "channel_scores", :channel_scores, [:array, "UserExportDerivedChannelScoresItem"]
+      # Zorunlu.
+      field "decisions", :decisions, [:array, "UserExportDerivedDecisionsItem"]
+      # Zorunlu.
+      field "recommendations", :recommendations, [:array, "UserExportDerivedRecommendationsItem"]
+      # Zorunlu.
+      field "affinities", :affinities, [:array, "UserExportDerivedAffinitiesItem"]
+      # Zorunlu.
+      field "frequency_cap", :frequency_cap, "UserExportDerivedFrequencyCap"
+      # Zorunlu.
+      field "companies", :companies, [:array, "UserExportDerivedCompaniesItem"]
+    end
+
+    # UserExportDerivedAffinitiesItem şeması.
+    class UserExportDerivedAffinitiesItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "attribute", :attribute, :string
+      # Zorunlu.
+      field "value", :value, :string
+      # Zorunlu.
+      field "score", :score, :number
+      # Zorunlu.
+      field "rank", :rank, :number
+      # Zorunlu.
+      field "computed_at", :computed_at, :string
+    end
+
+    # UserExportDerivedChannelScoresItem şeması.
+    class UserExportDerivedChannelScoresItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "channel", :channel, :string
+      # Zorunlu.
+      field "sends", :sends, :number
+      # Zorunlu.
+      field "engaged", :engaged, :number
+      # Zorunlu.
+      field "score", :score, :number
+      # Zorunlu.
+      field "is_best", :is_best, :boolean
+      # Zorunlu.
+      field "computed_at", :computed_at, :string
+    end
+
+    # UserExportDerivedCompaniesItem şeması.
+    class UserExportDerivedCompaniesItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "company_id", :company_id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "role", :role, :string
+      # Zorunlu.
+      field "joined_at", :joined_at, :string
+    end
+
+    # UserExportDerivedDecisionsItem şeması.
+    class UserExportDerivedDecisionsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "agent", :agent, :string
+      # Zorunlu.
+      field "arm_id", :arm_id, :string
+      # Zorunlu.
+      field "context", :context, :string
+      # Zorunlu.
+      field "assigned_at", :assigned_at, :string
+      # Zorunlu.
+      field "rewarded_at", :rewarded_at, :string
+    end
+
+    # UserExportDerivedFrequencyCap şeması.
+    class UserExportDerivedFrequencyCap < Pushizo::BaseModel
+      # Zorunlu.
+      field "weekly_cap", :weekly_cap, :number
+      # Zorunlu.
+      field "engagement", :engagement, :number
+      # Zorunlu.
+      field "computed_at", :computed_at, :string
+    end
+
+    # UserExportDerivedPredictionsItem şeması.
+    class UserExportDerivedPredictionsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "model", :model, :string
+      # Zorunlu.
+      field "score", :score, :number
+      # Zorunlu.
+      field "computed_at", :computed_at, :string
+    end
+
+    # UserExportDerivedRecommendationsItem şeması.
+    class UserExportDerivedRecommendationsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "catalog_id", :catalog_id, :string
+      # Zorunlu.
+      field "personalized", :personalized, [:array, :string]
+      # Zorunlu.
+      field "recent", :recent, [:array, :string]
+      # Zorunlu.
+      field "purchased", :purchased, [:array, :string]
+      # Zorunlu.
+      field "computed_at", :computed_at, :string
+    end
+
+    # UserExportDerivedRfm şeması.
+    class UserExportDerivedRfm < Pushizo::BaseModel
+      # Zorunlu.
+      field "segment", :segment, :string
+      # Zorunlu.
+      field "segment_since", :segment_since, :string
+      # Zorunlu.
+      field "r", :r, :number
+      # Zorunlu.
+      field "f", :f, :number
+      # Zorunlu.
+      field "m", :m, :number
+      # Zorunlu.
+      field "frequency", :frequency, :number
+      # Zorunlu.
+      field "monetary", :monetary, :number
+      # Zorunlu.
+      field "last_event_at", :last_event_at, :string
+      # Zorunlu.
+      field "computed_at", :computed_at, :string
+    end
+
+    # UserExportDerivedWalletPassesItem şeması.
+    class UserExportDerivedWalletPassesItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "template_id", :template_id, :string
+      # Zorunlu.
+      field "status", :status, :string
+      # Zorunlu.
+      field "barcode_value", :barcode_value, :string
+      # Zorunlu.
+      field "values", :values, [:map, :string]
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
     end
 
     # UserExportEventsItem şeması.
@@ -8204,6 +14025,44 @@ module Pushizo
       field "has_more", :has_more, :boolean
     end
 
+    # UserMessageList şeması.
+    class UserMessageList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "UserMessageListDataItem"]
+    end
+
+    # UserMessageListDataItem şeması.
+    class UserMessageListDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "delivery_id", :delivery_id, :string
+      # Zorunlu.
+      field "message_id", :message_id, :string
+      # Zorunlu.
+      field "campaign_id", :campaign_id, :string
+      # Zorunlu.
+      field "source", :source, :string
+      # Zorunlu.
+      field "channel", :channel, :string
+      # Zorunlu.
+      field "status", :status, :string
+      # Zorunlu.
+      field "title", :title, :string
+      # Zorunlu.
+      field "body", :body, :string
+      # Zorunlu.
+      field "error_code", :error_code, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "sent_at", :sent_at, :string
+      # Zorunlu.
+      field "delivered_at", :delivered_at, :string
+      # Zorunlu.
+      field "opened_at", :opened_at, :string
+      # Zorunlu.
+      field "clicked_at", :clicked_at, :string
+    end
+
     # UserPreferences şeması.
     class UserPreferences < Pushizo::BaseModel
       # Zorunlu.
@@ -8259,10 +14118,160 @@ module Pushizo
       field "none", :none, [:array, [:map, :any]]
     end
 
+    # UserTimeline şeması.
+    class UserTimeline < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "UserTimelineDataItem"]
+    end
+
+    # UserTimelineDataItem şeması.
+    class UserTimelineDataItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "event", "delivery".
+      field "kind", :kind, :string
+      # Zorunlu.
+      field "at", :at, :string
+      # Zorunlu.
+      field "title", :title, :string
+      # Zorunlu.
+      field "detail", :detail, :string
+    end
+
     # VerifyAddressDto şeması.
     class VerifyAddressDto < Pushizo::BaseModel
       # Zorunlu.
       field "address", :address, :string
+    end
+
+    # WalletConfig şeması.
+    class WalletConfig < Pushizo::BaseModel
+      # Zorunlu.
+      field "apple", :apple, "WalletConfigApple"
+      # Zorunlu.
+      field "google", :google, "WalletConfigGoogle"
+    end
+
+    # WalletConfigApple şeması.
+    class WalletConfigApple < Pushizo::BaseModel
+      # Zorunlu.
+      field "configured", :configured, :boolean
+      # Zorunlu.
+      field "pass_type_id", :pass_type_id, :string
+      # Zorunlu.
+      field "team_id", :team_id, :string
+      # Zorunlu.
+      field "certificate_expires_at", :certificate_expires_at, :string
+    end
+
+    # WalletConfigGoogle şeması.
+    class WalletConfigGoogle < Pushizo::BaseModel
+      # Zorunlu.
+      field "configured", :configured, :boolean
+      # Zorunlu.
+      field "issuer_id", :issuer_id, :string
+    end
+
+    # WalletPass şeması.
+    class WalletPass < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "template_id", :template_id, :string
+      # Zorunlu.
+      field "user_id", :user_id, :string
+      # Zorunlu.
+      field "external_id", :external_id, :string
+      # Zorunlu.
+      field "barcode_value", :barcode_value, :string
+      # Zorunlu.
+      field "values", :values, [:map, :string]
+      # Zorunlu. Değerler: "active", "voided".
+      field "status", :status, :string
+      # Zorunlu.
+      field "url", :url, :string
+      # Zorunlu.
+      field "apple_url", :apple_url, :string
+      # Zorunlu.
+      field "google_url", :google_url, :string
+      # Zorunlu.
+      field "apple_devices", :apple_devices, :integer
+      # Zorunlu.
+      field "version", :version, :integer
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # WalletPassPage şeması.
+    class WalletPassPage < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "WalletPass"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+    end
+
+    # WalletTemplate şeması.
+    class WalletTemplate < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "slug", :slug, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "coupon", "loyalty", "event", "generic".
+      field "kind", :kind, :string
+      # Zorunlu. Değerler: "active", "archived".
+      field "status", :status, :string
+      # Zorunlu.
+      field "design", :design, "WalletTemplateDesign"
+      # Zorunlu.
+      field "images", :images, [:array, :string]
+      # Zorunlu.
+      field "passes", :passes, :integer
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # WalletTemplateDesign şeması.
+    class WalletTemplateDesign < Pushizo::BaseModel
+      # Zorunlu.
+      field "title", :title, :string
+      # Zorunlu.
+      field "description", :description, :string
+      # Zorunlu.
+      field "organization", :organization, :string
+      # Zorunlu.
+      field "background_color", :background_color, :string
+      # Zorunlu.
+      field "foreground_color", :foreground_color, :string
+      # Zorunlu.
+      field "label_color", :label_color, :string
+      # Zorunlu. Değerler: "qr", "pdf417", "aztec", "code128".
+      field "barcode", :barcode, :string
+      # Zorunlu.
+      field "fields", :fields_value, [:array, "WalletTemplateDesignFieldsItem"]
+      field "expires_at", :expires_at, :string
+      field "relevant_at", :relevant_at, :string
+    end
+
+    # WalletTemplateDesignFieldsItem şeması.
+    class WalletTemplateDesignFieldsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "key", :key, :string
+      # Zorunlu.
+      field "label", :label, :string
+      # Zorunlu.
+      field "value", :value, :string
+      # Zorunlu. Değerler: "header", "primary", "secondary", "auxiliary", "back".
+      field "section", :section, :string
+    end
+
+    # WalletTemplateList şeması.
+    class WalletTemplateList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "WalletTemplate"]
     end
 
     # WarehouseConnectionResult şeması.
@@ -8291,7 +14300,7 @@ module Pushizo
       field "app_id", :app_id, :string
       # Zorunlu.
       field "name", :name, :string
-      # Zorunlu. Değerler: "bigquery", "snowflake", "s3_parquet".
+      # Zorunlu. Değerler: "bigquery", "snowflake", "s3_parquet", "redshift", "databricks".
       field "destination", :destination, :string
       # Zorunlu.
       field "config", :config, [:map, :any]
@@ -8299,7 +14308,7 @@ module Pushizo
       field "credentials_hint", :credentials_hint, :string
       # Zorunlu. Değerler: "deliveries", "delivery_events", "events", "conversions", "users", "subscriptions".
       field "tables", :tables, [:array, :string]
-      # Zorunlu. Değerler: "hourly", "daily".
+      # Zorunlu. Değerler: "every_15_minutes", "hourly", "daily".
       field "schedule", :schedule, :string
       # Zorunlu.
       field "enabled", :enabled, :boolean
@@ -8405,6 +14414,170 @@ module Pushizo
       field "ts", :ts, :string
       # Zorunlu.
       field "id", :id, :string
+    end
+
+    # WarehouseSegmentConnection şeması.
+    class WarehouseSegmentConnection < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "bigquery", "snowflake", "databricks".
+      field "type", :type, :string
+      # Zorunlu.
+      field "config", :config, [:map, :any]
+      # Zorunlu.
+      field "credentials_hint", :credentials_hint, :string
+      # Zorunlu.
+      field "segment_count", :segment_count, :integer
+      # Zorunlu.
+      field "last_tested_at", :last_tested_at, :string
+      # Zorunlu.
+      field "last_test_error", :last_test_error, :string
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # WarehouseSegmentConnectionList şeması.
+    class WarehouseSegmentConnectionList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "WarehouseSegmentConnection"]
+    end
+
+    # WarehouseSegmentConnectionTest şeması.
+    class WarehouseSegmentConnectionTest < Pushizo::BaseModel
+      # Zorunlu.
+      field "ok", :ok, :boolean
+      # Zorunlu.
+      field "error", :error, "WarehouseSegmentConnectionTestError"
+    end
+
+    # WarehouseSegmentConnectionTestError şeması.
+    class WarehouseSegmentConnectionTestError < Pushizo::BaseModel
+      # Zorunlu.
+      field "code", :code, :string
+      # Zorunlu.
+      field "message", :message, :string
+    end
+
+    # WarehouseSegmentList şeması.
+    class WarehouseSegmentList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "Segment"]
+    end
+
+    # WarehouseSegmentOptions şeması.
+    class WarehouseSegmentOptions < Pushizo::BaseModel
+      # Zorunlu. Değerler: "bigquery", "snowflake", "databricks".
+      field "types", :types, [:array, :string]
+      # Zorunlu. Değerler: "external_id", "user_id".
+      field "id_types", :id_types, [:array, :string]
+      # Zorunlu. Değerler: "X-Small", "Small", "Medium", "Large", "X-Large", "2X-Large", "3X-Large", "4X-Large", "5X-Large", "6X-Large".
+      field "snowflake_warehouse_sizes", :snowflake_warehouse_sizes, [:array, :string]
+      # Zorunlu.
+      field "refresh_intervals", :refresh_intervals, [:array, :integer]
+      # Zorunlu.
+      field "limits", :limits, "WarehouseSegmentOptionsLimits"
+    end
+
+    # WarehouseSegmentOptionsLimits şeması.
+    class WarehouseSegmentOptionsLimits < Pushizo::BaseModel
+      # Zorunlu.
+      field "query_max", :query_max, :integer
+      # Zorunlu.
+      field "timeout_default_seconds", :timeout_default_seconds, :integer
+      # Zorunlu.
+      field "timeout_min_seconds", :timeout_min_seconds, :integer
+      # Zorunlu.
+      field "timeout_max_seconds", :timeout_max_seconds, :integer
+      # Zorunlu.
+      field "max_rows_default", :max_rows_default, :integer
+      # Zorunlu.
+      field "max_rows_max", :max_rows_max, :integer
+      # Zorunlu.
+      field "max_bytes_billed_default", :max_bytes_billed_default, :integer
+      # Zorunlu.
+      field "max_bytes_billed_min", :max_bytes_billed_min, :integer
+      # Zorunlu.
+      field "max_bytes_billed_max", :max_bytes_billed_max, :integer
+      # Zorunlu.
+      field "preview_sample", :preview_sample, :integer
+      # Zorunlu.
+      field "connections_per_app", :connections_per_app, :integer
+    end
+
+    # WarehouseSegmentPreview şeması.
+    class WarehouseSegmentPreview < Pushizo::BaseModel
+      # Zorunlu.
+      field "run_id", :run_id, :string
+      # Zorunlu. Değerler: "dry_run", "sample".
+      field "mode", :mode, :string
+      # Zorunlu.
+      field "estimated_bytes", :estimated_bytes, :number
+      # Zorunlu.
+      field "max_bytes_billed", :max_bytes_billed, :number
+      # Zorunlu.
+      field "within_limit", :within_limit, :boolean
+      # Zorunlu.
+      field "sample", :sample, [:array, :string]
+      # Zorunlu.
+      field "sample_truncated", :sample_truncated, :boolean
+      # Zorunlu.
+      field "sample_matched", :sample_matched, :integer
+      # Zorunlu.
+      field "duration_ms", :duration_ms, :integer
+    end
+
+    # WarehouseSegmentRunList şeması.
+    class WarehouseSegmentRunList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "WarehouseSegmentRunListDataItem"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
+    end
+
+    # WarehouseSegmentRunListDataItem şeması.
+    class WarehouseSegmentRunListDataItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "segment_id", :segment_id, :string
+      # Zorunlu.
+      field "connection_id", :connection_id, :string
+      # Zorunlu. Değerler: "bigquery", "snowflake", "databricks".
+      field "warehouse_type", :warehouse_type, :string
+      # Zorunlu. Değerler: "panel", "api", "schedule".
+      field "source", :source, :string
+      # Zorunlu.
+      field "actor_id", :actor_id, :string
+      # Zorunlu.
+      field "query", :query, :string
+      # Zorunlu.
+      field "query_hash", :query_hash, :string
+      # Zorunlu. Değerler: "ok", "rejected", "timeout", "failed".
+      field "status", :status, :string
+      # Zorunlu. Değerler: "empty", "too_long", "syntax", "multiple_statements", "not_select", "forbidden_relation", "forbidden_function", "forbidden_construct", "forbidden_type".
+      field "reason", :reason, :string
+      # Zorunlu.
+      field "error", :error, :string
+      # Zorunlu.
+      field "row_count", :row_count, :integer
+      # Zorunlu.
+      field "matched_count", :matched_count, :integer
+      # Zorunlu.
+      field "bytes_processed", :bytes_processed, :number
+      # Zorunlu.
+      field "truncated", :truncated, :boolean
+      # Zorunlu.
+      field "duration_ms", :duration_ms, :integer
+      # Zorunlu.
+      field "created_at", :created_at, :string
     end
 
     # WarehouseTables şeması.
@@ -8690,6 +14863,12 @@ module Pushizo
       field "conversion_rate", :conversion_rate, :number
     end
 
+    # WebCampaignWinnerDto şeması.
+    class WebCampaignWinnerDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "variant_id", :variant_id, :string
+    end
+
     # Webhook şeması.
     class Webhook < Pushizo::BaseModel
       # Zorunlu.
@@ -8732,6 +14911,12 @@ module Pushizo
       field "created_at", :created_at, :string
       # Zorunlu.
       field "updated_at", :updated_at, :string
+    end
+
+    # WebhookBulkReplayResult şeması.
+    class WebhookBulkReplayResult < Pushizo::BaseModel
+      # Zorunlu.
+      field "replayed", :replayed, :integer
     end
 
     # WebhookDeliveryDetail şeması.
@@ -8817,6 +15002,12 @@ module Pushizo
     # WebhookEventFilters şeması.
     class WebhookEventFilters < Pushizo::BaseModel
       field "event_names", :event_names, [:array, :string]
+    end
+
+    # WebhookEventTypes şeması.
+    class WebhookEventTypes < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, :string]
     end
 
     # WebhookFilters şeması.
@@ -8972,6 +15163,196 @@ module Pushizo
       field "value", :value, :any
     end
 
+    # WebPersonalization şeması.
+    class WebPersonalization < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "app_id", :app_id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu. Değerler: "draft", "active", "paused", "archived".
+      field "status", :status, :string
+      # Zorunlu.
+      field "priority", :priority, :integer
+      # Zorunlu.
+      field "changes", :changes, [:array, :any]
+      # Zorunlu.
+      field "variants", :variants, [:array, "WebPersonalizationVariantsItem"]
+      # Zorunlu.
+      field "ab_test", :ab_test, "WebPersonalizationAbTest"
+      # Zorunlu.
+      field "conditions", :conditions, "WebPersonalizationConditions"
+      # Zorunlu.
+      field "targeting", :targeting, "WebPersonalizationTargeting"
+      # Zorunlu.
+      field "goal", :goal, :any
+      # Zorunlu.
+      field "start_at", :start_at, :string
+      # Zorunlu.
+      field "end_at", :end_at, :string
+      # Zorunlu.
+      field "stats", :stats, "WebPersonalizationStats"
+      # Zorunlu.
+      field "variant_stats", :variant_stats, [:array, "WebPersonalizationVariantStatsItem"]
+      # Zorunlu.
+      field "variant_significance", :variant_significance, "WebPersonalizationVariantSignificance"
+      # Zorunlu.
+      field "created_at", :created_at, :string
+      # Zorunlu.
+      field "updated_at", :updated_at, :string
+    end
+
+    # WebPersonalizationAbTest şeması.
+    class WebPersonalizationAbTest < Pushizo::BaseModel
+      # Zorunlu.
+      field "winner_variant_id", :winner_variant_id, :string
+      # Zorunlu.
+      field "decided_at", :decided_at, :string
+      # Zorunlu.
+      field "decided_by", :decided_by, :string
+    end
+
+    # WebPersonalizationConditions şeması.
+    class WebPersonalizationConditions < Pushizo::BaseModel
+      field "url_rules", :url_rules, [:array, "WebPersonalizationConditionsUrlRulesItem"]
+      field "utm_rules", :utm_rules, [:array, "WebPersonalizationConditionsUtmRulesItem"]
+      field "visits", :visits, "WebPersonalizationConditionsVisits"
+    end
+
+    # WebPersonalizationConditionsUrlRulesItem şeması.
+    class WebPersonalizationConditionsUrlRulesItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "equals", "contains", "starts_with", "not_contains", "matches".
+      field "op", :op, :string
+      # Zorunlu.
+      field "value", :value, :string
+    end
+
+    # WebPersonalizationConditionsUtmRulesItem şeması.
+    class WebPersonalizationConditionsUtmRulesItem < Pushizo::BaseModel
+      # Zorunlu. Değerler: "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content".
+      field "param", :param, :string
+      # Zorunlu. Değerler: "equals", "contains", "exists".
+      field "op", :op, :string
+      field "value", :value, :string
+    end
+
+    # WebPersonalizationConditionsVisits şeması.
+    class WebPersonalizationConditionsVisits < Pushizo::BaseModel
+      # Zorunlu. Değerler: "gte", "lte", "eq".
+      field "op", :op, :string
+      # Zorunlu.
+      field "value", :value, :integer
+    end
+
+    # WebPersonalizationPage şeması.
+    class WebPersonalizationPage < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "WebPersonalization"]
+      # Zorunlu.
+      field "next_cursor", :next_cursor, :string
+      # Zorunlu.
+      field "has_more", :has_more, :boolean
+    end
+
+    # WebPersonalizationReport şeması.
+    class WebPersonalizationReport < Pushizo::BaseModel
+      # Zorunlu.
+      field "personalization_id", :personalization_id, :string
+      # Zorunlu.
+      field "days", :days, :integer
+      # Zorunlu.
+      field "daily", :daily, [:array, "WebPersonalizationReportDailyItem"]
+      # Zorunlu.
+      field "totals", :totals, "WebPersonalizationReportTotals"
+    end
+
+    # WebPersonalizationReportDailyItem şeması.
+    class WebPersonalizationReportDailyItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "date", :date, :string
+      # Zorunlu.
+      field "visitors", :visitors, :integer
+      # Zorunlu.
+      field "conversions", :conversions, :integer
+    end
+
+    # WebPersonalizationReportTotals şeması.
+    class WebPersonalizationReportTotals < Pushizo::BaseModel
+      # Zorunlu.
+      field "visitors", :visitors, :integer
+      # Zorunlu.
+      field "conversions", :conversions, :integer
+      # Zorunlu.
+      field "conversion_rate", :conversion_rate, :number
+    end
+
+    # WebPersonalizationStats şeması.
+    class WebPersonalizationStats < Pushizo::BaseModel
+      # Zorunlu.
+      field "visitors", :visitors, :integer
+      # Zorunlu.
+      field "conversions", :conversions, :integer
+      # Zorunlu.
+      field "conversion_rate", :conversion_rate, :number
+    end
+
+    # WebPersonalizationStatusDto şeması.
+    class WebPersonalizationStatusDto < Pushizo::BaseModel
+      # Zorunlu. Değerler: "draft", "active", "paused", "archived".
+      field "status", :status, :string
+    end
+
+    # WebPersonalizationTargeting şeması.
+    class WebPersonalizationTargeting < Pushizo::BaseModel
+      field "included_segments", :included_segments, [:array, :string]
+      field "excluded_segments", :excluded_segments, [:array, :string]
+      # Değerler: "all", "new", "returning".
+      field "visitor", :visitor, :string
+      # Değerler: "desktop", "mobile", "tablet".
+      field "devices", :devices, [:array, :string]
+    end
+
+    # WebPersonalizationVariantSignificance şeması.
+    class WebPersonalizationVariantSignificance < Pushizo::BaseModel
+      # Zorunlu.
+      field "leader", :leader, :string
+      # Zorunlu.
+      field "p_value", :p_value, :number
+      # Zorunlu.
+      field "significant", :significant, :boolean
+    end
+
+    # WebPersonalizationVariantsItem şeması.
+    class WebPersonalizationVariantsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "id", :id, :string
+      # Zorunlu.
+      field "name", :name, :string
+      # Zorunlu.
+      field "weight_percent", :weight_percent, :integer
+      # Zorunlu.
+      field "changes", :changes, [:array, :any]
+    end
+
+    # WebPersonalizationVariantStatsItem şeması.
+    class WebPersonalizationVariantStatsItem < Pushizo::BaseModel
+      # Zorunlu.
+      field "visitors", :visitors, :integer
+      # Zorunlu.
+      field "conversions", :conversions, :integer
+      # Zorunlu.
+      field "conversion_rate", :conversion_rate, :number
+      # Zorunlu.
+      field "variant_id", :variant_id, :string
+    end
+
+    # WebPersonalizationWinnerDto şeması.
+    class WebPersonalizationWinnerDto < Pushizo::BaseModel
+      # Zorunlu.
+      field "variant_id", :variant_id, :string
+    end
+
     # WhatsAppTemplateList şeması.
     class WhatsAppTemplateList < Pushizo::BaseModel
       # Zorunlu.
@@ -9056,6 +15437,12 @@ module Pushizo
       field "failure_count", :failure_count, :integer
       # Zorunlu.
       field "created_at", :created_at, :string
+    end
+
+    # ZapierHookList şeması.
+    class ZapierHookList < Pushizo::BaseModel
+      # Zorunlu.
+      field "data", :data, [:array, "ZapierHook"]
     end
 
     # ZapierMe şeması.
